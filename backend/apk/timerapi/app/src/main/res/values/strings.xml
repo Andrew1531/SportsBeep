@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">timerapi</string>
+    <string name="button_main_get_states">get states</string>
+    <string name="button_main_lookup_value">lookup value</string>
+    <string name="button_main_report_answer">report answer</string>
+    <string name="edit_main_enter_ticket_number">T?</string>
+    <string name="edit_main_enter_seconds">S?</string>
+    <string name="edit_main_enter_precision">P?</string>
+    <string name="edit_main_enter_timer_value">V?</string>
+    <string name="edit_main_enter_question_number">Q?</string>
+    <string name="edit_main_enter_answer">A?</string>
+    <string name="value_not_found">Not Found</string>
+    <string name="report_successful">Report Successful</string>
+
+    <string name="url_base_ticket_timer_states_get">http://10.0.2.2:3000/ticket_timer_states_get/:ticket_number/:seconds/:precision</string>
+    <string name="url_base_ticket_question_answer_set">http://10.0.2.2:3000/ticket_question_answer_set/:ticket_number/:question_number/:answer/:timer_state_text</string>
+</resources>

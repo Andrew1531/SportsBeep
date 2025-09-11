@@ -1,0 +1,4 @@
+#!/bin/bash
+#rebuild and copy to uitest folder
+/workspace/sportsbeep-android/gradlew assembleDebug
+cp /workspace/sportsbeep-android/app/build/apk/app-debug-unaligned.apk /workspace/sportsbeep-android/sportsbeep-android-uitest/sportsbeep-android.apk

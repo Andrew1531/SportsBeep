@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="dragView" type="id" />
+    <item name="tag_holder" type="id" />
+    <item name="tag_task" type="id" />
+</resources>

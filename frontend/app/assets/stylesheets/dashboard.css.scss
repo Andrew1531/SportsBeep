@@ -1,0 +1,78 @@
+.dashboard {
+  @include make-row();
+
+  .contests {
+    @include make-sm-column(6);
+    @include make-md-column(4);
+    @include make-lg-column(4);
+
+    .contest {
+      margin-bottom: 15px;
+    }
+  }
+
+  .players {
+    @include make-sm-column(6);
+    @include make-md-column(8);
+    @include make-lg-column(8);
+  }
+
+  .new-ticket {
+    height: $mobile-player-card-height;
+    line-height: $mobile-player-card-height;
+    margin-bottom: $grid-gutter-width;
+    color: #fff;
+    background-color: $sb-secondary;
+    display: block;
+    font-size: 30px;
+    @include sans-serif;
+    text-align: center;
+
+    &:hover {
+      text-decoration: none;
+      background-color: darken($sb-secondary, 5%);
+    }
+
+    i, .new-game-text {
+      display: block;
+      float: left;
+    }
+
+    i {
+      font-style: normal;
+      font-size: 86px;
+      margin-right: 15px;
+    }
+  }
+
+  ul {
+    margin-bottom: $grid-gutter-width;
+    text-align: center;
+    list-style: none;
+
+    li {
+      display: block;
+      float: left;
+      font-size: 20px;
+      width: 33.3333333333%;
+
+      &.middle-btn {
+        padding: 0 5px;
+      }
+    }
+  }
+
+  .contest-tab {
+    @include secondary-btn;
+    @include loud;
+    padding: ($grid-gutter-width / 4) 0;
+    width: 100%;
+
+    &:focus { outline: none; }
+
+    &.selected {
+      background-color: darken($sb-secondary, 10%);
+    }
+  }
+
+}

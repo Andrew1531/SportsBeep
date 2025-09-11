@@ -1,0 +1,111 @@
+// Place all the styles related to the users controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.user-profile, .edit-user-profile {
+  margin-top: $grid-gutter-width;
+  @include make-row();
+
+  header {
+    @include loud;
+    color: $sb-primary;
+    font-size: 28px;
+  }
+}
+
+.user-profile {
+
+  .user-information, .recent-transactions {
+    @include make-xs-column(12);
+    @include make-sm-column(6);
+  }
+
+  .user-information {
+    margin-bottom: $grid-gutter-width;
+
+    .username-block {
+      margin-left: $grid-gutter-width;
+
+      ul {
+        list-style: none;
+
+        li {
+          display: block;
+
+          a {
+            color: $sb-primary;
+          }
+         }
+      }
+    }
+
+    .edit-user-btn {
+      display: block;
+      margin-top: 10px;
+      @include secondary-btn;
+      @include loud;
+      color: #fff !important;
+      padding: 5px $grid-gutter-width;
+      font-size: 24px;
+
+      &:hover { text-decoration: none; }
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      display: block;
+      float: left;
+      @extend .img-circle;
+      border: 5px solid $sb-light-gray;
+    }
+  }
+
+  .recent-transactions {
+    header {
+      text-align: center;
+    }
+  }
+}
+
+.edit-user-profile {
+  text-align: center;
+
+  .edit-user-form {
+    @include make-xs-column(12);
+    @include make-sm-column(10);
+    @include make-sm-column-offset(1);
+    @include make-md-column(8);
+    @include make-md-column-offset(2);
+    @include make-lg-column(6);
+    @include make-lg-column-offset(3);
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+    @extend .img-circle;
+    border: 5px solid $sb-light-gray;
+  }
+
+  form {
+    margin-bottom: $grid-gutter-width;
+    text-align: left;
+
+    input[type=text], input[type=email], input[type=password], input[type=file] {
+      border-radius: 0 !important;
+      height: 40px;
+    }
+
+    input[type=file] {
+      padding-top: 8px;
+    }
+
+    input[type=submit] {
+      @include secondary-btn;
+      @include loud;
+      padding: ($grid-gutter-width / 2) ($grid-gutter-width * 2);
+      font-size: 24px;
+    }
+  }
+}

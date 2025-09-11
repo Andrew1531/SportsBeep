@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:drawable="@drawable/edittext_background_default"
+            android:state_checked="false"/>
+    <item
+            android:drawable="@drawable/sport_level_checked"
+            android:state_checked="true"/>
+</selector>

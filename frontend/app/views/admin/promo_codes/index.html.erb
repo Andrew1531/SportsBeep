@@ -1,0 +1,25 @@
+<h3>
+  Promo Codes (<%= PromoCode.count %>)
+  <%= link_to 'Create', new_admin_promo_code_path, class: 'btn btn-primary' %>
+</h3>
+<%= paginate @promo_codes %>
+<table id="promo_codes" class="table table-hover">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Note</th>
+      <th># of Redemptions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @promo_codes.each do |promo_code| %>
+      <tr>
+        <td><%= link_to promo_code.code, admin_promo_code_path(promo_code) %></td>
+        <td><%= promo_code.note %></td>
+        <td><%= link_to promo_code.users_count, admin_promo_code_users_path(promo_code) %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @promo_codes %>

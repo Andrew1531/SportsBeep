@@ -1,0 +1,1 @@
+json.(pool, :id, :prize_pool, :entry_fee)

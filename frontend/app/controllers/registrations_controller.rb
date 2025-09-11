@@ -1,0 +1,38 @@
+class RegistrationsController < Devise::RegistrationsController
+
+  before_action :permit_parameters!, only: [:create, :update]
+  prepend_before_action :logout_current_user, only: :new, if: :current_user
+
+  def create
+    build_resource(sign_up_params)
+    resource.promo_code_text = params[:user][:promo_code]
+    if resource.save
+      sign_up(resource_name, resource)
+      respond_with resource, status: :created
+    else
+      clean_up_passwords(resource)
+      respond_with resource, status: :created
+    end
+  end
+
+  def after_update_path_for(*)
+    user_path(resource)
+  end
+
+  private
+
+    def permit_parameters!
+      params[:user][:avatar_uuid] = SecureRandom.uuid if params[:user][:avatar]
+      devise_parameter_sanitizer.for(:account_update) do |u|
+        u.permit :email, :username, :password, :current_password, :avatar, :avatar_uuid
+      end
+      devise_parameter_sanitizer.for(:sign_up) do |u|
+        u.permit :email, :username, :password
+      end
+    end
+
+    def logout_current_user
+      sign_out current_user
+    end
+
+end

@@ -1,0 +1,6 @@
+<h1 class="text-center">{{ headerText || 'Your Players' }}</h1>
+<div class="player-cards">
+  <a ui-sref="gameShow.ticketRoster" ng-click="selectPlayer(player)" ng-repeat="player in players">
+    <player-card sb-player="player"></player-card>
+  </a>
+</div>

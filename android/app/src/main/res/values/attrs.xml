@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="font" format="enum">
+        <enum name="Roboto" value="0" />
+        <enum name="BebasNeue" value="1" />
+    </attr>
+
+    <declare-styleable name="FontTextView">
+        <attr name="font" />
+    </declare-styleable>
+
+    <declare-styleable name="FontRadioButton">
+        <attr name="font" />
+    </declare-styleable>
+
+    <declare-styleable name="SplitColorRelativeLayout">
+        <attr name="topBackgroundColor" format="color|reference" />
+        <attr name="bottomBackgroundColor" format="color|reference" />
+        <attr name="splitDirection" format="enum">
+            <enum name="diagonal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ArcCountDownView">
+        <attr name="arcStrokeWidth" format="dimension" />
+        <attr name="arcColor" format="reference|color" />
+        <attr name="timeStart" format="reference|integer" />
+        <attr name="arcAngleStart" format="reference|float" />
+        <attr name="arcAngleSweep" format="reference|float" />
+        <attr name="textColor" format="reference|color" />
+        <attr name="textSize" format="reference|dimension" />
+        <attr name="textOffsetX" format="reference|dimension" />
+        <attr name="textOffsetY" format="reference|dimension" />
+        <attr name="font" />
+    </declare-styleable>
+</resources>

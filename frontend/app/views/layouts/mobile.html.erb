@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sportsbeep</title>
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body class="mobile">
+  <div class="header">
+    <div class="container">
+      <%= image_tag 'mobile-layout-logo.png' %>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <%= yield %>
+    </div>
+  </div>
+</body>
+</html>

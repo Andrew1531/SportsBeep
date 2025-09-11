@@ -1,0 +1,98 @@
+<calendars xmlns="http://feed.elasticstats.com/schema/mlb/schedule-v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" season_id="8f4e3a30-8444-11e3-808c-22000a904a71" season_year="2014">
+<event id="00372cd7-911b-42e7-a509-bb555f747a9d" season_type="REG" status="scheduled" visitor="d52d5339-cbdd-43f3-9dfa-a42fd588b9a3" home="25507be1-6a68-4267-bd82-e097d94b359b" venue="bf05de0d-7ced-4a19-8e17-2bbd985f8a92" tbd="false">
+<broadcast network="FS-A" satellite="" internet="" cable=""/>
+<scheduled_start>2014-09-14T20:10:00Z</scheduled_start>
+</event>
+<event id="003d4e57-a36d-4d9a-af8d-bf2020619414" season_type="REG" status="scheduled" visitor="833a51a9-0d84-410f-bd77-da08c3e5e26e" home="aa34e0ed-f342-4ec6-b774-c79b47b60e2d" venue="302f8dcd-eed6-4b83-8609-81548d51e955" tbd="false">
+<broadcast network="FS-N" satellite="" internet="" cable=""/>
+<scheduled_start>2014-08-19T00:10:00Z</scheduled_start>
+</event>
+<event id="0095d59b-9cad-46c5-b97f-2d74235e4754" season_type="REG" status="scheduled" visitor="80715d0d-0d2a-450f-a970-1b9a3b18c7e7" home="d99f919b-1534-4516-8e8a-9cd106c6d8cd" venue="3f47c1c6-b059-4fa2-9d85-5d37b7000992" tbd="false">
+<broadcast network="FS1" satellite="" internet="" cable=""/>
+<scheduled_start>2014-06-07T20:05:00Z</scheduled_start>
+</event>
+<event id="00ae10fa-f34a-468e-8d1d-57cdb424c193" season_type="REG" status="scheduled" visitor="75729d34-bca7-4a0f-b3df-6f26c6ad3719" home="1d678440-b4b1-4954-9b39-70afb3ebbcfa" venue="84d72338-2173-4a90-9d25-99adc6c86f4b" tbd="false">
+<broadcast network="SNET" satellite="" internet="" cable=""/>
+<scheduled_start>2014-04-22T23:07:00Z</scheduled_start>
+</event>
+<event id="ba916a0b-55ea-414d-b809-5657c7a05edf" season_type="AST" status="scheduled" visitor="3bbb3b39-b5cb-4fc9-bd22-522521f0f329" home="dd59d49e-caee-4443-9220-f05d0d9bd1e1" venue="302f8dcd-eed6-4b83-8609-81548d51e955" tbd="false">
+<broadcast network="FOX" satellite="" internet="" cable=""/>
+<scheduled_start>2014-07-16T00:00:00Z</scheduled_start>
+</event>
+<event id="00b0f91d-c586-4516-93b4-b957cbab4501" season_type="REG" status="scheduled" visitor="27a59d3b-ff7c-48ea-b016-4798f560f5e1" home="d99f919b-1534-4516-8e8a-9cd106c6d8cd" venue="3f47c1c6-b059-4fa2-9d85-5d37b7000992" tbd="false">
+<broadcast network="FSSW" satellite="" internet="" cable=""/>
+<scheduled_start>2014-04-30T00:05:00Z</scheduled_start>
+</event>
+<event id="00d7eac3-92e2-4d7b-ac53-552d2fd95ca3" season_type="REG" status="scheduled" visitor="29dd9a87-5bcc-4774-80c3-7f50d985068b" home="2142e1ba-3b40-445c-b8bb-f1f8b1054220" venue="b4186004-b6d0-42e7-8dc1-82ef0d946ecc" tbd="false">
+<broadcast network="CSN" satellite="" internet="" cable=""/>
+<scheduled_start>2014-05-27T23:05:00Z</scheduled_start>
+</event>
+<event id="00dec1db-2e9f-4092-b0fa-22f310b784eb" season_type="REG" status="scheduled" visitor="d99f919b-1534-4516-8e8a-9cd106c6d8cd" home="47f490cd-2f58-4ef7-9dfd-2ad6ba6c1ae8" venue="4a550fc1-c03d-4294-b63a-30ff197bedc4" tbd="false">
+<broadcast network="CSN" satellite="" internet="" cable=""/>
+<scheduled_start>2014-08-06T18:10:00Z</scheduled_start>
+</event>
+<event id="00e56185-5737-41a7-9ebd-750d17e684f0" season_type="REG" status="scheduled" visitor="d89bed32-3aee-4407-99e3-4103641b999a" home="c874a065-c115-4e7d-b0f0-235584fb0e6f" venue="f102d8fb-de67-4b86-9053-8b55f578d45c" tbd="false">
+<broadcast network="FS-O" satellite="" internet="" cable=""/>
+<scheduled_start>2014-07-27T17:10:00Z</scheduled_start>
+</event>
+<event id="00ed9e92-4366-452f-9ab5-bb9d795d33ee" season_type="REG" status="scheduled" visitor="80715d0d-0d2a-450f-a970-1b9a3b18c7e7" home="833a51a9-0d84-410f-bd77-da08c3e5e26e" venue="6fca95c9-7f2c-4acb-a9f3-02ef96340d2a" tbd="false">
+<broadcast network="FSKC" satellite="" internet="" cable=""/>
+<scheduled_start>2014-07-27T18:10:00Z</scheduled_start>
+</event>
+<event id="01197c1a-2d9b-4806-bb70-7012cfd38b02" season_type="REG" status="scheduled" visitor="80715d0d-0d2a-450f-a970-1b9a3b18c7e7" home="c874a065-c115-4e7d-b0f0-235584fb0e6f" venue="f102d8fb-de67-4b86-9053-8b55f578d45c" tbd="false">
+<broadcast network="FS-O" satellite="" internet="" cable=""/>
+<scheduled_start>2014-08-06T23:10:00Z</scheduled_start>
+</event>
+<event id="0147f177-e46d-47c0-8b4d-2017ef05b840" season_type="REG" status="scheduled" visitor="f246a5e5-afdb-479c-9aaa-c68beeda7af6" home="03556285-bdbb-4576-a06d-42f71f46ddc5" venue="d5a66fb3-ff26-4f36-910c-3df5cedb36b3" tbd="false">
+<broadcast network="FS-F" satellite="" internet="" cable=""/>
+<scheduled_start>2014-06-19T23:10:00Z</scheduled_start>
+</event>
+<event id="01619400-0b6b-4972-9834-e04cdc6d227a" season_type="REG" status="scheduled" visitor="ef64da7f-cfaf-4300-87b0-9313386b977c" home="25507be1-6a68-4267-bd82-e097d94b359b" venue="bf05de0d-7ced-4a19-8e17-2bbd985f8a92" tbd="false">
+<broadcast network="FS-A" satellite="" internet="" cable=""/>
+<scheduled_start>2014-05-18T00:10:00Z</scheduled_start>
+</event>
+<event id="019822a5-fa0d-4dad-9393-68f6df3de71e" season_type="REG" status="scheduled" visitor="43a39081-52b4-4f93-ad29-da7f329ea960" home="2142e1ba-3b40-445c-b8bb-f1f8b1054220" venue="b4186004-b6d0-42e7-8dc1-82ef0d946ecc" tbd="false">
+<broadcast network="CSN" satellite="" internet="" cable=""/>
+<scheduled_start>2014-08-20T17:05:00Z</scheduled_start>
+</event>
+<event id="01ecfd42-7c81-4e71-b4b8-bf61cd25602d" season_type="REG" status="scheduled" visitor="25507be1-6a68-4267-bd82-e097d94b359b" home="2142e1ba-3b40-445c-b8bb-f1f8b1054220" venue="b4186004-b6d0-42e7-8dc1-82ef0d946ecc" tbd="false">
+<broadcast network="CSN" satellite="" internet="" cable=""/>
+<scheduled_start>2014-07-27T17:35:00Z</scheduled_start>
+</event>
+<event id="01f85f19-7673-4397-aa2e-23c209f6eedc" season_type="REG" status="scheduled" visitor="d52d5339-cbdd-43f3-9dfa-a42fd588b9a3" home="d89bed32-3aee-4407-99e3-4103641b999a" venue="bb062fb1-e268-412e-b3d2-2ddb6acc1822" tbd="false">
+<broadcast network="MASN 2" satellite="" internet="" cable=""/>
+<scheduled_start>2014-04-25T23:05:00Z</scheduled_start>
+</event>
+<event id="021eb655-6677-4875-85ff-7dfdde6dd7bf" season_type="REG" status="scheduled" visitor="4f735188-37c8-473d-ae32-1f7e34ccf892" home="d99f919b-1534-4516-8e8a-9cd106c6d8cd" venue="3f47c1c6-b059-4fa2-9d85-5d37b7000992" tbd="false">
+<broadcast network="FSSW" satellite="" internet="" cable=""/>
+<scheduled_start>2014-09-12T00:05:00Z</scheduled_start>
+</event>
+<event id="023aaf6d-0b2a-4548-98f5-3889a185362d" season_type="REG" status="scheduled" visitor="a09ec676-f887-43dc-bbb3-cf4bbaee9a18" home="833a51a9-0d84-410f-bd77-da08c3e5e26e" venue="6fca95c9-7f2c-4acb-a9f3-02ef96340d2a" tbd="false">
+<broadcast network="FSKC" satellite="" internet="" cable=""/>
+<scheduled_start>2014-06-10T00:10:00Z</scheduled_start>
+</event>
+<event id="026c8c49-fcf9-4a9c-88d6-afc5be9d6978" season_type="REG" status="scheduled" visitor="29dd9a87-5bcc-4774-80c3-7f50d985068b" home="c874a065-c115-4e7d-b0f0-235584fb0e6f" venue="f102d8fb-de67-4b86-9053-8b55f578d45c" tbd="false">
+<broadcast network="FS-O" satellite="" internet="" cable=""/>
+<scheduled_start>2014-05-11T17:10:00Z</scheduled_start>
+</event>
+<event id="02796d70-d084-49ea-85e5-16ee7bf4f83a" season_type="REG" status="scheduled" visitor="ef64da7f-cfaf-4300-87b0-9313386b977c" home="d89bed32-3aee-4407-99e3-4103641b999a" venue="bb062fb1-e268-412e-b3d2-2ddb6acc1822" tbd="false">
+<broadcast network="MASN" satellite="" internet="" cable=""/>
+<scheduled_start>2014-05-05T23:05:00Z</scheduled_start>
+</event>
+<event id="028acf12-f1fb-43dc-9589-e05d62d8ef3d" season_type="REG" status="scheduled" visitor="1d678440-b4b1-4954-9b39-70afb3ebbcfa" home="47f490cd-2f58-4ef7-9dfd-2ad6ba6c1ae8" venue="4a550fc1-c03d-4294-b63a-30ff197bedc4" tbd="false">
+<broadcast network="CSN" satellite="" internet="" cable=""/>
+<scheduled_start>2014-08-16T23:10:00Z</scheduled_start>
+</event>
+<event id="02b402e3-d388-49f9-a178-2d2f33c8d72b" season_type="REG" status="scheduled" visitor="27a59d3b-ff7c-48ea-b016-4798f560f5e1" home="03556285-bdbb-4576-a06d-42f71f46ddc5" venue="d5a66fb3-ff26-4f36-910c-3df5cedb36b3" tbd="false">
+<broadcast network="FS-F" satellite="" internet="" cable=""/>
+<scheduled_start>2014-06-27T23:10:00Z</scheduled_start>
+</event>
+<event id="02d2ffe6-0798-4e9f-a232-a0ec361047ab" season_type="REG" status="closed" visitor="d99f919b-1534-4516-8e8a-9cd106c6d8cd" home="93941372-eb4c-4c40-aced-fe3267174393" venue="b27b0dc5-c2c5-401d-b8b9-a6a2dbc225e5" tbd="false">
+<broadcast network="NESN" satellite="" internet="" cable=""/>
+<scheduled_start>2014-04-09T20:05:00Z</scheduled_start>
+</event>
+<event id="02dd1526-c37f-4794-a458-8dc3ae7d8657" season_type="REG" status="scheduled" visitor="12079497-e414-450a-8bf2-29f91de646bf" home="f246a5e5-afdb-479c-9aaa-c68beeda7af6" venue="265c7d6c-427a-4b8a-8def-392c41954bec" tbd="false">
+<broadcast network="WPIX" satellite="" internet="" cable=""/>
+<scheduled_start>2014-07-08T23:10:00Z</scheduled_start>
+</event>
+</calendars>

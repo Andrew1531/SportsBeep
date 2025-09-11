@@ -1,0 +1,6 @@
+<%= simple_form_for [:admin, promo_code] do |f| %>
+  <%= render 'admin/errors', form: f %>
+  <%= f.input :code %>
+  <%= f.input :note %>
+  <%= f.submit create_or_update_text(promo_code), class: 'btn btn-primary' %>
+<% end %>

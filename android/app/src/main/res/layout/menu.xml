@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:id="@+id/menu"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_blue"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@id/dragView"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/green">
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/menuBox_FontTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:text="@string/menu_box"
+            android:textSize="40sp"
+            app:font="BebasNeue" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_toLeftOf="@id/menuBox_FontTextView"
+            android:layout_toStartOf="@id/menuBox_FontTextView"
+            android:src="@drawable/ic_menu" />
+    </RelativeLayout>
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/pickAGame_FontTextView"
+        style="@style/MenuFontTextView"
+        android:drawableLeft="@drawable/ic_pickgame_selector"
+        android:drawableStart="@drawable/ic_settings_selector"
+        android:text="@string/pick_a_game"
+        app:font="BebasNeue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/myContests_FontTextView"
+        style="@style/MenuFontTextView"
+        android:drawableLeft="@drawable/ic_contests_selector"
+        android:drawableStart="@drawable/ic_contests_selector"
+        android:text="@string/my_contests"
+        app:font="BebasNeue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/changeSport_FontTextView"
+        style="@style/MenuFontTextView"
+        android:drawableLeft="@drawable/ic_changesport_selector"
+        android:drawableStart="@drawable/ic_changesport_selector"
+        android:text="@string/change_sport"
+        app:font="BebasNeue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/profilePhoto_FontTextView"
+        style="@style/MenuFontTextView"
+        android:drawableLeft="@drawable/ic_user_selector"
+        android:drawableStart="@drawable/ic_user_selector"
+        android:text="@string/profile"
+        app:font="BebasNeue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/howToPlay_FontTextView"
+        style="@style/MenuFontTextView"
+        android:drawableLeft="@drawable/ic_howtoplay_selector"
+        android:drawableStart="@drawable/ic_howtoplay_selector"
+        android:text="@string/how_to_play"
+        app:font="BebasNeue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/logOut_FontTextView"
+        style="@style/MenuFontTextView"
+        android:drawableLeft="@drawable/ic_settings_selector"
+        android:drawableStart="@drawable/ic_settings_selector"
+        android:text="@string/log_out"
+        app:font="BebasNeue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
+
+</LinearLayout>

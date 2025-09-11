@@ -1,0 +1,25 @@
+body.admin { padding-top: 70px; }
+
+.admin-login {
+  margin-top: 20px;
+}
+
+h3 {
+  margin-top: 0 !important;
+}
+
+.validation-errors {
+  margin: 10px 0 20px 0;
+
+  li strong {
+    color: #b94a48;
+  }
+}
+
+.admin {
+  background-color: #fff;
+}
+
+.admin .container {
+  overflow: visible !important;
+}

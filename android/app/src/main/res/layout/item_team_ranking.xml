@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/name_FontTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textSize="24sp"
+        app:font="BebasNeue" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/ranking_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-4dp"
+                android:lineSpacingMultiplier="0.9"
+                android:textSize="64sp"
+                app:font="BebasNeue" />
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/overall"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/value_FontTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:textSize="20sp" />
+    </RelativeLayout>
+</LinearLayout>

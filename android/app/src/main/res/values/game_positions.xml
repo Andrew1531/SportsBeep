@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DO NOT MODIFY THE NAME OF THESE STRINGS. THEY ARE REFERENCED BY NAME IN GAMEPOSITION.JAVA -->
+    <string name="pitcher">PITCHER</string>
+    <string name="catcher">CATCHER</string>
+    <string name="corner_infielder">CORNER INFIELDER</string>
+    <string name="middle_infielder">MIDDLE INFIELDER</string>
+    <string name="outfielder">OUTFIELDER</string>
+    <string name="flex_player">FLEX PLAYER</string>
+    <string name="league_pick">LEAGUE PICK</string>
+    <string name="quarterbacks">QUARTERBACK</string>
+    <string name="running_back">RUNNING BACK</string>
+    <string name="wide_receiver">WIDE RECEIVER</string>
+    <string name="tight_end">TIGHT END</string>
+    <string name="defense">DEFENSE</string>
+    <string name="kicker">KICKER</string>
+    <string name="special_teams">SPECIAL TEAMS</string>
+    <string name="qb_squad">QB SQUAD</string>
+</resources>

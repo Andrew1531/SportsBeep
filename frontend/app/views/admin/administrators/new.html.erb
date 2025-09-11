@@ -1,0 +1,12 @@
+<h3>Add an Administrator</h3>
+<div class="row">
+  <div class="col-xs-6">
+    <%= simple_form_for [:admin, @administrator] do |f| %>
+      <%= render 'admin/errors', form: f %>
+      <%= f.input :email %>
+      <%= f.input :password %>
+      <%= f.input :password_confirmation %>
+      <%= f.submit 'Create', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

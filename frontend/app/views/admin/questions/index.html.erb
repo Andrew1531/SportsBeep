@@ -1,0 +1,27 @@
+<h3>
+  Best or Bust Questions (<%= @questions.size %>)
+  <%= link_to 'Create', new_polymorphic_path([:admin, current_sport, Question]), class: 'btn btn-primary' %>
+</h3>
+<table id="questions" class="table table-hover">
+  <thead>
+    <tr>
+      <th>Topic</th>
+      <th>Type</th>
+      <th>Text</th>
+      <th class="centered">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @questions.each do |question| %>
+      <tr>
+        <td><%= question.topic.stat.name %></td>
+        <td><%= question.kind %></td>
+        <td><%= question.text %></td>
+        <td class="centered">
+          <%= link_to 'Edit', edit_polymorphic_path([:admin, current_sport, question.becomes(Question)]), class: 'btn btn-xs btn-default' %>
+          <%= link_to 'Delete', polymorphic_path([:admin, current_sport, question.becomes(Question)]), method: :delete, class: 'btn btn-xs btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

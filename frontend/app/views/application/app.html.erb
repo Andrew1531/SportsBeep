@@ -1,0 +1,89 @@
+<div id="auth-token" data-token="<%= current_user.authentication_token %>"></div>
+<div ng-app="sportsbeep">
+  <div ui-view class="container">
+    <%= yield %>
+  </div>
+
+  <!-- overlay -->
+  <overlay id="squad-overlay">
+    <div ng-controller="ChooseSquadTeamModalCtrl">
+      <header>{{ squad.name }} Squad</header>
+      <game-card sb-game="game" sb-center-circle-text="'OR'">
+      </game-card>
+    </div>
+  </overlay>
+
+  <overlay id="finalize-ticket">
+    <div class="default-overlay">
+      <div ng-controller="FinalizeTicketCtrl">
+        <div ng-switch="state">
+          <div ng-repeat="pool in pools" ng-switch-when="showPools">
+            <span class="which-pool-text">What pool would you like to enter?</span>
+            <select ng-model="$parent.$parent.pool" ng-options="stringifyPool(pool) for pool in pools" class="pool-select">
+            </select>
+            <div class="row overlay-buttons">
+              <div class="cancel-pool">
+                <a class="modal-btn" ng-click="cancelOverlay()">Cancel</a>
+              </div>
+              <div class="confirm-pool">
+                <a class="confirm-pool-btn modal-btn red-modal-btn" ng-click="selectPool()">OK</a>
+              </div>
+            </div>
+          </div>
+          <div ng-switch-when="paymentConfirmation">
+            <p><i class="credit-card fa fa-credit-card"></i></p>
+            <p>Your account will be charged ${{ pool.entry_fee }} for this game.</p>
+            <span class="matchup">
+              {{ game.home_team.market }} {{ game.home_team.name }}
+              <span class="vs">vs.</span>
+              {{ game.away_team.market }} {{ game.away_team.name }}
+            </span>
+            <div class="row">
+              <div class="cancel-payment">
+                <a class="modal-btn" ng-click="cancelOverlay()">Cancel</a>
+              </div>
+              <div class="confirm-payment">
+                <a class="confirm-payment-btn modal-btn red-modal-btn" ng-disabled="disableButton" ng-click="disableButton || confirmPayment()">
+                  <i class="fa fa-spin fa-spinner"></i>
+                  Let's Play!
+                </a>
+              </div>
+              <div class="ticket-error" ng-show="error">{{ error }}</div>
+            </div>
+          </div>
+          <div ng-switch-when="quizTime">
+            <strong class="quiz-time">Quiz Time</strong>
+            <p>Answer the questions as fast as you can</p>
+            <div class="row">
+              <a class="start-questions-btn modal-btn red-modal-btn" ng-click="beginQuestionAnswering()">Start</a>
+            </div>
+          </div>
+          <div ng-switch-when="bestAndBust">
+            <header>
+              {{ $parent.currentQuestion.text }}
+            </header>
+            <game-card sb-game="game" sb-center-circle-text="'OR'">
+            </game-card>
+            <div class="best-and-bust-timer">{{ bestAndBustTime }}</div>
+          </div>
+          <div ng-switch-when="sendingAnswers" class="sending-answers">
+            <i class="fa fa-spin fa-spinner"></i> Submitting answers...
+          </div>
+          <div ng-switch-when="ticketFinalized">
+            <strong class="ticket-completed">You have joined this contest!</strong>
+            <div class="row">
+              <div class="view-ticket">
+                <a class="view-ticket-btn modal-btn red-modal-btn" ui-sref="dashboard.ticket.show({ id: ticket.id })" ng-click="cancelOverlay()">View Ticket</a>
+              </div>
+              <div class="play-again">
+                <a class="new-ticket-btn modal-btn red-modal-btn" ui-sref="gameIndex" ng-click="cancelOverlay()">Play Again</a>
+              </div>
+            </div>
+          </div>
+          <div ng-switch-default>default</div>
+        </div>
+      </div>
+    </div>
+  </overlay>
+
+</div>

@@ -1,0 +1,9 @@
+<div class="well admin-login col-sm-6 col-sm-offset-3">
+  <h4>Login</h4>
+  <%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+    <%= devise_error_messages! %>
+    <%= f.input :email, :required => false, :autofocus => true %>
+    <%= f.input :password, :required => false %>
+    <%= f.button :submit, "Login", class: 'btn btn-primary' %>
+  <% end %>
+</div>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticket_id: 1
+  question_number: 1
+  answer: 1
+  answer_time: 1.5
+
+two:
+  ticket_id: 1
+  question_number: 1
+  answer: 1
+  answer_time: 1.5

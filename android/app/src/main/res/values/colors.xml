@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="panel_background">#394263</color>
+    <color name="hint_color">#aaaaaa</color>
+    <color name="dark_blue">#1b1f2e</color>
+    <color name="green">#86ab66</color>
+    <color name="option_pressed">#50597a</color>
+    <color name="red">#cc3347</color>
+    <color name="baby_blue">#5ec3eb</color>
+    <color name="edittext_background_default">#515a7a</color>
+    <color name="light_red">#e34d69</color>
+    <color name="blue">#3767ab</color>
+    <color name="orange">#eba236</color>
+    <color name="gray">#858c8c</color>
+    <color name="blue_gray">#4d5c7d</color>
+    <color name="lavender">#868fad</color>
+    <color name="sky_blue">#46bcf2</color>
+    <color name="yet_another_blue">#2e5ea6</color>
+</resources>

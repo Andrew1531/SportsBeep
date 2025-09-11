@@ -1,0 +1,196 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  hello: "Hello world"
+  stats:
+    mlb:
+      ab:
+        desc: 'At bats'
+      avg:
+        desc: 'Batting average'
+      bb:
+        desc: 'Walks'
+      d:
+        desc: 'Doubles'
+      era:
+        desc: 'Earned runs average'
+      h:
+        desc: 'Hits'
+      ha:
+        desc: 'Hits allowed'
+      hb:
+        desc: 'Hit batter'
+      hbp:
+        desc: 'Hit by pitcher'
+      hr:
+        desc: 'Home runs'
+      hra:
+        desc: 'Home runs allowed'
+      e:
+        desc: 'Errors'
+      h:
+        desc: 'Hits'
+      ip:
+        desc: 'Innings pitched'
+      k:
+        desc: 'Strike outs'
+      loss:
+        desc: 'Losses'
+      oba:
+        desc: 'On base average'
+      obp:
+        desc: 'On base percentage'
+      out:
+        desc: 'Outs'
+      r:
+        desc: 'Runs'
+      ra:
+        desc: 'Runs allowed'
+      obp:
+        desc: 'On base percentage'
+      rbi:
+        desc: 'RBIs'
+      s:
+        desc: 'Singles'
+      save:
+        desc: 'Saves'
+      sb:
+        desc: 'Stolen bases'
+      slg:
+        desc: 'Slugging percentage'
+      starts:
+        desc: 'Starts'
+      t:
+        desc: 'Triples'
+      whip:
+        desc: 'WHIP'
+      win:
+        desc: 'Wins'
+    nfl:
+      passtd:
+        desc: 'Passing TDs'
+        abbr: 'PASS TD'
+      rushtd:
+        desc: 'Rushing TDs'
+        abbr: 'RUSH TD'
+      passyd:
+        desc: 'Passing yards'
+        abbr: 'PASS YD'
+      int:
+        desc: 'Interceptions'
+      rushatt:
+        desc: 'Rushing attempts'
+        abbr: 'ATT'
+      rushyd:
+        desc: 'Rushing yards'
+        abbr: 'RUSH YD'
+      rec:
+        desc: 'Receptions'
+        abbr: 'REC'
+      recyd:
+        desc: 'Receiving yards'
+        abbr: 'REC YD'
+      rectd:
+        desc: 'Receiving TDs'
+        abbr: 'REC TD'
+      prtd:
+        desc: 'Punt return TDs'
+        abbr: 'PUNT TD'
+      krtd:
+        desc: 'Kick return TDs'
+        abbr: 'KICK TD'
+      fum:
+        desc: 'Fumbles'
+        abbr: 'FUM'
+      fumlost:
+        desc: 'Fumbles lost'
+        abbr: 'FUM LOST'
+      sack:
+        desc: 'Sacks'
+        abbr: 'SCK'
+      fumrec:
+        desc: 'Fumbles recovered'
+        abbr: 'FUM REC'
+      safety:
+        desc: 'Safety'
+        abbr: 'SFTY'
+      block:
+        desc: 'Blocks'
+        abbr: 'BLK'
+      kicks:
+        desc: 'Kicks'
+        abbr: 'ATT'
+      kickyd:
+        desc: 'Kicking yards'
+        abbr: 'KICK YD'
+      kickavg:
+        desc: 'Kicking average'
+        abbr: 'KICK AVG'
+  league_pick_stats:
+    r: 'Runs'
+    avg: 'Batting average'
+    obp: 'On base'
+    slg: 'Slugging pct'
+    offensive_ypg: 'Offensive YPG'
+    passing_ypg: 'Passing YPG'
+    rushing_ypg: 'Rushing YPG'
+    int_/_game: 'Ints / Game'
+  time:
+    formats:
+      short: "%B %d %Y, %l:%M%P %Z"
+  flash:
+    actions:
+      create:
+        success: "%{resource_name} was successfully created."
+        danger: "%{resource_name} could not be created."
+      update:
+        success: "%{resource_name} was successfully updated."
+        danger: "%{resource_name} could not be updated."
+      destroy:
+        success: "%{resource_name} was successfully deleted."
+        danger: "%{resource_name} could not be destroyed."
+  simple_form:
+    labels:
+      question:
+        kind: 'Type'
+    placeholders:
+      user:
+        email: 'Email'
+        password: 'Password'
+        username: 'Username'
+        promo_code: 'Promo code'
+    options:
+      question:
+        topic:
+          walks: 'Walks'
+          errors: 'Errors'
+          steals: 'Stolen bases'
+          home_runs: 'Home runs'
+          strike_outs: 'Strike outs'
+          hits: 'Hits'
+          singles: 'Singles'
+          doubles: 'Doubles'
+          triples: 'Triples'
+        connotation:
+          positive: 'more'
+          negative: 'less'
+

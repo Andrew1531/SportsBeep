@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:id="@+id/game_LinearLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="112dp"
+    android:background="@android:color/black"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp">
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/date_FontTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textSize="11sp" />
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/time_FontTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <com.sportsbeep.app.ui.view.SplitColorRelativeLayout
+        android:id="@+id/parent_SplitColorRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/at" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/teamMarket1_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-3dp"
+                android:includeFontPadding="false"
+                android:textSize="14sp"
+                app:font="BebasNeue" />
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/teamName1_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
+                android:includeFontPadding="false"
+                android:textSize="28sp"
+                app:font="BebasNeue" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:orientation="vertical">
+
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/teamMarket2_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-3dp"
+                android:includeFontPadding="false"
+                android:textSize="14sp"
+                app:font="BebasNeue" />
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/teamName2_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-5dp"
+                android:layout_marginTop="-5dp"
+                android:includeFontPadding="false"
+                android:textSize="28sp"
+                app:font="BebasNeue" />
+        </LinearLayout>
+    </com.sportsbeep.app.ui.view.SplitColorRelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/DialogStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/save_contest_message"
+        android:textSize="22sp"
+        app:font="BebasNeue" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/continue_FontTextView"
+        style="@style/DialogButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/continue_it" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/save_FontTextView"
+        style="@style/DialogButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/save_it" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/cancel_FontTextView"
+        style="@style/DialogButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/cancel_it" />
+</LinearLayout>

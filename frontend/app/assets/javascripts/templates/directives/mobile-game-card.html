@@ -1,0 +1,18 @@
+<div class="mobile-game-card-container">
+  <div class="start-time">
+    <span class="game-start-date">{{ game.start_time | momentFormat: 'dddd, MMM D' }}</span>
+    <span class="game-start-time">{{ game.start_time | momentTZ: 'h:mm A' }} EST</span>
+  </div>
+  <div class="clearfix"></div>
+  <div class="mobile-game-card">
+    <div class="away-team" ng-style="{ 'background-color': game.away_team.primary_color }">
+      <div class="market">{{ game.away_team.market }}</div>
+      <div class="name" ng-style="{ 'color': game.away_team.secondary_color }">{{ game.away_team.name }}</div>
+    </div>
+    <div class="center-circle">AT</div>
+    <div class="home-team" ng-style="{ 'background-color': game.home_team.primary_color }">
+      <div class="market">{{ game.home_team.market }}</div>
+      <div class="name" ng-style="{ 'color': game.home_team.secondary_color }">{{ game.home_team.name }}</div>
+    </div>
+  </div>
+</div>

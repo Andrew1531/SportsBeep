@@ -1,0 +1,9 @@
+<div class="col-xs-6">
+  <%= simple_form_for [:admin, :mlb, @question.becomes(Question)], as: :question do |f| %>
+    <%= render 'admin/errors', form: f %>
+    <%= f.association :topic, collection: Mlb::StatTopic.all.sort_by { |s| s.stat.name }, label_method: proc { |s| s.stat.name} %>
+    <%= f.input :text %>
+    <%= f.input :kind, collection: %w(Best Bust), input_html: { value: f.object.kind } %>
+    <%= f.submit 'Create', class: 'btn btn-primary' %>
+  <% end %>
+</div>

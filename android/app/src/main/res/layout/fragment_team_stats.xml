@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/panel_background"
+    android:orientation="vertical">
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/dark_blue"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/team_rankings"
+        android:textSize="36sp"
+        app:font="BebasNeue" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@color/dark_blue"
+            android:padding="4dp">
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/gameDate_FontTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:textSize="14.5sp" />
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/gameTime_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textSize="14.5sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/team_LinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/teamMarket_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingMultiplier="0.9"
+                android:singleLine="true"
+                android:textSize="32sp"
+                app:font="BebasNeue" />
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/teamName_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-8dp"
+                android:lineSpacingMultiplier="0.9"
+                android:singleLine="true"
+                android:textSize="68sp"
+                app:font="BebasNeue" />
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:id="@+id/winLoss_FontTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:singleLine="true"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/regular_season_rankings"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <GridView
+                android:id="@+id/rankings_GridView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="2"
+                android:visibility="invisible" />
+
+            <ProgressBar
+                android:id="@android:id/progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

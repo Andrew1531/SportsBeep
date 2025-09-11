@@ -1,0 +1,324 @@
+.player-cards {
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.player-card, .player-score-card, .squad-card {
+  .team-name {
+    display: none;
+    @extend .visible-sm;
+    @extend .visible-xs;
+  }
+
+  table {
+    width: 100%;
+    font-size: 18px !important;
+    line-height: 18px !important;
+
+    tr:first-child {
+      border: 1px solid #fff;
+      border-left: none;
+      border-right: none;
+    }
+
+    tr {
+      line-height: 24px;
+    }
+
+    tr, td {
+      text-align: center;
+    }
+
+    td {
+      width: 33%;
+    }
+  }
+
+  @include breakpoint(sm) {
+    .middle {
+      padding-top: 7px !important;
+      line-height: 28px !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      .team-name { font-size: inherit; }
+
+      .player-name {
+        margin: auto;
+        height: 28px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+.player-card, {
+  .card {
+    background-color: $sb-dark-gray;
+  }
+
+  .no-player {
+    border: 1px solid darken($sb-dark-gray, 5%);
+  }
+
+  @include breakpoint(sm) {
+    .no-player .middle {
+      display: none;
+    }
+
+    .no-player .content {
+      display: block;
+    }
+  }
+}
+
+.set-team-row {
+  @include make-row();
+}
+
+.set-your-team {
+  @include make-md-column(6);
+  @include make-md-column-offset(3);
+  @include make-xs-column(12);
+
+  button {
+    line-height: 70px;
+    height: 70px;
+    margin-bottom: 80px;
+    background-color: $sb-secondary;
+    display: block;
+    font-family: 'BebasNeue';
+    color: #fff;
+    text-align: center;
+    font-size: 36px;
+    width: 100%;
+    border: 0;
+
+    &:disabled {
+      background-color: $sb-dark-gray;
+      color: #919594;
+
+      &:hover {
+        background-color: $sb-dark-gray;
+      }
+    }
+
+    &:hover {
+      background-color: darken($sb-secondary, 5%);
+    }
+  }
+}
+
+.team-backdrop {
+  @extend .hidden-xs;
+  @extend .hidden-sm;
+}
+
+.team-name {
+  text-align: center;
+  font-size: 32px;
+  display: none;
+  @extend .visible-xs;
+  @extend .visible-sm;
+}
+
+.player-score-card, .squad-card {
+  @include breakpoint(sm) {
+    .back .content {
+      width: 100%;
+      height: 244px !important;
+      padding: 0  ($grid-gutter-width / 2) !important;
+      display: block !important;
+    }
+
+    .back .scrollable {
+      height: 244px !important;
+    }
+  }
+}
+
+.player-score-card, .squad-card {
+  perspective: 1000;
+  transform-style: preserve-3d;
+
+  .no-stats-msg {
+    margin-top: $grid-gutter-width;
+    font-size: 20px;
+    text-align: center;
+    display: block;
+    padding: 0 20px;
+  }
+
+  .player-score-xs {
+    position: absolute;
+    font-size: 36px !important;
+    right: $grid-gutter-width;
+    display: none;
+    @extend .visible-xs;
+    @extend .visible-sm;
+  }
+
+  .player-position {
+    @extend .hidden-sm;
+    @extend .hidden-xs;
+  }
+
+  .back {
+    display: none;
+  }
+
+  &.flip {
+    .back {
+      display: block;
+    }
+
+    .front {
+      display: none;
+    }
+  }
+
+  // &.flip .flipper {
+  //   transform: rotateY(180deg);
+  // }
+
+  // &.flip {
+  //   .back {
+  //     display: block;
+  //     transform: rotateY(0deg);
+  //   }
+
+  //   .front {
+  //     transform: rotateY(180deg);
+  //   }
+  // }
+
+  // .flipper {
+  //   transition: 0.5s;
+  //   transform-style: preserve-3d;
+  // }
+
+  // .front, .back {
+  //   backface-visibility: hidden;
+  //   transition: 0.6s;
+  //   transform-style: preserve-3d;
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   right: 0;
+  // }
+
+  // .front {
+  //   z-index: 2;
+  //   transform: rotateY(0deg);
+  // }
+
+  // .back {
+  //   display: none;
+  //   transform: rotateY(180deg);
+  // }
+
+  .player-score {
+    display: block;
+    font-size: 38px;
+    text-align: center;
+    margin-top: $grid-gutter-width / 2;
+  }
+}
+
+@include breakpoint(xs) {
+  .players h1 {
+    margin-top: 0;
+  }
+}
+
+@media(max-width: $screen-sm-max) {
+  .player-card, .squad-card {
+    height: $mobile-player-card-height !important;
+    margin-bottom: $grid-gutter-width / 2;
+
+    .player-name .name {
+      width: 60%;
+      margin: auto;
+      height: 26px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .no-stats-msg {
+    margin: 0;
+  }
+
+  .select-player-card, .select-squad-card, .real-player-card, .real-squad-card {
+    height: $mobile-player-card-height !important;
+    line-height: $mobile-player-card-height;
+    border-radius: 0 !important;
+    @include box-shadow(none !important);
+
+    img, table, .picture {
+      display: none !important;
+    }
+
+    .player-name {
+      height: $mobile-player-card-height !important;
+      padding-top: 16px;
+      margin: 0;
+    }
+  }
+
+  .player-number, .player-position {
+    position: absolute;
+    font-size: 36px !important;
+  }
+
+  .player-number {
+    left: $grid-gutter-width;
+  }
+
+  .player-position {
+    right: $grid-gutter-width;
+  }
+
+  .player-score-card, .squad-card {
+    perspective: 1000;
+
+    &.flip, &.flip .card {
+      height: $player-card-height !important;
+    }
+
+    // &.flip .flipper {
+    //   transform: rotateY(180deg);
+    // }
+
+    // .flipper {
+    //   transition: 0s;
+    //   transform-style: preserve-3d;
+    //   position: relative;
+    // }
+
+    .front, .back {
+      backface-visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+
+    // .front {
+    //   z-index: 2;
+    //   transform: rotateY(0deg);
+    // }
+
+    // .back {
+    //   transform: rotateY(180deg);
+    // }
+
+    table {
+      display: table !important;
+    }
+  }
+}

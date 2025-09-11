@@ -1,0 +1,10 @@
+<h3>Edit Global Settings</h3>
+<div class="row">
+  <div class="col-xs-6">
+    <%= simple_form_for [:admin, @setting] do |f| %>
+      <%= render 'admin/errors', form: f %>
+      <%= f.input :require_promo_code_on_signup %>
+      <%= f.submit 'Update', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

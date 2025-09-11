@@ -1,0 +1,1 @@
+json.partial! 'api/resources/league_pick', league_pick: @league_pick

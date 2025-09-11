@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/panel_background"
+    android:orientation="vertical"
+    tools:context="${packageName}.${activityClass}">
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/dark_blue"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/pick_a_game"
+        android:textSize="36sp"
+        app:font="BebasNeue" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/click_to_play"
+        android:textSize="18sp"
+        app:font="BebasNeue" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridView
+            android:id="@+id/games_GridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:horizontalSpacing="5dp"
+            android:numColumns="@integer/game_columns"
+            android:verticalSpacing="5dp" />
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/empty_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_games_found"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progress_ProgressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</LinearLayout>

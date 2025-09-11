@@ -1,0 +1,7 @@
+<% if form.object.errors.any? %>
+  <ul class="validation-errors">
+    <% form.object.errors.full_messages.each do |error| %>
+      <li><strong>Error:</strong> <%= error %></li>
+    <% end %>
+  </ul>
+<% end %>

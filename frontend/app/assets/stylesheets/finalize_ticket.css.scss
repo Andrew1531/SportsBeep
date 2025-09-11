@@ -1,0 +1,151 @@
+#finalize-ticket {
+
+  .quiz-time {
+    font-family: 'BebasNeue';
+    text-align: center;
+    font-size: 80px;
+    display: block;
+  }
+
+  .credit-card {
+    color: #000;
+    font-size: 70px;
+  }
+
+  p {
+    @include sans-serif();
+    text-align: center;
+  }
+
+  .overlay-text {
+    font-family: 'BebasNeue';
+    text-align: center;
+    font-size: 26px;
+    display: block;
+    margin-bottom: 30px;
+  }
+
+  .matchup, .which-pool-text, .ticket-completed {
+    @extend .overlay-text;
+  }
+
+  .ticket-completed {
+    font-size: 50px;
+  }
+
+  .sending-answers {
+    font-size: 36px;
+    @include loud;
+    text-align: center;
+  }
+
+  .start-questions-btn {
+    @include make-xs-column(10);
+    @include make-xs-column-offset(1);
+    @include make-sm-column(4);
+    @include make-sm-column-offset(4);
+  }
+
+  .cancel-payment, .confirm-payment,
+  .cancel-pool, .confirm-pool,
+  .view-ticket, .play-again {
+    @include make-xs-column(10);
+    @include make-xs-column-offset(1);
+    @include make-sm-column(6);
+    @include make-sm-column-offset(0);
+    padding: 0 15px;
+
+    .fa {
+      margin-right: 5px;
+      display: none;
+    }
+
+    .modal-btn {
+      width: 100%;
+      display: block;
+    }
+  }
+
+  .pool-select {
+    width: 80%;
+    margin: auto;
+    display: block;
+    height: 48px;
+    margin-bottom: 30px;
+    background: #fff;
+    border: none;
+    @include shadow;
+    @include sans-serif;
+    font-size: 18px;
+  }
+
+  .modal-btn {
+    color: #fff;
+    text-align: center;
+    font-size: 24px;
+    padding: 10px 0;
+    font-family: 'BebasNeue';
+    background-color: $sb-dark-gray;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: none;
+      background-color: darken($sb-dark-gray, 5%);
+    }
+  }
+
+  .red-modal-btn {
+    background-color: $sb-modal-btn-primary;
+
+    &:hover {
+      background-color: darken($sb-modal-btn-primary, 5%);
+    }
+  }
+
+  .best-and-bust-timer {
+    font-size: 48px;
+    margin: 15px auto 0 auto;
+    color: #000;
+    text-align: center;
+    font-family: 'BebasNeue';
+  }
+
+  @include breakpoint(xs) {
+    .quiz-time {
+      color: #fff;
+    }
+
+    p {
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .vs {
+      display: block;
+    }
+
+    .credit-card {
+      color: #fff;
+    }
+
+    .overlay-text {
+      font-size: 42px;
+      color: #fff;
+    }
+
+    .best-and-bust-timer {
+      color: #fff;
+    }
+
+    .modal-btn {
+      margin-bottom: 15px;
+    }
+
+  }
+}
+
+@include breakpoint(xs) {
+  .sending-answers {
+    color: #fff;
+  }
+}

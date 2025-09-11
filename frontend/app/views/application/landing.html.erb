@@ -1,0 +1,119 @@
+<div class="splash-1">
+  <%= image_tag 'logo-md.png' %>
+  <ul>
+    <li><%= link_to 'About Us', '#about-us' %></li>
+    <li><%= link_to 'Why Sportsbeep', '#why-sportsbeep' %></li>
+    <li><%= link_to 'Sign Up', new_user_registration_path %></li>
+    <li><%= link_to (current_user ? 'Play' : 'Login & Play'), play_path %></li>
+    <li><%= link_to 'Contact', '#contact-us' %></li>
+  </ul>
+</div>
+<div class="about-us">
+  <div class="landing-padding">
+    <a name="about-us"></a>
+    <header>About Sportsbeep</header>
+    <p>
+      Sportsbeep intends to be at the forefront of Fantasy Sports entertainment and gaming. By providing a faster, easier,
+      and richer approach to gaming and communications, Sportsbeep believes it will become an integral part of its users’ daily lives.
+      Sportsbeep’s top priority is to build a gaming platform that enables users to connect, interact and recruit other fantasy
+      sports players. The Company wants its users to discover, learn and win cash prizes, all the while becoming smarter sports fans
+      by using the platform. Sportsbeep’s business structure is low cost and web based. However, Sportsbeep’s reach can extend to
+      millions of site hits on a daily basis. It has no physical products to manufacture; no cost of goods sold; no inventory or
+      warehousing needs; no freight or insurance costs; zero shipping or packaging; zero need for massive real-estate space, leasing,
+      offices or labor costs. The electronic nature of the automated services sold, avoids all the usual “brick and mortar” business
+      expenditures with all of their inherent risks.
+    </p>
+  </div>
+</div>
+<div class="splash-2">
+  <a name="why-sportsbeep"></a>
+  <div class="ad">
+    <p>
+      PLAY, WIN, EARN &amp; SHARE
+      <br>
+      with the leader in one day fantasy sports
+    </p>
+    <p>
+      Free &amp; paid games available.
+    </p>
+    <p>
+      NO long-term commitment.
+      <br>
+      Simply Play when you want!
+    </p>
+    <%= link_to 'Play Now!', play_path, class: 'play-btn' %>
+    <p>
+      Also available on
+      <br>
+      <%= image_tag 'landing-googleplay.png' %>
+    </p>
+  </div>
+  <div class="phones">
+    <%= image_tag 'landing-phones.png' %>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="twitter-block">
+  <%= image_tag 'twitter-logo.png' %>
+  <header>What our Twitter followers are talking about</header>
+  <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23sportsbeep%20OR%20%40Sportsbeep" data-widget-id="540585371449692160">Tweets about #sportsbeep OR @Sportsbeep</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+<div class="play-now-banner">
+  <%= link_to 'Play Now!', play_path, class: 'play-btn' %>
+</div>
+<div class="footer">
+  <a name="contact-us"></a>
+  <footer>
+    <div class="contact">
+      <span class="footer-header">Sportsbeep</span>
+      <ul>
+        <li>Phone: 610-776-7872</li>
+        <li><%= mail_to 'support@sportsbeep.com' %></li>
+      </ul>
+    </div>
+    <div class="other-links">
+      <span class="footer-header">Other Links</span>
+      <ul>
+        <li><%= link_to 'Privacy Policy', privacy_policy_path %></li>
+        <li><%= link_to 'Refund Policy', refund_policy_path %></li>
+      </ul>
+    </div>
+    <div class="follow-us">
+      <span class="footer-header">Also follow us on:</span>
+      <ul>
+        <li class="social-icon facebook">
+          <%= link_to 'https://www.facebook.com/sportsbeep' do %>
+            <i class="fa fa-facebook"></i>
+          <% end %>
+        </li>
+        <li class="social-icon twitter">
+          <%= link_to 'https://twitter.com/Sportsbeep' do %>
+            <i class="fa fa-twitter"></i>
+          <% end %>
+        </li>
+        <li class="social-icon youtube">
+          <%= link_to 'https://www.youtube.com/channel/UCwcPSE82w0aYSspC8bZjlsg' do %>
+            <i class="fa fa-youtube"></i>
+          <% end %>
+        </li>
+        <li class="social-icon tumblr">
+          <%= link_to 'https://www.tumblr.com/blog/sportsbeepapp' do %>
+            <i class="fa fa-tumblr"></i>
+          <% end %>
+        </li>
+        <li class="social-icon pinterest">
+          <%= link_to 'http://www.pinterest.com/Sportsbeep/' do %>
+            <i class="fa fa-pinterest"></i>
+          <% end %>
+        </li>
+        <li class="social-icon instagram">
+          <%= link_to 'http://instagram.com/sportsbeep' do %>
+            <i class="fa fa-instagram"></i>
+          <% end %>
+        </li>
+        <div class="clearfix"></div>
+      </ul>
+    </div>
+  </footer>
+</div>

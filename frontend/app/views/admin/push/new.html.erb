@@ -1,0 +1,5 @@
+<%= simple_form_for @push, url: admin_push_index_path do |f| %>
+  <%= f.input :email %>
+  <%= f.input :type, collection: %w(contest injury) %>
+  <%= f.submit 'Push' %>
+<% end %>

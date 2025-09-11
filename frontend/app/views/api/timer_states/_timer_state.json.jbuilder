@@ -1,0 +1,1 @@
+json.(timer_state, :id, :encrypted_text)

@@ -1,0 +1,229 @@
+@import '_colors';
+@import 'bootstrap/variables';
+
+@mixin landing-padding {
+  @include make-xs-column(10);
+  @include make-xs-column-offset(1);
+}
+
+.play-btn {
+  padding: 15px;
+  width: 300px;
+  display: block;
+  margin: auto;
+  background-color: $sb-secondary;
+  color: #fff;
+  font-family: 'BebasNeue', sans-serif;
+  text-transform: uppercase;
+  font-size: 24px;
+  letter-spacing: 2px;
+  text-align: center;
+
+  &:hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: darken($sb-secondary, 5%);
+  }
+}
+
+.landing-padding {
+  @include landing-padding;
+}
+
+.splash-1,
+.about-us,
+.splash-2,
+.twitter-block,
+.play-now-banner,
+.footer {
+  @include make-row();
+}
+
+@include breakpoint(xs) {
+  .landing-page .splash-1 img {
+    width: 90%;
+  }
+}
+.landing-page {
+
+  header {
+    font-size: 24px;
+    letter-spacing: 4px;
+    text-align: center;
+    font-family: 'BebasNeue', sans-serif;
+    text-transform: uppercase;
+  }
+
+  .splash-1 {
+    height: 500px;
+    background: image-url('hero.png') no-repeat center center;
+    background-size: cover;
+    text-align: center;
+
+    img {
+      margin: 40px 0 20px 0;
+    }
+
+    ul {
+      font-family: 'Ubuntu', sans-serif;
+      @include make-row();
+      @include landing-padding;
+
+      li {
+        @extend .col-sm-15;
+        list-style: none;
+
+        a {
+          display: block;
+          text-align: center;
+          color: #fff;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  .about-us {
+    padding: 40px 0 30px 0;
+    background-color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+
+    p {
+      line-height: 28px;
+    }
+  }
+}
+
+.splash-2 {
+  padding: 20px 0;
+  background-color: $sb-primary;
+  font-family: 'Ubuntu', sans-serif;
+  background: image-url('landing-fbplayer.png') no-repeat center center;
+  background-size: cover;
+  position: relative;
+
+  .ad {
+    margin-top: 40px;
+    margin-bottom: $grid-gutter-width * 2;
+    @include make-md-column(6);
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+
+    p {
+      margin: 30px 0;
+    }
+  }
+
+  .phones {
+    @include make-md-column(6);
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+}
+
+.twitter-block {
+  background-color: #fff;
+  padding: 20px 0;
+  text-align: center;
+
+  header {
+    margin: 5px 20px 20px 20px;
+  }
+}
+
+.play-now-banner {
+  padding: 20px 0;
+  background: $sb-primary;
+}
+
+.footer {
+  padding: 40px 0;
+  font-family: 'Ubuntu', sans-serif;
+  background: #f6f5f6;
+
+  .footer-header {
+    display: block;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  footer {
+    @include landing-padding();
+  }
+
+  .contact, .other-links {
+    @include make-sm-column(4);
+    @include make-md-column(3);
+  }
+
+  .other-links {
+    a {
+      color: #000;
+    }
+  }
+
+  .follow-us {
+    @include make-sm-column(4);
+    @include make-md-column(6);
+
+    ul li {
+      display: inline;
+    }
+  }
+
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 24px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    float: left;
+
+    a {
+      display: block;
+      color: #fff;
+    }
+
+    &.facebook { background-color: #3b5998; }
+    &.twitter { background-color: #55acee; }
+    &.youtube { background-color: #bb0000; }
+    &.tumblr { background-color: #32506d; }
+    &.pinterest { background-color: #cb2027; }
+    &.instagram { background-color: #517fa4; }
+  }
+}
+
+@media (max-width: $screen-xs-max) {
+  .splash-2 .ad {
+    margin-top: 0;
+  }
+
+  .footer {
+    text-align: center;
+
+    .footer-header {
+      margin-top: $grid-gutter-width;
+    }
+
+    .follow-us {
+      display: table;
+      margin: 0 auto;
+
+      ul {
+        li {
+          display: table-cell;
+        }
+      }
+    }
+  }
+}

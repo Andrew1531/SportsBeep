@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticket_id: 1
+  state_text: MyString
+  state_value: 1.5
+
+two:
+  ticket_id: 1
+  state_text: MyString
+  state_value: 1.5

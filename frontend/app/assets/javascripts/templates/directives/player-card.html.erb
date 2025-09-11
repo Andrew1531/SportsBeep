@@ -1,0 +1,47 @@
+<div class="card-container player-card">
+  <span ng-switch="player.null">
+
+    <!-- Select a player card, when a player isn't chosen yet -->
+    <div class="card no-player" ng-switch-when="true">
+      <div class="flipper">
+        <div class="front">
+          <div class="top-left">{{ player.number }}</div>
+          <div class="top-right"></div>
+          <div class="clearfix"></div>
+          <div class="picture"></div>
+          <p class="middle">
+            Select a
+          </p>
+          <div class="content">{{ player.gamePosition.name }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player card after chosen, showing all information -->
+    <div class="card" ng-style="{ 'background-color': player.teamColor }" ng-switch-default>
+      <div class="flipper">
+        <div class="front">
+      <div class="top-left">{{ player.number }}</div>
+      <div class="top-right">{{ player.position }}</div>
+      <div class="clearfix"></div>
+      <%= image_tag 'silhouette.png', class: 'picture', 'ng-hide' => 'player.headshot_url' %>
+      <img class="picture" ng-show="player.headshot_url" ng-src="{{ player.headshot_url }}">
+      <p class="middle">
+        <span class="player-name">{{ player.name }}</span><br>
+        <span class="team-name" ng-style="{ 'color': player.team.secondary_color }">{{ player.team.name }}</span>
+      </p>
+      <div class="content">
+        <div class="scrollable">
+          <table>
+            <tr><td ng-repeat="stat in player.stats">{{ stat.abbr }}</td></tr>
+            <tr><td ng-repeat="stat in player.stats">{{ stat.amount }}</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="backdrop">
+        <team-name-backdrop sb-team="player.team" sb-height="150"></team-name-backdrop>
+      </div>
+    </div>
+
+  </span>
+</div>

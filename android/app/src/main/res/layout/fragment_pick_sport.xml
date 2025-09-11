@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    tools:context="com.sportsbeep.app.ui.sport.PickSportActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/panel_blue_rounded"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/panel_red_rounded_top"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="@string/new_game"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            app:font="BebasNeue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="12dp"
+            android:text="@string/select_a_level"
+            android:textColor="@color/red" />
+
+        <RadioGroup
+            android:id="@+id/level_RadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/professional_FontRadioButton"
+                style="@style/LevelFontRadioButtonStyle"
+                android:text="@string/professional" />
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/college_FontRadioButton"
+                style="@style/LevelFontRadioButtonStyle"
+                android:text="@string/college" />
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/international_FontRadioButton"
+                style="@style/LevelFontRadioButtonStyle"
+                android:text="@string/international" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="12dp"
+            android:text="@string/select_a_sport"
+            android:textColor="@color/red" />
+
+        <RadioGroup
+            android:id="@+id/sport_RadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/baseball_FontRadioButton"
+                style="@style/SportFontRadioButtonStyle"
+                android:background="@drawable/baseball_selector"
+                android:drawableTop="@drawable/ic_baseball"
+                android:text="@string/baseball" />
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/football_FontRadioButton"
+                style="@style/SportFontRadioButtonStyle"
+                android:background="@drawable/football_selector"
+                android:drawableTop="@drawable/ic_football"
+                android:text="@string/football" />
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/basketball_FontRadioButton"
+                style="@style/SportFontRadioButtonStyle"
+                android:background="@drawable/basketball_selector"
+                android:drawableTop="@drawable/ic_basketball"
+                android:text="@string/basketball" />
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/hockey_FontRadioButton"
+                style="@style/SportFontRadioButtonStyle"
+                android:background="@drawable/hockey_selector"
+                android:drawableTop="@drawable/ic_hockey"
+                android:text="@string/hockey" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/enter_Button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/enter_button_selector"
+            android:enabled="false"
+            android:text="@string/enter"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

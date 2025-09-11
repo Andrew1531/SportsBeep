@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include layout="@layout/item_game_big" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="@string/incomplete"
+        android:textColor="@color/red"
+        android:textSize="32sp"
+        app:font="BebasNeue" />
+</LinearLayout>

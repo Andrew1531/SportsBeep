@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assetlist xmlns="http://feed.elasticstats.com/schema/assets/manifest-v1.0.xsd" type="players headshots" sport="MLB">
+  <asset id="178af28f-f5bb-49e1-9770-71d6e39edb63" created="2014-07-31T14:21:59+0000" updated="2014-07-31T14:27:26+0000" player_id="178af28f-f5bb-49e1-9770-71d6e39edb63">
+    <title><![CDATA[Nate Adcock]]></title>
+    <description><![CDATA[MLB: Texas Rangers-Photo Day]]></description>
+    <links>
+      <link width="250" height="250" href="/players/headshots/946eca3a-649a-4747-ad2b-abc44fc057f1/250.jpg" />
+      <link width="195" height="270" href="/players/headshots/946eca3a-649a-4747-ad2b-abc44fc057f1/195x270.jpg" />
+    </links>
+  </asset>
+  <asset id="2aee445d-7116-4616-bcfd-1a8931da5a06" created="2014-07-31T14:21:57+0000" updated="2014-07-31T14:27:13+0000" player_id="2aee445d-7116-4616-bcfd-1a8931da5a06">
+    <title><![CDATA[Scott Baker]]></title>
+    <description><![CDATA[MLB: Texas Rangers at Detroit Tigers]]></description>
+    <links>
+      <link width="250" height="253" href="/players/headshots/d4b07b27-022a-44e1-9d5b-c31d5d22ea56/250.jpg" />
+      <link width="195" height="270" href="/players/headshots/d4b07b27-022a-44e1-9d5b-c31d5d22ea56/195x270.jpg" />
+    </links>
+  </asset>
+  <asset id="ff750663-5eb3-4006-9d6a-2660397ff595" created="2014-07-31T14:19:37+0000" updated="2014-07-31T14:19:41+0000" player_id="ff750663-5eb3-4006-9d6a-2660397ff595">
+    <title><![CDATA[Aaron Poreda]]></title>
+    <description><![CDATA[MLB: Texas Rangers-Photo Day]]></description>
+    <copyright><![CDATA[USA Today Sports Images]]></copyright>
+    <links>
+      <link width="250" height="250" href="/players/headshots/97b495c8-fcf3-4f70-a5e4-ca291838e270/250.jpg" />
+      <link width="195" height="270" href="/players/headshots/97b495c8-fcf3-4f70-a5e4-ca291838e270/195x270.jpg" />
+    </links>
+  </asset>
+</assetlist>

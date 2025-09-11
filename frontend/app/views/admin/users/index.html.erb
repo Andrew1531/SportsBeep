@@ -1,0 +1,23 @@
+<h3>
+  Users (<%= @count %>)
+</h3>
+<%= paginate @users %>
+<table id="users" class="table table-hover">
+  <thead>
+    <tr>
+      <th>E-mail</th>
+      <th>Created at</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to user.email, admin_user_path(user) %></td>
+        <td><%= l est(user.created_at), format: :short %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @users %>

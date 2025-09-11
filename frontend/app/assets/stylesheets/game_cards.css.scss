@@ -1,0 +1,139 @@
+.start-time {
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  padding: 0 15px;
+  background: $sb-primary;
+  @include sans-serif();
+  font-size: 13px;
+  @include border-top-radius(3px);
+  border-bottom: 1px solid $sb-primary;
+  @include gradient-vertical($sb-primary, darken($sb-primary, 5%));
+
+  .game-start-date {
+    display: block;
+    float: left;
+  }
+
+  .game-start-time {
+    display: block;
+    overflow: hidden;
+    text-align: right;
+  }
+}
+
+.game-card {
+  height: $game-height;
+  position: relative;
+  @include shadow;
+
+  .teams {
+    height: $game-height;
+    position: relative;
+  }
+
+  .away-team {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+  }
+
+  .home-team {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+
+    .market {
+      text-align: right;
+    }
+  }
+
+  .center-circle {
+    width: 40px;
+    height: 40px;
+    line-height: 35px;
+    font-size: 30px;
+    letter-spacing: 1px;
+    text-align: center;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 3px solid #fff;
+    color: #fff;
+    font-family: 'BebasNeue';
+    background-color: $sb-primary;
+    @extend .vertically-centered;
+    @extend .img-circle;
+    @include shadow(2);
+  }
+
+  .market, .name {
+    font-family: 'BebasNeue', sans-serif;
+  }
+
+  .market {
+    color: #fff;
+    font-size: 26px;
+    line-height: 16px;
+    margin-bottom: 4px;
+  }
+
+  .name {
+    line-height: 30px;
+    font-size: 42px;
+    color: yellow;
+  }
+}
+
+.overlay .game-card {
+  height: 320px;
+
+  svg {
+    cursor: pointer;
+  }
+
+  .name {
+    font-size: 90px;
+    line-height: 66px;
+  }
+
+  .market {
+    font-size: 50px;
+    line-height: 42px;
+  }
+}
+
+@media(min-width: 0) {
+  .overlay .content { width: $overlay-xs-width !important; }
+  .overlay .game-card {
+    .name {
+      font-size: 50px;
+      line-height: 32px;
+    }
+
+    .market {
+      font-size: 36px;
+      line-height: 34px;
+    }
+  }
+}
+
+@media(min-width: $screen-sm) {
+  .overlay .content { width: $overlay-sm-width !important; }
+}
+
+@media(min-width: $screen-md) {
+  .overlay .content { width: $overlay-md-width !important; }
+}
+
+@media(min-width: $screen-lg) {
+  .overlay .content { width: $overlay-lg-width !important; }
+
+  .center-circle {
+    width: 45px;
+    height: 45px;
+    line-height: 40px;
+    font-size: 28px;
+  }
+}

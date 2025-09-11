@@ -1,0 +1,47 @@
+<statistics xmlns="http://feed.elasticstats.com/schema/mlb/player-stats-v6.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" season_id="8f4e3a30-8444-11e3-808c-22000a904a71" season_year="2014" type="player">
+  <player id="000f4266-baa3-4065-b8c7-acd16e9dbe72" first_name="Andrew" last_name="Brown" preferred_name="Andrew">
+    <team id="f246a5e5-afdb-479c-9aaa-c68beeda7af6" name="Mets">
+      <hitting ab="27" ap="30" avg=".185" lob="12" pcount="122" rbi="5" abhr="27.0" abk="3.0" bip="18" babip="0.222" bbk="0.222" bbpa="0.067" gofo="2.0" iso="0.148" obp="0.233" ops="0.566" seca="0.074" slg="0.333" xbh="2">
+        <onbase h="5" s="3" d="1" t="0" hr="1" tb="9" bb="2" ibb="0" hbp="0" fc="0" roe="0"/>
+        <runs unearned="0" earned="4" total="4"/>
+        <outcome klook="14" kswing="10" ktotal="24" ball="43" iball="0" dirtball="0" foul="0"/>
+        <outs klook="3" kswing="6" ktotal="9" po="0" fo="4" fidp="0" go="8" gidp="1" lo="0" lidp="0" sacfly="1" sachit="0"/>
+        <steal caught="0" stolen="0" pct="0.0"/>
+        <games start="5" play="10" finish="8" complete="3"/>
+      </hitting>
+      <fielding po="9" a="0" dp="0" tp="0" error="0" tc="9" fpct="1.0" rf="1.0">
+        <games start="3" play="7" finish="6" complete="2"/>
+      </fielding>
+    </team>
+  </player>
+  <player id="002f8bc7-87df-4014-91b5-44db51523d5e" first_name="Alfredo" last_name="Aceves" preferred_name="Alfredo">
+    <team id="a09ec676-f887-43dc-bbb3-cf4bbaee9a18" name="Yankees">
+      <pitching pcount="194" error="0" ip_1="34" ip_2="11.1" bf="49" oba="0.261" gofo="0.211" lob="19" era="6.353" k9="8.739" whip="1.324" kbb="3.67">
+        <onbase h="12" s="7" d="2" t="0" hr="3" tb="23" bb="3" ibb="0" hbp="0" fc="0" roe="0"/>
+        <runs unearned="0" earned="8" total="8"/>
+        <outcome klook="33" kswing="21" ktotal="54" ball="59" iball="0" dirtball="0" foul="0"/>
+        <outs klook="4" kswing="7" ktotal="11" po="5" fo="11" fidp="0" go="4" gidp="0" lo="3" lidp="0" sacfly="0" sachit="0"/>
+        <steal caught="0" stolen="0"/>
+        <games start="0" play="5" finish="2" complete="0" win="0" loss="2" save="0" svo="1" hold="1" blown_save="0" qstart="0" shutout="0"/>
+      </pitching>
+      <fielding po="1" a="1" dp="0" tp="0" error="0" tc="2" fpct="1.0" rf="0.0">
+        <games start="0" play="5" finish="2" complete="0"/>
+      </fielding>
+    </team>
+  </player>
+  <player id="0081ffb9-e0d7-4e7f-9adf-d6b36cbb959a" first_name="Chad" last_name="Qualls" preferred_name="Chad">
+    <team id="eb21dadd-8f10-4095-8bf3-dfb3b779f107" name="Astros">
+      <pitching pcount="217" error="0" ip_1="41" ip_2="13.2" bf="60" oba="0.321" gofo="2.5" lob="30" era="3.293" k9="10.539" whip="1.537" kbb="16.0">
+        <onbase h="18" s="15" d="1" t="1" hr="1" tb="24" bb="1" ibb="2" hbp="1" fc="0" roe="0"/>
+        <runs unearned="0" earned="5" total="5"/>
+        <outcome klook="38" kswing="18" ktotal="56" ball="51" iball="6" dirtball="2" foul="0"/>
+        <outs klook="3" kswing="13" ktotal="16" po="1" fo="4" fidp="0" go="15" gidp="2" lo="1" lidp="0" sacfly="0" sachit="0"/>
+        <steal caught="0" stolen="0"/>
+        <games start="0" play="16" finish="7" complete="0" win="1" loss="1" save="3" svo="5" hold="1" blown_save="1" qstart="0" shutout="0"/>
+      </pitching>
+      <fielding po="2" a="3" dp="0" tp="0" error="0" tc="5" fpct="1.0" rf="0.0">
+        <games start="0" play="16" finish="7" complete="0"/>
+      </fielding>
+    </team>
+  </player>
+</statistics>

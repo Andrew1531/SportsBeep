@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="edit-user-profile">
+    <div class="edit-user-form">
+      <%= image_tag avatar_for(@user), class: 'avatar' %>
+      <header><%= @user.username %></header>
+      <%= render 'shared/errors', errors: @user.errors.full_messages %>
+      <%= simple_form_for @user, url: registration_path(:user) do |f| %>
+        <%= f.input :email %>
+        <%= f.input :username, required: false %>
+        <%= f.input :avatar %>
+        <%= f.input :password, placeholder: 'Leave blank to leave unchanged' %>
+        <%= f.input :current_password %>
+        <div class="text-center">
+          <%= f.submit 'Update Account' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

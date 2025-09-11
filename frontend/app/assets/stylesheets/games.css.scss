@@ -1,0 +1,117 @@
+.games-list {
+  list-style: none;
+
+  li {
+    margin-bottom: $grid-gutter-width;
+    @include make-sm-column(6);
+    @include make-lg-column(4);
+  }
+}
+
+.ticket-roster {
+  @include make-row();
+
+  .sidebar {
+    @extend .hidden-xs;
+    @include make-sm-column(6);
+    @include make-md-column(4);
+    @include make-lg-column(3);
+  }
+
+  .players {
+    @include make-sm-column(6);
+    @include make-md-column(8);
+    @include make-lg-column(9);
+  }
+}
+
+#game-positions {
+  list-style: none;
+  margin-top: $grid-gutter-width;
+  @include shadow;
+  @extend .hidden-xs;
+
+  li {
+    padding: 2px 0;
+    text-indent: 15px;
+    letter-spacing: 1px;
+    background-color: $sb-primary;
+    color: #fff;
+    font-family: 'BebasNeue';
+    font-size: 28px;
+    cursor: pointer;
+    border-top: 1px solid darken($sb-primary, 5%);
+
+    &:first-child {
+      border-top: 0;
+    }
+
+    &:hover {
+      background-color: darken($sb-primary, 5%);
+    }
+  }
+}
+
+.mobile-game-card-container {
+  display: none;
+  @extend .visible-xs;
+  @include make-row();
+
+  .start-time {
+    border-radius: 0;
+    @include box-shadow(none);
+    @include make-xs-column(12);
+  }
+
+  .mobile-game-card {
+    @include make-row();
+    position: relative;
+    margin-bottom: $grid-gutter-width / 2;
+
+    .center-circle {
+      width: 45px;
+      height: 45px;
+      line-height: 40px;
+      font-size: 30px;
+      letter-spacing: 1px;
+      text-align: center;
+      left: 0;
+      right: 0;
+      margin: auto;
+      border: 3px solid #fff;
+      color: #fff;
+      font-family: 'BebasNeue';
+      background-color: $sb-primary;
+      z-index: 2;
+      @extend .vertically-centered;
+      @extend .img-circle;
+      @include shadow(2);
+    }
+
+    .home-team, .away-team {
+      @include make-xs-column(6);
+      padding: 0 $grid-gutter-width;
+      padding-bottom: 12px;
+      font-family: 'BebasNeue';
+
+      .market {
+        font-size: 28px;
+        color: #fff;
+      }
+
+      .name {
+        font-size: 42px;
+        line-height: 28px;
+      }
+    }
+
+    .home-team {
+      text-align: right;
+    }
+  }
+}
+
+// @media(max-width: $screen-xs-max) {}
+// @media(min-width: $screen-sm-max) {}
+// @media(min-width: $screen-md-max) {}
+// @media(min-width: $screen-lg-max) {}

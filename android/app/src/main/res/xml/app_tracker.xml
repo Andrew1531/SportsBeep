@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <bool name="ga_autoActivityTracking">true</bool>
+    <string name="ga_trackingId">UA-55386266-1</string>
+
+    <screenName name="com.sportsbeep.app.ui.login.LoginActivity">Login</screenName>
+    <screenName name="com.sportsbeep.app.ui.account.CreateAccountActivity">Create Account</screenName>
+    <screenName name="com.sportsbeep.app.ui.contest.ContestActivity">Contests</screenName>
+    <screenName name="com.sportsbeep.app.ui.contest.ContestDetailsActivity">Contest Details</screenName>
+    <screenName name="com.sportsbeep.app.ui.game.buildteam.BuildTeamActivity">Build A Team</screenName>
+    <screenName name="com.sportsbeep.app.ui.game.pickgame.PickGameActivity">Pick A Game</screenName>
+    <screenName name="com.sportsbeep.app.ui.game.pool.PickPoolActivity">Pick A Pool</screenName>
+    <screenName name="com.sportsbeep.app.ui.game.questions.BestBustActivity">Best and Bust</screenName>
+    <screenName name="com.sportsbeep.app.ui.game.stats.PlayerStatsActivity">Player Stats</screenName>
+    <screenName name="com.sportsbeep.app.ui.game.stats.TeamStatsActivity">Team Stats</screenName>
+    <screenName name="com.sportsbeep.app.ui.sport.PickSportActivity">Pick A Sport</screenName>
+    <screenName name="com.sportsbeep.app.ui.tutorial.HowToPlayActivity">How To Play</screenName>
+</resources>

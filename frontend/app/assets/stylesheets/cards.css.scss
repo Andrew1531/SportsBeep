@@ -1,0 +1,136 @@
+.card-container {
+  @include make-xs-column(12);
+  @include make-md-column(4);
+  @include make-lg-column(3);
+  margin-bottom: $grid-gutter-width;
+}
+
+.card {
+  padding: 5px;
+  height: $card-height;
+  @include loud;
+  color: #fff;
+  position: relative;
+  cursor: pointer;
+  border-radius: 3px;
+  @include shadow;
+
+  .clearfix {
+    display: none;
+    @extend .visible-md;
+    @extend .visible-lg;
+  }
+
+  .front, .back {
+    height: $card-height;
+  }
+
+  .flipper {
+    position: relative;
+  }
+
+  .top-left, .top-right {
+    font-size: 24px;
+    line-height: 24px;
+    float: left;
+  }
+
+  .top-right {
+    float: right;
+  }
+
+  .picture {
+    @extend .img-circle;
+    @include shadow(2);
+    height: 100px;
+    width: 100px;
+    border: 5px solid $sb-light-gray;
+    margin: auto;
+    margin-bottom: 15px;
+    background-color: #fff;
+    display: block;
+
+    &.placeholder {
+      @include box-shadow(none);
+      border: 0;
+      background-color: transparent;
+    }
+  }
+
+  .middle, .content {
+    font-size: 28px;
+    line-height: 28px;
+    text-align: center;
+  }
+
+  .content {
+    height: $card-content-height;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .scrollable {
+    height: $card-content-height;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    left: 0;
+  }
+
+  .backdrop {
+    & > div {
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      right: 0;
+      text-indent: -7px;
+    }
+
+    text {
+      font-size: 85px;
+    }
+  }
+}
+
+@include breakpoint(sm) {
+  .card-container {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: $grid-gutter-width / 2;
+  }
+
+  .card {
+    height: $card-height-sm;
+    line-height: $card-height-sm;
+
+    .picture,
+    table,
+    .content,
+    .backdrop {
+      display: none;
+    }
+
+    .top-left, .top-right {
+      height: $card-height-sm;
+      min-width: 35px;
+      text-align: center;
+      line-height: 68px;
+      font-size: 36px;
+      margin-left: 5px;
+    }
+
+    .top-right {
+      margin-right: 5px;
+    }
+
+    .front, .back, {
+      height: $card-height-sm;
+    }
+
+    .middle, .content {
+      padding: 0 5px;
+      line-height: 68px;
+    }
+  }
+}

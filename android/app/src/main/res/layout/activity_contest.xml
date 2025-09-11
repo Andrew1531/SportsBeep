@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:background="@android:color/black"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/dark_blue"
+            android:padding="8dp">
+
+            <com.sportsbeep.app.ui.view.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/my_contests"
+                android:textSize="36sp"
+                app:font="BebasNeue" />
+        </RelativeLayout>
+
+        <RadioGroup
+            android:id="@+id/contest_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="14dp">
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/live_contest_button"
+                style="@style/contest_tab"
+                android:text="@string/live_contests"
+                app:font="BebasNeue" />
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/upcoming_contest_button"
+                style="@style/contest_tab"
+                android:text="@string/upcoming_contests"
+                app:font="BebasNeue" />
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/contest_history_button"
+                style="@style/contest_tab"
+                android:text="@string/contests_history"
+                app:font="BebasNeue" />
+
+            <com.sportsbeep.app.ui.view.FontRadioButton
+                android:id="@+id/incomplete_contest_button"
+                style="@style/contest_tab"
+                android:layout_marginRight="0dp"
+                android:text="@string/incomplete_contests"
+                app:font="BebasNeue" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

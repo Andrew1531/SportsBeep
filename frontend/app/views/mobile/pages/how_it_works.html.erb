@@ -1,0 +1,251 @@
+<div class="col-xs-12">
+  <h1>Rules &amp; Scoring</h1>
+
+  <h2>Scoring</h2>
+  <div class="collapsed">
+    <header><h3>Football</h3></header>
+    <div class="collapsed-content">
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>All Players</th>
+            <th>Points Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Nfl::ScoringMap.const_get(:MAPPING).each do |statdata, points| %>
+            <tr><td><%= statdata.name %></td><td><%= sprintf "%.2f", points %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>Defense</th>
+            <th>Points Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Nfl::ScoringMap.const_get(:DEFENSE_OVERRIDE_MAPPING).each do |statdata, points| %>
+            <tr><td><%= statdata.name %></td><td><%= sprintf "%.2f", points %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>Kickers</th>
+            <th>Points Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Nfl::ScoringMap.const_get(:KICKING_OVERRIDE_MAPPING).each do |statdata, points| %>
+            <tr><td><%= statdata.name %></td><td><%= sprintf "%.2f", points %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>Best and Bust*</th>
+            <th>Points Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Perfect Time (0 sec.)</td><td>2.80</td></tr>
+          <tr><td>&frac12; Time (7 sec.)</td><td>1.40</td></tr>
+          <tr><td>Over Time (14 sec.+)</td><td>0.00</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        * Correct answers to best and bust questions are worth a maximum of 2.80 points each.
+        Your time for answering the question is recorded. The timer counts down from 14.0
+        seconds by 0.1 seconds. The actual points for each question is a formula based on
+        the actual time. Three examples are shown here, but almost any value between 2.80 and
+        0.00 is possible.
+      </p>
+
+
+    </div>
+  </div>
+  <div class="collapsed">
+    <header><h3>Baseball</h3></header>
+    <div class="collapsed-content">
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>Batters</th>
+            <th>Points Each</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% Mlb::ScoringMap.new.to_h(batter).each do |statdata, points| %>
+            <tr><td><%= statdata.name %></td><td><%= sprintf "%.2f", points %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>Pitchers</th>
+            <th>Points Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% %w(era ip k ha bb).each do |name| %>
+            <tr><td><%= st(name, Mlb) %></td><td><%= sprintf "%.2f", Mlb::SCORING_MULTIPLIER.(name, :pitcher) %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>Pitcher Bonus</th>
+            <th>Points Per Game</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Win</td><td>4.00</td></tr>
+          <tr><td>Save</td><td>2.00</td></tr>
+          <tr><td>Complete Game</td><td>2.00</td></tr>
+          <tr><td>Shutout</td><td>2.00</td></tr>
+          <tr><td>No Hitter</td><td>2.00</td></tr>
+          <tr><td>Perfect Game</td><td>2.00</td></tr>
+        </tbody>
+      </table>
+
+      <!-- league picks have been temporarily disabled
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>League Pick</th>
+            <th>Points Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Home Run by Your Pick</td><td>3.00</td></tr>
+        </tbody>
+      </table>
+      -->
+
+      <table class="table table-bordered stat-table">
+        <thead>
+          <tr>
+            <th>Best and Bust*</th>
+            <th>Points Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Perfect Time (0 sec.)</td><td>2.80</td></tr>
+          <tr><td>&frac12; Time (7 sec.)</td><td>1.40</td></tr>
+          <tr><td>Over Time (14 sec.+)</td><td>0.00</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        * Correct answers to best and bust questions are worth a maximum of 2.80 points each.
+        Your time for answering the question is recorded. The timer counts down from 14.0
+        seconds by 0.1 seconds. The actual points for each question is a formula based on
+        the actual time. Three examples are shown here, but almost any value between 2.80 and
+        0.00 is possible.
+      </p>
+
+    </div>
+  </div>
+  <div class="collapsed">
+    <header><h3>Basketball</h3></header>
+    <div class="collapsed-content">
+      <p>Not yet implemented</p>
+    </div>
+  </div>
+  <div class="collapsed">
+    <header><h3>Hockey</h3></header>
+    <div class="collapsed-content">
+      <p>Not yet implemented</p>
+    </div>
+  </div>
+
+  <h2>How to play</h2>
+  <desc>In addition to our Terms &amp; Conditions, contests at Sportsbeep are governed by the following set of rules:</desc>
+  <div class="collapsed">
+    <header><h3>Pick a Game</h3></header>
+    <div class="collapsed-content">
+      <p>
+        This is how you enter a Sportsbeep contest. Pick a live, upcoming MLB game to enter your ticket for the contest.
+      </p>
+    </div>
+  </div>
+  <div class="collapsed">
+    <header><h3>Your Ticket</h3></header>
+    <div class="collapsed-content">
+      <p>
+        Players.  Pitcher, Catcher, Corner Infielder (First and Third), Middle Infielder (Second and Short), Outfielder.
+      </p>
+      <!-- league picks have been temporarily disabled
+      <p>
+        League Pick.  Pick a team playing at the same time as the game you picked or shortly thereafter.
+        This is a limited list of concurrent or upcoming games from which you can pick a team.  That team's home runs will
+        contribute to your overall score for this contest, even though it's a different game.  The object is to pick the
+        team you believe will score the most home runs.  This is designed to give a contest at least one element that is
+        completely unrelated to the two teams in the contest.
+      </p>
+      -->
+      <p>
+        Picking a Pool.  Right now, it's only "Play for Free."  Once you pick a pool, your ticket is submitted.  The timed
+        best/best questions come next.  It's important to note that to prevent someone from "sampling" the best and bust questions,
+        backing out, and then trying again for better questions, the ticket is committed before you see the questions.  This means
+        that if your battery dies, you lose network connection, etc. before completely answering the questions, you'll get 0 points
+        for the questions but the ticket is committed anyway.
+      </p>
+      <p>
+        Best/Bust Questions.  These are 6 prediction questions that have only two answers: one team or the other that is playing
+        in the game on which the contest is based.  The first three are "BEST" questions, which ask you to predict which team will
+        be the BEST at a particular stat (singles, home runs, strike outs, etc.).  The second three are "BUST".  Points are awarded
+        for the right answer and the time you take to answer each question.  Answering correctly is only part of the scoring.
+      </p>
+      <p>
+        Your ticket’s total score will be a combination of Sportsbeep fantasy points from the players picked for
+        each position on your roster <!-- , home runs from the team you picked as the League Pick,-->
+        and your answers and times for the Best &amp; Bust questions.
+      </p>
+    </div>
+  </div>
+  <div class="collapsed">
+    <header><h3>Contests</h3></header>
+    <div class="collapsed-content">
+      <p>
+        Regardless of how many people enter a ticket for the game live MLB game, contests are always 10 tickets.  If 100 tickets
+        are entered, they will be organized into 10 contests of 10 tickets.  This is done randomly.  If a ticket is not filled,
+        “house players” with zero points will be assumed.
+      </p>
+    </div>
+  </div>
+  <div class="collapsed">
+    <header><h3>Winners (future)</h3></header>
+    <div class="collapsed-content">
+      <p>
+        For each contests, 7 out of the 10 people win. Tickets are scored and the top 7 people win. First
+        place almost doubles their money. Seventh place breaks even. The exact payouts are as follows (payout
+        dollar value of the entry fee):
+      </p>
+      <table class="table table-bordered">
+        <tr><td>1st</td><td>$1.909</td></tr>
+        <tr><td>2nd</td><td>$1.545</td></tr>
+        <tr><td>3rd</td><td>$1.364</td></tr>
+        <tr><td>4th</td><td>$1.136</td></tr>
+        <tr><td>5th</td><td>$1.090</td></tr>
+        <tr><td>6th</td><td>$1.045</td></tr>
+        <tr><td>7th</td><td>$1.000</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+</div>

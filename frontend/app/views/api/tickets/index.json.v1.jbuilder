@@ -1,0 +1,1 @@
+json.tickets @tickets, partial: 'api/resources/ticket', as: :ticket

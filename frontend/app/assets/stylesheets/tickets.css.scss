@@ -1,0 +1,93 @@
+.ticket-card {
+
+  .card {
+    background-color: $sb-primary;
+    border: 1px solid darken($sb-primary, 5%);
+  }
+
+  .middle {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .content {
+    font-size: 48px !important;
+    line-height: 48px !important;
+  }
+
+  .top-right {
+    display: none;
+    @extend .visible-xs;
+    @extend .visible-sm;
+  }
+}
+
+.ticket-error {
+  @include make-xs-column(12);
+  text-align: center;
+  margin-top: $grid-gutter-width;
+
+  &:before {
+    font-weight: bold;
+    content: 'Error: ';
+    color: $brand-danger;
+  }
+}
+
+#update-ticket-btn {
+  margin-bottom: $grid-gutter-width;
+  .fa { display: none }
+}
+
+.update-ticket {
+  .ticket-error {
+    margin: 0 0 $grid-gutter-width 0;
+  }
+}
+
+@media(max-width: $screen-sm-max) {
+  .ticket-card {
+    height: $mobile-player-card-height !important;
+    margin-bottom: $grid-gutter-width / 2;
+
+    .card {
+      height: $mobile-player-card-height !important;
+      line-height: $mobile-player-card-height;
+      border-radius: 0 !important;
+      @include box-shadow(none !important);
+    }
+
+    .name {
+      height: $mobile-player-card-height !important;
+      padding-top: 26px;
+      margin: 0 auto;
+      width: 60%;
+      height: 26px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    img {
+      display: none !important;
+    }
+
+    .ticket-placing, .ticket-score {
+      position: absolute;
+      font-size: 36px !important;
+    }
+
+    .ticket-placing {
+      left: $grid-gutter-width;
+    }
+
+    .ticket-score {
+      display: block;
+      float: right;
+      margin-right: 5px;
+      margin-top: 0;
+      top: 0;
+      right: $grid-gutter-width;
+    }
+  }
+}

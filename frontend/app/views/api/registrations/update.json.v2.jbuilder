@@ -1,0 +1,1 @@
+json.(resource, :id, :avatar_url)

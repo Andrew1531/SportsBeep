@@ -1,0 +1,66 @@
+$game-height: 160px;
+$mobile-game-card-height: 250px;
+$player-card-height: 340px;
+$mobile-player-card-height: 80px;
+$header-height: 80px;
+$grid-gutter-width: 20px;
+
+$card-height: 340px;
+$card-height-sm: 80px;
+$card-content-height: 154px;
+
+$squad-card-content-height: 240px;
+
+$overlay-xs-width: 100%;
+$overlay-sm-width: 720px;
+$overlay-md-width: 768px;
+$overlay-lg-width: 768px;
+
+$blur-size: 4px;
+
+@mixin shadow($level: 1) {
+  @if $level == 1 {
+    @include box-shadow(0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24));
+  } @else if $level == 2 {
+    @include box-shadow(0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23));
+  } @else if $level == 3 {
+    @include box-shadow(0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23));
+  } @else if $level == 4 {
+    @include box-shadow(0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22));
+  } @else if $level == 5 {
+    @include box-shadow(0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22));
+  }
+}
+
+@mixin breakpoint($size) {
+  @if $size == xs {
+    @media(max-width: $screen-xs-max) { @content ; }
+  } @else if $size == sm {
+    @media(max-width: $screen-sm-max) { @content ; }
+  } @else if $size == md {
+    @media(max-width: $screen-md-max) { @content ; }
+  } @else if $size == lg {
+    @media(max-width: $screen-lg-max) { @content ; }
+  }
+}
+
+
+@mixin secondary-btn {
+  background-color: $sb-secondary;
+  color: #fff;
+  text-align: center;
+  border: 0;
+
+  &:hover {
+    background-color: darken($sb-secondary, 5%);
+  }
+}
+
+@mixin sans-serif {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+@mixin loud {
+  font-family: 'BebasNeue', sans-serif;
+  text-transform: uppercase;
+}

@@ -1,0 +1,109 @@
+.best-and-bust {
+
+  header {
+    height: $header-height;
+    line-height: $header-height;
+    background-color: #2e5ea6;
+    @include loud;
+    @include shadow(1);
+    margin-bottom: $grid-gutter-width;
+    text-align: center;
+    color: #fff;
+    font-size: 36px;
+  }
+
+  li {
+    width: 100% !important;
+    background-color: $sb-primary;
+    border: 1px solid darken($sb-primary, 5%);
+    @include shadow(1);
+    display: block !important;
+    padding: $grid-gutter-width / 2;
+    @include sans-serif;
+    font-size: 16px !important;
+    margin-bottom: $grid-gutter-width / 2;
+  }
+
+  strong {
+    color: #46bcf2;
+    text-transform: uppercase;
+  }
+
+  .answer-details {
+    float: left;
+    color: #fff;
+    text-align: left;
+    width: 80%;
+
+    .question-type {
+    }
+
+    .correctness {
+      text-transform: uppercase;
+      @include loud;
+      font-size: 24px;
+      line-height: 24px;
+    }
+
+    .correct {
+      color: #86ab66;
+      i { @extend .fa-check; }
+    }
+
+    .incorrect {
+      color: #cc3347;
+      i { @extend .fa-times; }
+    }
+
+    .answer {
+      font-size: 14px;
+      em {
+        font-style: normal;
+        color: darken(#fff, 5%);
+      }
+    }
+  }
+
+  .points {
+    float: right;
+    @include loud;
+    background-color: lighten($sb-primary, 40%);
+    padding: 5px;
+
+    .value {
+      color: #fff;
+      font-size: 30px;
+      line-height: 30px;
+    }
+
+    .points-text {
+      color: #000;
+      font-size: 20px;
+      line-height: 20px;
+    }
+  }
+}
+
+.best-and-bust-card {
+
+  .card {
+    background-color: $sb-primary;
+    border: 1px solid darken($sb-primary, 5%);
+
+    .top-left, .top-right {
+      text-indent: -9999px;
+    }
+
+    @include breakpoint(sm) {
+      .middle {
+        padding-top: 7px !important;
+        line-height: 28px !important;
+
+        .team-name {
+          font-size: inherit;
+        }
+      }
+    }
+
+  }
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generation started @ 2014-07-31 18:36:11 UTC -->
+<event id="ffe073c4-69a5-4560-975f-df363376a4e8" season_id="8f4e3a30-8444-11e3-808c-22000a904a71" season_year="2014" season_type="REG" status="closed" xmlns="http://feed.elasticstats.com/schema/mlb/game-events-v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" attendance="" day_night="N" game_number="1">
+  <scheduled_start_time>2014-06-25T23:05:00Z</scheduled_start_time>
+  <venue id="b4186004-b6d0-42e7-8dc1-82ef0d946ecc"/>
+  <broadcast network="CSN" satellite="" internet="" cable=""/>
+  <visitor id="03556285-bdbb-4576-a06d-42f71f46ddc5" abbr="MIA" name="Marlins" market="Miami" probable_pitcher="0dbeec6c-890d-4d8f-9044-575c8d5c3e5e" starting_pitcher="0dbeec6c-890d-4d8f-9044-575c8d5c3e5e"/>
+  <home id="2142e1ba-3b40-445c-b8bb-f1f8b1054220" abbr="PHI" name="Phillies" market="Philadelphia" probable_pitcher="a468fd82-8723-433d-a302-15aaf2c9c07a" starting_pitcher="a468fd82-8723-433d-a302-15aaf2c9c07a"/>
+  <game>
+    <visitor id="03556285-bdbb-4576-a06d-42f71f46ddc5">
+      <roster>
+        <player id="04931bc2-76ee-4427-8da8-b5b3696f9ba6" first_name="Derek" preferred_name="Derek" last_name="Dietrich" status="A"/>
+      </roster>
+      <lineup>
+        <player id="04931bc2-76ee-4427-8da8-b5b3696f9ba6" inning="0" bo="2" pos="4"/>
+        <player id="b54ace79-5c94-45d1-873a-7ae90e5c6726" inning="0" bo="3" pos="8"/>
+        <player id="b8c02abe-a462-449b-85f3-a9dbc3ea6dae" inning="0" bo="4" pos="5"/>
+        <player id="85c10b49-865e-4fcf-8392-7cb6d3cc4e45" inning="0" bo="5" pos="3"/>
+        <player id="57f0a40f-e0f5-4e76-bd59-b8c4de7a680c" inning="0" bo="6" pos="7"/>
+        <player id="bf0b8f10-73fe-4b8d-98f2-319dacf8d48a" inning="0" bo="7" pos="2"/>
+        <player id="793a1221-15c6-4126-8fb0-015805590666" inning="0" bo="8" pos="6"/>
+        <player id="0dbeec6c-890d-4d8f-9044-575c8d5c3e5e" inning="0" bo="9" pos="1"/>
+        <player id="6ab8c92b-ff53-4567-8eea-ac51decad5fe" inning="7" bo="9" pos="1" inning_half="B"/>
+        <player id="f1053d88-4fd5-4cea-a5f0-546ce9bd8840" inning="9" bo="9" pos="1" inning_half="B"/>
+      </lineup>
+    </visitor>
+    <home id="2142e1ba-3b40-445c-b8bb-f1f8b1054220">
+      <roster>
+        <player id="0aaf592f-e6d1-460f-8af4-e0aff911dc62" first_name="Marlon" preferred_name="Marlon" last_name="Byrd" status="A"/>
+      </roster>
+      <lineup>
+        <player id="2467981c-566e-4a2b-ba35-a1f68af9947b" inning="0" bo="1" pos="6"/>
+        <player id="84cdb899-2928-4020-bf3c-a1f6216c9c4f" inning="0" bo="2" pos="2"/>
+        <player id="16c0d07f-94f0-4fec-8cfa-4703ec344865" inning="0" bo="3" pos="4"/>
+        <player id="b3516925-d942-4284-8cbc-16592eae31b4" inning="0" bo="4" pos="3"/>
+        <player id="0aaf592f-e6d1-460f-8af4-e0aff911dc62" inning="0" bo="5" pos="9"/>
+        <player id="c9baa403-308f-4ec2-b109-20cb9435a15e" inning="0" bo="6" pos="5"/>
+        <player id="68c94fe5-6560-4730-be69-b96dbfdbf164" inning="0" bo="7" pos="7"/>
+        <player id="f4b89e5f-baae-4dd4-87b2-1cd75889b48b" inning="0" bo="8" pos="8"/>
+        <player id="a468fd82-8723-433d-a302-15aaf2c9c07a" inning="0" bo="9" pos="1"/>
+        <player id="5120e35e-9802-4bd7-a0cb-013b6404fdb5" inning="7" bo="9" pos="11" inning_half="B"/>
+        <player id="8341c20b-5412-4c76-89c4-2f36fac8e5ff" inning="8" bo="9" pos="1" inning_half="T"/>
+        <player id="7cd9067c-6e0e-4cc7-a6c5-0dd5584ddf3d" inning="9" bo="9" pos="1" inning_half="T"/>
+      </lineup>
+    </home>
+    <pitching>
+      <win id="0dbeec6c-890d-4d8f-9044-575c8d5c3e5e"/>
+      <loss id="a468fd82-8723-433d-a302-15aaf2c9c07a"/>
+      <save id="f1053d88-4fd5-4cea-a5f0-546ce9bd8840"/>
+      <hold id="6ab8c92b-ff53-4567-8eea-ac51decad5fe"/>
+      <hold id="f8540e6c-b3fe-4c2d-b5fe-0a6cc337b278"/>
+    </pitching>
+    <officials>
+      <official id="53c7bf03-6fe8-4d2c-b8fb-0d0114e6e18b" assignment="HP" full_name="Jim Wolf" last_name="Wolf" first_name="Jim" experience="11"/>
+      <official id="35768157-598b-46b5-8aa2-df17d1ade8c4" assignment="3B" full_name="Dave Rackley" last_name="Rackley" first_name="Dave" experience="1"/>
+      <official id="c79d73a2-68a6-46b1-8983-8285f94a8cef" assignment="1B" full_name="Brian Gorman" last_name="Gorman" first_name="Brian" experience="21"/>
+      <official id="9e2f52bc-3b6e-4490-997c-92c0e2965df6" assignment="2B" full_name="Tony Randazzo" last_name="Randazzo" first_name="Tony" experience="13"/>
+    </officials>
+  </game>
+  <notes/>
+</event>
+<!-- Generation ended @ 2014-07-31 18:36:11 UTC -->

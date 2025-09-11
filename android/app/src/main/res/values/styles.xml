@@ -1,0 +1,166 @@
+<resources>
+
+    <style name="AppTheme" parent="android:Theme.Holo.NoActionBar">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:buttonStyle">@style/Widget.AppButton</item>
+    </style>
+
+    <style name="BaseballTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/background_baseball</item>
+    </style>
+
+    <style name="FootballTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/background_football</item>
+    </style>
+
+    <style name="DefaultTheme" parent="FootballTheme" />
+
+    <style name="Widget.AppButton" parent="android:Widget.Holo.Light.Button">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Widget.AppEditText" parent="android:Widget.Holo.Light.EditText">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ContestTimeFontTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">22sp</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="MenuFontTextView">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/option_selector</item>
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">28sp</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="ProfilePhotoMenuFontTextView" parent="MenuFontTextView">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TopProfilePhotoMenuFontTextView" parent="ProfilePhotoMenuFontTextView">
+        <item name="android:background">@drawable/option_top_selector</item>
+    </style>
+
+    <style name="BottomProfilePhotoMenuFontTextView" parent="ProfilePhotoMenuFontTextView">
+        <item name="android:background">@drawable/option_bottom_selector</item>
+    </style>
+
+    <style name="DialogStyle">
+        <item name="android:background">@drawable/dialog_background</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="DialogButtonStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:background">@drawable/btn_red</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="contest_tab">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:lineSpacingMultiplier">.7</item>
+        <item name="android:background">@drawable/contest_tab_selector</item>
+    </style>
+
+    <style name="ScoreStat">
+        <item name="android:background">@color/blue_gray</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="ScoreStatHeader">
+        <item name="android:background">@color/blue</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">22sp</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="ScoreStatFooter">
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:background">@color/blue_gray</item>
+        <item name="android:gravity">center</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="LevelFontRadioButtonStyle">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/sport_level_selector</item>
+        <item name="android:button">@null</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="SportFontRadioButtonStyle">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:gravity">bottom|center</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">@color/hint_color</item>
+        <item name="android:textSize">20sp</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="GameCompactTeamName">
+        <item name="android:layout_marginTop">-5dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">28sp</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="GameCompactTeamMarket">
+        <item name="android:layout_marginBottom">-3dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">16sp</item>
+        <item name="font">BebasNeue</item>
+    </style>
+
+    <style name="LoginEditTextStyle">
+        <item name="android:background">@drawable/edittext_background_selector</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+    </style>
+
+    <style name="StatViewStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+</resources>

@@ -1,0 +1,114 @@
+// Place all the styles related to the mobile/pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import 'colors';
+@import 'fonts';
+@import 'bootstrap/mixins';
+
+$r: #e84829;
+$b: #3468af;
+
+.mobile {
+  background-color: #d4d4d4;
+
+  .header {
+    height: 100px;
+    background-color: $dark-blue;
+    border-bottom: 0.625em solid #3367ae;
+    text-align: center;
+
+    img {
+      margin-top: 10px;
+    }
+  }
+
+  h1, h2 {
+    font-family: 'BebasNeue';
+    text-shadow: 0.063em 0.063em #ccc;
+  }
+
+  h1 {
+    color: $r;
+    font-size: 2.500em;
+    margin-bottom: 0;
+  }
+
+  h2 {
+    margin-bottom: 0;
+    color: $b;
+    font-size: 2.250em;
+  }
+
+  desc {
+    margin-bottom: 0.125em;
+    font-family: 'Ubuntu';
+    text-transform: uppercase;
+    color: #50597b;
+    display: block;
+  }
+
+  .collapsed header {
+    background: #50597b image-url('collapse-arrow-right.png') no-repeat 0.375em center;
+  }
+
+  .uncollapsed header {
+    background: #50597b image-url('collapse-arrow-down.png') no-repeat 0.375em center;
+  }
+
+  .collapsed, .uncollapsed {
+    margin-top: 0.313em;
+
+    header {
+      padding: 0 0.250em;
+      border: 0.063em solid #50597b;
+      border-radius: 0.125em;
+
+      h3 {
+        font-family: 'Ubuntu';
+        height: 2.813em;
+        line-height: 2.875em;
+        text-indent: 2.125em;
+        margin: 0;
+        display: block;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 1.000em;
+        letter-spacing: 0.063em;
+      }
+    }
+
+    .collapsed-content {
+      padding: 0.938em;
+      font-family: 'Ubuntu';
+      color: #fff;
+      background-color: #797979;
+      display: none;
+
+      p {
+        font-size: 1em;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+
+      table {
+        width: 100%;
+        margin-bottom: 0;
+      }
+
+      .stat-table {
+        margin-bottom: 0.938em;
+
+        tbody tr td {
+          width: 50%;
+        }
+      }
+    }
+  }
+
+  .spacer {
+    height: 3.125em;
+  }
+}

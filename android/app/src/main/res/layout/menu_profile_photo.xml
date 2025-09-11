@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_outline"
+        android:orientation="vertical">
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/uploadPhoto_FontTextView"
+            style="@style/TopProfilePhotoMenuFontTextView"
+            android:text="@string/upload_photo" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/takePhoto_FontTextView"
+            style="@style/ProfilePhotoMenuFontTextView"
+            android:text="@string/take_photo" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/remove_FontTextView"
+            style="@style/ProfilePhotoMenuFontTextView"
+            android:text="@string/remove" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+        <com.sportsbeep.app.ui.view.FontTextView
+            android:id="@+id/cancelContext_FontTextView"
+            style="@style/BottomProfilePhotoMenuFontTextView"
+            android:text="@string/cancel" />
+    </LinearLayout>
+</FrameLayout>

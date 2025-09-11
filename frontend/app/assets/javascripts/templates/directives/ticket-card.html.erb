@@ -1,0 +1,19 @@
+<div class="card-container ticket-card">
+  <div class="card" ng-style="{ 'background-color': player.teamColor }">
+    <div class="flipper">
+      <div class="front">
+        <div class="top-left">{{ ticket.placing }}</div>
+        <div class="top-right">{{ ticket.score }}</div>
+        <div class="clearfix"></div>
+        <%= image_tag 'silhouette.png', class: 'picture', 'ng-hide' => 'ticket.user.avatar_url' %>
+        <img class="picture" ng-show="ticket.user.avatar_url" ng-src="{{ ticket.user.avatar_url }}">
+        <p class="middle">
+          {{ ticket.user.username }}
+        </p>
+        <div class="content">
+          {{ ticket.score }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

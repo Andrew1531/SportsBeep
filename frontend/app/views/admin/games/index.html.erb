@@ -1,0 +1,26 @@
+<%= paginate @games %>
+<table id="games" class="table table-hover">
+  <thead>
+    <tr>
+      <th>Actions</th>
+      <th>Matchup</th>
+      <th>Start time</th>
+      <th class="centered">Bettable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @games.each do |game| %>
+      <tr data-href="<%= polymorphic_path([:admin, game]) %>">
+        <td>
+          <%= link_to 'View', polymorphic_path([:admin, game]) %>
+        </td>
+        <td><%= matchup(game) %></td>
+        <td><%= l est(game.start_time), format: :short %></td>
+        <td class="bettable-column centered">
+          <%= check_box_tag 'bettable[]', game.bettable?, game.bettable?, disabled: game.bettable?, data: { href: admin_mlb_game_path(game) } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @games %>

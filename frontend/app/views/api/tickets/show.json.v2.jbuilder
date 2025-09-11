@@ -1,0 +1,1 @@
+json.partial! 'api/resources/ticket', ticket: @ticket

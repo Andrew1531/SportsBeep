@@ -1,0 +1,402 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generation started @ 2014-05-05 18:13:23 UTC -->
+<statistics xmlns="http://feed.elasticstats.com/schema/mlb/game-stats-v6.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="d902f823-503a-4eef-bbd7-e1b5f67d5299" status="open">
+  <visitor id="d89bed32-3aee-4407-99e3-4103641b999a" name="Nationals" runs="0" hits="5" errors="0">
+    <hitting>
+      <team ab="31" ap="36" avg=".161" lob="16" pcount="135" rbi="0" abhr="0" abk="6.2" bip="26" babip="0.192" bbk="0.8" bbpa="0.111" gofo="0.9" iso="0.0" obp="0.257" ops="0.418" seca="-0.129" slg="0.161" xbh="0">
+        <onbase h="5" s="5" d="0" t="0" hr="0" tb="5" bb="4" ibb="0" hbp="0" fc="0" roe="0"/>
+        <runs unearned="0" earned="0" total="0"/>
+        <outcome klook="19" kswing="11" ktotal="30" ball="50" iball="0" dirtball="5" foul="0"/>
+        <outs klook="1" kswing="4" ktotal="5" po="3" fo="5" fidp="0" go="9" gidp="0" lo="2" lidp="0" sacfly="0" sachit="1"/>
+        <steal caught="0" stolen="0" pct="0.0"/>
+      </team>
+      <players>
+        <player ab="3" ap="3" avg=".123" lob="1" pcount="10" rbi="5" abhr="0" abk="0" bip="3" babip="0.0" bbk="0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="dba90413-2bf3-4767-9516-f3a6b7cfb53c">
+          <onbase h="0" s="1" d="2" t="3" hr="4" tb="0" bb="6" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="1"/>
+          <outcome klook="1" kswing="0" ktotal="1" ball="4" iball="0" dirtball="0" foul="0"/>
+          <outs klook="1" kswing="0" ktotal="1" po="2" fo="0" fidp="4" go="3" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="4" ap="4" avg=".500" lob="0" pcount="14" rbi="0" abhr="0" abk="0" bip="4" babip="0.5" bbk="0" bbpa="0.0" gofo="1.0" iso="0.0" obp="0.5" ops="1.0" seca="0.0" slg="0.5" xbh="0" id="46433f9b-536e-427c-b9ea-1f98b31de665">
+          <onbase h="2" s="2" d="0" t="0" hr="0" tb="2" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="4" kswing="0" ktotal="4" ball="5" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="1" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="0" ap="0" avg=".000" lob="0" pcount="0" rbi="0" abhr="0" abk="0" bip="0" babip="0" bbk="0" bbpa="0" gofo="0.0" iso="0.0" obp="0" ops="0.0" seca="0" slg="0" xbh="0" id="5ef86afa-fed3-4029-843d-f7fdb096d54a">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="0" ktotal="0" ball="0" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player ab="2" ap="4" avg=".000" lob="1" pcount="15" rbi="0" abhr="0" abk="0" bip="2" babip="0.0" bbk="0" bbpa="0.25" gofo="1.0" iso="0.0" obp="0.333" ops="0.333" seca="-0.5" slg="0.0" xbh="0" id="4fe5d18d-cd9c-4587-a109-0fd8cfe4aa6d">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="1" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="1" kswing="1" ktotal="2" ball="7" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="1" fo="0" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="1"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="2" ap="4" avg=".000" lob="2" pcount="11" rbi="0" abhr="0" abk="0" bip="2" babip="0.0" bbk="0" bbpa="0.5" gofo="0.0" iso="0.0" obp="0.5" ops="0.5" seca="-1.0" slg="0.0" xbh="0" id="4967e3ea-fa11-4475-ac7b-253a8dc4009d">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="2" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="1" kswing="0" ktotal="1" ball="3" iball="0" dirtball="3" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="1" fidp="0" go="0" gidp="0" lo="1" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="0" complete="0"/>
+        </player>
+        <player ab="4" ap="4" avg=".250" lob="2" pcount="10" rbi="0" abhr="0" abk="0" bip="4" babip="0.25" bbk="0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.25" ops="0.5" seca="0.0" slg="0.25" xbh="0" id="b1dff8d7-4a08-4a53-bc92-c48c4e841369">
+          <onbase h="1" s="1" d="0" t="0" hr="0" tb="1" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="2" kswing="0" ktotal="2" ball="4" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="2" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="0" ap="0" avg=".000" lob="0" pcount="0" rbi="0" abhr="0" abk="0" bip="0" babip="0" bbk="0" bbpa="0" gofo="0.0" iso="0.0" obp="0" ops="0.0" seca="0" slg="0" xbh="0" id="2cfe41eb-a26d-45b0-8b7c-22536e59db28">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="0" ktotal="0" ball="0" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player ab="0" ap="0" avg=".000" lob="0" pcount="0" rbi="0" abhr="0" abk="0" bip="0" babip="0" bbk="0" bbpa="0" gofo="0.0" iso="0.0" obp="0" ops="0.0" seca="0" slg="0" xbh="0" id="cb637cd4-dc88-496f-8be4-4773c09f0a9f">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="0" ktotal="0" ball="0" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player ab="3" ap="3" avg=".000" lob="2" pcount="11" rbi="0" abhr="0" abk="1.5" bip="1" babip="0.0" bbk="0.0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="0d674411-7f4d-4bc0-ba7a-853458580bab">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="3" kswing="3" ktotal="6" ball="1" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="2" ktotal="2" po="0" fo="0" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="0" complete="0"/>
+        </player>
+        <player ab="1" ap="1" avg=".000" lob="1" pcount="5" rbi="0" abhr="0" abk="1.0" bip="0" babip="0" bbk="0.0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="0bcd0f33-ce3c-4916-bfcc-949ec78fe80c">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="1" ktotal="1" ball="1" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player ab="4" ap="4" avg=".250" lob="0" pcount="12" rbi="0" abhr="0" abk="0" bip="4" babip="0.25" bbk="0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.25" ops="0.5" seca="0.0" slg="0.25" xbh="0" id="fac92698-ed41-4615-8e1e-cd552612c5cf">
+          <onbase h="1" s="1" d="0" t="0" hr="0" tb="1" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="1" kswing="2" ktotal="3" ball="4" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="1" fo="2" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="3" ap="4" avg=".333" lob="1" pcount="20" rbi="0" abhr="0" abk="0" bip="3" babip="0.333" bbk="0" bbpa="0.25" gofo="1.0" iso="0.0" obp="0.5" ops="0.833" seca="-0.333" slg="0.333" xbh="0" id="24d057a9-4def-4e9e-be83-3eca01c9c922">
+          <onbase h="1" s="1" d="0" t="0" hr="0" tb="1" bb="1" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="3" kswing="1" ktotal="4" ball="12" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="1" gidp="0" lo="1" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="4" ap="4" avg=".000" lob="6" pcount="21" rbi="0" abhr="0" abk="2.0" bip="2" babip="0.0" bbk="0.0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="78712aa3-b342-48ee-a0cc-ab90d5dd3618">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="3" kswing="2" ktotal="5" ball="6" iball="0" dirtball="2" foul="0"/>
+          <outs klook="1" kswing="1" ktotal="2" po="0" fo="1" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="1" ap="1" avg=".000" lob="0" pcount="6" rbi="0" abhr="0" abk="0" bip="1" babip="0.0" bbk="0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="f9e77907-22a6-44dd-81f3-21c1dbdc06c9">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="1" ktotal="1" ball="3" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="1" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="0" complete="0"/>
+        </player>
+      </players>
+    </hitting>
+    <pitching>
+      <team pcount="116" error="0" ip_1="24" ip_2="8.0" bf="30" oba="0.16" gofo="1.6" lob="8" era="1.125" k9="9.0" whip="0.875" kbb="4.0">
+        <onbase h="4" s="2" d="0" t="2" hr="0" tb="8" bb="2" ibb="1" hbp="0" fc="0" roe="0"/>
+        <runs unearned="0" earned="1" total="1"/>
+        <outcome klook="17" kswing="11" ktotal="28" ball="35" iball="3" dirtball="1" foul="0"/>
+        <outs klook="0" kswing="8" ktotal="8" po="2" fo="2" fidp="0" go="8" gidp="0" lo="1" lidp="0" sacfly="0" sachit="2"/>
+        <steal caught="0" stolen="0"/>
+        <games complete="0" win="0" loss="1" save="0" svo="0" hold="0" blown_save="0" qstart="1" shutout="0"/>
+      </team>
+      <players>
+        <player pcount="13" error="0" ip_1="2" ip_2="0.2" bf="3" oba="0.0" gofo="0.0" lob="3" era="0.0" k9="13.5" whip="1.5" kbb="0.0" id="5ef86afa-fed3-4029-843d-f7fdb096d54a">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="1" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="2" kswing="1" ktotal="3" ball="1" iball="3" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="0" fo="0" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0"/>
+          <games start="0" play="1" finish="1" complete="0" win="1" loss="0" save="0" svo="0" hold="0" blown_save="0" qstart="0" shutout="0"/>
+        </player>
+        <player pcount="103" error="0" ip_1="22" ip_2="7.1" bf="27" oba="0.174" gofo="1.4" lob="5" era="1.227" k9="8.595" whip="0.818" kbb="3.5" id="0d674411-7f4d-4bc0-ba7a-853458580bab">
+          <onbase h="4" s="2" d="0" t="2" hr="0" tb="8" bb="2" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="1" total="1"/>
+          <outcome klook="15" kswing="10" ktotal="25" ball="34" iball="0" dirtball="1" foul="0"/>
+          <outs klook="0" kswing="7" ktotal="7" po="2" fo="2" fidp="0" go="7" gidp="0" lo="1" lidp="0" sacfly="0" sachit="2"/>
+          <steal caught="0" stolen="0"/>
+          <games start="1" play="1" finish="0" complete="0" win="0" loss="1" save="0" svo="0" hold="0" blown_save="0" qstart="1" shutout="0"/>
+        </player>
+      </players>
+    </pitching>
+    <fielding>
+      <team po="24" a="10" dp="1" tp="0" error="0" tc="34" fpct="1.0"/>
+      <players>
+        <player po="1" a="0" dp="0" tp="0" error="0" tc="1" fpct="1.0" id="cb637cd4-dc88-496f-8be4-4773c09f0a9f" rf="1.0">
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player po="1" a="0" dp="0" tp="0" error="0" tc="1" fpct="1.0" id="46433f9b-536e-427c-b9ea-1f98b31de665" rf="1.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="8" a="0" dp="0" tp="0" error="0" tc="8" fpct="1.0" id="24d057a9-4def-4e9e-be83-3eca01c9c922" rf="8.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="0" a="5" dp="0" tp="0" error="0" tc="5" fpct="1.0" id="4fe5d18d-cd9c-4587-a109-0fd8cfe4aa6d" rf="5.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="1" a="0" dp="0" tp="0" error="0" tc="1" fpct="1.0" id="b1dff8d7-4a08-4a53-bc92-c48c4e841369" rf="1.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="0" a="1" dp="0" tp="0" error="0" tc="1" fpct="1.0" id="5ef86afa-fed3-4029-843d-f7fdb096d54a" rf="1.0">
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player po="3" a="3" dp="1" tp="0" error="0" tc="6" fpct="1.0" id="78712aa3-b342-48ee-a0cc-ab90d5dd3618" rf="6.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="1" a="1" dp="0" tp="0" error="0" tc="2" fpct="1.0" id="fac92698-ed41-4615-8e1e-cd552612c5cf" rf="2.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="0" a="0" dp="0" tp="0" error="0" tc="0" fpct="0.0" id="0d674411-7f4d-4bc0-ba7a-853458580bab" rf="0.0">
+          <games start="1" play="1" finish="0" complete="0"/>
+        </player>
+        <player po="1" a="0" dp="0" tp="0" error="0" tc="1" fpct="1.0" id="dba90413-2bf3-4767-9516-f3a6b7cfb53c" rf="1.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="8" a="0" dp="1" tp="0" error="0" tc="8" fpct="1.0" id="4967e3ea-fa11-4475-ac7b-253a8dc4009d" rf="8.0">
+          <games start="1" play="1" finish="0" complete="0"/>
+        </player>
+      </players>
+    </fielding>
+  </visitor>
+  <home id="2142e1ba-3b40-445c-b8bb-f1f8b1054220" name="Phillies" runs="1" hits="4" errors="1">
+    <hitting>
+      <team ab="25" ap="30" avg=".160" lob="8" pcount="116" rbi="1" abhr="0" abk="3.125" bip="17" babip="0.235" bbk="0.25" bbpa="0.067" gofo="1.6" iso="0.16" obp="0.25" ops="0.57" seca="0.08" slg="0.32" xbh="2">
+        <onbase h="4" s="2" d="0" t="2" hr="0" tb="8" bb="2" ibb="1" hbp="0" fc="0" roe="0"/>
+        <runs unearned="0" earned="1" total="1"/>
+        <outcome klook="17" kswing="11" ktotal="28" ball="35" iball="3" dirtball="1" foul="0"/>
+        <outs klook="0" kswing="8" ktotal="8" po="2" fo="2" fidp="0" go="8" gidp="0" lo="1" lidp="0" sacfly="0" sachit="2"/>
+        <steal caught="0" stolen="0" pct="0.0"/>
+      </team>
+      <players>
+        <player ab="3" ap="3" avg=".000" lob="0" pcount="16" rbi="0" abhr="0" abk="1.5" bip="1" babip="0.0" bbk="0.0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="b3516925-d942-4284-8cbc-16592eae31b4">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="3" kswing="2" ktotal="5" ball="6" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="2" ktotal="2" po="0" fo="0" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="3" ap="4" avg=".333" lob="1" pcount="20" rbi="0" abhr="0" abk="3.0" bip="2" babip="0.5" bbk="0.0" bbpa="0.0" gofo="0.0" iso="0.667" obp="0.5" ops="1.5" seca="0.667" slg="1.0" xbh="1" id="2467981c-566e-4a2b-ba35-a1f68af9947b">
+          <onbase h="1" s="0" d="0" t="1" hr="0" tb="3" bb="0" ibb="1" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="1" total="1"/>
+          <outcome klook="1" kswing="2" ktotal="3" ball="5" iball="3" dirtball="1" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="0" fo="0" fidp="0" go="0" gidp="0" lo="1" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="2" ap="3" avg=".500" lob="1" pcount="12" rbi="0" abhr="0" abk="2.0" bip="1" babip="1.0" bbk="1.0" bbpa="0.333" gofo="0.0" iso="0.0" obp="0.667" ops="1.167" seca="-0.5" slg="0.5" xbh="0" id="2bb5da80-9cf2-487f-8c93-bfb2f5bf3204">
+          <onbase h="1" s="1" d="0" t="0" hr="0" tb="1" bb="1" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="2" kswing="1" ktotal="3" ball="5" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="4" ap="4" avg=".250" lob="3" pcount="14" rbi="1" abhr="0" abk="4.0" bip="3" babip="0.333" bbk="0.0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.25" ops="0.5" seca="0.0" slg="0.25" xbh="0" id="16c0d07f-94f0-4fec-8cfa-4703ec344865">
+          <onbase h="1" s="1" d="0" t="0" hr="0" tb="1" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="4" kswing="1" ktotal="5" ball="2" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="1" fo="1" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="0" ap="0" avg=".000" lob="0" pcount="0" rbi="0" abhr="0" abk="0" bip="0" babip="0" bbk="0" bbpa="0" gofo="0.0" iso="0.0" obp="0" ops="0.0" seca="0" slg="0" xbh="0" id="26df0469-37c0-4ca7-97df-ce0a5247e7bb">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="0" ktotal="0" ball="0" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player ab="3" ap="3" avg=".000" lob="0" pcount="11" rbi="0" abhr="0" abk="3.0" bip="2" babip="0.0" bbk="0.0" bbpa="0.0" gofo="1.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="84cdb899-2928-4020-bf3c-a1f6216c9c4f">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="2" kswing="0" ktotal="2" ball="4" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="0" fo="1" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="0" ap="0" avg=".000" lob="0" pcount="0" rbi="0" abhr="0" abk="0" bip="0" babip="0" bbk="0" bbpa="0" gofo="0.0" iso="0.0" obp="0" ops="0.0" seca="0" slg="0" xbh="0" id="08182c45-06d5-43ef-926b-99dd81e929e0">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="0" ktotal="0" ball="0" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="0" complete="0"/>
+        </player>
+        <player ab="0" ap="0" avg=".000" lob="0" pcount="0" rbi="0" abhr="0" abk="0" bip="0" babip="0" bbk="0" bbpa="0" gofo="0.0" iso="0.0" obp="0" ops="0.0" seca="0" slg="0" xbh="0" id="8341c20b-5412-4c76-89c4-2f36fac8e5ff">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="0" ktotal="0" ball="0" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="0" complete="0"/>
+        </player>
+        <player ab="4" ap="4" avg=".250" lob="2" pcount="14" rbi="0" abhr="0" abk="0" bip="4" babip="0.25" bbk="0" bbpa="0.0" gofo="0.0" iso="0.5" obp="0.25" ops="1.0" seca="0.5" slg="0.75" xbh="1" id="f4b89e5f-baae-4dd4-87b2-1cd75889b48b">
+          <onbase h="1" s="0" d="0" t="1" hr="0" tb="3" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="3" kswing="2" ktotal="5" ball="2" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="3" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="3" ap="3" avg=".000" lob="1" pcount="8" rbi="0" abhr="0" abk="3.0" bip="2" babip="0.0" bbk="0.0" bbpa="0.0" gofo="1.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="0aaf592f-e6d1-460f-8af4-e0aff911dc62">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="1" ktotal="1" ball="2" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="1" fo="0" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player ab="2" ap="3" avg=".000" lob="0" pcount="13" rbi="0" abhr="0" abk="2.0" bip="1" babip="0.0" bbk="1.0" bbpa="0.333" gofo="0.0" iso="0.0" obp="0.333" ops="0.333" seca="-0.5" slg="0.0" xbh="0" id="b56fb90d-2d44-4c0d-ae6c-6db1b9150887">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="1" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="1" kswing="1" ktotal="2" ball="6" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="0" fo="0" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="0" complete="0"/>
+        </player>
+        <player ab="1" ap="2" avg=".000" lob="0" pcount="7" rbi="0" abhr="0" abk="0" bip="1" babip="0.0" bbk="0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0.0" ops="0.0" seca="0.0" slg="0.0" xbh="0" id="42aa0ca9-8242-4035-9dfb-0033a11d6706">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="1" kswing="1" ktotal="2" ball="3" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="1"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="1" play="1" finish="0" complete="0"/>
+        </player>
+        <player ab="0" ap="1" avg=".000" lob="0" pcount="1" rbi="0" abhr="0" abk="0" bip="0" babip="0" bbk="0" bbpa="0.0" gofo="0.0" iso="0.0" obp="0" ops="0.0" seca="0" slg="0" xbh="0" id="5120e35e-9802-4bd7-a0cb-013b6404fdb5">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="0" kswing="0" ktotal="0" ball="0" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="1"/>
+          <steal caught="0" stolen="0" pct="0.0"/>
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+      </players>
+    </hitting>
+    <pitching>
+      <team pcount="135" error="0" ip_1="27" ip_2="9.0" bf="36" oba="0.161" gofo="0.9" lob="16" era="0.0" k9="5.004" whip="1.0" kbb="1.25">
+        <onbase h="5" s="5" d="0" t="0" hr="0" tb="5" bb="4" ibb="0" hbp="0" fc="0" roe="0"/>
+        <runs unearned="0" earned="0" total="0"/>
+        <outcome klook="19" kswing="11" ktotal="30" ball="50" iball="0" dirtball="5" foul="0"/>
+        <outs klook="1" kswing="4" ktotal="5" po="3" fo="5" fidp="0" go="9" gidp="0" lo="2" lidp="0" sacfly="0" sachit="1"/>
+        <steal caught="0" stolen="0"/>
+        <games complete="0" win="1" loss="0" save="1" svo="3" hold="2" blown_save="0" qstart="1" shutout="0"/>
+      </team>
+      <players>
+        <player pcount="10" error="0" ip_1="1" ip_2="0.1" bf="2" oba="0.0" gofo="0.0" lob="2" era="0.0" k9="27.0" whip="3.0" kbb="1.0" id="8341c20b-5412-4c76-89c4-2f36fac8e5ff">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="1" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="2" kswing="1" ktotal="3" ball="3" iball="0" dirtball="2" foul="0"/>
+          <outs klook="1" kswing="0" ktotal="1" po="0" fo="0" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0"/>
+          <games start="0" play="1" finish="0" complete="0" win="0" loss="0" save="0" svo="1" hold="1" blown_save="0" qstart="0" shutout="0"/>
+        </player>
+        <player pcount="17" error="0" ip_1="3" ip_2="1.0" bf="4" oba="0.25" gofo="0.0" lob="1" era="0.0" k9="9.0" whip="1.0" kbb="0.0" id="26df0469-37c0-4ca7-97df-ce0a5247e7bb">
+          <onbase h="1" s="1" d="0" t="0" hr="0" tb="1" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="1" kswing="2" ktotal="3" ball="7" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="1" ktotal="1" po="1" fo="1" fidp="0" go="0" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0"/>
+          <games start="0" play="1" finish="1" complete="0" win="0" loss="0" save="1" svo="1" hold="0" blown_save="0" qstart="0" shutout="0"/>
+        </player>
+        <player pcount="4" error="0" ip_1="1" ip_2="0.1" bf="1" oba="0.0" gofo="0.0" lob="1" era="0.0" k9="0.0" whip="0.0" kbb="0.0" id="08182c45-06d5-43ef-926b-99dd81e929e0">
+          <onbase h="0" s="0" d="0" t="0" hr="0" tb="0" bb="0" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="1" kswing="0" ktotal="1" ball="2" iball="0" dirtball="0" foul="0"/>
+          <outs klook="0" kswing="0" ktotal="0" po="0" fo="0" fidp="0" go="1" gidp="0" lo="0" lidp="0" sacfly="0" sachit="0"/>
+          <steal caught="0" stolen="0"/>
+          <games start="0" play="1" finish="0" complete="0" win="0" loss="0" save="0" svo="1" hold="1" blown_save="0" qstart="0" shutout="0"/>
+        </player>
+        <player pcount="104" error="0" ip_1="22" ip_2="7.1" bf="29" oba="0.16" gofo="1.0" lob="12" era="0.0" k9="3.681" whip="0.955" kbb="1.0" id="42aa0ca9-8242-4035-9dfb-0033a11d6706">
+          <onbase h="4" s="4" d="0" t="0" hr="0" tb="4" bb="3" ibb="0" hbp="0" fc="0" roe="0"/>
+          <runs unearned="0" earned="0" total="0"/>
+          <outcome klook="15" kswing="8" ktotal="23" ball="38" iball="0" dirtball="3" foul="0"/>
+          <outs klook="0" kswing="3" ktotal="3" po="2" fo="4" fidp="0" go="8" gidp="0" lo="2" lidp="0" sacfly="0" sachit="1"/>
+          <steal caught="0" stolen="0"/>
+          <games start="1" play="1" finish="0" complete="0" win="1" loss="0" save="0" svo="0" hold="0" blown_save="0" qstart="1" shutout="0"/>
+        </player>
+      </players>
+    </pitching>
+    <fielding>
+      <team po="27" a="12" dp="0" tp="0" error="1" tc="40" fpct="0.975"/>
+      <players>
+        <player po="0" a="3" dp="0" tp="0" error="0" tc="3" fpct="1.0" id="42aa0ca9-8242-4035-9dfb-0033a11d6706" rf="3.0">
+          <games start="1" play="1" finish="0" complete="0"/>
+        </player>
+        <player po="0" a="0" dp="0" tp="0" error="0" tc="0" fpct="0.0" id="08182c45-06d5-43ef-926b-99dd81e929e0" rf="0.0">
+          <games start="0" play="1" finish="0" complete="0"/>
+        </player>
+        <player po="5" a="0" dp="0" tp="0" error="0" tc="5" fpct="1.0" id="84cdb899-2928-4020-bf3c-a1f6216c9c4f" rf="5.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="0" a="0" dp="0" tp="0" error="0" tc="0" fpct="0.0" id="5120e35e-9802-4bd7-a0cb-013b6404fdb5" rf="0.0">
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player po="1" a="3" dp="0" tp="0" error="0" tc="4" fpct="1.0" id="2467981c-566e-4a2b-ba35-a1f68af9947b" rf="4.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="0" a="0" dp="0" tp="0" error="0" tc="0" fpct="0.0" id="8341c20b-5412-4c76-89c4-2f36fac8e5ff" rf="0.0">
+          <games start="0" play="1" finish="0" complete="0"/>
+        </player>
+        <player po="0" a="0" dp="0" tp="0" error="0" tc="0" fpct="0.0" id="26df0469-37c0-4ca7-97df-ce0a5247e7bb" rf="0.0">
+          <games start="0" play="1" finish="1" complete="0"/>
+        </player>
+        <player po="2" a="2" dp="0" tp="0" error="0" tc="4" fpct="1.0" id="2bb5da80-9cf2-487f-8c93-bfb2f5bf3204" rf="4.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="0" a="1" dp="0" tp="0" error="0" tc="1" fpct="1.0" id="b56fb90d-2d44-4c0d-ae6c-6db1b9150887" rf="1.0">
+          <games start="1" play="1" finish="0" complete="0"/>
+        </player>
+        <player po="2" a="0" dp="0" tp="0" error="0" tc="2" fpct="1.0" id="0aaf592f-e6d1-460f-8af4-e0aff911dc62" rf="2.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="3" a="3" dp="0" tp="0" error="1" tc="7" fpct="0.857" id="16c0d07f-94f0-4fec-8cfa-4703ec344865" rf="6.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="10" a="0" dp="0" tp="0" error="0" tc="10" fpct="1.0" id="b3516925-d942-4284-8cbc-16592eae31b4" rf="10.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+        <player po="4" a="0" dp="0" tp="0" error="0" tc="4" fpct="1.0" id="f4b89e5f-baae-4dd4-87b2-1cd75889b48b" rf="4.0">
+          <games start="1" play="1" finish="1" complete="1"/>
+        </player>
+      </players>
+    </fielding>
+  </home>
+</statistics>
+<!-- Generation ended @ 2014-05-05 18:13:23 UTC -->

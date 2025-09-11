@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:id="@+id/player_LinearLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:padding="4dp">
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="66dp"
+        android:singleLine="true"
+        android:text="@string/best_and_bust"
+        android:textSize="36sp"
+        app:font="BebasNeue" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        android:id="@+id/points_FontTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/position_oval"
+        android:gravity="center"
+        android:padding="2dp"
+        android:textSize="16sp" />
+</RelativeLayout>

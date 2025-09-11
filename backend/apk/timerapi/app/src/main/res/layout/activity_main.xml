@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${packageName}.${activityClass}">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/ticket_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_main_enter_ticket_number"
+                android:inputType="number"
+                />
+            <EditText
+                android:id="@+id/seconds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_main_enter_seconds"
+                android:inputType="number"
+                />
+
+            <EditText
+                android:id="@+id/precision"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_main_enter_precision"
+                android:inputType="number"
+                />
+
+            <Button
+                android:id="@+id/get_states"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_main_get_states" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/timer_value_lookup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:text="@string/edit_main_enter_timer_value"/>
+
+            <Button
+                android:id="@+id/lookup_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_main_lookup_value"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/matching_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@android:color/holo_blue_dark"/>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/question_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:text="@string/edit_main_enter_question_number"/>
+
+            <EditText
+                android:id="@+id/answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:text="@string/edit_main_enter_answer"/>
+
+            <Button
+                android:id="@+id/report_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_main_report_answer"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/report_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@android:color/holo_blue_dark"/>
+        />
+
+        <ListView
+            android:id="@+id/state_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"></ListView>
+
+    </LinearLayout>
+
+</RelativeLayout>

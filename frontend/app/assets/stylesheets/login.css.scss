@@ -1,0 +1,57 @@
+.user-login, .user-registration {
+  padding-top: $header-height + 0;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  background: image-url('login-bg.png') no-repeat center $header-height;
+  background-size: cover;
+}
+
+.login-form-container, .registration-form-container {
+  @include make-xs-column(10);
+  @include make-xs-column-offset(1);
+  @include make-sm-column(8);
+  @include make-sm-column-offset(2);
+  @include make-lg-column(6);
+  @include make-lg-column-offset(3);
+  color: #fff;
+  margin-top: 20px;
+
+  h4 {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'BebasNeue';
+    font-size: 48px;
+  }
+
+  .errors {
+    margin-bottom: $grid-gutter-width;
+    text-align: center;
+    list-style: none;
+  }
+
+  form {
+    @include make-row();
+
+    input[type=text], input[type=email], input[type=password] {
+      border-radius: 0 !important;
+      height: 40px;
+    }
+
+    .login-btn, .registration-btn {
+      @include make-xs-column(12);
+      background-color: $sb-secondary;
+      border: 0;
+      border-radius: 0;
+      color: #fff;
+      text-transform: uppercase;
+      font-family: 'BebasNeue';
+      font-size: 28px;
+
+      &:hover {
+        background-color: darken($sb-secondary, 5%);
+      }
+    }
+  }
+}

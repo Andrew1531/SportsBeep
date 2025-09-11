@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="user-profile">
+    <div class="user-information">
+      <%= image_tag avatar_for(@user), class: 'avatar' %>
+      <div class="username-block pull-left">
+        <header><%= @user.username %></header>
+        <ul>
+          <li><%= @user.email %></li>
+          <li><%= link_to 'Edit', edit_registration_path(:user), class: 'edit-user-btn' if @user == current_user %></li>
+        </ul>
+      </div>
+    </div>
+    <div class="recent-transactions">
+      <header>Recent Transactions</header>
+    </div>
+  </div>
+</div>

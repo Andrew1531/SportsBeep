@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp">
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        style="@style/ScoreStatHeader"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="6"
+        android:text="@string/stats" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        style="@style/ScoreStatHeader"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:text="@string/hashtag" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        style="@style/ScoreStatHeader"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:text="@string/pts_raw" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent" />
+
+    <com.sportsbeep.app.ui.view.FontTextView
+        style="@style/ScoreStatHeader"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:text="@string/total_raw" />
+</LinearLayout>

@@ -1,0 +1,116 @@
+angular.module('sportsbeep.factories', [])
+angular.module('sportsbeep.services', ['sportsbeep.factories'])
+angular.module('sportsbeep.controllers', ['sportsbeep.services'])
+angular.module('sportsbeep.directives', ['sportsbeep.controllers', 'sportsbeep.services'])
+
+app = angular.module('sportsbeep', [
+  'sportsbeep.services',
+  'sportsbeep.controllers',
+  'sportsbeep.directives',
+  'ngResource',
+  'ui.router',
+  'templates'
+])
+
+app.config ($httpProvider, $stateProvider, $urlRouterProvider) ->
+  $httpProvider.defaults.headers.common['X-API-Version'] = '2'
+  $httpProvider.defaults.headers.common['Content-Type'] = 'application/json'
+  $httpProvider.defaults.headers.common['Accept'] = 'application/json'
+  $httpProvider.interceptors.push('SportsbeepTokenAuthInterceptor')
+
+  $urlRouterProvider.otherwise '/dashboard'
+
+  $stateProvider
+    .state 'dashboard',
+      url: '/dashboard'
+      templateUrl: 'dashboard.html'
+      controller: 'DashboardCtrl'
+      abstract: true
+    .state 'dashboard.noTicketSelected',
+      url: ''
+      views:
+        'content':
+          template: ''
+          controller: 'NoTicketSelectedCtrl'
+    .state 'dashboard.ticket',
+      url: '/tickets/:id'
+      abstract: true
+      resolve:
+        ticket: ($stateParams, TicketService) ->
+          TicketService.find($stateParams.id).$promise
+        contest: (ticket, ContestService) ->
+          ContestService.find(ticket.contest.id).$promise
+        game: (ticket, contest) ->
+          game = contest.game
+          ticket.game = game
+          game
+      views:
+        content:
+          template: '<div ui-view="ticket"></div>'
+          controller: 'TicketCtrl'
+    .state 'dashboard.ticket.show',
+      url: ''
+      views:
+        ticket:
+          templateUrl: 'tickets/show.html'
+          controller: 'TicketShowCtrl'
+    .state 'dashboard.ticket.choosePlayer',
+      url: '/players/:position'
+      views:
+        ticket:
+          templateUrl: 'tickets/players.html'
+          controller: 'ChoosePlayerCtrl'
+    .state 'dashboard.contestShow',
+      url: '/contests/:id'
+      views:
+        'content':
+          templateUrl: 'contests/show.html'
+          controller: 'ContestShowCtrl'
+    .state 'dashboard.ticketBestAndBust',
+      url: '/tickets/:ticketId/best_and_bust'
+      views:
+        'content':
+          templateUrl: 'tickets/best_and_bust.html'
+          controller: 'BestAndBustCtrl'
+    .state 'dashboard.ticketPlayers',
+      url: '/tickets/:ticketId/players/:position'
+      views:
+        'content':
+          templateUrl: 'tickets/players.html'
+          controller: 'ChoosePlayerCtrl'
+    .state 'gameIndex',
+      url: '/games'
+      templateUrl: 'games/index.html'
+      controller: 'GameIndexCtrl'
+    .state 'gameShow',
+      url: '/games/:id'
+      templateUrl: 'games/show.html'
+      controller: 'GameShowCtrl'
+      abstract: true
+    .state 'gameShow.ticketRoster',
+      url: ''
+      views:
+        'content':
+          templateUrl: 'partials/ticket-roster.html'
+          controller: 'TicketRosterCtrl'
+    .state 'gameShow.players',
+      url: '/players/:position'
+      views:
+        'content':
+          templateUrl: 'players/index.html'
+          controller: 'PlayerIndexCtrl'
+
+app.filter 'momentFormat', ->
+  return (date, format) ->
+    moment(date).format(format)
+
+app.filter 'momentTZ', ->
+  return (date, format) ->
+    moment(date).tz('America/New_York').format(format)
+
+app.run ($rootScope, AuthService, CurrentContest) ->
+  AuthService.login()
+  FastClick.attach(document.body)
+
+  $rootScope.$on '$stateChangeSuccess', (e, toState) ->
+    CurrentContest.contest = undefined if toState.name is 'dashboard.noTicketSelected'
