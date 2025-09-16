@@ -36,3 +36,8 @@ externalPort = 80
 [[ports]]
 localPort = 45931
 externalPort = 3000
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+build = ["bundle", "install", "--without", "development"]
