@@ -37,8 +37,8 @@ SportsbeepWeb::Application.configure do
     address: "smtp.mandrillapp.com",
     port: 587,
     enable_starttls_auto: true,
-    user_name: "admin@sportsbeep.com",
-    password: "y-KvtsoHhC6ayMPuBVu0yg",
+    user_name: ENV['SMTP_USERNAME'],
+    password: ENV['SMTP_PASSWORD'],
     authentication: 'login',
     domain: 'localhost:5000',
   }
