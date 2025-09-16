@@ -30,7 +30,7 @@ SportsbeepWeb::Application.configure do
   # number of complex assets.
   config.assets.debug = false
 
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  config.action_mailer.default_url_options = { host: 'localhost:5000' }
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
@@ -40,7 +40,7 @@ SportsbeepWeb::Application.configure do
     user_name: "admin@sportsbeep.com",
     password: "y-KvtsoHhC6ayMPuBVu0yg",
     authentication: 'login',
-    domain: 'localhost:3000',
+    domain: 'localhost:5000',
   }
 
   # Allow all hosts for Replit proxy support

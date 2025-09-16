@@ -1,5 +1,15 @@
 require File.expand_path('../boot', __FILE__)
 
+# Clear PostgreSQL environment variables before anything else loads
+if ENV['RAILS_ENV'] == 'development' || ENV['RAILS_ENV'].nil?
+  ENV.delete('DATABASE_URL')
+  ENV.delete('PGPORT')
+  ENV.delete('PGPASSWORD') 
+  ENV.delete('PGUSER')
+  ENV.delete('PGDATABASE')
+  ENV.delete('PGHOST')
+end
+
 # Pick the frameworks you want:
 require "active_record/railtie"
 require "action_controller/railtie"

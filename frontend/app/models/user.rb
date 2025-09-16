@@ -2,10 +2,10 @@ class User < ActiveRecord::Base
   belongs_to :promo_code, counter_cache: true
 
   has_one :account
-  has_ancestry
+  # has_ancestry - commented out as gem not available in simplified setup
 
-  mount_uploader :avatar, AvatarUploader
-  process_in_background :avatar, ReprocessAvatarWorker
+  # mount_uploader :avatar, AvatarUploader - commented out as carrierwave not available
+  # process_in_background :avatar, ReprocessAvatarWorker - commented out as gem not available
 
   has_one :address
   has_one :favorite_team

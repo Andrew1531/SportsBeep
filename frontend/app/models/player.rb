@@ -1,7 +1,7 @@
 class Player < ActiveRecord::Base
   belongs_to :team
 
-  mount_uploader :headshot, HeadshotUploader
+  # mount_uploader :headshot, HeadshotUploader - commented out as carrierwave not available
 
   has_many :stats,          -> { extending(StatBracketsAccessor).order(:name) }
   has_many :seasonal_stats, -> { extending(StatBracketsAccessor).order(:name) }
