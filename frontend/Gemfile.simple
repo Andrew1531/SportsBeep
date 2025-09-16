@@ -1,0 +1,62 @@
+source 'https://rubygems.org'
+
+gem 'rails', '4.1.0'
+
+group :development, :test do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'rspec-rails'
+  gem 'sqlite3'
+  gem 'launchy'
+  gem 'quiet_assets'
+  gem 'timecop'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'webmock'
+end
+
+# assets
+gem 'sass-rails', '4.0.2'
+gem 'uglifier'
+gem 'coffee-rails'
+gem 'jquery-rails'
+gem 'turbolinks'
+gem 'font-awesome-rails'
+gem 'angularjs-rails'
+
+gem 'rails_admin'
+
+# application gems
+gem 'activerecord-import'
+gem 'ancestry'
+gem 'annotate'
+gem 'bootstrap-sass', '~> 3.1.1'
+gem 'carrierwave'
+gem 'devise'
+gem 'enumerize'
+gem 'fabrication'
+gem 'faker'
+gem 'figaro'
+gem 'faraday'
+gem 'httparty'
+gem 'jbuilder'
+gem 'kaminari'
+gem 'mini_magick'
+gem 'money-rails'
+gem 'nokogiri'
+gem 'nori'
+gem 'pundit'
+gem 'redis'
+gem 'responders'
+gem 'sidekiq'
+gem 'simple_form'
+gem 'sinatra', '>= 1.3.0', require: nil
+gem 'spring', group: :development
+gem 'thin'
+gem 'unicorn'
+gem 'yajl-ruby', require: 'yajl'
+gem 'versioncake'
+
+gem 'rspec-sidekiq', group: :test

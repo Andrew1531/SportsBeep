@@ -1,4 +1,4 @@
-require 'sidekiq/testing/inline'
+# require 'sidekiq/testing/inline'
 
 SportsbeepWeb::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -43,4 +43,7 @@ SportsbeepWeb::Application.configure do
     domain: 'localhost:3000',
   }
 
+  # Allow all hosts for Replit proxy support
+  config.hosts.clear
+  config.web_console.permissions = '0.0.0.0/0'
 end

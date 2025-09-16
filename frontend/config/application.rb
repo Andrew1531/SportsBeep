@@ -37,13 +37,13 @@ module SportsbeepWeb
 
     config.active_record.default_timezone = :utc
     config.active_record.maintain_test_schema = true
-    config.responders.flash_keys = [:success, :danger]
+    # config.responders.flash_keys = [:success, :danger]
 
     config.middleware.use Rack::Deflater
 
-    config.versioncake.supported_version_numbers = (1..2)
-    config.versioncake.extraction_strategy = :http_header
-    config.versioncake.default_version = 1
+    # config.versioncake.supported_version_numbers = (1..2)
+    # config.versioncake.extraction_strategy = :http_header
+    # config.versioncake.default_version = 1
 
     config.autoload_paths += %W(
       #{config.root}/app/models/transactions

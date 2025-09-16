@@ -1,0 +1,18 @@
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/racc-1.8.1/ext/racc/cparse
+/nix/store/l8k1zfxjixk6f5sya5x86sdyxffz6bcf-ruby-3.2.2/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250916-1974-sk2vg1 sitelibdir\=./.gem.20250916-1974-sk2vg1 clean
+
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250916-1974-sk2vg1 sitelibdir\=./.gem.20250916-1974-sk2vg1
+compiling cparse.c
+linking shared-object racc/cparse.so
+
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250916-1974-sk2vg1 sitelibdir\=./.gem.20250916-1974-sk2vg1 install
+install -c -p -m 755 cparse.so ./.gem.20250916-1974-sk2vg1/racc
+
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20250916-1974-sk2vg1 sitelibdir\=./.gem.20250916-1974-sk2vg1 clean
