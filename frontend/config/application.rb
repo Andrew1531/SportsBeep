@@ -43,7 +43,7 @@ module SportsbeepWeb
     # config.i18n.default_locale = :de
 
     config.assets.paths << Rails.root.join('vendor', 'assets', 'fonts')
-    config.assets.precompile << /\.(?:svg|eot|woff|ttf)$/
+    config.assets.precompile += %w( .svg .eot .woff .ttf )
 
     config.active_record.default_timezone = :utc
     config.active_record.maintain_test_schema = true

@@ -1,13 +1,15 @@
 # SportsBeep Web Application
 
 ## Overview
-This is a legacy Ruby on Rails sports betting/fantasy sports web application that has been successfully migrated to run in the Replit environment. The application includes a frontend Rails application and a separate backend timer API service.
+This is a legacy Ruby on Rails sports betting/fantasy sports web application being migrated to run in the Replit environment. The application includes a frontend Rails application and a separate backend timer API service.
 
 ## Current Status
-- **Frontend Application**: ✅ Running successfully on port 5000
-- **Backend Timer API**: ⚠️ Needs additional compatibility fixes for Ruby 3.2
-- **Database**: ✅ Using SQLite3 for development
-- **Deployment**: ✅ Configured for Replit autoscale deployment
+- **Rails Server**: ✅ Running on port 5000 with Puma
+- **Database**: ✅ SQLite3 configured and schema loaded
+- **JavaScript Runtime**: ✅ Node.js 20 installed  
+- **Asset Pipeline**: ⚠️ Sass variable scoping issues (see Known Issues)
+- **Backend Timer API**: ❌ Needs Rails 6+ upgrade for Ruby 3.2 compatibility
+- **Deployment**: ✅ Configured for Replit autoscale
 
 ## Project Structure
 - `/frontend/` - Main Rails 6.1.7.10 web application (upgraded from Rails 4.1.0)
@@ -28,9 +30,16 @@ The application automatically starts with the configured workflow:
 3. Access via the Replit web preview
 
 ## Known Issues
-- Database migrations need Rails version specification updates
-- Backend timer API needs Ruby 3.2 compatibility fixes
-- Some legacy gems removed (can be re-added individually as needed)
+
+### Critical (Blocking App Load)
+1. **Sass Variable Scoping**: Individual `.css.scss` files cannot access variables from `_variables.css.scss` despite proper import order in `application.css.scss`. This is likely due to Rails 6 Sass processing changes.
+   - **Current Error**: `$header-height` undefined in `best_and_bust.css.scss:4`
+   - **Workaround Needed**: Either configure global Sass variables or refactor to inline values
+
+### Non-Critical
+2. **Database Migrations**: 98 legacy migrations need Rails version declarations (e.g., `ActiveRecord::Migration[4.2]`)
+3. **Backend Timer API**: Rails 4.0.3 cannot run on Ruby 3.2 - needs upgrade to Rails 6+
+4. **Some Legacy Gems**: Removed during migration (can be re-added as needed)
 
 ## Next Steps for Full Functionality
 1. Fix remaining database migrations for full data model support

@@ -23,3 +23,7 @@ end
 # Application specific gems - minimal set
 gem 'devise'
 gem 'jquery-rails'
+gem 'coffee-rails'
+gem 'angular-rails-templates'
+gem 'bootstrap-sass', '~> 3.4'
+gem 'font-awesome-sass', '~> 4.7'
