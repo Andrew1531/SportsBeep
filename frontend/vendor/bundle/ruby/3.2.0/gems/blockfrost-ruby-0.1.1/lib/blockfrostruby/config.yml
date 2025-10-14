@@ -1,0 +1,4 @@
+use_asc_order_as_default: true
+default_count_per_page: 100
+parallel_requests: 10
+sleep_between_retries_ms: 500

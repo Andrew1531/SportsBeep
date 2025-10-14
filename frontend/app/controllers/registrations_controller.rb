@@ -27,7 +27,7 @@ class RegistrationsController < Devise::RegistrationsController
         u.permit :email, :username, :password, :current_password, :avatar, :avatar_uuid
       end
       devise_parameter_sanitizer.for(:sign_up) do |u|
-        u.permit :email, :username, :password
+        u.permit :email, :username, :password, :first_name, :last_name, :cardano_wallet_address
       end
     end
 
