@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'colors';
+
 .player-cards {
   a:hover {
     text-decoration: none;
@@ -7,8 +10,8 @@
 .player-card, .player-score-card, .squad-card {
   .team-name {
     display: none;
-    @extend .visible-sm;
-    @extend .visible-xs;
+    @extend .visible-sm !optional !optional;
+    @extend .visible-xs !optional !optional;
   }
 
   table {
@@ -113,16 +116,16 @@
 }
 
 .team-backdrop {
-  @extend .hidden-xs;
-  @extend .hidden-sm;
+  @extend .hidden-xs !optional;
+  @extend .hidden-sm !optional;
 }
 
 .team-name {
   text-align: center;
   font-size: 32px;
   display: none;
-  @extend .visible-xs;
-  @extend .visible-sm;
+  @extend .visible-xs !optional;
+  @extend .visible-sm !optional;
 }
 
 .player-score-card, .squad-card {
@@ -157,13 +160,13 @@
     font-size: 36px !important;
     right: $grid-gutter-width;
     display: none;
-    @extend .visible-xs;
-    @extend .visible-sm;
+    @extend .visible-xs !optional;
+    @extend .visible-sm !optional;
   }
 
   .player-position {
-    @extend .hidden-sm;
-    @extend .hidden-xs;
+    @extend .hidden-sm !optional;
+    @extend .hidden-xs !optional;
   }
 
   .back {

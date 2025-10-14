@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'colors';
+
 .best-and-bust {
 
   header {
@@ -47,12 +50,12 @@
 
     .correct {
       color: #86ab66;
-      i { @extend .fa-check; }
+      i { @extend .fa-check !optional; }
     }
 
     .incorrect {
       color: #cc3347;
-      i { @extend .fa-times; }
+      i { @extend .fa-times !optional; }
     }
 
     .answer {

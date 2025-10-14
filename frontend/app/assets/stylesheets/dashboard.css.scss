@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'colors';
+
 .dashboard {
   @include make-row();
 

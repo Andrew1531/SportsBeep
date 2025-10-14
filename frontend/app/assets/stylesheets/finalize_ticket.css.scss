@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'colors';
+
 #finalize-ticket {
 
   .quiz-time {
@@ -26,7 +29,7 @@
   }
 
   .matchup, .which-pool-text, .ticket-completed {
-    @extend .overlay-text;
+    @extend .overlay-text !optional;
   }
 
   .ticket-completed {

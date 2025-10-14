@@ -100,7 +100,7 @@ h3 {
   }
 
   .content {
-    @extend .vertically-centered;
+    @extend .vertically-centered !optional;
     left: 0;
     right: 0;
     margin: auto;
@@ -162,7 +162,7 @@ h3 {
     padding: 0 $grid-gutter-width;
 
     .logo-large {
-      @extend .hidden-xs;
+      @extend .hidden-xs !optional;
     }
   }
 

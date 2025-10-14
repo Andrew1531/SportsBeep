@@ -1,5 +1,5 @@
-@import '_colors';
-@import 'bootstrap/variables';
+@import 'variables';
+@import 'colors';
 
 @mixin landing-padding {
   @include make-xs-column(10);
@@ -70,7 +70,7 @@
       @include landing-padding;
 
       li {
-        @extend .col-sm-15;
+        @extend .col-sm-15 !optional;
         list-style: none;
 
         a {

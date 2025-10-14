@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'colors';
+
 .start-time {
   height: 40px;
   line-height: 40px;
@@ -63,8 +66,8 @@
     color: #fff;
     font-family: 'BebasNeue';
     background-color: $sb-primary;
-    @extend .vertically-centered;
-    @extend .img-circle;
+    @extend .vertically-centered !optional;
+    @extend .img-circle !optional;
     @include shadow(2);
   }
 

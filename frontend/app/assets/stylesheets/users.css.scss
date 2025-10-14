@@ -2,6 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@import 'variables';
+@import 'colors';
+
 .user-profile, .edit-user-profile {
   margin-top: $grid-gutter-width;
   @include make-row();
@@ -56,7 +59,7 @@
       height: 100px;
       display: block;
       float: left;
-      @extend .img-circle;
+      @extend .img-circle !optional;
       border: 5px solid $sb-light-gray;
     }
   }
@@ -84,7 +87,7 @@
   img {
     width: 100px;
     height: 100px;
-    @extend .img-circle;
+    @extend .img-circle !optional;
     border: 5px solid $sb-light-gray;
   }
 

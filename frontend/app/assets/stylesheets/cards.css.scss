@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'colors';
+
 .card-container {
   @include make-xs-column(12);
   @include make-md-column(4);
@@ -17,8 +20,8 @@
 
   .clearfix {
     display: none;
-    @extend .visible-md;
-    @extend .visible-lg;
+    @extend .visible-md !optional;
+    @extend .visible-lg !optional;
   }
 
   .front, .back {
@@ -40,7 +43,7 @@
   }
 
   .picture {
-    @extend .img-circle;
+    @extend .img-circle !optional;
     @include shadow(2);
     height: 100px;
     width: 100px;

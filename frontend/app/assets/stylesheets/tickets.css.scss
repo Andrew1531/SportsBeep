@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'colors';
+
 .ticket-card {
 
   .card {
@@ -17,8 +20,8 @@
 
   .top-right {
     display: none;
-    @extend .visible-xs;
-    @extend .visible-sm;
+    @extend .visible-xs !optional;
+    @extend .visible-sm !optional;
   }
 }
 

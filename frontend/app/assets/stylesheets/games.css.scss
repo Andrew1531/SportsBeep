@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'colors';
+
 .games-list {
   list-style: none;
 
@@ -12,7 +15,7 @@
   @include make-row();
 
   .sidebar {
-    @extend .hidden-xs;
+    @extend .hidden-xs !optional;
     @include make-sm-column(6);
     @include make-md-column(4);
     @include make-lg-column(3);
@@ -29,7 +32,7 @@
   list-style: none;
   margin-top: $grid-gutter-width;
   @include shadow;
-  @extend .hidden-xs;
+  @extend .hidden-xs !optional;
 
   li {
     padding: 2px 0;
@@ -54,7 +57,7 @@
 
 .mobile-game-card-container {
   display: none;
-  @extend .visible-xs;
+  @extend .visible-xs !optional;
   @include make-row();
 
   .start-time {
@@ -83,8 +86,8 @@
       font-family: 'BebasNeue';
       background-color: $sb-primary;
       z-index: 2;
-      @extend .vertically-centered;
-      @extend .img-circle;
+      @extend .vertically-centered !optional;
+      @extend .img-circle !optional;
       @include shadow(2);
     }
 
