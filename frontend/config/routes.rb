@@ -2,12 +2,12 @@ SportsbeepWeb::Application.routes.draw do
   # mount RailsAdmin::Engine => '/cpanel', as: 'rails_admin'
   # mount Avocado::Engine, at: '/api-docs', constraints: -> (_) { Rails.env.staging? }
 
-  # devise_for :users, path_names: {
-  #   sign_in: 'login', sign_out: 'logout', sign_up: 'register',
-  # }, controllers: {
-  #   registrations: 'registrations',
-  #   sessions: 'sessions'
-  # }
+  devise_for :users, path_names: {
+    sign_in: 'login', sign_out: 'logout', sign_up: 'register',
+  }, controllers: {
+    registrations: 'registrations',
+    sessions: 'sessions'
+  }
 
   # devise_for :administrators, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { sessions: 'admin/sessions' }
 
