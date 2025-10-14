@@ -42,6 +42,12 @@ The application automatically starts with the configured workflow:
 3. **Backend Timer API**: Rails 4.0.3 cannot run on Ruby 3.2 - needs upgrade to Rails 6+
 4. **Some Legacy Gems**: Removed during migration (can be re-added as needed)
 
+## Deployment Configuration
+- **Type**: Autoscale (scales automatically based on traffic)
+- **Build Command**: `bundle install --jobs 4 --retry 3` (installs ALL gems including puma)
+- **Run Command**: `bundle exec puma -C config/puma.rb` (production-ready web server)
+- **Puma Location**: Main gem list (available in all environments)
+
 ## Next Steps for Full Functionality
 1. Fix remaining database migrations for full data model support
 2. Migrate backend timer API to Rails 6+ for Ruby 3.2 compatibility  

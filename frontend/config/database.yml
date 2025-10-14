@@ -10,27 +10,14 @@ development:
   pool: 5
   timeout: 5000
 
-production: &production
-  adapter: 'makara_mysql2'
-  encoding: utf8
-  database: 'sportsbeep'
+production:
+  adapter: sqlite3
+  database: db/production.sqlite3
   pool: 25
   timeout: 5000
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  port: 3306
-
-  makara:
-    blacklist_duration: 5
-    master_ttl: 5
-    sticky: true
-    rescue_connection_failures: false
-
-    connections:
-      - role: master
-        host: <%= ENV['DB_MASTER_HOST'] %>
-      - role: slave
-        host: <%= ENV['DB_SLAVE1_HOST'] %>
 
 staging:
-  <<: *production
+  adapter: sqlite3
+  database: db/staging.sqlite3
+  pool: 25
+  timeout: 5000

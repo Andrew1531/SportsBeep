@@ -33,11 +33,7 @@ outputType = "webview"
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 45979
-externalPort = 3000
-
 [deployment]
 deploymentTarget = "autoscale"
-run = ["bash", "-c", "cd frontend && bundle exec puma -C config/puma.rb"]
-build = ["bash", "-c", "cd frontend && bundle install"]
+run = ["bash", "-c", "cd frontend && RAILS_ENV=production bundle exec puma -C config/puma.rb"]
+build = ["bash", "-c", "cd frontend && bundle install --jobs 4 --retry 3"]

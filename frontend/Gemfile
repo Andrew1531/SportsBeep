@@ -5,11 +5,13 @@ ruby '3.2.2'
 
 gem 'rails', '~> 6.1.0'
 gem 'sqlite3', '~> 1.4'
-gem 'puma', '~> 5.0'
 gem 'sass-rails', '>= 6'
 gem 'sprockets-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
+
+# Web server for production and development
+gem 'puma', '~> 5.0'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
