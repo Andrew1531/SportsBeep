@@ -191,6 +191,9 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    simple_form (5.3.1)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     sprockets (3.7.5)
       base64
       concurrent-ruby (~> 1.0)
@@ -240,6 +243,7 @@ DEPENDENCIES
   rails (~> 6.1.0)
   sass-rails (>= 6)
   sassc (~> 2.1.0)
+  simple_form
   sprockets (~> 3.7.2)
   sprockets-rails
   sqlite3 (~> 1.4)

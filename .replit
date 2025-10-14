@@ -33,6 +33,10 @@ outputType = "webview"
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 46753
+externalPort = 3000
+
 [deployment]
 deploymentTarget = "autoscale"
 run = ["bash", "-c", "cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec puma -C config/puma.rb"]

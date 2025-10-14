@@ -27,6 +27,7 @@ end
 
 # Application specific gems - minimal set
 gem 'devise'
+gem 'simple_form'  # Form builder for sign up and login pages
 gem 'jquery-rails'
 gem 'coffee-rails'
 gem 'angular-rails-templates'
