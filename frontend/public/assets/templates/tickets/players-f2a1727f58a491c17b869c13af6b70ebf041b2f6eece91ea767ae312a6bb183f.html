@@ -1,0 +1,5 @@
+<div class="player-cards">
+  <a ui-sref="dashboard.ticket.show({ id: ticket.id })" ng-click="selectPlayer(player, position)" ng-repeat="player in players">
+    <player-card sb-player="player"></player-card>
+  </a>
+</div>

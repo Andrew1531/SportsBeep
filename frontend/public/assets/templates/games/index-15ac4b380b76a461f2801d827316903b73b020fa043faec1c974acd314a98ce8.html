@@ -1,0 +1,9 @@
+<h1>Select a game</h1>
+<ul class="games-list row">
+  <li ng-repeat="game in games">
+    <a ng-href="#/games/{{game.id}}">
+      <game-card sb-game="game" sb-center-circle-text="AT" sb-include-start-time="true">
+      </game-card>
+    </a>
+  </li>
+</ul>

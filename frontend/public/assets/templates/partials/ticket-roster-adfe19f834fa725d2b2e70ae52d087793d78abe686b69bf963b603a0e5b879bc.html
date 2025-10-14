@@ -1,0 +1,15 @@
+<h1 class="text-center">Your Players</h1>
+<div class="player-cards">
+  <a ui-sref="gameShow.players({ position: player.gamePosition.id })" ng-repeat="player in players">
+    <player-card sb-player="player"></player-card>
+  </a>
+  <a ng-repeat="ticketSquad in ticketSquads" ng-click="selectSquad(ticketSquad, game)" >
+    <squad-card sb-squad="ticketSquad" sb-flipper="false"></squad-card>
+  </a>
+</div>
+
+<div class="set-team-row">
+  <div class="set-your-team">
+    <button ng-disabled="ticketInvalid()" open-modal="finalize-ticket">Set your team</button>
+  </div>
+</div>

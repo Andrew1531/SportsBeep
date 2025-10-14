@@ -1,0 +1,37 @@
+<div class="player-cards">
+  <div ng-if="ticket.editable">
+    <a ui-sref="dashboard.ticket.choosePlayer({ position: position.id })" ng-repeat="position in positions">
+      <player-card sb-player="$parent.getPlayerAtPosition(position)"></player-card>
+    </a>
+    <a ng-click="selectSquad(squad)" ng-repeat="squad in squads">
+      <squad-card sb-squad="squad" sb-flipper="false"></squad-card>
+    </a>
+    <div class="set-team-row">
+      <div class="set-your-team update-ticket">
+        <button id="update-ticket-btn" ng-click="updateTicket()">
+          <i class="fa fa-spin fa-spinner"></i>
+          <i class="fa fa-check"></i>
+          Update Your Ticket
+        </button>
+        <div class="ticket-error" ng-show="error">{{ error }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="!ticket.editable && ticket.visible_to_others">
+    <a ng-repeat="player in players">
+      <player-score-card sb-player="player"></player-score-card>
+    </a>
+    <a ng-repeat="squad in squads">
+      <squad-card sb-squad="squad" sb-include-score="true" class="squad-score-card"></squad-card>
+    </a>
+    <a ui-sref="dashboard.ticketBestAndBust({ ticketId: ticket.id })">
+      <best-and-bust-card sb-score="ticket.best_or_bust_score"></best-and-bust-card>
+    </a>
+  </div>
+
+  <div ng-if="ticket.$resolved && !ticket.editable && !ticket.visible_to_others">
+    You cannot view this ticket until the game starts!
+  </div>
+
+</div>

@@ -13,11 +13,8 @@ SportsbeepWeb::Application.configure do
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
-  # Setup Elasticache
-  if Rails.env.production?
-    elasticache = Dalli::ElastiCache.new 'memcached-prod.852vy4.cfg.use1.cache.amazonaws.com:11211'
-    config.cache_store = :dalli_store, elasticache.servers, { expires_in: 1.day, compress: true }
-  end
+  # Use memory store for caching (simple and works out of the box)
+  config.cache_store = :memory_store, { size: 64.megabytes }
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
   config.serve_static_assets = false
