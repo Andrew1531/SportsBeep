@@ -1,7 +1,6 @@
-// Import Bootstrap variables and mixins first so we can use them
+// Import Bootstrap variables and mixins (variable-only content)
 @import 'bootstrap/variables';
 @import 'bootstrap/mixins';
-@import 'font-awesome';
 
 $game-height: 160px;
 $mobile-game-card-height: 250px;

@@ -5,7 +5,7 @@
 * IMPORTANT: Using @import (not require) to share Sass variables across files
 */
 
-// Import third-party libraries and their variables first
+// Import third-party libraries first (these emit actual CSS, so import once)
 @import 'font-awesome';
 @import 'bootstrap-sprockets';
 @import 'bootstrap';

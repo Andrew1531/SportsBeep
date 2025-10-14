@@ -7,7 +7,7 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 - **Rails Server**: ✅ Running on port 5000 with Puma
 - **Database**: ✅ SQLite3 configured and schema loaded
 - **JavaScript Runtime**: ✅ Node.js 20 installed  
-- **Asset Pipeline**: ⚠️ Sass variable scoping issues (see Known Issues)
+- **Asset Pipeline**: ✅ Sass/CSS compiling successfully (Rails 6 compatible)
 - **Backend Timer API**: ❌ Needs Rails 6+ upgrade for Ruby 3.2 compatibility
 - **Deployment**: ✅ Configured for Replit autoscale
 
@@ -22,6 +22,7 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 3. **Host Configuration**: Configured to allow all hosts for Replit proxy support
 4. **Dependency Management**: Removed problematic private gems and simplified dependencies
 5. **Environment Fixes**: Added database adapter fixes and environment variable overrides
+6. **Sass/Asset Pipeline**: Fixed Rails 6 Sass variable scoping by manually importing variables in each component file
 
 ## How to Run
 The application automatically starts with the configured workflow:
@@ -31,10 +32,10 @@ The application automatically starts with the configured workflow:
 
 ## Known Issues
 
-### Critical (Blocking App Load)
-1. **Sass Variable Scoping**: Individual `.css.scss` files cannot access variables from `_variables.css.scss` despite proper import order in `application.css.scss`. This is likely due to Rails 6 Sass processing changes.
-   - **Current Error**: `$header-height` undefined in `best_and_bust.css.scss:4`
-   - **Workaround Needed**: Either configure global Sass variables or refactor to inline values
+### Blocking App Functionality
+1. **Missing Routes**: Application uses Devise authentication but routes are not configured
+   - **Error**: `undefined local variable or method 'new_user_registration_path'`
+   - **Solution**: Configure Devise routes and authentication (separate task)
 
 ### Non-Critical
 2. **Database Migrations**: 98 legacy migrations need Rails version declarations (e.g., `ActiveRecord::Migration[4.2]`)
