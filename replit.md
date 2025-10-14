@@ -18,11 +18,12 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 
 ## Key Technical Changes Made
 1. **Rails Upgrade**: Migrated from Rails 4.1.0 to Rails 6.1.7.10 for Ruby 3.2 compatibility
-2. **Database Configuration**: Switched from MySQL to SQLite3 for development environment
+2. **Database Configuration**: Switched from MySQL master-slave to SQLite3 for all environments (development, staging, production)
 3. **Host Configuration**: Configured to allow all hosts for Replit proxy support
 4. **Dependency Management**: Removed problematic private gems and simplified dependencies
 5. **Environment Fixes**: Added database adapter fixes and environment variable overrides
 6. **Sass/Asset Pipeline**: Fixed Rails 6 Sass variable scoping by manually importing variables in each component file
+7. **Deployment Setup**: Configured Puma web server for production autoscale deployment
 
 ## How to Run
 The application automatically starts with the configured workflow:
