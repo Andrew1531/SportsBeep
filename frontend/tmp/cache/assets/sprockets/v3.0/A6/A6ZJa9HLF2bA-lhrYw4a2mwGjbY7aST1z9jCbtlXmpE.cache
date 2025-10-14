@@ -1,0 +1,15 @@
+I"(function() {
+  angular.module('sportsbeep.factories').factory('NullTeam', function() {
+    var NullTeam;
+    return NullTeam = (function() {
+      function NullTeam() {
+        this["null"] = true;
+      }
+
+      return NullTeam;
+
+    })();
+  });
+
+}).call(this);
+:ET

@@ -1,0 +1,16 @@
+I"j(function() {
+  angular.module('sportsbeep.directives').directive('gameCard', function() {
+    return {
+      restrict: 'E',
+      scope: {
+        game: '=sbGame',
+        centerText: '=sbCenterCircleText',
+        includeStartTime: '=sbIncludeStartTime'
+      },
+      templateUrl: 'directives/game-card.html',
+      replace: true
+    };
+  });
+
+}).call(this);
+:ET

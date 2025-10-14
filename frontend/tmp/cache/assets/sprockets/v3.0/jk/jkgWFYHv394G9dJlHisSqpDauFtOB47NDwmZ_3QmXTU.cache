@@ -1,0 +1,20 @@
+{:uriI"™file://app/assets/javascripts/templates/partials/ticket-roster.html?type=text/ng-html&id=ff6ebf5538284c6c16ab77eb42687e36845d27dce9427ac255fb78559076bc9b:ET:load_pathI"app/assets/javascripts;T:filenameI"Aapp/assets/javascripts/templates/partials/ticket-roster.html;T:	nameI"%templates/partials/ticket-roster;T:logical_pathI"*templates/partials/ticket-roster.html;T:content_typeI"text/ng-html;T:sourceI":<h1 class="text-center">Your Players</h1>
+<div class="player-cards">
+  <a ui-sref="gameShow.players({ position: player.gamePosition.id })" ng-repeat="player in players">
+    <player-card sb-player="player"></player-card>
+  </a>
+  <a ng-repeat="ticketSquad in ticketSquads" ng-click="selectSquad(ticketSquad, game)" >
+    <squad-card sb-squad="ticketSquad" sb-flipper="false"></squad-card>
+  </a>
+</div>
+
+<div class="set-team-row">
+  <div class="set-your-team">
+    <button ng-disabled="ticketInvalid()" open-modal="finalize-ticket">Set your team</button>
+  </div>
+</div>;T:metadata{	:dependencieso:Set:
+@hash}
+I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Ofile-digest://app/assets/javascripts/templates/partials/ticket-roster.html;TTF:charsetI"
+utf-8;F:digest"%­þø4úr]+.p®RÐ‡y=x«æ†¶›ùc¶ å¸y¼:lengthi::dependencies_digest"%QUÍ:Ð¦{oÃSâ+â¿–ë%Î	
+ªº±6Ì³¡8°:idI"Eff6ebf5538284c6c16ab77eb42687e36845d27dce9427ac255fb78559076bc9b;F:
+mtimel+H³Éh

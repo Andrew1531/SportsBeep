@@ -1,5 +1,5 @@
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
-
-# gem "rails"
+# This project's Rails app is in the frontend/ directory
+# Evaluate the frontend Gemfile for all dependencies
+eval_gemfile './frontend/Gemfile'

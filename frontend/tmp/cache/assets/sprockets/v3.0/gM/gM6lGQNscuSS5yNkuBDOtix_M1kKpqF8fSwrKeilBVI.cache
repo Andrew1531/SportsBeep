@@ -1,0 +1,64 @@
+I"–(function() {
+  angular.module('sportsbeep.services').service('HttpService', function($resource, GlobalOptions, Model) {
+    var HttpService;
+    return HttpService = (function() {
+      function HttpService(url) {
+        this.url = url;
+        this.service = $resource(url, this.defaultParams(), this.actionOptions());
+      }
+
+      HttpService.prototype.jsonToModel = function(data) {
+        return new Model(data);
+      };
+
+      HttpService.prototype.find = function(id, callback) {
+        if (callback == null) {
+          callback = angular.noop;
+        }
+        return this.service.get({
+          id: id
+        }, callback);
+      };
+
+      HttpService.prototype.index = function(params) {
+        return this.service.query(params);
+      };
+
+      HttpService.prototype.sport = function() {
+        return GlobalOptions.get('sport');
+      };
+
+      HttpService.prototype.defaultParams = function() {
+        return {
+          sport: this.sport(),
+          id: '@id'
+        };
+      };
+
+      HttpService.prototype.actionOptions = function() {
+        return {
+          query: {
+            method: 'GET',
+            isArray: true,
+            transformResponse: (function(_this) {
+              return function(data) {
+                var response, wrapped;
+                response = [];
+                wrapped = angular.fromJson(data);
+                angular.forEach(wrapped[_this.indexRoot], function(item) {
+                  return response.push(_this.jsonToModel(item));
+                });
+                return response;
+              };
+            })(this)
+          }
+        };
+      };
+
+      return HttpService;
+
+    })();
+  });
+
+}).call(this);
+:ET

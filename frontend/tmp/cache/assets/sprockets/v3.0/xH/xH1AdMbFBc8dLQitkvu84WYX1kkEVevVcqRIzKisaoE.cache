@@ -1,0 +1,27 @@
+I"è(function() {
+  moment.tz.add(['America/New_York|EST EDT|50 40|0101|1Lz50 1zb0 Op0']);
+
+  $(document).on('page:load', function() {
+    return $('[ng-app]').each(function() {
+      var module;
+      module = $(this).attr('ng-app');
+      return angular.bootstrap(this, [module]);
+    });
+  });
+
+  $(document).on('ready page:load', function() {
+    $(document).on('click', '.back-btn', function(e) {
+      e.preventDefault();
+      return window.history.back();
+    });
+    $(document).on('click', '.overlay .content', function(e) {
+      return e.stopPropagation();
+    });
+    return $(document).on('click', '.overlay', function() {
+      $('.container').removeClass('blurred');
+      return $('.overlay').hide();
+    });
+  });
+
+}).call(this);
+:ET

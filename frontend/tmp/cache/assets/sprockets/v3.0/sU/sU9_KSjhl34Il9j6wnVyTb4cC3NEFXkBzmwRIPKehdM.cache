@@ -1,0 +1,17 @@
+I"§(function() {
+  angular.module('sportsbeep.directives').directive('openModal', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        return $(elem).on('click', (function(_this) {
+          return function() {
+            $('.container').addClass('blurred');
+            return $("#" + attrs.openModal).show();
+          };
+        })(this));
+      }
+    };
+  });
+
+}).call(this);
+:ET

@@ -1,0 +1,15 @@
+I"þ(function() {
+  angular.module('sportsbeep.factories').factory('Model', function() {
+    var Model;
+    return Model = (function() {
+      function Model(json) {
+        _.extend(this, json);
+      }
+
+      return Model;
+
+    })();
+  });
+
+}).call(this);
+:ET

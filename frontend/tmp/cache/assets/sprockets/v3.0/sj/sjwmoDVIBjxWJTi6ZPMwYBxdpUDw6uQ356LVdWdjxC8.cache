@@ -1,0 +1,38 @@
+I"þ(function() {
+  angular.module('sportsbeep.services').service('GamePositionService', function($resource, GlobalOptions, GamePosition) {
+    var GamePositionService;
+    GamePositionService = (function() {
+      function GamePositionService() {}
+
+      GamePositionService.prototype.all = function() {
+        switch (GlobalOptions.get('sport')) {
+          case 'nfl':
+            return [new GamePosition('running_back', 'Running Back'), new GamePosition('wide_receiver', 'Wide Receiver'), new GamePosition('tight_end', 'Tight End'), new GamePosition('flex_player', 'Flex Player'), new GamePosition('kicker', 'Kicker')];
+        }
+      };
+
+      GamePositionService.prototype.playerPositionsFor = function(gamePosition) {
+        var map;
+        map = (function() {
+          switch (GlobalOptions.get('sport')) {
+            case 'nfl':
+              return {
+                running_back: ['FB', 'HB', 'RB', 'TB', 'WB'],
+                tight_end: ['TE'],
+                wide_receiver: ['WR'],
+                kicker: ['K', 'PK'],
+                flex_player: ['RB', 'WR', 'TE']
+              };
+          }
+        })();
+        return map[gamePosition.id];
+      };
+
+      return GamePositionService;
+
+    })();
+    return new GamePositionService;
+  });
+
+}).call(this);
+:ET

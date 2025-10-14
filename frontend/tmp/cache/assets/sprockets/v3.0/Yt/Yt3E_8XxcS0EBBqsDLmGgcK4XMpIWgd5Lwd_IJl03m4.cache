@@ -1,0 +1,72 @@
+{:uriI"òfile://app/assets/javascripts/templates/directives/squad-card.html?type=text/ng-html&id=73b8fb4917915e85c5682b6ec6773cabe43a5d62dcc374d6d7618dd59df6ffcd:ET:load_pathI"app/assets/javascripts;T:filenameI"@app/assets/javascripts/templates/directives/squad-card.html;T:	nameI"$templates/directives/squad-card;T:logical_pathI")templates/directives/squad-card.html;T:content_typeI"text/ng-html;T:sourceI"4	<div class="card-container squad-card">
+  <span ng-switch="squad.team.null">
+
+    <div class="card no-squad" ng-switch-when="true">
+      <div class="flipper">
+        <div class="front">
+          <div class="top-left">00</div>
+          <div class="top-right">00</div>
+          <div class="clearfix"></div>
+          <p class="middle">Select a</p>
+          <div class="content">
+            {{ squad.name }} Squad
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" ng-style="{ 'background-color': squad.team.primary_color }" ng-switch-default>
+      <div class="flipper">
+        <div class="front">
+          <div class="top-left">00</div>
+          <div class="top-right">{{ squad.score }}</div>
+          <div class="clearfix"></div>
+          <div class="picture placeholder"></div>
+          <p class="middle">
+            {{ squad.name }} Squad<br>
+            <span class="team-name" ng-style="{ 'color': squad.team.secondary_color }">{{ squad.team.name }}</span>
+          </p>
+          <div class="content">
+            {{ squad.score }}
+          </div>
+          <div class="backdrop">
+            <team-name-backdrop sb-team="squad.team"></team-name-backdrop>
+          </div>
+        </div>
+
+        <div class="back">
+          <div class="top-left">00</div>
+          <div class="top-right hidden-xs">00</div>
+          <div class="top-right hidden visible-xs">{{ squad.score }}</div>
+          <div class="clearfix"></div>
+          <p class="middle">
+            {{ squad.name }} Squad<br>
+            <span class="team-name" ng-style="{ 'color': squad.team.secondary_color }">{{ squad.team.name }}</span>
+          </p>
+          <div class="content">
+            <div class="scrollable">
+              <table ng-if="stats.length > 0">
+                <tr>
+                  <td>Stat</td>
+                  <td>Amount</td>
+                  <td>Points</td>
+                </tr>
+                <tr ng-repeat="stat in stats">
+                  <td>{{ stat.abbr }}</td>
+                  <td>{{ stat.amount }}</td>
+                  <td>{{ stat.points }}</td>
+                </tr>
+              </table>
+              <span class="no-stats-msg" ng-if="stats.length == 0">No stats available for this squad.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </span>
+</div>;T:metadata{	:dependencieso:Set:
+@hash}
+I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Nfile-digest://app/assets/javascripts/templates/directives/squad-card.html;TTF:charsetI"
+utf-8;F:digest"%í3a3û(˚`-çI|GXfÉˆœp¯mu9yëã‘:lengthi4	:dependencies_digest"%?æ*IÙŒß1€Á’ñ?««kP›˜ù÷˚dîÈXˇJ«ñ:idI"E73b8fb4917915e85c5682b6ec6773cabe43a5d62dcc374d6d7618dd59df6ffcd;F:
+mtimel+H≥…h

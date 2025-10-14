@@ -1,0 +1,14 @@
+I"(function() {
+  angular.module('sportsbeep.directives').directive('mobileGameCard', function() {
+    return {
+      restrict: 'E',
+      scope: {
+        game: '=sbGame'
+      },
+      templateUrl: 'directives/mobile-game-card.html',
+      replace: true
+    };
+  });
+
+}).call(this);
+:ET

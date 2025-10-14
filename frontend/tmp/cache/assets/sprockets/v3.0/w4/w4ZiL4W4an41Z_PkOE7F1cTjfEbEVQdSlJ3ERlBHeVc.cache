@@ -1,0 +1,56 @@
+I"u	(function() {
+  var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  angular.module('sportsbeep.controllers').controller('PlayerIndexCtrl', function($scope, $stateParams, GamePositionService, PlayerService, CurrentTicket) {
+    var gamePosition, playerPositionsForGamePosition;
+    gamePosition = {
+      id: $stateParams.position
+    };
+    playerPositionsForGamePosition = GamePositionService.playerPositionsFor(gamePosition);
+    $scope.headerText = $stateParams.position.replace('_', ' ');
+    $scope.game.$promise.then((function(_this) {
+      return function() {
+        var playerIdsOnCurrentTicket;
+        playerIdsOnCurrentTicket = CurrentTicket.ticketPlayers.map(function(tp) {
+          return tp.player.id;
+        });
+        return $scope.game.players.$promise.then(function(data) {
+          var awayTeamPlayers, homeTeamPlayers, i, j, maxSize, players, ref;
+          $scope.players = data.filter(function(player) {
+            var ref, ref1;
+            return (ref = player.position, indexOf.call(playerPositionsForGamePosition, ref) >= 0) && (ref1 = player.id, indexOf.call(playerIdsOnCurrentTicket, ref1) < 0);
+          });
+          $scope.players = $scope.players.sort(function(a, b) {
+            if (a.name.toUpperCase() > b.name.toUpperCase()) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+          homeTeamPlayers = $scope.players.filter(function(player) {
+            return player.team.id === $scope.game.home_team.id;
+          });
+          awayTeamPlayers = $scope.players.filter(function(player) {
+            return player.team.id === $scope.game.away_team.id;
+          });
+          maxSize = Math.max(homeTeamPlayers.length, awayTeamPlayers.length);
+          players = [];
+          for (i = j = 0, ref = maxSize; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+            if (homeTeamPlayers[i]) {
+              players.push(homeTeamPlayers[i]);
+            }
+            if (awayTeamPlayers[i]) {
+              players.push(awayTeamPlayers[i]);
+            }
+          }
+          return $scope.players = players;
+        });
+      };
+    })(this));
+    return $scope.selectPlayer = function(player) {
+      return CurrentTicket.selectPlayerForGamePosition(player, gamePosition);
+    };
+  });
+
+}).call(this);
+:ET

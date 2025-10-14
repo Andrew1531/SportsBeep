@@ -1,0 +1,25 @@
+{:uriI"—file://app/assets/javascripts/templates/directives/game-card.html?type=text/ng-html&id=c01f6ce884fa7ec857eb580ce16006360e4ec4f855d27ad740706a6dc1471c17:ET:load_pathI"app/assets/javascripts;T:filenameI"?app/assets/javascripts/templates/directives/game-card.html;T:	nameI"#templates/directives/game-card;T:logical_pathI"(templates/directives/game-card.html;T:content_typeI"text/ng-html;T:sourceI"G<div>
+  <div class="start-time" ng-if="includeStartTime">
+    <span class="game-start-date">{{ game.start_time | momentFormat: 'dddd, MMM D' }}</span>
+    <span class="game-start-time">{{ game.start_time | momentTZ: 'h:mm A' }} EST</span>
+  </div>
+  <div class="game-card">
+    <svg width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none">
+      <polygon onclick="angular.element(this).scope().$parent.selectAwayTeam()" fill="{{ game.away_team.primary_color }}" stroke-width="0" points="0,0 1.1,0 0,1.1" />
+      <polygon onclick="angular.element(this).scope().$parent.selectHomeTeam()" fill="{{ game.home_team.primary_color }}" stroke-width="0" points="-0.1,1.1 1.1,1.1 1.1,-0.1" />
+    </svg>
+    <div class="away-team">
+      <div class="market" ng-click="$parent.selectAwayTeam()">{{ game.away_team.market }}</div>
+      <div class="name" ng-click="$parent.selectAwayTeam()" ng-style="{ 'color': game.away_team.secondary_color }">{{ game.away_team.name }}</div>
+    </div>
+    <div class="center-circle">{{ centerText || '@' }}</div>
+    <div class="home-team">
+      <div class="market" ng-click="$parent.selectHomeTeam()">{{ game.home_team.market }}</div>
+      <div class="name" ng-click="$parent.selectHomeTeam()" ng-style="{ 'color': game.home_team.secondary_color }">{{ game.home_team.name }}</div>
+    </div>
+  </div>
+</div>;T:metadata{	:dependencieso:Set:
+@hash}
+I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Mfile-digest://app/assets/javascripts/templates/directives/game-card.html;TTF:charsetI"
+utf-8;F:digest"%Aàì‡kñë‡-¦µÑ$àe¨»Ë¶MÔ›Q3..t°+:lengthiG:dependencies_digest"%Xî0?*J1ìL„Û%K$~ÖË8¬ó+ÛÎÏÆûÊŠÓ:idI"Ec01f6ce884fa7ec857eb580ce16006360e4ec4f855d27ad740706a6dc1471c17;F:
+mtimel+H³Éh
