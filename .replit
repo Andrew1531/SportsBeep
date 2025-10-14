@@ -39,5 +39,5 @@ externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["bundle", "exec", "puma", "-C", "config/puma.rb"]
-build = ["bundle", "install", "--without", "development"]
+run = ["bash", "-c", "cd frontend && bundle exec puma -C config/puma.rb"]
+build = ["bash", "-c", "cd frontend && bundle install"]
