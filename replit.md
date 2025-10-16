@@ -53,6 +53,7 @@ The application automatically starts with the configured workflow:
 ## Recent Fixes
 - **Devise Parameter Sanitizer**: Updated from Rails 4 `.for()` syntax to Rails 6 `.permit()` syntax for user registration
 - **User Sign-up**: Now accepts username, email, password, first_name, last_name, and cardano_wallet_address
+- **Landing Page About Section**: Updated with new Cardano blockchain positioning, $BEEP token information, Tech Stack details, and Our Mission statement
 
 ## Known Issues
 
