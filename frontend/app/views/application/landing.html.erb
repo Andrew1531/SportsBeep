@@ -66,10 +66,21 @@
 </div>
 <div class="clearfix"></div>
 <div class="twitter-block">
-  <%= image_tag 'twitter-logo.png' %>
-  <header>What our Twitter followers are talking about</header>
-  <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23sportsbeep%20OR%20%40playsportsbeep" data-widget-id="540585371449692160">Tweets about #sportsbeep OR @playsportsbeep</a>
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+  <header>Join Our Community</header>
+  <p style="text-align: center; margin: 20px 0;">
+    Connect with us on X, Discord, and Telegram for the latest updates, community discussions, and exclusive announcements!
+  </p>
+  <div style="text-align: center; margin: 30px 0;">
+    <%= link_to 'https://twitter.com/playsportsbeep', target: '_blank', style: 'margin: 0 15px; font-size: 48px; color: #000;' do %>
+      <i class="fa fa-twitter"></i>
+    <% end %>
+    <%= link_to '#', target: '_blank', style: 'margin: 0 15px; font-size: 48px; color: #5865F2;' do %>
+      <i class="fa fa-discord" title="Discord - Coming Soon"></i>
+    <% end %>
+    <%= link_to '#', target: '_blank', style: 'margin: 0 15px; font-size: 48px; color: #0088cc;' do %>
+      <i class="fa fa-telegram" title="Telegram - Coming Soon"></i>
+    <% end %>
+  </div>
 </div>
 <div class="play-now-banner">
   <%= link_to 'Play Now!', play_path, class: 'play-btn' %>
@@ -94,29 +105,24 @@
     <div class="follow-us">
       <span class="footer-header">Also follow us on:</span>
       <ul>
-        <li class="social-icon facebook">
-          <%= link_to 'https://www.facebook.com/sportsbeep' do %>
-            <i class="fa fa-facebook"></i>
-          <% end %>
-        </li>
         <li class="social-icon twitter">
           <%= link_to 'https://twitter.com/playsportsbeep' do %>
             <i class="fa fa-twitter"></i>
           <% end %>
         </li>
+        <li class="social-icon discord">
+          <%= link_to '#' do %>
+            <i class="fa fa-discord"></i>
+          <% end %>
+        </li>
+        <li class="social-icon telegram">
+          <%= link_to '#' do %>
+            <i class="fa fa-telegram"></i>
+          <% end %>
+        </li>
         <li class="social-icon youtube">
           <%= link_to 'https://www.youtube.com/channel/UCwcPSE82w0aYSspC8bZjlsg' do %>
             <i class="fa fa-youtube"></i>
-          <% end %>
-        </li>
-        <li class="social-icon tumblr">
-          <%= link_to 'https://www.tumblr.com/blog/sportsbeepapp' do %>
-            <i class="fa fa-tumblr"></i>
-          <% end %>
-        </li>
-        <li class="social-icon pinterest">
-          <%= link_to 'http://www.pinterest.com/Sportsbeep/' do %>
-            <i class="fa fa-pinterest"></i>
           <% end %>
         </li>
         <li class="social-icon instagram">
