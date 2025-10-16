@@ -50,6 +50,10 @@ The application automatically starts with the configured workflow:
   - Direct HTTPS API integration (uses Net::HTTP)
 - **Database**: `cardano_wallet_address` field added to users table
 
+## Recent Fixes
+- **Devise Parameter Sanitizer**: Updated from Rails 4 `.for()` syntax to Rails 6 `.permit()` syntax for user registration
+- **User Sign-up**: Now accepts username, email, password, first_name, last_name, and cardano_wallet_address
+
 ## Known Issues
 
 ### Non-Critical
@@ -67,8 +71,22 @@ The application automatically starts with the configured workflow:
 - **Caching**: Memory store (64MB, no external dependencies)
 - **Production Ready**: ✅ Timezone data (tzinfo-data) installed and configured
 
+## Backend Timer API Status
+**Current State**: Rails 4.0.3 → 6.1.7.10 upgrade in progress
+- **Issue**: Rails 6.1 has compatibility issues with Ruby 3.2 (Logger::Severity errors)
+- **Solution**: Requires Rails 7.x or custom logger configuration
+- **Endpoints**: 
+  - `GET /ticket_timer_states_get/:ticket_number/:seconds/:precision` - Generate encrypted timer states
+  - `GET /ticket_question_answer_set/:ticket_number/:question_number/:answer/:timer_state_text` - Record answer with timestamp
+
+## Android App Status
+**Current State**: Needs modernization
+- **Build System**: Gradle 1.0.1 (very outdated, needs update to 8.x+)
+- **Dependencies**: Retrofit 1.6.1, OkHttp 1.6.0, Play Services 6.1.71 (all need updates)
+- **API Integration**: Connects to Timer API for game timing functionality
+
 ## Next Steps for Full Functionality
-1. Fix remaining database migrations for full data model support
-2. Migrate backend timer API to Rails 6+ for Ruby 3.2 compatibility  
-3. Re-integrate removed gems as needed for specific features
-4. Add proper error pages and user authentication flows
+1. Upgrade Timer API to Rails 7.x for Ruby 3.2 compatibility
+2. Modernize Android app build system and dependencies
+3. Fix remaining database migrations for full data model support
+4. Re-integrate removed gems as needed for specific features

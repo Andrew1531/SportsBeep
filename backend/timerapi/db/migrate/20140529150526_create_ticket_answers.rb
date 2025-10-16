@@ -1,4 +1,4 @@
-class CreateTicketAnswers < ActiveRecord::Migration
+class CreateTicketAnswers < ActiveRecord::Migration[7.0]
   def change
     create_table :ticket_answers do |t|
       t.integer :ticket_id

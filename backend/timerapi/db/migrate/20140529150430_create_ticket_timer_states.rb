@@ -1,4 +1,4 @@
-class CreateTicketTimerStates < ActiveRecord::Migration
+class CreateTicketTimerStates < ActiveRecord::Migration[7.0]
   def change
     create_table :ticket_timer_states do |t|
       t.integer :ticket_id
