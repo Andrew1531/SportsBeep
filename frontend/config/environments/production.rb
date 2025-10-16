@@ -8,7 +8,8 @@ SportsbeepWeb::Application.configure do
   # your application in memory, allowing both thread web servers
   # and those relying on copy on write to perform better.
   # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
+  # Disabled for now due to legacy admin dependencies
+  config.eager_load = false
 
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = true

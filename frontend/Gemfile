@@ -16,6 +16,9 @@ gem 'uglifier', '>= 1.3.0'  # JavaScript compressor for production
 # Web server for production and development
 gem 'puma', '~> 5.0'
 
+# Timezone data for production deployment (required on all platforms)
+gem 'tzinfo-data'
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end

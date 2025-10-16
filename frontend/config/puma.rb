@@ -19,7 +19,8 @@ min_threads_count = ENV.fetch("RAILS_MIN_THREADS") { max_threads_count }
 threads min_threads_count, max_threads_count
 
 # Use the `preload_app!` method when specifying a `workers` number.
-preload_app!
+# Disabled for now due to legacy admin dependencies that cause eager loading issues
+# preload_app!
 
 # Allow Puma to be restarted by `rails restart` command.
 plugin :tmp_restart
