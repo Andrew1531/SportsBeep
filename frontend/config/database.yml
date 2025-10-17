@@ -14,7 +14,11 @@ production:
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 25 } %>
-  url: <%= ENV['DATABASE_URL'] %>
+  database: <%= ENV.fetch("PGDATABASE") { "sportsbeep_production" } %>
+  username: <%= ENV.fetch("PGUSER") { "postgres" } %>
+  password: <%= ENV.fetch("PGPASSWORD") { "" } %>
+  host: <%= ENV.fetch("PGHOST") { "localhost" } %>
+  port: <%= ENV.fetch("PGPORT") { 5432 } %>
 
 staging:
   adapter: sqlite3
