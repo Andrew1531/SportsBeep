@@ -1,4 +1,4 @@
-class CreateMlbGames < ActiveRecord::Migration
+class CreateMlbGames < ActiveRecord::Migration[4.2]
   def change
     create_table :mlb_games do |t|
       t.string :external_id

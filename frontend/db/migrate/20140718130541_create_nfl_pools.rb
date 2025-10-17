@@ -1,4 +1,4 @@
-class CreateNflPools < ActiveRecord::Migration
+class CreateNflPools < ActiveRecord::Migration[4.2]
   def change
     create_table :nfl_pools do |t|
       t.integer :prize_pool

@@ -1,4 +1,4 @@
-class RemoveOldStatisticTables < ActiveRecord::Migration
+class RemoveOldStatisticTables < ActiveRecord::Migration[4.2]
   def change
     drop_table :mlb_pitching_stat_lines  if self.table_exists?(:mlb_pitching_stat_lines.to_s)
     drop_table :mlb_hitting_stat_lines   if self.table_exists?(:mlb_hitting_stat_lines.to_s)

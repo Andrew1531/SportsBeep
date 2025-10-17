@@ -1,4 +1,4 @@
-class RenameLineupPlayersToLineupPositions < ActiveRecord::Migration
+class RenameLineupPlayersToLineupPositions < ActiveRecord::Migration[4.2]
   def change
     rename_table :lineup_players, :lineup_positions
   end

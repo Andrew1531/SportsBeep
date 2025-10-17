@@ -1,4 +1,4 @@
-class CreateMlbSeasonalStats < ActiveRecord::Migration
+class CreateMlbSeasonalStats < ActiveRecord::Migration[4.2]
   def change
     create_table :mlb_seasonal_stats do |t|
       t.references :player, index: true

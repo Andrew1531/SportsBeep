@@ -1,4 +1,4 @@
-class DeviseCreateSportsbeepSpecialUsers < ActiveRecord::Migration
+class DeviseCreateSportsbeepSpecialUsers < ActiveRecord::Migration[4.2]
   def change
     create_table(:sportsbeep_special_users) do |t|
       ## Database authenticatable

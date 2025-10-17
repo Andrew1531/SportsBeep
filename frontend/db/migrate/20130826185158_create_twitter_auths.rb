@@ -1,4 +1,4 @@
-class CreateTwitterAuths < ActiveRecord::Migration
+class CreateTwitterAuths < ActiveRecord::Migration[4.2]
   def change
     create_table :twitter_auths do |t|
       t.references :user

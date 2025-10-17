@@ -1,4 +1,4 @@
-class AddStatToStats < ActiveRecord::Migration
+class AddStatToStats < ActiveRecord::Migration[4.2]
   def change
     add_column :stats, :stat, :integer
     add_column :team_stats, :stat, :integer

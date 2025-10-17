@@ -1,4 +1,4 @@
-class CreateBaseballGames < ActiveRecord::Migration
+class CreateBaseballGames < ActiveRecord::Migration[4.2]
   def change
     create_table :baseball_games do |t|
       t.string :sportsdata_id

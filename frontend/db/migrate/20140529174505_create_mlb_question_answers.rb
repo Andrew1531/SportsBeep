@@ -1,4 +1,4 @@
-class CreateMlbQuestionAnswers < ActiveRecord::Migration
+class CreateMlbQuestionAnswers < ActiveRecord::Migration[4.2]
   def change
     create_table :mlb_question_answers do |t|
       t.references :question, index: true

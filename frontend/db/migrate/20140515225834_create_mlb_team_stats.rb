@@ -1,4 +1,4 @@
-class CreateMlbTeamStats < ActiveRecord::Migration
+class CreateMlbTeamStats < ActiveRecord::Migration[4.2]
   def change
     create_table :mlb_team_stats do |t|
       t.references :team, index: true

@@ -1,4 +1,4 @@
-class GeneralizeTables < ActiveRecord::Migration
+class GeneralizeTables < ActiveRecord::Migration[4.2]
   def change
     rename_table :mlb_questions, :questions
     rename_table :mlb_contest_templates, :contest_templates

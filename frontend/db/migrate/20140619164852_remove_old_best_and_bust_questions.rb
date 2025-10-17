@@ -1,4 +1,4 @@
-class RemoveOldBestAndBustQuestions < ActiveRecord::Migration
+class RemoveOldBestAndBustQuestions < ActiveRecord::Migration[4.2]
   def change
     Mlb::Question.destroy_all
   end

@@ -1,4 +1,4 @@
- class ConvertStatStorage < ActiveRecord::Migration
+ class ConvertStatStorage < ActiveRecord::Migration[4.2]
    def change
      [Stat, TeamStat, RecentStat, SeasonalStat].each do |model|
        convert(model)

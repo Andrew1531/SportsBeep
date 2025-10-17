@@ -1,4 +1,4 @@
-class RemoveNflTables < ActiveRecord::Migration
+class RemoveNflTables < ActiveRecord::Migration[4.2]
   def change
     drop_table :nfl_games
     drop_table :nfl_game_pools

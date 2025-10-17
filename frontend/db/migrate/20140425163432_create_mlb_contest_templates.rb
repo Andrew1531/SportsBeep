@@ -1,4 +1,4 @@
-class CreateMlbContestTemplates < ActiveRecord::Migration
+class CreateMlbContestTemplates < ActiveRecord::Migration[4.2]
   def change
     create_table :mlb_contest_templates do |t|
       t.references :game, index: true

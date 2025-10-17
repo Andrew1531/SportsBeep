@@ -1,4 +1,4 @@
-class CreateMlbTicketPlayers < ActiveRecord::Migration
+class CreateMlbTicketPlayers < ActiveRecord::Migration[4.2]
   def change
     create_table :mlb_ticket_players do |t|
       t.references :ticket, index: true

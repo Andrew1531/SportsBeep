@@ -54,21 +54,24 @@ The application automatically starts with the configured workflow:
 - **Devise Parameter Sanitizer**: Updated from Rails 4 `.for()` syntax to Rails 6 `.permit()` syntax for user registration
 - **User Sign-up**: Now accepts username, email, password, first_name, last_name, and cardano_wallet_address
 - **Landing Page About Section**: Updated with new Cardano blockchain positioning, $BEEP token information, Tech Stack details, and Our Mission statement
+- **Database Migrations**: ✅ Fixed all 98 legacy migrations to specify Rails version (`ActiveRecord::Migration[4.2]`)
+- **Production Deployment**: ✅ Added database migrations to build step to ensure production database is initialized
+- **Landing Page HTML5 Tags**: ✅ Replaced `<header>` tags with `<h2>` tags to fix rendering issues in Chrome
 
 ## Known Issues
 
 ### Non-Critical
-1. **Database Migrations**: 98 legacy migrations need Rails version declarations (e.g., `ActiveRecord::Migration[4.2]`)
-2. **Backend Timer API**: Rails 4.0.3 cannot run on Ruby 3.2 - needs upgrade to Rails 6+
-3. **Some Legacy Gems**: Removed during migration (can be re-added as needed)
+1. **Backend Timer API**: Rails 4.0.3 cannot run on Ruby 3.2 - needs upgrade to Rails 6+
+2. **Some Legacy Gems**: Removed during migration (can be re-added as needed)
 
 ## Deployment Configuration  
 - **Type**: Autoscale (scales automatically based on traffic)
-- **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec rake assets:precompile`
+- **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec rake db:migrate && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec rake assets:precompile`
 - **Run Command**: `cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec puma -C config/puma.rb`
 - **Timezone**: Eastern Time (US & Canada) - Bloomfield, NJ
 - **Asset Compilation**: ✅ Precompiles during build (sassc 2.1.0, sprockets 3.7.5)
 - **Database**: SQLite3 for all environments (development, staging, production)
+- **Database Migrations**: ✅ Runs automatically during production deployment
 - **Caching**: Memory store (64MB, no external dependencies)
 - **Production Ready**: ✅ Timezone data (tzinfo-data) installed and configured
 

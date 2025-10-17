@@ -1,4 +1,4 @@
-class CreateGlAccounts < ActiveRecord::Migration
+class CreateGlAccounts < ActiveRecord::Migration[4.2]
   def change
     create_table :gl_accounts do |t|
       t.string :name

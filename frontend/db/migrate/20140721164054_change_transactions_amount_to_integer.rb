@@ -1,4 +1,4 @@
-class ChangeTransactionsAmountToInteger < ActiveRecord::Migration
+class ChangeTransactionsAmountToInteger < ActiveRecord::Migration[4.2]
   def up
     change_column :transactions, :amount, :integer, default: 0
   end

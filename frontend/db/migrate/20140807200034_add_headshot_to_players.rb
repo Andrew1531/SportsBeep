@@ -1,4 +1,4 @@
-class AddHeadshotToPlayers < ActiveRecord::Migration
+class AddHeadshotToPlayers < ActiveRecord::Migration[4.2]
   def change
     add_column :players, :headshot, :string
   end

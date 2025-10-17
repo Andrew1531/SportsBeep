@@ -1,4 +1,4 @@
-class CreateFacebookAuths < ActiveRecord::Migration
+class CreateFacebookAuths < ActiveRecord::Migration[4.2]
   def change
     create_table :facebook_auths do |t|
       t.references :user

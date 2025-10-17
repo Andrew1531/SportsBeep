@@ -1,4 +1,4 @@
-class CreateMlbGamePools < ActiveRecord::Migration
+class CreateMlbGamePools < ActiveRecord::Migration[4.2]
   def change
     create_table :mlb_game_pools do |t|
       t.references :game, index: true

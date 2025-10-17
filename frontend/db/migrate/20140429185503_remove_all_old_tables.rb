@@ -1,4 +1,4 @@
-class RemoveAllOldTables < ActiveRecord::Migration
+class RemoveAllOldTables < ActiveRecord::Migration[4.2]
   def change
     drop! :baseball_games
     drop! :baseball_games_hitting_player_stat_lines

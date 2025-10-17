@@ -1,4 +1,4 @@
-class UpdateBestAndBustTypeColumns < ActiveRecord::Migration
+class UpdateBestAndBustTypeColumns < ActiveRecord::Migration[4.2]
   class Mlb::BestQuestion < BestQuestion; end
   class Mlb::BustQuestion < BustQuestion; end
 
