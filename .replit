@@ -48,4 +48,4 @@ externalPort = 3001
 [deployment]
 deploymentTarget = "autoscale"
 run = ["bash", "-c", "cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec puma -C config/puma.rb"]
-build = ["bash", "-c", "bundle install --jobs 4 --retry 3 && cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec rake assets:precompile"]
+build = ["bash", "-c", "bundle install --jobs 4 --retry 3 && cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec rake db:migrate && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec rake assets:precompile"]
