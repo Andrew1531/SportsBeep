@@ -11,7 +11,7 @@ SportsbeepWeb::Application.configure do
   # Disabled for now due to legacy admin dependencies
   config.eager_load = false
 
-  config.consider_all_requests_local = false
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = true
 
   # Use memory store for caching (simple and works out of the box)
