@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SPORTSBEEP: Building a Crypto-Native Fantasy Sports dApp on Cardano — Powered by LAD MEDIA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="SPORTSBEEP white paper: wallets, identity, smart contracts, privacy, DeFi, and token launch on Cardano — powered by LAD MEDIA." />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --fg: #ffffff;
+      --muted: #bdbdbd;
+      --accent: #ffffff;
+      --border: #1a1a1a;
+      --headline: #f2f2f2;
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.6;
+    }
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .watermark {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.05;
+      font-weight: 900;
+      font-size: 12vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.2rem;
+      color: var(--fg);
+      mix-blend-mode: lighten;
+      z-index: 0;
+    }
+    .cover {
+      border: 1px solid var(--border);
+      padding: 56px 48px;
+      margin-bottom: 32px;
+      background: linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
+      position: relative;
+      z-index: 1;
+    }
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .brand {
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .powered {
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .title {
+      font-size: 40px;
+      line-height: 1.15;
+      font-weight: 900;
+      color: var(--headline);
+      margin: 8px 0 8px;
+    }
+    .subtitle {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .tagline {
+      font-size: 14px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+    .section {
+      border: 1px solid var(--border);
+      padding: 28px;
+      margin-bottom: 24px;
+      background: #0b0b0b;
+      position: relative;
+      z-index: 1;
+    }
+    .section-footer {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    h2 {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 32px 0 12px;
+      line-height: 1.25;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 20px 0 8px;
+    }
+    ul {
+      margin: 12px 0;
+      padding-left: 20px;
+    }
+    li {
+      margin: 6px 0;
+    }
+    strong {
+      font-weight: 700;
+    }
+    .doc-footer {
+      margin-top: 40px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      background: #0c0c0c;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="watermark">LAD MEDIA</div>
+
+  <div class="page">
+    <section class="cover" id="cover">
+      <div class="logo-row">
+        <div class="brand">SPORTSBEEP</div>
+        <div class="powered">Powered by LAD MEDIA</div>
+      </div>
+      <h1 class="title">Building a Crypto‑Native Fantasy Sports dApp on Cardano</h1>
+      <p class="subtitle">A practical guide to wallets, identity, smart contracts, privacy, DeFi, and token launch for SPORTSBEEP.</p>
+      <p class="tagline">Strategy, execution, and verification — crafted and powered by LAD MEDIA.</p>
+    </section>
+
+    <section class="section" id="daedalus">
+      <h2>Daedalus: Full‑node wallet for development and testing</h2>
+      <p><strong>Purpose:</strong> A secure, full‑node wallet that downloads the entire Cardano blockchain for offline verification. Ideal for dev/test of token minting, transactions, and dApp interactions.</p>
+      <ul>
+        <li><strong>Download and install:</strong> From daedaluswallet.io; the chain auto‑downloads (~200GB as of 2025).</li>
+        <li><strong>Create or restore wallet:</strong> Generate and securely back up the 24‑word recovery phrase; set a password.</li>
+        <li><strong>Fund wallet:</strong> Use a testnet faucet for tADA; for mainnet, acquire ADA on an exchange and transfer.</li>
+        <li><strong>Send/receive ADA:</strong> Use "Send" and "Receive" tabs to test payments and integrations.</li>
+        <li><strong>Delegate/stake:</strong> Delegate to a pool to test staking models and rewards flows.</li>
+        <li><strong>Integrate with dApp:</strong> Use cardano‑wallet API to simulate user connections during QA.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="identus">
+      <h2>Identus: Decentralized identity for user verification</h2>
+      <p><strong>Purpose:</strong> Self‑sovereign identity with verifiable credentials (VCs) to verify user age/location for compliance without storing personal data on‑chain.</p>
+      <ul>
+        <li><strong>Set up environment:</strong> Clone the Hyperledger Identus repo; install Node.js 18+ and Docker; run npm install in agent‑sdk‑ts.</li>
+        <li><strong>Create a DID:</strong> Generate keys and derive a DID via the Identus Agent SDK.</li>
+        <li><strong>Issue credentials:</strong> Define schemas (e.g., AgeOver18) and issue VCs to user DIDs.</li>
+        <li><strong>Integrate in app:</strong> Request/verify VCs via QR or SDK; verify proofs programmatically.</li>
+        <li><strong>Test on Cardano:</strong> Use testnet and Cardano DID support; leverage quick‑start workshop code.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="lace">
+      <h2>Lace: Light wallet for user‑friendly dApp access</h2>
+      <p><strong>Purpose:</strong> Browser‑based wallet with dApp integration for seamless crypto entries and payments in ADA or $BEEP.</p>
+      <ul>
+        <li><strong>Install Lace:</strong> Use Chrome/Firefox extension or mobile app; create/import wallet.</li>
+        <li><strong>Fund and manage assets:</strong> Add ADA; mint and view multi‑assets including $BEEP.</li>
+        <li><strong>Connect to dApp:</strong> Enable Lace via window.cardano.lace and prompt user connection.</li>
+        <li><strong>Sign transactions:</strong> Build tx off‑chain (e.g., Mesh.js) and request signature.</li>
+        <li><strong>Use features:</strong> Stake ADA, access DeFi, and swap into $BEEP as needed.</li>
+        <li><strong>Mobile integration:</strong> Bridge connections via WebView and mobile SDK.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="catalyst">
+      <h2>Catalyst: Community funding for app development</h2>
+      <p><strong>Purpose:</strong> Decentralized grants via community voting to fund token launch, smart contracts, and growth.</p>
+      <ul>
+        <li><strong>Prepare proposal:</strong> Clear title, concise summary, quantified impact, transparent budget, and milestones.</li>
+        <li><strong>Submit via app:</strong> Connect wallet, complete forms, and include a video pitch.</li>
+        <li><strong>Community review:</strong> Gather feedback on Cardano forums and respond proactively.</li>
+        <li><strong>Voting phase:</strong> Track shortlist status and voting results in app dashboards.</li>
+        <li><strong>If funded:</strong> Report progress quarterly and allocate for hires/tools; target upcoming funds.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="marlowe">
+      <h2>Marlowe: User‑friendly smart contracts for game logic</h2>
+      <p><strong>Purpose:</strong> DSL for financial contracts with visual tools to model contest entries, timeouts, and payouts.</p>
+      <ul>
+        <li><strong>Access Playground:</strong> Use the web UI to design contracts with drag‑and‑drop blocks.</li>
+        <li><strong>Write contract:</strong> Define deposits, timeouts, and payout conditions tied to oracle data.</li>
+        <li><strong>Simulate:</strong> Run scenarios to validate timelines and payout behavior.</li>
+        <li><strong>Compile to Cardano:</strong> Export text and build via Marlowe CLI on testnet.</li>
+        <li><strong>Deploy:</strong> Submit transactions and test on previewnet.</li>
+        <li><strong>Integrate:</strong> Query state via Marlowe Runtime for live entry tracking.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="plutus">
+      <h2>Plutus (Plinth): Advanced smart contracts for complex logic</h2>
+      <p><strong>Purpose:</strong> Cardano's native smart contract platform (with Plinth for safer subsets) to support complex features like on‑chain scoring or randomness.</p>
+      <ul>
+        <li><strong>Set up dev environment:</strong> Install Nix, enter Plutus shells, and follow official docs.</li>
+        <li><strong>Write on‑chain code:</strong> Implement validators in Haskell/Plinth and compile to Plutus Core.</li>
+        <li><strong>Off‑chain client:</strong> Use plutus‑apps to build and sign transactions.</li>
+        <li><strong>Test:</strong> Run emulator scenarios for entries and payouts.</li>
+        <li><strong>Deploy:</strong> Build Alonzo‑era scripts and submit via CLI/wallet.</li>
+        <li><strong>Verify:</strong> Apply property tests and formal methods to reduce defects.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="midnight">
+      <h2>Midnight: Privacy‑focused sidechain for sensitive data</h2>
+      <p><strong>Purpose:</strong> Cardano sidechain using zero‑knowledge proofs to keep entries and personal data private while meeting regulatory requirements.</p>
+      <ul>
+        <li><strong>Access network:</strong> Join devnet and install tooling for ZK development.</li>
+        <li><strong>Set up wallet:</strong> Manage NIGHT tokens and configure sidechain accounts.</li>
+        <li><strong>Build private dApp:</strong> Write ZK circuits (e.g., private entry proofs) and generate attestations.</li>
+        <li><strong>Integrate with Cardano:</strong> Bridge assets and verify proofs via SDK.</li>
+        <li><strong>Test:</strong> Simulate shielded transactions on devnet.</li>
+        <li><strong>Deploy:</strong> Submit private transactions and confirm via explorers.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="nami">
+      <h2>Nami: Browser wallet for quick dApp connections</h2>
+      <p><strong>Purpose:</strong> Lightweight extension that enables users to connect and pay quickly; a fallback if Lace isn't available.</p>
+      <ul>
+        <li><strong>Install:</strong> Add extension; create or import wallet.</li>
+        <li><strong>Connect to dApp:</strong> Detect window.cardano.nami and prompt enable.</li>
+        <li><strong>Sign payments:</strong> Build unsigned tx and request signature.</li>
+        <li><strong>Manage tokens:</strong> Add $BEEP policy ID post‑mint and verify in assets.</li>
+        <li><strong>Mobile:</strong> Use WebView to simulate extension flows.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="realfi">
+      <h2>RealFi: DeFi platform for lending and borrowing</h2>
+      <p><strong>Purpose:</strong> Access lending markets and real‑world asset rails so users can borrow ADA/$BEEP against collateral to enter contests.</p>
+      <ul>
+        <li><strong>Access platform:</strong> Connect wallet and discover available pools.</li>
+        <li><strong>Deposit collateral:</strong> Provide ADA liquidity to earn yields.</li>
+        <li><strong>Borrow:</strong> Request loans against NFT/ADA collateral with wallet approval.</li>
+        <li><strong>Integrate in app:</strong> Use APIs to query rates and build borrow tx off‑chain.</li>
+        <li><strong>Repay:</strong> Hook contest winnings to auto‑repay loan via contract.</li>
+        <li><strong>Test:</strong> Use testnet pools and monitor behaviors.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="beep-token">
+      <h2>Launching your coin ($BEEP) to support development</h2>
+      <p><strong>Purpose:</strong> Mint a native token for app funding and fees (e.g., 1% to treasury) to incentivize ecosystem growth.</p>
+      <ul>
+        <li><strong>Prepare metadata:</strong> Create JSON (name, ticker, description) and register with CIP metadata resources.</li>
+        <li><strong>Generate policy:</strong> Build a single‑mint policy and derive the policy ID.</li>
+        <li><strong>Build mint transaction:</strong> Construct Alonzo‑era tx including mint amount and metadata.</li>
+        <li><strong>Sign and submit:</strong> Sign with payment key and submit on testnet/mainnet.</li>
+        <li><strong>List on DEX:</strong> Provide liquidity on Minswap and establish an ADA/$BEEP pair.</li>
+        <li><strong>Integrate:</strong> Enable entry payments in $BEEP; route 1% fee to treasury wallet.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <section class="section" id="final-tips">
+      <h2>Final tips, security, and timeline</h2>
+      <ul>
+        <li><strong>Mobile integration:</strong> Use Cardano mobile SDKs with deep links/QR bridges for wallet connections.</li>
+        <li><strong>Security:</strong> Audit contracts with reputable firms; start on testnet and enforce key management best practices.</li>
+        <li><strong>Timeline (suggested):</strong>
+          <div class="small">
+            <strong>Week 1:</strong> Wallets and Cardano setup. <strong>Weeks 2–4:</strong> Token + smart contracts. <strong>Month 2:</strong> Catalyst submission and launch.
+          </div>
+        </li>
+        <li><strong>Community:</strong> Join Cardano and developer channels for faster feedback loops.</li>
+      </ul>
+      <div class="section-footer">Powered by LAD MEDIA</div>
+    </section>
+
+    <footer class="doc-footer">
+      <p><strong>About LAD MEDIA:</strong> We architect crypto‑native products with precision: branding, UX, smart contracts, and growth. Our black‑and‑white aesthetic reflects a commitment to clarity and truth in execution.</p>
+      <p class="small">© 2025 LAD MEDIA. All rights reserved. SPORTSBEEP is a LAD MEDIA initiative. This document is for informational purposes and does not constitute financial advice.</p>
+    </footer>
+  </div>
+</body>
+</html>
