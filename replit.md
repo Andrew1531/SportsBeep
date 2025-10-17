@@ -5,12 +5,12 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 
 ## Current Status
 - **Rails Server**: ✅ Running on port 5000 with Puma
-- **Database**: ✅ SQLite3 configured and schema loaded
+- **Database**: ✅ SQLite3 for development, PostgreSQL for production
 - **JavaScript Runtime**: ✅ Node.js 20 installed  
 - **Asset Pipeline**: ✅ Sass/CSS compiling successfully (Rails 6 compatible)
 - **Cardano Blockchain**: ✅ Integrated with Blockfrost API for crypto wallet support
 - **Backend Timer API**: ❌ Needs Rails 6+ upgrade for Ruby 3.2 compatibility
-- **Deployment**: ✅ Configured for Replit autoscale
+- **Deployment**: ✅ Configured for Replit autoscale with PostgreSQL
 
 ## Project Structure
 - `/frontend/` - Main Rails 6.1.7.10 web application (upgraded from Rails 4.1.0)
@@ -19,12 +19,12 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 
 ## Key Technical Changes Made
 1. **Rails Upgrade**: Migrated from Rails 4.1.0 to Rails 6.1.7.10 for Ruby 3.2 compatibility
-2. **Database Configuration**: Switched from MySQL master-slave to SQLite3 for all environments (development, staging, production)
+2. **Database Configuration**: SQLite3 for development/test, PostgreSQL for production (autoscale compatible)
 3. **Host Configuration**: Configured to allow all hosts for Replit proxy support
 4. **Dependency Management**: Removed problematic private gems and simplified dependencies
 5. **Environment Fixes**: Added database adapter fixes and environment variable overrides
 6. **Sass/Asset Pipeline**: Fixed Rails 6 Sass variable scoping by manually importing variables in each component file
-7. **Deployment Setup**: Configured Puma web server for production autoscale deployment
+7. **Deployment Setup**: Configured Puma web server for production autoscale deployment with PostgreSQL
 8. **Cardano Integration**: Added Cardano wallet address field to user registration with Blockfrost API integration
 
 ## How to Run
@@ -66,11 +66,13 @@ The application automatically starts with the configured workflow:
 
 ## Deployment Configuration  
 - **Type**: Autoscale (scales automatically based on traffic)
-- **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec rake db:migrate && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec rake assets:precompile`
-- **Run Command**: `cd frontend && DATABASE_URL=sqlite3:db/production.sqlite3 RAILS_ENV=production bundle exec puma -C config/puma.rb`
+- **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && RAILS_ENV=production bundle exec rake db:migrate && RAILS_ENV=production bundle exec rake assets:precompile`
+- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec puma -C config/puma.rb`
 - **Timezone**: Eastern Time (US & Canada) - Bloomfield, NJ
 - **Asset Compilation**: ✅ Precompiles during build (sassc 2.1.0, sprockets 3.7.5)
-- **Database**: SQLite3 for all environments (development, staging, production)
+- **Database**: 
+  - Development/Test: SQLite3
+  - Production: PostgreSQL (Replit managed, persistent across deployments)
 - **Database Migrations**: ✅ Runs automatically during production deployment
 - **Caching**: Memory store (64MB, no external dependencies)
 - **Production Ready**: ✅ Timezone data (tzinfo-data) installed and configured

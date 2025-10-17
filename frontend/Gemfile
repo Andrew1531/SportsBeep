@@ -5,6 +5,7 @@ ruby '3.2.2'
 
 gem 'rails', '~> 6.1.0'
 gem 'sqlite3', '~> 1.4'
+gem 'pg', '~> 1.1'
 gem 'sass-rails', '>= 6'
 gem 'sassc', '~> 2.1.0'  # Pin to stable version - 2.4.0 has native compilation issues
 gem 'sprockets', '~> 3.7.2'  # Pin for sassc compatibility

@@ -11,10 +11,10 @@ development:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 25
-  timeout: 5000
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 25 } %>
+  url: <%= ENV['DATABASE_URL'] %>
 
 staging:
   adapter: sqlite3
