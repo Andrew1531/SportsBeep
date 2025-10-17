@@ -57,6 +57,8 @@ The application automatically starts with the configured workflow:
 - **Database Migrations**: ✅ Fixed all 98 legacy migrations to specify Rails version (`ActiveRecord::Migration[4.2]`)
 - **Production Deployment**: ✅ Added database migrations to build step to ensure production database is initialized
 - **Landing Page HTML5 Tags**: ✅ Replaced `<header>` tags with `<h2>` tags to fix rendering issues in Chrome
+- **Production Database**: ✅ Configured to use PostgreSQL instead of SQLite3 for persistence on autoscale
+- **Legacy Migration Data Updates**: ✅ Fixed 6 migrations that tried to update records on fresh databases
 
 ## Known Issues
 

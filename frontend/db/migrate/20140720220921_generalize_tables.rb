@@ -20,13 +20,14 @@ class GeneralizeTables < ActiveRecord::Migration[4.2]
     make_sti :mlb_teams
     make_sti :mlb_tickets
 
-    Contest.update_all type: 'Mlb::Contest'
-    Game.update_all type: 'Mlb::Game'
-    Player.update_all type: 'Mlb::Player'
-    Stat.update_all type: 'Mlb::Stat'
-    StatTopic.update_all type: 'Mlb::StatTopic'
-    Team.update_all type: 'Mlb::Team'
-    Ticket.update_all type: 'Mlb::Ticket'
+    # Only update existing records - skip if tables are empty (fresh database)
+    Contest.update_all type: 'Mlb::Contest' if Contest.any?
+    Game.update_all type: 'Mlb::Game' if Game.any?
+    Player.update_all type: 'Mlb::Player' if Player.any?
+    Stat.update_all type: 'Mlb::Stat' if Stat.any?
+    StatTopic.update_all type: 'Mlb::StatTopic' if StatTopic.any?
+    Team.update_all type: 'Mlb::Team' if Team.any?
+    Ticket.update_all type: 'Mlb::Ticket' if Ticket.any?
 
   end
 
