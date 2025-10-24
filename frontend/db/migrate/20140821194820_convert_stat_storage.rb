@@ -1,10 +1,11 @@
  class ConvertStatStorage < ActiveRecord::Migration[4.2]
    def change
      [Stat, TeamStat, RecentStat, SeasonalStat].each do |model|
-       convert(model) if model.any?
+       table_name = model.table_name.to_sym
+       convert(model) if table_exists?(table_name) && model.count > 0
      end
 
-     if Mlb::StatTopic.any?
+     if table_exists?(:stat_topics) && Mlb::StatTopic.count > 0
        Mlb::StatTopic.all.each do |st|
          statdata = mapping[st.read_attribute(:stat)]
          if statdata
