@@ -68,8 +68,8 @@ The application automatically starts with the configured workflow:
 
 ## Deployment Configuration  
 - **Type**: Autoscale (scales automatically based on traffic)
-- **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && RAILS_ENV=production bundle exec rake db:create db:migrate && RAILS_ENV=production bundle exec rake assets:precompile`
-- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec puma -C config/puma.rb`
+- **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && RAILS_ENV=production bundle exec rake assets:precompile`
+- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec rake db:create db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb`
 - **Timezone**: Eastern Time (US & Canada) - Bloomfield, NJ
 - **Asset Compilation**: ✅ Precompiles during build (sassc 2.1.0, sprockets 3.7.5)
 - **Database**: 
