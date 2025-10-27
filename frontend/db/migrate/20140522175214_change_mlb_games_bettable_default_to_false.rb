@@ -1,8 +1,8 @@
 class ChangeMlbGamesBettableDefaultToFalse < ActiveRecord::Migration[4.2]
   def up
     change_column_default :mlb_games, :bettable, false
-    if table_exists?(:mlb_games) && Mlb::Game.count > 0
-      Mlb::Game.where(bettable: nil).update_all bettable: false
+    if table_exists?(:mlb_games)
+      execute "UPDATE mlb_games SET bettable = false WHERE bettable IS NULL" rescue nil
     end
   end
 

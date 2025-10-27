@@ -1,18 +1,7 @@
  class ConvertStatStorage < ActiveRecord::Migration[4.2]
    def change
-     [Stat, TeamStat, RecentStat, SeasonalStat].each do |model|
-       table_name = model.table_name.to_sym
-       convert(model) if table_exists?(table_name) && model.count > 0
-     end
-
-     if table_exists?(:stat_topics) && Mlb::StatTopic.count > 0
-       Mlb::StatTopic.all.each do |st|
-         statdata = mapping[st.read_attribute(:stat)]
-         if statdata
-           st.update(stat: statdata.id)
-         end
-       end
-     end
+     # Skip stat conversion for fresh databases - stats will be stored in new format from the start
+     # This migration was for converting legacy data from old format to new format
    end
 
    private

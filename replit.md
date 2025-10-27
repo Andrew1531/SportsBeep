@@ -58,7 +58,7 @@ The application automatically starts with the configured workflow:
 - **Production Deployment**: ✅ Added database migrations to build step to ensure production database is initialized
 - **Landing Page HTML5 Tags**: ✅ Replaced `<header>` tags with `<h2>` tags to fix rendering issues in Chrome
 - **Production Database**: ✅ Configured to use PostgreSQL instead of SQLite3 for persistence on autoscale
-- **Legacy Migration Data Updates**: ✅ Fixed 6 migrations that tried to update records on fresh databases
+- **Legacy Migration Data Updates**: ✅ Fixed 6 migrations - replaced ActiveRecord calls with raw SQL to avoid circular dependencies
 
 ## Known Issues
 
@@ -75,7 +75,7 @@ The application automatically starts with the configured workflow:
 - **Database**: 
   - Development/Test: SQLite3
   - Production: PostgreSQL (Replit managed, persistent across deployments)
-- **Database Migrations**: ✅ Runs automatically during production deployment
+- **Database Migrations**: ✅ Runs automatically at application startup (runtime, not build phase)
 - **Caching**: Memory store (64MB, no external dependencies)
 - **Production Ready**: ✅ Timezone data (tzinfo-data) installed and configured
 
