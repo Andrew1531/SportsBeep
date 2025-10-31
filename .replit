@@ -47,5 +47,5 @@ externalPort = 3001
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["bash", "-c", "cd frontend && RAILS_ENV=production bundle exec rake db:create db:schema:load db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb"]
+run = ["bash", "-c", "cd frontend && RAILS_ENV=production bundle exec rake db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb"]
 build = ["bash", "-c", "bundle install --jobs 4 --retry 3 && cd frontend && RAILS_ENV=production bundle exec rake assets:precompile"]

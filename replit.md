@@ -69,13 +69,13 @@ The application automatically starts with the configured workflow:
 ## Deployment Configuration  
 - **Type**: Autoscale (scales automatically based on traffic)
 - **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && RAILS_ENV=production bundle exec rake assets:precompile`
-- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec rake db:create db:schema:load db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb`
+- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec rake db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb`
 - **Timezone**: Eastern Time (US & Canada) - Bloomfield, NJ
 - **Asset Compilation**: ✅ Precompiles during build (sassc 2.1.0, sprockets 3.7.5)
 - **Database**: 
   - Development/Test: SQLite3
   - Production: PostgreSQL (Replit managed, persistent across deployments)
-- **Database Migrations**: ✅ Uses `db:schema:load` to load schema, then `db:migrate` for new migrations only
+- **Database Migrations**: ✅ Runs `db:migrate` automatically at runtime
 - **Caching**: Memory store (64MB, no external dependencies)
 - **Production Ready**: ✅ Timezone data (tzinfo-data) installed and configured
 
