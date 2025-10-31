@@ -56,9 +56,10 @@ The application automatically starts with the configured workflow:
 - **Default Admin Account**:
   - Email: `getinked53@gmail.com`
   - Password: `$sb2025$`
-  - Created automatically via `db:seed`
+  - Created via `rake db:seed` (run manually if needed)
 - **Features**: User management, game management (MLB/NFL), promo codes, push notifications, system settings
 - **Status**: ✅ Admin routes enabled in production
+- **Note**: Run `RAILS_ENV=production bundle exec rake db:seed` manually to create admin account and default data
 
 ## Recent Fixes
 - **Devise Parameter Sanitizer**: Updated from Rails 4 `.for()` syntax to Rails 6 `.permit()` syntax for user registration
@@ -79,14 +80,13 @@ The application automatically starts with the configured workflow:
 ## Deployment Configuration  
 - **Type**: Autoscale (scales automatically based on traffic)
 - **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && RAILS_ENV=production bundle exec rake assets:precompile`
-- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec rake db:migrate db:seed && RAILS_ENV=production bundle exec puma -C config/puma.rb`
+- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec rake db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb`
 - **Timezone**: Eastern Time (US & Canada) - Bloomfield, NJ
 - **Asset Compilation**: ✅ Precompiles during build (sassc 2.1.0, sprockets 3.7.5)
 - **Database**: 
   - Development/Test: SQLite3
   - Production: PostgreSQL (Replit managed, persistent across deployments)
 - **Database Migrations**: ✅ Runs `db:migrate` automatically at runtime
-- **Database Seeds**: ✅ Runs `db:seed` automatically after migrations to create default data
 - **Caching**: Memory store (64MB, no external dependencies)
 - **Production Ready**: ✅ Timezone data (tzinfo-data) installed and configured
 
