@@ -1,4 +1,4 @@
-Fabricate :administrator, email: 'admin@metova.com', password: 'metova123' unless Administrator.exists?(email: 'admin@metova.com')
+Fabricate :administrator, email: 'getinked53@gmail.com', password: '$sb2025$' unless Administrator.exists?(email: 'getinked53@gmail.com')
 Setting.create if Setting.count.zero?
 
 # seed some default pools (should be configurable in admin portal)

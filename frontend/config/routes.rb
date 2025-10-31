@@ -9,7 +9,7 @@ SportsbeepWeb::Application.routes.draw do
     sessions: 'sessions'
   }
 
-  # devise_for :administrators, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { sessions: 'admin/sessions' }
+  devise_for :administrators, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { sessions: 'admin/sessions' }
 
   # require 'sidekiq/web'
   # require 'sidetiq/web'

@@ -50,6 +50,16 @@ The application automatically starts with the configured workflow:
   - Direct HTTPS API integration (uses Net::HTTP)
 - **Database**: `cardano_wallet_address` field added to users table
 
+## Admin Portal Access
+- **URL**: `/admin` (requires administrator authentication)
+- **Login URL**: `/administrators/login`
+- **Default Admin Account**:
+  - Email: `getinked53@gmail.com`
+  - Password: `$sb2025$`
+  - Created automatically via `db:seed`
+- **Features**: User management, game management (MLB/NFL), promo codes, push notifications, system settings
+- **Status**: ✅ Admin routes enabled in production
+
 ## Recent Fixes
 - **Devise Parameter Sanitizer**: Updated from Rails 4 `.for()` syntax to Rails 6 `.permit()` syntax for user registration
 - **User Sign-up**: Now accepts username, email, password, first_name, last_name, and cardano_wallet_address
@@ -69,13 +79,14 @@ The application automatically starts with the configured workflow:
 ## Deployment Configuration  
 - **Type**: Autoscale (scales automatically based on traffic)
 - **Build Command**: `bundle install --jobs 4 --retry 3 && cd frontend && RAILS_ENV=production bundle exec rake assets:precompile`
-- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec rake db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb`
+- **Run Command**: `cd frontend && RAILS_ENV=production bundle exec rake db:migrate db:seed && RAILS_ENV=production bundle exec puma -C config/puma.rb`
 - **Timezone**: Eastern Time (US & Canada) - Bloomfield, NJ
 - **Asset Compilation**: ✅ Precompiles during build (sassc 2.1.0, sprockets 3.7.5)
 - **Database**: 
   - Development/Test: SQLite3
   - Production: PostgreSQL (Replit managed, persistent across deployments)
 - **Database Migrations**: ✅ Runs `db:migrate` automatically at runtime
+- **Database Seeds**: ✅ Runs `db:seed` automatically after migrations to create default data
 - **Caching**: Memory store (64MB, no external dependencies)
 - **Production Ready**: ✅ Timezone data (tzinfo-data) installed and configured
 
