@@ -1,0 +1,191 @@
+<div class="admin-dashboard">
+  <div class="page-header">
+    <h1>SportsBeep Admin Dashboard</h1>
+    <p class="text-muted">Welcome, <%= current_administrator.email %></p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row">
+    <div class="col-md-3">
+      <div class="panel panel-primary">
+        <div class="panel-body text-center">
+          <h2><%= number_with_delimiter(@stats[:users]) %></h2>
+          <p>Total Users</p>
+          <%= link_to 'View All', admin_users_path, class: 'btn btn-sm btn-default' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="panel panel-success">
+        <div class="panel-body text-center">
+          <h2><%= number_with_delimiter(@stats[:active_contests]) %></h2>
+          <p>Active Contests</p>
+          <%= link_to 'View', admin_mlb_games_path, class: 'btn btn-sm btn-default' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="panel panel-info">
+        <div class="panel-body text-center">
+          <h2><%= number_with_delimiter(@stats[:mlb_games] + @stats[:nfl_games]) %></h2>
+          <p>Total Games</p>
+          <small class="text-muted">MLB: <%= @stats[:mlb_games] %> | NFL: <%= @stats[:nfl_games] %></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="panel panel-warning">
+        <div class="panel-body text-center">
+          <h2><%= number_with_delimiter(@stats[:promo_codes]) %></h2>
+          <p>Promo Codes</p>
+          <%= link_to 'Manage', admin_promo_codes_path, class: 'btn btn-sm btn-default' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Quick Actions</h3>
+        </div>
+        <div class="panel-body">
+          <%= link_to 'View MLB Games', admin_mlb_games_path, class: 'btn btn-primary' %>
+          <%= link_to 'View NFL Games', admin_nfl_games_path, class: 'btn btn-primary' %>
+          <%= link_to 'Send Push Notification', new_admin_push_path, class: 'btn btn-info' %>
+          <%= link_to 'Create Promo Code', new_admin_promo_code_path, class: 'btn btn-success' %>
+          <%= link_to 'Add Administrator', new_admin_administrator_path, class: 'btn btn-warning' %>
+          <%= link_to 'System Settings', admin_setting_path, class: 'btn btn-default' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Users -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Recent Users</h3>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Joined</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_users.each do |user| %>
+              <tr>
+                <td><%= user.username %></td>
+                <td><%= user.email %></td>
+                <td><%= time_ago_in_words(user.created_at) %> ago</td>
+                <td><%= link_to 'View', admin_user_path(user), class: 'btn btn-xs btn-default' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="panel-footer">
+          <%= link_to 'View All Users', admin_users_path %>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Information -->
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">System Information</h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-condensed">
+            <tr>
+              <td><strong>Environment:</strong></td>
+              <td><span class="label label-<%= Rails.env.production? ? 'success' : 'warning' %>"><%= Rails.env.upcase %></span></td>
+            </tr>
+            <tr>
+              <td><strong>Rails Version:</strong></td>
+              <td><%= Rails.version %></td>
+            </tr>
+            <tr>
+              <td><strong>Ruby Version:</strong></td>
+              <td><%= RUBY_VERSION %></td>
+            </tr>
+            <tr>
+              <td><strong>Database:</strong></td>
+              <td><%= ActiveRecord::Base.connection.adapter_name %></td>
+            </tr>
+            <tr>
+              <td><strong>Total Administrators:</strong></td>
+              <td><%= @stats[:administrators] %></td>
+            </tr>
+            <tr>
+              <td><strong>Server Time:</strong></td>
+              <td><%= Time.current.strftime('%B %d, %Y %I:%M %p %Z') %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sport Management -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">⚾ MLB Management</h3>
+        </div>
+        <div class="panel-body">
+          <p><strong><%= @stats[:mlb_games] %></strong> total games</p>
+          <%= link_to 'Manage MLB Games', admin_mlb_games_path, class: 'btn btn-primary' %>
+          <%= link_to 'Manage MLB Questions', admin_mlb_questions_path, class: 'btn btn-default' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">🏈 NFL Management</h3>
+        </div>
+        <div class="panel-body">
+          <p><strong><%= @stats[:nfl_games] %></strong> total games</p>
+          <%= link_to 'Manage NFL Games', admin_nfl_games_path, class: 'btn btn-primary' %>
+          <%= link_to 'Manage NFL Questions', admin_nfl_questions_path, class: 'btn btn-default' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.admin-dashboard .panel-body h2 {
+  margin: 10px 0;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.admin-dashboard .panel-body p {
+  margin: 5px 0 15px 0;
+  color: #666;
+}
+
+.admin-dashboard .panel {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.page-header {
+  border-bottom: 2px solid #e7e7e7;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+</style>

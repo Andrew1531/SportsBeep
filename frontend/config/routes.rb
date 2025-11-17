@@ -69,7 +69,8 @@ SportsbeepWeb::Application.routes.draw do
   end
 
   namespace :admin do
-    root to: 'mlb/games#index'
+    root to: 'dashboard#index'
+    get 'dashboard', to: 'dashboard#index', as: :dashboard
     resources :administrators, only: [:index, :new, :create, :destroy]
     resources :users, only: [:index, :show, :update]
 
