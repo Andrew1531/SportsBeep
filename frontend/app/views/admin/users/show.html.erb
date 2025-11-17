@@ -1,27 +1,238 @@
-<h3><%= @user.email %> <small><%= @user.username %></small></h3>
+<div class="page-header">
+  <h3>
+    <%= @user.username %>
+    <small><%= @user.email %></small>
+  </h3>
+  <%= link_to '← Back to Users', admin_users_path, class: 'btn btn-default' %>
+</div>
+
+<% if flash[:success] %>
+  <div class="alert alert-success alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= flash[:success] %>
+  </div>
+<% end %>
+
+<% if flash[:danger] %>
+  <div class="alert alert-danger alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= flash[:danger] %>
+  </div>
+<% end %>
+
+<% if flash[:warning] %>
+  <div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= flash[:warning] %>
+  </div>
+<% end %>
+
 <div class="row">
-  <div class="col-xs-6">
-    <table class="table table-bordered table-striped">
-      <thead>
-        <th>Attribute</th>
-        <th>Value</th>
-      </thead>
-      <tbody>
-        <% %w(id email username device_token platform).each do |attr| %>
+  <!-- User Information -->
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4 class="panel-title">User Information</h4>
+      </div>
+      <table class="table table-bordered">
+        <tbody>
           <tr>
-            <td><code><%= attr %></code></td>
-            <td><%= @user.send attr %></td>
+            <td><strong>ID</strong></td>
+            <td><code><%= @user.id %></code></td>
           </tr>
+          <tr>
+            <td><strong>Username</strong></td>
+            <td><%= @user.username %></td>
+          </tr>
+          <tr>
+            <td><strong>Email</strong></td>
+            <td><%= @user.email %></td>
+          </tr>
+          <tr>
+            <td><strong>First Name</strong></td>
+            <td><%= @user.first_name || '<span class="text-muted">Not set</span>'.html_safe %></td>
+          </tr>
+          <tr>
+            <td><strong>Last Name</strong></td>
+            <td><%= @user.last_name || '<span class="text-muted">Not set</span>'.html_safe %></td>
+          </tr>
+          <tr>
+            <td><strong>Cardano Wallet</strong></td>
+            <td>
+              <% if @user.cardano_wallet_address.present? %>
+                <code style="font-size: 10px;"><%= @user.cardano_wallet_address %></code>
+              <% else %>
+                <span class="text-muted">Not set</span>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Device Token</strong></td>
+            <td>
+              <% if @user.device_token.present? %>
+                <code style="font-size: 10px;"><%= @user.device_token[0..40] %>...</code>
+              <% else %>
+                <span class="text-muted">None</span>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Platform</strong></td>
+            <td><%= @user.platform || '<span class="text-muted">Not set</span>'.html_safe %></td>
+          </tr>
+          <tr>
+            <td><strong>Promo Code</strong></td>
+            <td>
+              <% if @user.promo_code %>
+                <%= link_to @user.promo_code.code, admin_promo_code_path(@user.promo_code), class: 'label label-info' %>
+              <% else %>
+                <span class="text-muted">None</span>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Created</strong></td>
+            <td><%= @user.created_at.strftime('%B %d, %Y at %I:%M %p') %></td>
+          </tr>
+          <tr>
+            <td><strong>Last Sign In</strong></td>
+            <td>
+              <% if @user.respond_to?(:last_sign_in_at) && @user.last_sign_in_at %>
+                <%= time_ago_in_words(@user.last_sign_in_at) %> ago
+              <% else %>
+                <span class="text-muted">Never</span>
+              <% end %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Account Information -->
+  <div class="col-md-6">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h4 class="panel-title">Account Balance</h4>
+      </div>
+      <div class="panel-body">
+        <% if @user.account %>
+          <h2 class="text-center">
+            <%= number_to_currency(@user.account.balance_cents.to_i / 100.0) %>
+          </h2>
+          <table class="table table-condensed">
+            <tr>
+              <td><strong>Balance (cents):</strong></td>
+              <td><%= number_with_delimiter(@user.account.balance_cents.to_i) %></td>
+            </tr>
+            <tr>
+              <td><strong>Clearing Expense:</strong></td>
+              <td><%= number_to_currency(@user.account.clearing_expense_cents.to_i / 100.0) %></td>
+            </tr>
+          </table>
+        <% else %>
+          <p class="text-muted text-center">No account created yet</p>
         <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h4 class="panel-title">Activity Summary</h4>
+      </div>
+      <table class="table table-bordered">
         <tr>
-            <td><code>created_at</code></td>
-            <td><%= l est(@user.created_at), format: :short %></td>
-          </tr>
-      </tbody>
-    </table>
-    <%= simple_form_for [:admin, @user] do |f| %>
-      <%= f.input :password %>
-      <%= f.submit %>
-    <% end %>
+          <td><strong>Total Tickets:</strong></td>
+          <td><span class="badge"><%= @user.tickets.count %></span></td>
+        </tr>
+        <tr>
+          <td><strong>MLB Tickets:</strong></td>
+          <td><span class="badge"><%= @user.mlb_tickets.count %></span></td>
+        </tr>
+        <tr>
+          <td><strong>NFL Tickets:</strong></td>
+          <td><span class="badge"><%= @user.nfl_tickets.count rescue 0 %></span></td>
+        </tr>
+        <tr>
+          <td><strong>Transactions:</strong></td>
+          <td><span class="badge"><%= @user.transactions.count rescue 0 %></span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Actions -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-warning">
+      <div class="panel-heading">
+        <h4 class="panel-title">Admin Actions</h4>
+      </div>
+      <div class="panel-body">
+        <p class="text-warning">
+          <strong>⚠️ Warning:</strong> This will change the user's password immediately. Make sure you have authorization to perform this action.
+        </p>
+        <%= simple_form_for [:admin, @user] do |f| %>
+          <div class="form-group">
+            <%= f.label :password, 'New Password' %>
+            <%= f.input :password, label: false, placeholder: 'Enter new password (minimum 6 characters)', required: true %>
+            <small class="text-muted">User will need to use this new password to log in.</small>
+          </div>
+          <%= f.submit 'Update Password', class: 'btn btn-warning', data: { confirm: 'Are you sure you want to reset this user\'s password?' } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Tickets -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Recent Tickets</h4>
+      </div>
+      <% if @user.tickets.any? %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Type</th>
+              <th>Game</th>
+              <th>Status</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @user.tickets.order(created_at: :desc).limit(10).each do |ticket| %>
+              <tr>
+                <td><code><%= ticket.id %></code></td>
+                <td><%= ticket.type %></td>
+                <td>
+                  <% if ticket.respond_to?(:game) && ticket.game %>
+                    <%= ticket.game.try(:home_team).try(:name) %> vs <%= ticket.game.try(:away_team).try(:name) %>
+                  <% else %>
+                    <span class="text-muted">N/A</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if ticket.respond_to?(:status) %>
+                    <span class="label label-<%= ticket.status == 'active' ? 'success' : 'default' %>">
+                      <%= ticket.status %>
+                    </span>
+                  <% end %>
+                </td>
+                <td><small><%= time_ago_in_words(ticket.created_at) %> ago</small></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="panel-body text-center text-muted">
+          No tickets yet
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

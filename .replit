@@ -45,10 +45,6 @@ externalPort = 3002
 localPort = 42207
 externalPort = 3001
 
-[[ports]]
-localPort = 42771
-externalPort = 3003
-
 [deployment]
 deploymentTarget = "autoscale"
 run = ["bash", "-c", "cd frontend && RAILS_ENV=production bundle exec rake db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb"]
