@@ -56,10 +56,17 @@ The application automatically starts with the configured workflow:
 - **Default Admin Account**:
   - Email: `getinked53@gmail.com`
   - Password: `$sb2025$`
-  - Created via `rake db:seed` (run manually if needed)
-- **Features**: User management, game management (MLB/NFL), promo codes, push notifications, system settings
-- **Status**: ✅ Admin routes enabled in production
-- **Note**: Run `RAILS_ENV=production bundle exec rake db:seed` manually to create admin account and default data
+  - Created manually via: `bundle exec rails runner "Administrator.create!(email: 'getinked53@gmail.com', password: '$sb2025$', password_confirmation: '$sb2025$')"`
+- **Status**: ✅ Fully functional with comprehensive dashboard and management views
+- **Features Implemented**:
+  - ✅ Dashboard with statistics (users, games, contests, promo codes)
+  - ✅ User Management (search, detailed user profiles, password reset)
+  - ✅ Quick action buttons for all admin functions
+  - ✅ System information display
+  - 🔨 Game Management (MLB/NFL) - Routes exist, needs data import
+  - 🔨 Promo Code Management - Routes exist, needs completion
+  - 🔨 Push Notifications - Routes exist, needs implementation
+  - 🔨 Settings Page - Routes exist, needs completion
 
 ## Recent Fixes
 - **Devise Parameter Sanitizer**: Updated from Rails 4 `.for()` syntax to Rails 6 `.permit()` syntax for user registration
@@ -70,6 +77,9 @@ The application automatically starts with the configured workflow:
 - **Landing Page HTML5 Tags**: ✅ Replaced `<header>` tags with `<h2>` tags to fix rendering issues in Chrome
 - **Production Database**: ✅ Configured to use PostgreSQL instead of SQLite3 for persistence on autoscale
 - **Legacy Migration Data Updates**: ✅ Fixed 6 migrations - replaced ActiveRecord calls with raw SQL to avoid circular dependencies
+- **Admin Sessions Controller**: Fixed after_sign_in redirect to properly route to admin dashboard
+- **Admin Base Controller**: Removed missing Pundit and Responders dependencies, fixed set_current_sport method
+- **Admin User Management**: Built comprehensive user list with search, detailed user profiles with account/activity stats, N+1 query optimization with preloading
 
 ## Known Issues
 
@@ -104,8 +114,37 @@ The application automatically starts with the configured workflow:
 - **Dependencies**: Retrofit 1.6.1, OkHttp 1.6.0, Play Services 6.1.71 (all need updates)
 - **API Integration**: Connects to Timer API for game timing functionality
 
+## TheSportsDB Integration (Ready to Use)
+- **Service**: `app/services/thesportsdb_service.rb` - Complete API wrapper for MLB/NFL data
+- **Rake Tasks**: `lib/tasks/import_sports_data.rake` - Import teams and schedules
+- **Status**: ⏸️ Awaiting premium API key ($9/month required for real data)
+- **Environment Variable**: `THESPORTSDB_API_KEY` (add via Replit Secrets)
+- **Available Commands**:
+  - `rake sports:import_mlb_teams` - Import all 30 MLB teams
+  - `rake sports:import_nfl_teams` - Import all 32 NFL teams
+  - `rake sports:import_mlb_schedule` - Import current MLB season schedule
+  - `rake sports:import_nfl_schedule` - Import current NFL season schedule
+  - `rake sports:import_all` - Import everything at once
+- **Note**: Free API has been restricted. Premium key available at https://www.thesportsdb.com/free_sports_api
+
+## Development Roadmap (18 Tasks)
+**Completed:**
+- ✅ Task 1: Admin Dashboard with statistics and quick actions
+- ✅ Task 2: Admin User Management with search and detailed views
+
+**In Progress:**
+- 🔨 Task 3: Admin Game Management (MLB/NFL)
+- 🔨 Task 4: Admin Promo Code Management
+- 🔨 Task 5: Admin Push Notifications
+- 🔨 Task 6: Admin Settings Page
+- 🔨 Tasks 7-10: Legal/educational pages (How to Play, ToS, Refund, Privacy)
+- 🔨 Tasks 11-14: User features (Dashboard, Wallet, Transactions, Promo redemption)
+- 🔨 Tasks 15-18: Game features (Selection, Team building, Contest entry, Leaderboards)
+
 ## Next Steps for Full Functionality
-1. Upgrade Timer API to Rails 7.x for Ruby 3.2 compatibility
-2. Modernize Android app build system and dependencies
-3. Fix remaining database migrations for full data model support
-4. Re-integrate removed gems as needed for specific features
+1. **Obtain TheSportsDB API key** - Sign up for premium to import real MLB/NFL data
+2. Upgrade Timer API to Rails 7.x for Ruby 3.2 compatibility
+3. Complete remaining admin features (Tasks 3-6)
+4. Build legal/educational content pages (Tasks 7-10)
+5. Implement user-facing features (Tasks 11-18)
+6. Modernize Android app build system and dependencies

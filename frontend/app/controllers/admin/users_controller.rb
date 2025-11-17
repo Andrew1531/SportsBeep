@@ -20,7 +20,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def show
-    @user = User.includes(:account, :promo_code, :tickets).find params[:id]
+    @user = User.includes(:account, :promo_code, tickets: [:game]).find params[:id]
   end
 
   def update

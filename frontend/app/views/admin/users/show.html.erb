@@ -143,19 +143,19 @@
       <table class="table table-bordered">
         <tr>
           <td><strong>Total Tickets:</strong></td>
-          <td><span class="badge"><%= @user.tickets.count %></span></td>
+          <td><span class="badge"><%= @user.tickets.size %></span></td>
         </tr>
         <tr>
           <td><strong>MLB Tickets:</strong></td>
-          <td><span class="badge"><%= @user.mlb_tickets.count %></span></td>
+          <td><span class="badge"><%= @user.mlb_tickets.size %></span></td>
         </tr>
         <tr>
           <td><strong>NFL Tickets:</strong></td>
-          <td><span class="badge"><%= @user.nfl_tickets.count rescue 0 %></span></td>
+          <td><span class="badge"><%= @user.nfl_tickets.size rescue 0 %></span></td>
         </tr>
         <tr>
           <td><strong>Transactions:</strong></td>
-          <td><span class="badge"><%= @user.transactions.count rescue 0 %></span></td>
+          <td><span class="badge"><%= @user.transactions.size rescue 0 %></span></td>
         </tr>
       </table>
     </div>
@@ -210,8 +210,8 @@
                 <td><code><%= ticket.id %></code></td>
                 <td><%= ticket.type %></td>
                 <td>
-                  <% if ticket.respond_to?(:game) && ticket.game %>
-                    <%= ticket.game.try(:home_team).try(:name) %> vs <%= ticket.game.try(:away_team).try(:name) %>
+                  <% if ticket.game %>
+                    Game #<%= ticket.game.id %>
                   <% else %>
                     <span class="text-muted">N/A</span>
                   <% end %>
