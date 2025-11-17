@@ -1,0 +1,457 @@
+No route matches [GET] "/admin/login"
+Rails.root: /home/runner/workspace/frontend
+
+Application Trace | Framework Trace | Full Trace
+Routes
+Routes match in priority from top to bottom
+
+Helper	HTTP Verb	Path	Controller#Action
+Path / Url		
+Path Match
+new_user_session_path	GET	/users/login(.:format)	
+sessions#new
+
+user_session_path	POST	/users/login(.:format)	
+sessions#create
+
+destroy_user_session_path	DELETE	/users/logout(.:format)	
+sessions#destroy
+
+new_user_password_path	GET	/users/password/new(.:format)	
+devise/passwords#new
+
+edit_user_password_path	GET	/users/password/edit(.:format)	
+devise/passwords#edit
+
+user_password_path	PATCH	/users/password(.:format)	
+devise/passwords#update
+
+PUT	/users/password(.:format)	
+devise/passwords#update
+
+POST	/users/password(.:format)	
+devise/passwords#create
+
+cancel_user_registration_path	GET	/users/cancel(.:format)	
+registrations#cancel
+
+new_user_registration_path	GET	/users/register(.:format)	
+registrations#new
+
+edit_user_registration_path	GET	/users/edit(.:format)	
+registrations#edit
+
+user_registration_path	PATCH	/users(.:format)	
+registrations#update
+
+PUT	/users(.:format)	
+registrations#update
+
+DELETE	/users(.:format)	
+registrations#destroy
+
+POST	/users(.:format)	
+registrations#create
+
+new_administrator_session_path	GET	/administrators/login(.:format)	
+admin/sessions#new
+
+administrator_session_path	POST	/administrators/login(.:format)	
+admin/sessions#create
+
+destroy_administrator_session_path	DELETE	/administrators/logout(.:format)	
+admin/sessions#destroy
+
+play_path	GET	/play(.:format)	
+application#app
+
+root_path	GET	/	
+application#landing
+
+tos_path	GET	/tos(.:format)	
+pages#tos
+
+refund_policy_path	GET	/refund_policy(.:format)	
+pages#refund_policy
+
+privacy_policy_path	GET	/privacy_policy(.:format)	
+pages#privacy_policy
+
+user_path	GET	/users/:id(.:format)	
+users#show
+
+new_api_user_session_path	GET	/api/users/login(.:format)	
+api/sessions#new {:format=>"json"}
+
+api_user_session_path	POST	/api/users/login(.:format)	
+api/sessions#create {:format=>"json"}
+
+destroy_api_user_session_path	DELETE	/api/users/logout(.:format)	
+api/sessions#destroy {:format=>"json"}
+
+new_api_user_password_path	GET	/api/users/password/new(.:format)	
+api/passwords#new {:format=>"json"}
+
+edit_api_user_password_path	GET	/api/users/password/edit(.:format)	
+api/passwords#edit {:format=>"json"}
+
+api_user_password_path	PATCH	/api/users/password(.:format)	
+api/passwords#update {:format=>"json"}
+
+PUT	/api/users/password(.:format)	
+api/passwords#update {:format=>"json"}
+
+POST	/api/users/password(.:format)	
+api/passwords#create {:format=>"json"}
+
+cancel_api_user_registration_path	GET	/api/users/cancel(.:format)	
+api/registrations#cancel {:format=>"json"}
+
+new_api_user_registration_path	GET	/api/users/register(.:format)	
+api/registrations#new {:format=>"json"}
+
+edit_api_user_registration_path	GET	/api/users/edit(.:format)	
+api/registrations#edit {:format=>"json"}
+
+api_user_registration_path	PATCH	/api/users(.:format)	
+api/registrations#update {:format=>"json"}
+
+PUT	/api/users(.:format)	
+api/registrations#update {:format=>"json"}
+
+DELETE	/api/users(.:format)	
+api/registrations#destroy {:format=>"json"}
+
+POST	/api/users(.:format)	
+api/registrations#create {:format=>"json"}
+
+api_favorite_team_path	PATCH	/api/favorite_team(.:format)	
+api/favorite_teams#update {:format=>"json"}
+
+PUT	/api/favorite_team(.:format)	
+api/favorite_teams#update {:format=>"json"}
+
+api_mlb_contest_tickets_path	GET	/api/mlb/contests/:contest_id/tickets(.:format)	
+api/mlb/tickets#index {:format=>"json"}
+
+api_mlb_contests_path	GET	/api/mlb/contests(.:format)	
+api/mlb/contests#index {:format=>"json"}
+
+api_mlb_contest_path	GET	/api/mlb/contests/:id(.:format)	
+api/mlb/contests#show {:format=>"json"}
+
+api_mlb_game_league_picks_path	GET	/api/mlb/games/:game_id/league_picks(.:format)	
+api/mlb/league_picks#index {:format=>"json"}
+
+previous_api_mlb_game_players_path	GET	/api/mlb/games/:game_id/players/previous(.:format)	
+api/mlb/players#previous {:format=>"json"}
+
+api_mlb_game_players_path	GET	/api/mlb/games/:game_id/players(.:format)	
+api/mlb/players#index {:format=>"json"}
+
+api_mlb_game_pools_path	GET	/api/mlb/games/:game_id/pools(.:format)	
+api/mlb/pools#index {:format=>"json"}
+
+api_mlb_games_path	GET	/api/mlb/games(.:format)	
+api/mlb/games#index {:format=>"json"}
+
+api_mlb_game_path	GET	/api/mlb/games/:id(.:format)	
+api/mlb/games#show {:format=>"json"}
+
+api_mlb_player_stats_path	GET	/api/mlb/players/:player_id/stats(.:format)	
+api/mlb/stats#index {:format=>"json"}
+
+api_mlb_player_path	GET	/api/mlb/players/:id(.:format)	
+api/mlb/players#show {:format=>"json"}
+
+rankings_api_mlb_team_path	GET	/api/mlb/teams/:id/rankings(.:format)	
+api/mlb/teams#rankings {:format=>"json"}
+
+api_mlb_teams_path	GET	/api/mlb/teams(.:format)	
+api/mlb/teams#index {:format=>"json"}
+
+league_pick_api_mlb_ticket_path	GET	/api/mlb/tickets/:id/league_pick(.:format)	
+api/mlb/tickets#league_pick {:format=>"json"}
+
+api_mlb_ticket_player_scoresheet_path	GET	/api/mlb/tickets/:ticket_id/players/:player_id/scoresheet(.:format)	
+api/mlb/scoresheets#show {:format=>"json"}
+
+api_mlb_ticket_players_path	GET	/api/mlb/tickets/:ticket_id/players(.:format)	
+api/mlb/players#index {:format=>"json"}
+
+api_mlb_ticket_questions_path	GET	/api/mlb/tickets/:ticket_id/questions(.:format)	
+api/mlb/questions#index {:format=>"json"}
+
+api_mlb_ticket_timer_states_path	GET	/api/mlb/tickets/:ticket_id/timer_states(.:format)	
+api/mlb/timer_states#index {:format=>"json"}
+
+api_mlb_ticket_answers_path	GET	/api/mlb/tickets/:ticket_id/answers(.:format)	
+api/mlb/question_answers#index {:format=>"json"}
+
+POST	/api/mlb/tickets/:ticket_id/answers(.:format)	
+api/mlb/question_answers#create {:format=>"json"}
+
+api_mlb_ticket_squad_path	GET	/api/mlb/tickets/:ticket_id/squads/:id(.:format)	
+api/mlb/squads#show {:format=>"json"}
+
+api_mlb_tickets_path	POST	/api/mlb/tickets(.:format)	
+api/mlb/tickets#create {:format=>"json"}
+
+api_mlb_ticket_path	GET	/api/mlb/tickets/:id(.:format)	
+api/mlb/tickets#show {:format=>"json"}
+
+PATCH	/api/mlb/tickets/:id(.:format)	
+api/mlb/tickets#update {:format=>"json"}
+
+PUT	/api/mlb/tickets/:id(.:format)	
+api/mlb/tickets#update {:format=>"json"}
+
+api_nfl_contest_tickets_path	GET	/api/nfl/contests/:contest_id/tickets(.:format)	
+api/nfl/tickets#index {:format=>"json"}
+
+api_nfl_contests_path	GET	/api/nfl/contests(.:format)	
+api/nfl/contests#index {:format=>"json"}
+
+api_nfl_contest_path	GET	/api/nfl/contests/:id(.:format)	
+api/nfl/contests#show {:format=>"json"}
+
+api_nfl_game_league_picks_path	GET	/api/nfl/games/:game_id/league_picks(.:format)	
+api/nfl/league_picks#index {:format=>"json"}
+
+previous_api_nfl_game_players_path	GET	/api/nfl/games/:game_id/players/previous(.:format)	
+api/nfl/players#previous {:format=>"json"}
+
+api_nfl_game_players_path	GET	/api/nfl/games/:game_id/players(.:format)	
+api/nfl/players#index {:format=>"json"}
+
+api_nfl_game_pools_path	GET	/api/nfl/games/:game_id/pools(.:format)	
+api/nfl/pools#index {:format=>"json"}
+
+api_nfl_games_path	GET	/api/nfl/games(.:format)	
+api/nfl/games#index {:format=>"json"}
+
+api_nfl_game_path	GET	/api/nfl/games/:id(.:format)	
+api/nfl/games#show {:format=>"json"}
+
+api_nfl_player_stats_path	GET	/api/nfl/players/:player_id/stats(.:format)	
+api/nfl/stats#index {:format=>"json"}
+
+api_nfl_player_path	GET	/api/nfl/players/:id(.:format)	
+api/nfl/players#show {:format=>"json"}
+
+rankings_api_nfl_team_path	GET	/api/nfl/teams/:id/rankings(.:format)	
+api/nfl/teams#rankings {:format=>"json"}
+
+api_nfl_teams_path	GET	/api/nfl/teams(.:format)	
+api/nfl/teams#index {:format=>"json"}
+
+league_pick_api_nfl_ticket_path	GET	/api/nfl/tickets/:id/league_pick(.:format)	
+api/nfl/tickets#league_pick {:format=>"json"}
+
+api_nfl_ticket_player_scoresheet_path	GET	/api/nfl/tickets/:ticket_id/players/:player_id/scoresheet(.:format)	
+api/nfl/scoresheets#show {:format=>"json"}
+
+api_nfl_ticket_players_path	GET	/api/nfl/tickets/:ticket_id/players(.:format)	
+api/nfl/players#index {:format=>"json"}
+
+api_nfl_ticket_questions_path	GET	/api/nfl/tickets/:ticket_id/questions(.:format)	
+api/nfl/questions#index {:format=>"json"}
+
+api_nfl_ticket_timer_states_path	GET	/api/nfl/tickets/:ticket_id/timer_states(.:format)	
+api/nfl/timer_states#index {:format=>"json"}
+
+api_nfl_ticket_answers_path	GET	/api/nfl/tickets/:ticket_id/answers(.:format)	
+api/nfl/question_answers#index {:format=>"json"}
+
+POST	/api/nfl/tickets/:ticket_id/answers(.:format)	
+api/nfl/question_answers#create {:format=>"json"}
+
+api_nfl_ticket_squad_path	GET	/api/nfl/tickets/:ticket_id/squads/:id(.:format)	
+api/nfl/squads#show {:format=>"json"}
+
+api_nfl_tickets_path	POST	/api/nfl/tickets(.:format)	
+api/nfl/tickets#create {:format=>"json"}
+
+api_nfl_ticket_path	GET	/api/nfl/tickets/:id(.:format)	
+api/nfl/tickets#show {:format=>"json"}
+
+PATCH	/api/nfl/tickets/:id(.:format)	
+api/nfl/tickets#update {:format=>"json"}
+
+PUT	/api/nfl/tickets/:id(.:format)	
+api/nfl/tickets#update {:format=>"json"}
+
+admin_root_path	GET	/admin(.:format)	
+admin/dashboard#index
+
+admin_dashboard_path	GET	/admin/dashboard(.:format)	
+admin/dashboard#index
+
+admin_administrators_path	GET	/admin/administrators(.:format)	
+admin/administrators#index
+
+POST	/admin/administrators(.:format)	
+admin/administrators#create
+
+new_admin_administrator_path	GET	/admin/administrators/new(.:format)	
+admin/administrators#new
+
+admin_administrator_path	DELETE	/admin/administrators/:id(.:format)	
+admin/administrators#destroy
+
+admin_users_path	GET	/admin/users(.:format)	
+admin/users#index
+
+admin_user_path	GET	/admin/users/:id(.:format)	
+admin/users#show
+
+PATCH	/admin/users/:id(.:format)	
+admin/users#update
+
+PUT	/admin/users/:id(.:format)	
+admin/users#update
+
+admin_promo_code_users_path	GET	/admin/promo_codes/:promo_code_id/users(.:format)	
+admin/users#index
+
+admin_promo_codes_path	GET	/admin/promo_codes(.:format)	
+admin/promo_codes#index
+
+POST	/admin/promo_codes(.:format)	
+admin/promo_codes#create
+
+new_admin_promo_code_path	GET	/admin/promo_codes/new(.:format)	
+admin/promo_codes#new
+
+edit_admin_promo_code_path	GET	/admin/promo_codes/:id/edit(.:format)	
+admin/promo_codes#edit
+
+admin_promo_code_path	GET	/admin/promo_codes/:id(.:format)	
+admin/promo_codes#show
+
+PATCH	/admin/promo_codes/:id(.:format)	
+admin/promo_codes#update
+
+PUT	/admin/promo_codes/:id(.:format)	
+admin/promo_codes#update
+
+DELETE	/admin/promo_codes/:id(.:format)	
+admin/promo_codes#destroy
+
+edit_admin_setting_path	GET	/admin/setting/edit(.:format)	
+admin/settings#edit
+
+admin_setting_path	GET	/admin/setting(.:format)	
+admin/settings#show
+
+PATCH	/admin/setting(.:format)	
+admin/settings#update
+
+PUT	/admin/setting(.:format)	
+admin/settings#update
+
+admin_push_index_path	POST	/admin/push(.:format)	
+admin/push#create
+
+new_admin_push_path	GET	/admin/push/new(.:format)	
+admin/push#new
+
+admin_mlb_root_path	GET	/admin/mlb(.:format)	
+admin/mlb/games#index
+
+admin_mlb_games_path	GET	/admin/mlb/games(.:format)	
+admin/mlb/games#index
+
+admin_mlb_game_path	GET	/admin/mlb/games/:id(.:format)	
+admin/mlb/games#show
+
+PATCH	/admin/mlb/games/:id(.:format)	
+admin/mlb/games#update
+
+PUT	/admin/mlb/games/:id(.:format)	
+admin/mlb/games#update
+
+admin_mlb_questions_path	GET	/admin/mlb/questions(.:format)	
+admin/mlb/questions#index
+
+POST	/admin/mlb/questions(.:format)	
+admin/mlb/questions#create
+
+new_admin_mlb_question_path	GET	/admin/mlb/questions/new(.:format)	
+admin/mlb/questions#new
+
+edit_admin_mlb_question_path	GET	/admin/mlb/questions/:id/edit(.:format)	
+admin/mlb/questions#edit
+
+admin_mlb_question_path	PATCH	/admin/mlb/questions/:id(.:format)	
+admin/mlb/questions#update
+
+PUT	/admin/mlb/questions/:id(.:format)	
+admin/mlb/questions#update
+
+DELETE	/admin/mlb/questions/:id(.:format)	
+admin/mlb/questions#destroy
+
+admin_nfl_root_path	GET	/admin/nfl(.:format)	
+admin/nfl/games#index
+
+admin_nfl_games_path	GET	/admin/nfl/games(.:format)	
+admin/nfl/games#index
+
+admin_nfl_game_path	GET	/admin/nfl/games/:id(.:format)	
+admin/nfl/games#show
+
+PATCH	/admin/nfl/games/:id(.:format)	
+admin/nfl/games#update
+
+PUT	/admin/nfl/games/:id(.:format)	
+admin/nfl/games#update
+
+admin_nfl_questions_path	GET	/admin/nfl/questions(.:format)	
+admin/nfl/questions#index
+
+POST	/admin/nfl/questions(.:format)	
+admin/nfl/questions#create
+
+new_admin_nfl_question_path	GET	/admin/nfl/questions/new(.:format)	
+admin/nfl/questions#new
+
+edit_admin_nfl_question_path	GET	/admin/nfl/questions/:id/edit(.:format)	
+admin/nfl/questions#edit
+
+admin_nfl_question_path	PATCH	/admin/nfl/questions/:id(.:format)	
+admin/nfl/questions#update
+
+PUT	/admin/nfl/questions/:id(.:format)	
+admin/nfl/questions#update
+
+DELETE	/admin/nfl/questions/:id(.:format)	
+admin/nfl/questions#destroy
+
+how_it_works_mobile_pages_path	GET	/mobile/pages/how_it_works(.:format)	
+mobile/pages#how_it_works
+
+mobile_pages_path	GET	/mobile/pages(.:format)	
+mobile/pages#index
+
+POST	/mobile/pages(.:format)	
+mobile/pages#create
+
+new_mobile_page_path	GET	/mobile/pages/new(.:format)	
+mobile/pages#new
+
+edit_mobile_page_path	GET	/mobile/pages/:id/edit(.:format)	
+mobile/pages#edit
+
+mobile_page_path	GET	/mobile/pages/:id(.:format)	
+mobile/pages#show
+
+PATCH	/mobile/pages/:id(.:format)	
+mobile/pages#update
+
+PUT	/mobile/pages/:id(.:format)	
+mobile/pages#update
+
+DELETE	/mobile/pages/:id(.:format)	
+mobile/pages#destroy
+
