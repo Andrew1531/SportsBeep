@@ -1,0 +1,97 @@
+NoMethodError in Admin::DashboardController#index
+undefined method `set_current_sport' for #<Admin::DashboardController:0x0000000000bd38>
+Extracted source (around line #427):
+425
+426
+427
+428
+429
+430
+              
+          lambda do |target, value, &block|
+            target, block, method, *arguments = expand(target, value, block)
+            target.send(method, *arguments, &block)
+          end
+        end
+
+
+Rails.root: /home/runner/workspace/frontend
+
+Application Trace | Framework Trace | Full Trace
+activesupport (6.1.7.10) lib/active_support/callbacks.rb:427:in `block in make_lambda'
+activesupport (6.1.7.10) lib/active_support/callbacks.rb:198:in `block (2 levels) in halting'
+actionpack (6.1.7.10) lib/abstract_controller/callbacks.rb:34:in `block (2 levels) in <module:Callbacks>'
+activesupport (6.1.7.10) lib/active_support/callbacks.rb:199:in `block in halting'
+activesupport (6.1.7.10) lib/active_support/callbacks.rb:512:in `block in invoke_before'
+activesupport (6.1.7.10) lib/active_support/callbacks.rb:512:in `each'
+activesupport (6.1.7.10) lib/active_support/callbacks.rb:512:in `invoke_before'
+activesupport (6.1.7.10) lib/active_support/callbacks.rb:105:in `run_callbacks'
+actionpack (6.1.7.10) lib/abstract_controller/callbacks.rb:41:in `process_action'
+actionpack (6.1.7.10) lib/action_controller/metal/rescue.rb:22:in `process_action'
+actionpack (6.1.7.10) lib/action_controller/metal/instrumentation.rb:34:in `block in process_action'
+activesupport (6.1.7.10) lib/active_support/notifications.rb:203:in `block in instrument'
+activesupport (6.1.7.10) lib/active_support/notifications/instrumenter.rb:24:in `instrument'
+activesupport (6.1.7.10) lib/active_support/notifications.rb:203:in `instrument'
+actionpack (6.1.7.10) lib/action_controller/metal/instrumentation.rb:33:in `process_action'
+actionpack (6.1.7.10) lib/action_controller/metal/params_wrapper.rb:249:in `process_action'
+activerecord (6.1.7.10) lib/active_record/railties/controller_runtime.rb:27:in `process_action'
+actionpack (6.1.7.10) lib/abstract_controller/base.rb:165:in `process'
+actionview (6.1.7.10) lib/action_view/rendering.rb:39:in `process'
+actionpack (6.1.7.10) lib/action_controller/metal.rb:190:in `dispatch'
+actionpack (6.1.7.10) lib/action_controller/metal.rb:254:in `dispatch'
+actionpack (6.1.7.10) lib/action_dispatch/routing/route_set.rb:50:in `dispatch'
+actionpack (6.1.7.10) lib/action_dispatch/routing/route_set.rb:33:in `serve'
+actionpack (6.1.7.10) lib/action_dispatch/journey/router.rb:50:in `block in serve'
+actionpack (6.1.7.10) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.1.7.10) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.1.7.10) lib/action_dispatch/routing/route_set.rb:842:in `call'
+rack (2.2.20) lib/rack/deflater.rb:44:in `call'
+warden (1.2.9) lib/warden/manager.rb:36:in `block in call'
+warden (1.2.9) lib/warden/manager.rb:34:in `catch'
+warden (1.2.9) lib/warden/manager.rb:34:in `call'
+rack (2.2.20) lib/rack/tempfile_reaper.rb:15:in `call'
+rack (2.2.20) lib/rack/etag.rb:27:in `call'
+rack (2.2.20) lib/rack/conditional_get.rb:27:in `call'
+rack (2.2.20) lib/rack/head.rb:12:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/http/permissions_policy.rb:22:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/http/content_security_policy.rb:19:in `call'
+rack (2.2.20) lib/rack/session/abstract/id.rb:266:in `context'
+rack (2.2.20) lib/rack/session/abstract/id.rb:260:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/cookies.rb:697:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.1.7.10) lib/active_support/callbacks.rb:98:in `run_callbacks'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/debug_exceptions.rb:29:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.1.7.10) lib/rails/rack/logger.rb:37:in `call_app'
+railties (6.1.7.10) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.1.7.10) lib/active_support/tagged_logging.rb:99:in `block in tagged'
+activesupport (6.1.7.10) lib/active_support/tagged_logging.rb:37:in `tagged'
+activesupport (6.1.7.10) lib/active_support/tagged_logging.rb:99:in `tagged'
+railties (6.1.7.10) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/request_id.rb:26:in `call'
+rack (2.2.20) lib/rack/method_override.rb:24:in `call'
+rack (2.2.20) lib/rack/runtime.rb:22:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/static.rb:24:in `call'
+rack (2.2.20) lib/rack/sendfile.rb:127:in `call'
+actionpack (6.1.7.10) lib/action_dispatch/middleware/host_authorization.rb:142:in `call'
+railties (6.1.7.10) lib/rails/engine.rb:539:in `call'
+puma (5.6.9) lib/puma/configuration.rb:252:in `call'
+puma (5.6.9) lib/puma/request.rb:77:in `block in handle_request'
+puma (5.6.9) lib/puma/thread_pool.rb:340:in `with_force_shutdown'
+puma (5.6.9) lib/puma/request.rb:76:in `handle_request'
+puma (5.6.9) lib/puma/server.rb:443:in `process_client'
+puma (5.6.9) lib/puma/thread_pool.rb:147:in `block in spawn_thread'
+Request
+Parameters:
+
+None
+Toggle session dump
+Toggle env dump
+Response
+Headers:
+
+None

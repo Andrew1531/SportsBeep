@@ -7,8 +7,6 @@ class Admin::BaseController < ApplicationController
   respond_to :html
   self.responder = AdminResponder
 
-  include Pundit
-
   def current_user
     current_administrator
   end
@@ -18,13 +16,9 @@ class Admin::BaseController < ApplicationController
   end
   helper_method :current_sport
 
-  rescue_from(Pundit::NotAuthorizedError) do |e|
-    flash[:danger] = 'Not authorized to do that'
-    redirect_to :back
-  end
-
   def set_current_sport
-    session[:current_sport] = _sport.name.downcase if _sport
+    # Default to MLB if no sport is set
+    session[:current_sport] ||= 'mlb'
   end
 
 end

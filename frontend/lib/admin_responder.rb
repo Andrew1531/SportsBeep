@@ -1,7 +1,5 @@
 class AdminResponder < ActionController::Responder
-  include Responders::HttpCacheResponder
   include Responders::FlashResponder
-  include Responders::LocationResponder
 
   def initialize(*)
     super
