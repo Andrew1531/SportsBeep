@@ -106,7 +106,7 @@
     </div>
   </div>
 
-  <% game_class = @sport == 'nfl' ? Nfl::Game : Mlb::Game rescue nil %>
+  <% game_class = begin; @sport == 'nfl' ? Nfl::Game : Mlb::Game; rescue NameError; nil; end %>
   <div class="row">
     <div class="col-xs-12 col-md-4">
       <div class="panel panel-info">

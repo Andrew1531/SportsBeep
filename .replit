@@ -33,18 +33,6 @@ outputType = "webview"
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 37821
-externalPort = 3000
-
-[[ports]]
-localPort = 41527
-externalPort = 3002
-
-[[ports]]
-localPort = 42207
-externalPort = 3001
-
 [deployment]
 deploymentTarget = "autoscale"
 run = ["bash", "-c", "cd frontend && RAILS_ENV=production bundle exec rake db:migrate && RAILS_ENV=production bundle exec puma -C config/puma.rb"]
