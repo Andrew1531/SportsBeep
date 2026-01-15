@@ -1,6 +1,31 @@
 <%= simple_form_for [:admin, promo_code] do |f| %>
   <%= render 'admin/errors', form: f %>
-  <%= f.input :code %>
-  <%= f.input :note %>
-  <%= f.submit create_or_update_text(promo_code), class: 'btn btn-primary' %>
+  
+  <div class="form-group">
+    <%= f.input :code, 
+        label: 'Promo Code',
+        placeholder: 'e.g., WELCOME50',
+        hint: 'The code users will enter to get the promotion',
+        input_html: { 
+          class: 'form-control', 
+          style: 'text-transform: uppercase; font-family: monospace; font-size: 18px;',
+          maxlength: 20
+        } %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.input :note, 
+        as: :text,
+        label: 'Description / Notes',
+        placeholder: 'Describe the purpose of this promo code...',
+        hint: 'Internal notes about this promotion (not shown to users)',
+        input_html: { class: 'form-control', rows: 3 } %>
+  </div>
+  
+  <hr>
+  
+  <div class="form-group">
+    <%= f.submit create_or_update_text(promo_code), class: 'btn btn-success btn-lg' %>
+    <%= link_to 'Cancel', admin_promo_codes_path, class: 'btn btn-default btn-lg' %>
+  </div>
 <% end %>

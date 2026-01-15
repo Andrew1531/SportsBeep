@@ -1,5 +1,147 @@
-<%= simple_form_for @push, url: admin_push_index_path do |f| %>
-  <%= f.input :email %>
-  <%= f.input :type, collection: %w(contest injury) %>
-  <%= f.submit 'Push' %>
-<% end %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <i class="glyphicon glyphicon-send"></i>
+            Push Notifications
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12 col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">Send Test Notification</h4>
+                </div>
+                <div class="panel-body">
+                  <%= simple_form_for @push, url: admin_push_index_path do |f| %>
+                    <div class="form-group">
+                      <%= f.input :email, 
+                          label: 'Recipient Email',
+                          placeholder: 'user@example.com',
+                          hint: 'Enter the email address of the user to receive the notification',
+                          input_html: { class: 'form-control' } %>
+                    </div>
+                    
+                    <div class="form-group">
+                      <%= f.input :type, 
+                          collection: [
+                            ['Contest Placement Update', 'contest'],
+                            ['Player Injury Alert', 'injury']
+                          ],
+                          label: 'Notification Type',
+                          prompt: 'Select notification type...',
+                          input_html: { class: 'form-control' } %>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                      <i class="glyphicon glyphicon-info-sign"></i>
+                      <strong>Note:</strong> This will send a test notification to the specified user. The user must have push notifications enabled on their device.
+                    </div>
+                    
+                    <%= f.submit 'Send Notification', class: 'btn btn-success btn-lg' %>
+                  <% end %>
+                  
+                  <% if flash[:success] %>
+                    <div class="alert alert-success" style="margin-top: 15px;">
+                      <i class="glyphicon glyphicon-ok-sign"></i>
+                      <strong>Success!</strong> Notification sent successfully (Status: <%= flash[:success] %>)
+                    </div>
+                  <% end %>
+                  
+                  <% if flash[:alert] %>
+                    <div class="alert alert-danger" style="margin-top: 15px;">
+                      <i class="glyphicon glyphicon-exclamation-sign"></i>
+                      <strong>Error!</strong> Failed to send notification (Status: <%= flash[:alert] %>)
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-xs-12 col-md-6">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h4 class="panel-title">Notification Types</h4>
+                </div>
+                <div class="panel-body">
+                  <div class="media" style="border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px;">
+                    <div class="media-left">
+                      <span class="glyphicon glyphicon-trophy" style="font-size: 32px; color: #f0ad4e;"></span>
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">Contest Placement</h4>
+                      <p class="text-muted">Notifies users about their contest rankings and prize winnings.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="media">
+                    <div class="media-left">
+                      <span class="glyphicon glyphicon-alert" style="font-size: 32px; color: #d9534f;"></span>
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">Player Injury</h4>
+                      <p class="text-muted">Alerts users when a player on their roster is injured or status changes.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">Broadcast Notifications</h4>
+                </div>
+                <div class="panel-body">
+                  <p class="text-muted">Send notifications to all users at once.</p>
+                  
+                  <div class="alert alert-warning">
+                    <i class="glyphicon glyphicon-warning-sign"></i>
+                    <strong>Coming Soon</strong><br>
+                    Mass broadcast notifications will be available in a future update.
+                  </div>
+                  
+                  <button class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-bullhorn"></i> Send Broadcast
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Recent Notifications</h4>
+        </div>
+        <div class="panel-body">
+          <div class="alert alert-info">
+            <i class="glyphicon glyphicon-info-sign"></i>
+            Notification history will be displayed here once the push notification service is fully configured.
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Recipient</th>
+                <th>Status</th>
+                <th>Sent At</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4" class="text-center text-muted">No notification history available</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

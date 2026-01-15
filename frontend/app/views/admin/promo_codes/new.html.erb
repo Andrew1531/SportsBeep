@@ -1,6 +1,49 @@
-<h3>Add a Promo Code</h3>
-<div class="row">
-  <div class="col-xs-6">
-    <%= render 'form', promo_code: @promo_code %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <%= link_to '&larr; Back to Promo Codes'.html_safe, admin_promo_codes_path, class: 'btn btn-default' %>
+    </div>
+  </div>
+  
+  <br>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <i class="glyphicon glyphicon-plus"></i>
+            Create New Promo Code
+          </h3>
+        </div>
+        <div class="panel-body">
+          <%= render 'form', promo_code: @promo_code %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-xs-12 col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h4 class="panel-title">Tips for Promo Codes</h4>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <strong>Keep codes short and memorable</strong>
+              <p class="text-muted">Examples: WELCOME10, BEEP2025, CRYPTO50</p>
+            </li>
+            <li class="list-group-item">
+              <strong>Use all caps for consistency</strong>
+              <p class="text-muted">Makes it easier for users to enter correctly</p>
+            </li>
+            <li class="list-group-item">
+              <strong>Add a note for tracking</strong>
+              <p class="text-muted">Describe the campaign or purpose of this code</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

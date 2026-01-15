@@ -10,14 +10,22 @@ class Admin::SettingsController < Admin::BaseController
   end
 
   def update
-    @setting.update permitted_params
-    respond_with @setting, location: admin_setting_path
+    if @setting
+      if @setting.update(permitted_params)
+        flash[:success] = "Settings updated successfully!"
+      else
+        flash[:alert] = "Failed to update settings."
+      end
+    else
+      flash[:alert] = "No settings record found. Please run database seeds."
+    end
+    redirect_to admin_setting_path
   end
 
   private
 
     def set_setting
-      @setting = Setting.first
+      @setting = Setting.first_or_create
     end
 
     def permitted_params

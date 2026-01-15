@@ -1,23 +1,114 @@
-<h3>Promo Code <%= @promo_code.code %> <small><%= @promo_code.users_count %> redemptions</small></h3>
-<div class="row">
-  <div class="col-xs-6">
-    <table class="table table-bordered table-striped">
-      <thead>
-        <th>Attribute</th>
-        <th>Value</th>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>code</code></td>
-          <td><%= @promo_code.code %></td>
-        </tr>
-        <tr>
-          <td><code>note</code></td>
-          <td><%= @promo_code.note %></td>
-        </tr>
-      </tbody>
-    </table>
-    <%= link_to 'Edit', edit_admin_promo_code_path(@promo_code), class: 'btn btn-primary' %>
-    <%= link_to 'Delete', admin_promo_code_path(@promo_code), method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure?' } %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <%= link_to '&larr; Back to Promo Codes'.html_safe, admin_promo_codes_path, class: 'btn btn-default' %>
+    </div>
+  </div>
+  
+  <br>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <i class="glyphicon glyphicon-tag"></i>
+            Promo Code: <%= @promo_code.code %>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="text-center" style="padding: 20px;">
+            <h1><code style="font-size: 36px; padding: 15px 25px;"><%= @promo_code.code %></code></h1>
+          </div>
+          
+          <table class="table table-bordered">
+            <tr>
+              <td width="40%"><strong>Code</strong></td>
+              <td><code><%= @promo_code.code %></code></td>
+            </tr>
+            <tr>
+              <td><strong>Description</strong></td>
+              <td><%= @promo_code.note.presence || '<span class="text-muted">No description</span>'.html_safe %></td>
+            </tr>
+            <tr>
+              <td><strong>Total Redemptions</strong></td>
+              <td>
+                <span class="badge badge-success" style="font-size: 16px;">
+                  <%= @promo_code.users_count rescue @promo_code.users.size %>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Created</strong></td>
+              <td><%= @promo_code.created_at.strftime("%B %d, %Y at %I:%M %p") rescue 'N/A' %></td>
+            </tr>
+            <tr>
+              <td><strong>Last Updated</strong></td>
+              <td><%= @promo_code.updated_at.strftime("%B %d, %Y at %I:%M %p") rescue 'N/A' %></td>
+            </tr>
+          </table>
+          
+          <div class="btn-group" style="margin-top: 15px;">
+            <%= link_to edit_admin_promo_code_path(@promo_code), class: 'btn btn-warning' do %>
+              <i class="glyphicon glyphicon-pencil"></i> Edit
+            <% end %>
+            <%= link_to admin_promo_code_path(@promo_code), method: :delete, data: { confirm: 'Are you sure you want to delete this promo code? This cannot be undone.' }, class: 'btn btn-danger' do %>
+              <i class="glyphicon glyphicon-trash"></i> Delete
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-xs-12 col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <i class="glyphicon glyphicon-user"></i>
+            Users Who Redeemed
+            <span class="badge"><%= @promo_code.users.size %></span>
+          </h4>
+        </div>
+        <% users = @promo_code.users.order(created_at: :desc).limit(20) %>
+        <% if users.any? %>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% users.each do |user| %>
+                  <tr>
+                    <td>
+                      <%= link_to user.username, admin_user_path(user) %>
+                    </td>
+                    <td><small><%= user.email %></small></td>
+                    <td><small><%= user.created_at.strftime("%b %d, %Y") rescue 'N/A' %></small></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <% if @promo_code.users.size > 20 %>
+            <div class="panel-footer text-center">
+              <%= link_to admin_promo_code_users_path(@promo_code), class: 'btn btn-sm btn-info' do %>
+                View All <%= @promo_code.users.size %> Users
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="panel-body">
+            <div class="alert alert-info" style="margin: 0;">
+              <i class="glyphicon glyphicon-info-sign"></i>
+              No users have redeemed this promo code yet.
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

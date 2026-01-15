@@ -1,26 +1,154 @@
-<%= paginate @games %>
-<table id="games" class="table table-hover">
-  <thead>
-    <tr>
-      <th>Actions</th>
-      <th>Matchup</th>
-      <th>Start time</th>
-      <th class="centered">Bettable</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @games.each do |game| %>
-      <tr data-href="<%= polymorphic_path([:admin, game]) %>">
-        <td>
-          <%= link_to 'View', polymorphic_path([:admin, game]) %>
-        </td>
-        <td><%= matchup(game) %></td>
-        <td><%= l est(game.start_time), format: :short %></td>
-        <td class="bettable-column centered">
-          <%= check_box_tag 'bettable[]', game.bettable?, game.bettable?, disabled: game.bettable?, data: { href: admin_mlb_game_path(game) } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= paginate @games %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <i class="glyphicon glyphicon-calendar"></i>
+            Game Management
+            <span class="badge"><%= @games.total_count rescue @games.size %></span>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="row" style="margin-bottom: 15px;">
+            <div class="col-xs-12">
+              <div class="btn-group">
+                <%= link_to admin_mlb_games_path, class: "btn btn-default #{@sport == 'mlb' ? 'active' : ''}" do %>
+                  <i class="glyphicon glyphicon-grain"></i> MLB Games
+                <% end %>
+                <%= link_to admin_nfl_games_path, class: "btn btn-default #{@sport == 'nfl' ? 'active' : ''}" do %>
+                  <i class="glyphicon glyphicon-flag"></i> NFL Games
+                <% end %>
+              </div>
+              <div class="btn-group pull-right">
+                <button class="btn btn-info" disabled>
+                  <i class="glyphicon glyphicon-refresh"></i> Sync from API
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <% if @games.any? %>
+            <div class="table-responsive">
+              <%= paginate @games %>
+              <table id="games" class="table table-hover table-striped">
+                <thead>
+                  <tr>
+                    <th width="80">ID</th>
+                    <th>Matchup</th>
+                    <th width="180">Start Time</th>
+                    <th width="100">Status</th>
+                    <th width="100" class="text-center">Bettable</th>
+                    <th width="120">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @games.each do |game| %>
+                    <tr>
+                      <td><code>#<%= game.id %></code></td>
+                      <td>
+                        <strong>
+                          <% if game.away_team && game.home_team %>
+                            <%= game.away_team.try(:name) || game.away_team %> 
+                            <span class="text-muted">@</span> 
+                            <%= game.home_team.try(:name) || game.home_team %>
+                          <% else %>
+                            <span class="text-muted">Teams TBD</span>
+                          <% end %>
+                        </strong>
+                      </td>
+                      <td>
+                        <% if game.start_time %>
+                          <%= game.start_time.strftime("%b %d, %Y") %>
+                          <br>
+                          <small class="text-muted"><%= game.start_time.strftime("%I:%M %p") %></small>
+                        <% else %>
+                          <span class="text-muted">TBD</span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <% status = game.status.to_s.presence || 'scheduled' %>
+                        <span class="label label-<%= status == 'live' ? 'success' : (status == 'ended' ? 'default' : 'info') %>">
+                          <%= status.titleize %>
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <% if game.bettable? %>
+                          <span class="label label-success"><i class="glyphicon glyphicon-ok"></i> Yes</span>
+                        <% else %>
+                          <span class="label label-default"><i class="glyphicon glyphicon-remove"></i> No</span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <%= link_to polymorphic_path([:admin, game]), class: 'btn btn-sm btn-primary' do %>
+                          <i class="glyphicon glyphicon-eye-open"></i> View
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @games %>
+            </div>
+          <% else %>
+            <div class="alert alert-warning">
+              <h4><i class="glyphicon glyphicon-info-sign"></i> No Games Found</h4>
+              <p>There are no games in the database yet. To import games:</p>
+              <ol>
+                <li>Add your <code>THESPORTSDB_API_KEY</code> to Replit Secrets</li>
+                <li>Run: <code>rake sports:import_all</code></li>
+              </ol>
+              <p>Or wait for your sports data API to be connected.</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% game_class = @sport == 'nfl' ? Nfl::Game : Mlb::Game rescue nil %>
+  <div class="row">
+    <div class="col-xs-12 col-md-4">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h4 class="panel-title"><%= @sport.to_s.upcase %> Game Statistics</h4>
+        </div>
+        <div class="panel-body">
+          <table class="table table-condensed">
+            <tr>
+              <td>Total Games</td>
+              <td class="text-right"><span class="badge"><%= game_class ? game_class.count : 0 %></span></td>
+            </tr>
+            <tr>
+              <td>Bettable Games</td>
+              <td class="text-right"><span class="badge badge-success"><%= game_class ? (game_class.bettable.count rescue 0) : 0 %></span></td>
+            </tr>
+            <tr>
+              <td>Upcoming Games</td>
+              <td class="text-right"><span class="badge badge-info"><%= game_class ? (game_class.future.count rescue 0) : 0 %></span></td>
+            </tr>
+            <tr>
+              <td>Live Games</td>
+              <td class="text-right"><span class="badge badge-warning"><%= game_class ? (game_class.live.count rescue 0) : 0 %></span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Quick Actions</h4>
+        </div>
+        <div class="panel-body">
+          <p><strong>Import Commands:</strong></p>
+          <pre>rake sports:import_mlb_teams     # Import MLB teams
+rake sports:import_nfl_teams     # Import NFL teams
+rake sports:import_mlb_schedule  # Import MLB schedule
+rake sports:import_nfl_schedule  # Import NFL schedule
+rake sports:import_all           # Import everything</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,25 +1,140 @@
-<h3>
-  Promo Codes (<%= PromoCode.count %>)
-  <%= link_to 'Create', new_admin_promo_code_path, class: 'btn btn-primary' %>
-</h3>
-<%= paginate @promo_codes %>
-<table id="promo_codes" class="table table-hover">
-  <thead>
-    <tr>
-      <th>Code</th>
-      <th>Note</th>
-      <th># of Redemptions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @promo_codes.each do |promo_code| %>
-      <tr>
-        <td><%= link_to promo_code.code, admin_promo_code_path(promo_code) %></td>
-        <td><%= promo_code.note %></td>
-        <td><%= link_to promo_code.users_count, admin_promo_code_users_path(promo_code) %></td>
-        <td></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= paginate @promo_codes %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <i class="glyphicon glyphicon-tags"></i>
+            Promo Code Management
+            <span class="badge"><%= PromoCode.count %></span>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="row" style="margin-bottom: 15px;">
+            <div class="col-xs-12">
+              <%= link_to new_admin_promo_code_path, class: 'btn btn-success' do %>
+                <i class="glyphicon glyphicon-plus"></i> Create New Promo Code
+              <% end %>
+            </div>
+          </div>
+
+          <% if @promo_codes.any? %>
+            <div class="table-responsive">
+              <%= paginate @promo_codes %>
+              <table id="promo_codes" class="table table-hover table-striped">
+                <thead>
+                  <tr>
+                    <th width="150">Code</th>
+                    <th>Note / Description</th>
+                    <th width="120" class="text-center">Redemptions</th>
+                    <th width="150">Created</th>
+                    <th width="180">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @promo_codes.each do |promo_code| %>
+                    <tr>
+                      <td>
+                        <code class="label label-info" style="font-size: 14px;"><%= promo_code.code %></code>
+                      </td>
+                      <td><%= promo_code.note.presence || '-' %></td>
+                      <td class="text-center">
+                        <% count = promo_code.users_count rescue promo_code.users.size %>
+                        <% if count > 0 %>
+                          <%= link_to admin_promo_code_users_path(promo_code), class: 'btn btn-xs btn-info' do %>
+                            <span class="badge"><%= count %></span> users
+                          <% end %>
+                        <% else %>
+                          <span class="text-muted">0 users</span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <small><%= promo_code.created_at.strftime("%b %d, %Y") rescue 'N/A' %></small>
+                      </td>
+                      <td>
+                        <%= link_to admin_promo_code_path(promo_code), class: 'btn btn-xs btn-primary' do %>
+                          <i class="glyphicon glyphicon-eye-open"></i>
+                        <% end %>
+                        <%= link_to edit_admin_promo_code_path(promo_code), class: 'btn btn-xs btn-warning' do %>
+                          <i class="glyphicon glyphicon-pencil"></i>
+                        <% end %>
+                        <%= link_to admin_promo_code_path(promo_code), method: :delete, data: { confirm: 'Are you sure you want to delete this promo code?' }, class: 'btn btn-xs btn-danger' do %>
+                          <i class="glyphicon glyphicon-trash"></i>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= paginate @promo_codes %>
+            </div>
+          <% else %>
+            <div class="alert alert-info">
+              <h4><i class="glyphicon glyphicon-info-sign"></i> No Promo Codes Yet</h4>
+              <p>Create your first promo code to offer discounts and bonuses to new users.</p>
+              <%= link_to new_admin_promo_code_path, class: 'btn btn-success' do %>
+                <i class="glyphicon glyphicon-plus"></i> Create Promo Code
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-4">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h4 class="panel-title">Promo Statistics</h4>
+        </div>
+        <div class="panel-body">
+          <table class="table table-condensed">
+            <tr>
+              <td>Total Promo Codes</td>
+              <td class="text-right"><span class="badge"><%= PromoCode.count %></span></td>
+            </tr>
+            <tr>
+              <td>Total Redemptions</td>
+              <td class="text-right"><span class="badge badge-success"><%= User.where.not(promo_code_id: nil).count rescue 0 %></span></td>
+            </tr>
+            <tr>
+              <td>Users Without Code</td>
+              <td class="text-right"><span class="badge"><%= User.where(promo_code_id: nil).count rescue 0 %></span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">Top Performing Codes</h4>
+        </div>
+        <div class="panel-body">
+          <% top_codes = PromoCode.left_joins(:users).group(:id).order('COUNT(users.id) DESC').limit(5) rescue [] %>
+          <% if top_codes.any? %>
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th class="text-right">Redemptions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% top_codes.each do |code| %>
+                  <tr>
+                    <td><code><%= code.code %></code></td>
+                    <td class="text-right"><span class="badge"><%= code.users.size %></span></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <p class="text-muted">No redemption data available yet.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

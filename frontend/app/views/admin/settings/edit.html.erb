@@ -1,10 +1,184 @@
-<h3>Edit Global Settings</h3>
-<div class="row">
-  <div class="col-xs-6">
-    <%= simple_form_for [:admin, @setting] do |f| %>
-      <%= render 'admin/errors', form: f %>
-      <%= f.input :require_promo_code_on_signup %>
-      <%= f.submit 'Update', class: 'btn btn-primary' %>
-    <% end %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <i class="glyphicon glyphicon-cog"></i>
+            System Settings
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12 col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">User Registration Settings</h4>
+                </div>
+                <div class="panel-body">
+                  <% if @setting %>
+                    <%= simple_form_for [:admin, @setting] do |f| %>
+                      <%= render 'admin/errors', form: f %>
+                      
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <label>
+                            <%= f.check_box :require_promo_code_on_signup %>
+                            <strong>Require Promo Code on Sign Up</strong>
+                          </label>
+                          <p class="help-block">When enabled, users must enter a valid promo code to create an account.</p>
+                        </div>
+                      </div>
+                      
+                      <hr>
+                      
+                      <%= f.submit 'Save Settings', class: 'btn btn-success btn-lg' %>
+                    <% end %>
+                  <% else %>
+                    <div class="alert alert-warning">
+                      <i class="glyphicon glyphicon-warning-sign"></i>
+                      <strong>Settings Not Initialized</strong>
+                      <p>No settings record found. Please run database seeds to initialize settings.</p>
+                      <pre>bundle exec rake db:seed</pre>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+              
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">Contest Settings</h4>
+                </div>
+                <div class="panel-body">
+                  <div class="alert alert-info">
+                    <i class="glyphicon glyphicon-info-sign"></i>
+                    Contest configuration settings will be available once the sports data API is connected.
+                  </div>
+                  
+                  <div class="form-group">
+                    <label>Minimum Entry Fee</label>
+                    <div class="input-group">
+                      <span class="input-group-addon">$</span>
+                      <input type="number" class="form-control" value="5.00" disabled>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label>Maximum Entry Fee</label>
+                    <div class="input-group">
+                      <span class="input-group-addon">$</span>
+                      <input type="number" class="form-control" value="100.00" disabled>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-xs-12 col-md-6">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h4 class="panel-title">System Information</h4>
+                </div>
+                <div class="panel-body">
+                  <table class="table table-bordered table-condensed">
+                    <tr>
+                      <td><strong>Rails Version</strong></td>
+                      <td><code><%= Rails::VERSION::STRING %></code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Ruby Version</strong></td>
+                      <td><code><%= RUBY_VERSION %></code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Environment</strong></td>
+                      <td>
+                        <span class="label label-<%= Rails.env.production? ? 'danger' : 'success' %>">
+                          <%= Rails.env %>
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Database</strong></td>
+                      <td><code><%= ActiveRecord::Base.connection.adapter_name rescue 'Unknown' %></code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Server Time</strong></td>
+                      <td><%= Time.current.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Timezone</strong></td>
+                      <td><%= Time.zone.name %></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">API Configuration</h4>
+                </div>
+                <div class="panel-body">
+                  <table class="table table-bordered table-condensed">
+                    <tr>
+                      <td><strong>TheSportsDB API</strong></td>
+                      <td>
+                        <% if ENV['THESPORTSDB_API_KEY'].present? %>
+                          <span class="label label-success"><i class="glyphicon glyphicon-ok"></i> Configured</span>
+                        <% else %>
+                          <span class="label label-warning"><i class="glyphicon glyphicon-warning-sign"></i> Not Set</span>
+                        <% end %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Blockfrost (Cardano)</strong></td>
+                      <td>
+                        <% if ENV['BLOCKFROST_PROJECT_ID'].present? %>
+                          <span class="label label-success"><i class="glyphicon glyphicon-ok"></i> Configured</span>
+                        <% else %>
+                          <span class="label label-warning"><i class="glyphicon glyphicon-warning-sign"></i> Not Set</span>
+                        <% end %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Database URL</strong></td>
+                      <td>
+                        <% if ENV['DATABASE_URL'].present? %>
+                          <span class="label label-success"><i class="glyphicon glyphicon-ok"></i> Configured</span>
+                        <% else %>
+                          <span class="label label-default"><i class="glyphicon glyphicon-minus"></i> Using SQLite</span>
+                        <% end %>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">Maintenance</h4>
+                </div>
+                <div class="panel-body">
+                  <div class="btn-group-vertical" style="width: 100%;">
+                    <button class="btn btn-default" disabled>
+                      <i class="glyphicon glyphicon-refresh"></i> Clear Cache
+                    </button>
+                    <button class="btn btn-default" disabled>
+                      <i class="glyphicon glyphicon-download"></i> Export Users (CSV)
+                    </button>
+                    <button class="btn btn-default" disabled>
+                      <i class="glyphicon glyphicon-download"></i> Export Transactions (CSV)
+                    </button>
+                  </div>
+                  <p class="text-muted" style="margin-top: 10px; font-size: 12px;">
+                    <i class="glyphicon glyphicon-info-sign"></i>
+                    Maintenance features coming soon.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
