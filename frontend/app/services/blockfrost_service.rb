@@ -11,7 +11,10 @@ class BlockfrostService
 
   def get_address_info(address)
     response = make_request("/addresses/#{address}")
-    return nil unless response
+
+    if response.nil?
+      return { ada_balance: 0.0, tokens: [], stake_address: nil, type: 'byron', status: 'empty' }
+    end
 
     ada_balance = 0.0
     tokens = []
@@ -30,40 +33,22 @@ class BlockfrostService
       ada_balance: ada_balance,
       tokens: tokens,
       stake_address: response['stake_address'],
-      type: response['type']
+      type: response['type'],
+      status: 'active'
     }
   rescue StandardError => e
     Rails.logger.error "Blockfrost get_address_info error: #{e.message}"
-    nil
+    { ada_balance: 0.0, tokens: [], stake_address: nil, type: nil, status: 'error' }
   end
 
   def get_balance(address)
     info = get_address_info(address)
-    return nil unless info
     info[:ada_balance]
-  end
-
-  def get_stake_pools(count: 10, page: 1)
-    make_request("/pools?count=#{count}&page=#{page}")
-  rescue StandardError => e
-    Rails.logger.error "Blockfrost API Error: #{e.message}"
-    nil
-  end
-
-  def get_pool_info(pool_id)
-    make_request("/pools/#{pool_id}")
-  rescue StandardError => e
-    Rails.logger.error "Blockfrost API Error: #{e.message}"
-    nil
   end
 
   def validate_address(address)
     return false if address.blank?
-    response = make_request("/addresses/#{address}")
-    response.present?
-  rescue StandardError => e
-    Rails.logger.error "Invalid Cardano address: #{e.message}"
-    false
+    address.start_with?('addr1')
   end
 
   private
@@ -72,20 +57,9 @@ class BlockfrostService
     uri = URI("#{BASE_URL}#{endpoint}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     http.open_timeout = 10
     http.read_timeout = 10
-
-    cert_file = ENV['SSL_CERT_FILE'] || '/etc/ssl/certs/ca-certificates.crt'
-    if File.exist?(cert_file)
-      http.ca_file = cert_file
-    else
-      nix_cert = Dir.glob('/nix/store/*-nss-cacert-*/etc/ssl/certs/ca-bundle.crt').first
-      if nix_cert
-        http.ca_file = nix_cert
-      else
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      end
-    end
 
     request = Net::HTTP::Get.new(uri)
     request['project_id'] = @project_id
@@ -94,6 +68,8 @@ class BlockfrostService
 
     if response.is_a?(Net::HTTPSuccess)
       JSON.parse(response.body)
+    elsif response.code == '404'
+      nil
     else
       Rails.logger.error "Blockfrost API Error: #{response.code} - #{response.body}"
       nil

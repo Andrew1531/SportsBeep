@@ -77,16 +77,47 @@
 
     <% if @user.cardano_wallet_address.present? %>
       <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;">
-        <div style="display: flex; align-items: center; margin-bottom: 14px;">
-          <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #0088cc, #00b4d8); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-            <i class="fa fa-link" style="color: white; font-size: 16px;"></i>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px;">
+          <div style="display: flex; align-items: center;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0088cc, #00b4d8); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+              <i class="fa fa-wallet" style="color: white; font-size: 18px;"></i>
+            </div>
+            <div>
+              <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">Cardano Wallet</h4>
+              <p style="color: #8892b0; margin: 0; font-size: 12px;">Connected to Mainnet</p>
+            </div>
           </div>
-          <h4 style="color: white; font-weight: 700; margin: 0;">Cardano Wallet</h4>
+          <% if @wallet_info %>
+            <div style="text-align: right; margin-top: 5px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">ADA Balance</p>
+              <h3 style="color: #00b4d8; font-weight: 700; margin: 0; font-size: 26px;"><%= sprintf('%.2f', @wallet_info[:ada_balance]) %> <span style="font-size: 14px; color: #8892b0;">ADA</span></h3>
+            </div>
+          <% end %>
         </div>
-        <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">
-          <code style="color: #00b4d8; word-break: break-all; font-size: 13px;"><%= @user.cardano_wallet_address %></code>
+
+        <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px;">
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Wallet Address</p>
+          <code style="color: #00b4d8; word-break: break-all; font-size: 12px; line-height: 1.5;"><%= @user.cardano_wallet_address %></code>
         </div>
-        <p style="color: #8892b0; margin: 0; font-size: 13px;"><i class="fa fa-info-circle"></i> Your $BEEP token rewards will be sent to this address.</p>
+
+        <% if @wallet_info && @wallet_info[:stake_address].present? %>
+          <div style="background: rgba(0,0,0,0.15); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
+            <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Stake Address</p>
+            <code style="color: #63b3ed; word-break: break-all; font-size: 11px;"><%= @wallet_info[:stake_address] %></code>
+          </div>
+        <% end %>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <p style="color: #8892b0; margin: 0; font-size: 13px;">
+            <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
+            $BEEP token rewards will be sent to this wallet
+          </p>
+          <% if @wallet_info && @wallet_info[:status] == 'empty' %>
+            <span style="display: inline-block; padding: 4px 12px; background: rgba(253,203,110,0.15); color: #fdcb6e; border: 1px solid rgba(253,203,110,0.3); border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 5px;">No transactions yet</span>
+          <% elsif @wallet_info && @wallet_info[:status] == 'active' %>
+            <span style="display: inline-block; padding: 4px 12px; background: rgba(72,187,120,0.15); color: #68d391; border: 1px solid rgba(72,187,120,0.3); border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 5px;">Active</span>
+          <% end %>
+        </div>
       </div>
     <% else %>
       <div style="background: rgba(0,136,204,0.1); border: 1px solid rgba(0,136,204,0.25); border-radius: 14px; padding: 18px 24px; margin-bottom: 20px;">

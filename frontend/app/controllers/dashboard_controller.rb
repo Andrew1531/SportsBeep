@@ -7,12 +7,14 @@ class DashboardController < ApplicationController
     @recent_transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(5) }
     @mlb_tickets = safe_collection { @user.mlb_tickets.includes(:contest).order(created_at: :desc).limit(5) }
     @nfl_tickets = safe_collection { @user.nfl_tickets.includes(:contest).order(created_at: :desc).limit(5) }
+    load_wallet_info
   end
 
   def wallet
     @user = current_user
     @account = @user.account
     @transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(20) }
+    load_wallet_info
   end
 
   def transactions
@@ -52,5 +54,19 @@ class DashboardController < ApplicationController
     yield
   rescue NameError, NoMethodError
     []
+  end
+
+  def load_wallet_info
+    if @user.cardano_wallet_address.present? && ENV['BLOCKFROST_PROJECT_ID'].present?
+      begin
+        service = BlockfrostService.new
+        @wallet_info = service.get_address_info(@user.cardano_wallet_address)
+      rescue => e
+        Rails.logger.error "Wallet info error: #{e.message}"
+        @wallet_info = { ada_balance: 0.0, tokens: [], status: 'error' }
+      end
+    else
+      @wallet_info = nil
+    end
   end
 end
