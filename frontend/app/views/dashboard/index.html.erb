@@ -1,249 +1,247 @@
-<div class="container" style="padding-top: 20px; padding-bottom: 60px;">
+<div style="min-height: calc(100vh - 200px); background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 30px 15px 60px;">
+  <div class="container">
 
-  <% if flash[:notice] %>
-    <div class="alert alert-success alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-      <%= flash[:notice] %>
-    </div>
-  <% end %>
-  <% if flash[:alert] %>
-    <div class="alert alert-danger alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-      <%= flash[:alert] %>
-    </div>
-  <% end %>
+    <% if flash[:notice] %>
+      <div style="background: rgba(72, 187, 120, 0.15); border: 1px solid rgba(72, 187, 120, 0.4); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
+        <p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></p>
+      </div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div style="background: rgba(245, 101, 101, 0.15); border: 1px solid rgba(245, 101, 101, 0.4); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
+        <p style="color: #fc8181; margin: 0; font-size: 14px;"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></p>
+      </div>
+    <% end %>
 
-  <div class="row" style="margin-bottom: 25px;">
-    <div class="col-xs-12">
-      <h2 style="color: #e74c3c; margin-top: 0;">
-        Welcome back, <strong><%= @user.username %></strong>!
+    <div style="margin-bottom: 30px;">
+      <h2 style="color: white; font-weight: 700; margin: 0 0 4px 0; font-size: 26px;">
+        Welcome back, <%= @user.username %>
       </h2>
-      <p class="text-muted">Your SportsBeep Dashboard</p>
+      <p style="color: #8892b0; margin: 0; font-size: 15px;">Your SportsBeep Dashboard</p>
     </div>
-  </div>
 
-  <div class="row" style="margin-bottom: 25px;">
-    <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-      <div class="panel panel-primary text-center" style="border-color: #e74c3c;">
-        <div class="panel-heading" style="background-color: #e74c3c; border-color: #e74c3c;">
-          <h4 class="panel-title" style="color: white;">$BEEP Balance</h4>
+    <div class="row" style="margin-bottom: 20px;">
+      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center; transition: transform 0.2s;">
+          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
+            <i class="fa fa-coins" style="color: white; font-size: 20px;"></i>
+          </div>
+          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">$BEEP Balance</p>
+          <h3 style="color: white; font-weight: 700; margin: 0 0 14px; font-size: 24px;"><%= @account.balance rescue '0.00' %></h3>
+          <%= link_to 'View Wallet', wallet_path, style: 'display: inline-block; padding: 7px 18px; background: rgba(231,76,60,0.2); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;' %>
         </div>
-        <div class="panel-body">
-          <h2 style="margin: 5px 0; color: #e74c3c;"><%= @account.balance rescue '$0.00' %></h2>
-          <p class="text-muted"><small>Available Balance</small></p>
-          <%= link_to 'View Wallet', wallet_path, class: 'btn btn-sm btn-default' %>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
+          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
+            <i class="fa fa-gift" style="color: white; font-size: 20px;"></i>
+          </div>
+          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Promo Balance</p>
+          <h3 style="color: white; font-weight: 700; margin: 0 0 14px; font-size: 24px;"><%= @account.promo_balance rescue '0.00' %></h3>
+          <%= link_to 'Redeem Code', redeem_promo_path, style: 'display: inline-block; padding: 7px 18px; background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;' %>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
+          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00b894, #00cec9); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
+            <i class="fa fa-baseball" style="color: white; font-size: 20px;"></i>
+          </div>
+          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">MLB Contests</p>
+          <h3 style="color: white; font-weight: 700; margin: 0 0 14px; font-size: 24px;"><%= @mlb_tickets.size %></h3>
+          <a href="#mlb-entries" style="display: inline-block; padding: 7px 18px; background: rgba(0,184,148,0.2); color: #00b894; border: 1px solid rgba(0,184,148,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;">View Entries</a>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
+          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #fdcb6e, #e17055); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
+            <i class="fa fa-football" style="color: white; font-size: 20px;"></i>
+          </div>
+          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">NFL Contests</p>
+          <h3 style="color: white; font-weight: 700; margin: 0 0 14px; font-size: 24px;"><%= @nfl_tickets.size %></h3>
+          <a href="#nfl-entries" style="display: inline-block; padding: 7px 18px; background: rgba(253,203,110,0.2); color: #fdcb6e; border: 1px solid rgba(253,203,110,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;">View Entries</a>
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-      <div class="panel panel-info text-center">
-        <div class="panel-heading">
-          <h4 class="panel-title">Promo Balance</h4>
-        </div>
-        <div class="panel-body">
-          <h2 style="margin: 5px 0;"><%= @account.promo_balance rescue '$0.00' %></h2>
-          <p class="text-muted"><small>Promotional Credits</small></p>
-          <%= link_to 'Redeem Code', redeem_promo_path, class: 'btn btn-sm btn-default' %>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-      <div class="panel panel-success text-center">
-        <div class="panel-heading">
-          <h4 class="panel-title">MLB Contests</h4>
-        </div>
-        <div class="panel-body">
-          <h2 style="margin: 5px 0;"><%= @mlb_tickets.size %></h2>
-          <p class="text-muted"><small>Recent Entries</small></p>
-          <a href="#mlb-entries" class="btn btn-sm btn-default">View Entries</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-      <div class="panel panel-warning text-center">
-        <div class="panel-heading">
-          <h4 class="panel-title">NFL Contests</h4>
-        </div>
-        <div class="panel-body">
-          <h2 style="margin: 5px 0;"><%= @nfl_tickets.size %></h2>
-          <p class="text-muted"><small>Recent Entries</small></p>
-          <a href="#nfl-entries" class="btn btn-sm btn-default">View Entries</a>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="row" style="margin-bottom: 25px;">
-    <div class="col-xs-12">
-      <div class="well" style="background-color: #34495e; color: white; border: none;">
+    <div style="background: linear-gradient(135deg, rgba(231,76,60,0.15), rgba(192,57,43,0.1)); border: 1px solid rgba(231,76,60,0.25); border-radius: 14px; padding: 24px 28px; margin-bottom: 20px;">
+      <div class="row" style="display: flex; align-items: center; flex-wrap: wrap;">
+        <div class="col-xs-12 col-sm-6" style="margin-bottom: 10px;">
+          <h4 style="color: white; font-weight: 700; margin: 0 0 4px;">Quick Actions</h4>
+          <p style="color: #8892b0; margin: 0; font-size: 14px;">Jump right into the action!</p>
+        </div>
+        <div class="col-xs-12 col-sm-6 text-right" style="padding-top: 5px;">
+          <a href="#" style="display: inline-block; padding: 11px 28px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(231,76,60,0.35); margin-right: 10px;">Browse Contests</a>
+          <%= link_to 'How to Play', how_to_play_path, style: 'display: inline-block; padding: 11px 28px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none;' %>
+        </div>
+      </div>
+    </div>
+
+    <% if @user.cardano_wallet_address.present? %>
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 14px;">
+          <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #0088cc, #00b4d8); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+            <i class="fa fa-link" style="color: white; font-size: 16px;"></i>
+          </div>
+          <h4 style="color: white; font-weight: 700; margin: 0;">Cardano Wallet</h4>
+        </div>
+        <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">
+          <code style="color: #00b4d8; word-break: break-all; font-size: 13px;"><%= @user.cardano_wallet_address %></code>
+        </div>
+        <p style="color: #8892b0; margin: 0; font-size: 13px;"><i class="fa fa-info-circle"></i> Your $BEEP token rewards will be sent to this address.</p>
+      </div>
+    <% else %>
+      <div style="background: rgba(0,136,204,0.1); border: 1px solid rgba(0,136,204,0.25); border-radius: 14px; padding: 18px 24px; margin-bottom: 20px;">
+        <p style="color: #63b3ed; margin: 0; font-size: 14px;">
+          <i class="fa fa-wallet" style="margin-right: 6px;"></i>
+          <strong>Connect your Cardano wallet!</strong> Link your wallet address in your account settings to receive $BEEP token rewards.
+        </p>
+      </div>
+    <% end %>
+
+    <div class="row" style="margin-bottom: 20px;">
+      <div class="col-xs-12 col-md-6" style="margin-bottom: 15px;">
+        <div id="mlb-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
+          <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-baseball" style="color: #00b894; margin-right: 8px;"></i>Recent MLB Entries</h4>
+          </div>
+          <div style="padding: 18px 22px;">
+            <% if @mlb_tickets.any? %>
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Contest</th>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: center;">Score</th>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @mlb_tickets.each do |ticket| %>
+                    <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                      <td style="color: white; padding: 10px 0; font-size: 14px;"><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
+                      <td style="color: #a29bfe; padding: 10px 0; font-size: 14px; text-align: center;"><%= ticket.score rescue 'N/A' %></td>
+                      <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              <div style="text-align: center; padding: 25px 0;">
+                <i class="fa fa-baseball" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+                <p style="color: #8892b0; margin: 0; font-size: 14px;">No MLB entries yet</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-md-6" style="margin-bottom: 15px;">
+        <div id="nfl-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
+          <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-football" style="color: #fdcb6e; margin-right: 8px;"></i>Recent NFL Entries</h4>
+          </div>
+          <div style="padding: 18px 22px;">
+            <% if @nfl_tickets.any? %>
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Contest</th>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: center;">Score</th>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @nfl_tickets.each do |ticket| %>
+                    <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                      <td style="color: white; padding: 10px 0; font-size: 14px;"><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
+                      <td style="color: #a29bfe; padding: 10px 0; font-size: 14px; text-align: center;"><%= ticket.score rescue 'N/A' %></td>
+                      <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              <div style="text-align: center; padding: 25px 0;">
+                <i class="fa fa-football" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+                <p style="color: #8892b0; margin: 0; font-size: 14px;">No NFL entries yet</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
+      <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-arrow-right-arrow-left" style="color: #a29bfe; margin-right: 8px;"></i>Recent Transactions</h4>
+      </div>
+      <div style="padding: 18px 22px;">
+        <% if @recent_transactions.any? %>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Description</th>
+                <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Amount</th>
+                <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @recent_transactions.each do |txn| %>
+                <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                  <td style="color: white; padding: 10px 0; font-size: 14px;"><%= txn.description %></td>
+                  <td style="color: #68d391; padding: 10px 0; font-size: 14px; text-align: right; font-weight: 600;"><%= txn.amount %></td>
+                  <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= txn.created_at.strftime("%b %d, %Y") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div style="margin-top: 14px;">
+            <%= link_to 'View All Transactions', user_transactions_path, style: 'color: #a29bfe; font-size: 13px; font-weight: 600; text-decoration: none;' %>
+          </div>
+        <% else %>
+          <div style="text-align: center; padding: 25px 0;">
+            <i class="fa fa-arrow-right-arrow-left" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+            <p style="color: #8892b0; margin: 0; font-size: 14px;">No transactions yet</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
+      <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-user" style="color: #63b3ed; margin-right: 8px;"></i>Account Info</h4>
+      </div>
+      <div style="padding: 22px;">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <h4>Quick Actions</h4>
-            <p>Jump right into the action!</p>
-          </div>
-          <div class="col-xs-12 col-sm-6 text-right" style="padding-top: 10px;">
-            <%= link_to 'Browse Contests', '#', class: 'btn btn-danger btn-lg', style: 'margin-right: 10px;' %>
-            <%= link_to 'How to Play', how_to_play_path, class: 'btn btn-default btn-lg' %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <% if @user.cardano_wallet_address.present? %>
-    <div class="row" style="margin-bottom: 25px;">
-      <div class="col-xs-12">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title"><i class="glyphicon glyphicon-link"></i> Cardano Wallet</h4>
-          </div>
-          <div class="panel-body">
-            <p><strong>Wallet Address:</strong></p>
-            <code style="word-break: break-all;"><%= @user.cardano_wallet_address %></code>
-            <p class="text-muted" style="margin-top: 10px;"><small>Your $BEEP token rewards will be sent to this address.</small></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% else %>
-    <div class="row" style="margin-bottom: 25px;">
-      <div class="col-xs-12">
-        <div class="alert alert-info">
-          <i class="glyphicon glyphicon-info-sign"></i>
-          <strong>Connect your Cardano wallet!</strong>
-          Link your Cardano wallet address in your account settings to receive $BEEP token rewards.
-        </div>
-      </div>
-    </div>
-  <% end %>
-
-  <div class="row">
-    <div class="col-xs-12 col-md-6" style="margin-bottom: 25px;">
-      <div class="panel panel-default" id="mlb-entries">
-        <div class="panel-heading">
-          <h4 class="panel-title"><i class="glyphicon glyphicon-list"></i> Recent MLB Entries</h4>
-        </div>
-        <div class="panel-body">
-          <% if @mlb_tickets.any? %>
-            <table class="table table-condensed table-striped">
-              <thead>
-                <tr>
-                  <th>Contest</th>
-                  <th>Score</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @mlb_tickets.each do |ticket| %>
-                  <tr>
-                    <td><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
-                    <td><%= ticket.score rescue 'N/A' %></td>
-                    <td><%= ticket.created_at.strftime("%b %d, %Y") %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          <% else %>
-            <p class="text-muted text-center" style="padding: 20px;">No MLB contest entries yet. Browse contests to get started!</p>
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xs-12 col-md-6" style="margin-bottom: 25px;">
-      <div class="panel panel-default" id="nfl-entries">
-        <div class="panel-heading">
-          <h4 class="panel-title"><i class="glyphicon glyphicon-list"></i> Recent NFL Entries</h4>
-        </div>
-        <div class="panel-body">
-          <% if @nfl_tickets.any? %>
-            <table class="table table-condensed table-striped">
-              <thead>
-                <tr>
-                  <th>Contest</th>
-                  <th>Score</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @nfl_tickets.each do |ticket| %>
-                  <tr>
-                    <td><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
-                    <td><%= ticket.score rescue 'N/A' %></td>
-                    <td><%= ticket.created_at.strftime("%b %d, %Y") %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          <% else %>
-            <p class="text-muted text-center" style="padding: 20px;">No NFL contest entries yet. Browse contests to get started!</p>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title"><i class="glyphicon glyphicon-transfer"></i> Recent Transactions</h4>
-        </div>
-        <div class="panel-body">
-          <% if @recent_transactions.any? %>
-            <table class="table table-condensed table-striped">
-              <thead>
-                <tr>
-                  <th>Description</th>
-                  <th class="text-right">Amount</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @recent_transactions.each do |txn| %>
-                  <tr>
-                    <td><%= txn.description %></td>
-                    <td class="text-right"><%= txn.amount %></td>
-                    <td><%= txn.created_at.strftime("%b %d, %Y") %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-            <%= link_to 'View All Transactions', user_transactions_path, class: 'btn btn-sm btn-default' %>
-          <% else %>
-            <p class="text-muted text-center" style="padding: 20px;">No transactions yet.</p>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row" style="margin-bottom: 25px;">
-    <div class="col-xs-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title"><i class="glyphicon glyphicon-user"></i> Account Info</h4>
-        </div>
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-xs-12 col-sm-6">
-              <table class="table table-condensed">
-                <tr><td><strong>Username</strong></td><td><%= @user.username %></td></tr>
-                <tr><td><strong>Email</strong></td><td><%= @user.email %></td></tr>
-                <tr><td><strong>Name</strong></td><td><%= [@user.first_name, @user.last_name].compact.join(' ').presence || 'Not set' %></td></tr>
-              </table>
+            <div style="margin-bottom: 16px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Username</p>
+              <p style="color: white; font-size: 15px; font-weight: 600; margin: 0;"><%= @user.username %></p>
             </div>
-            <div class="col-xs-12 col-sm-6">
-              <table class="table table-condensed">
-                <tr><td><strong>Member Since</strong></td><td><%= @user.created_at.strftime("%B %Y") %></td></tr>
-                <tr><td><strong>Last Login</strong></td><td><%= @user.last_sign_in_at ? @user.last_sign_in_at.strftime("%b %d, %Y") : 'N/A' %></td></tr>
-                <tr><td><strong>Promo Code</strong></td><td><%= @user.promo_code.try(:code) || 'None' %></td></tr>
-              </table>
+            <div style="margin-bottom: 16px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Email</p>
+              <p style="color: white; font-size: 15px; margin: 0;"><%= @user.email %></p>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Name</p>
+              <p style="color: white; font-size: 15px; margin: 0;"><%= [@user.first_name, @user.last_name].compact.join(' ').presence || 'Not set' %></p>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div style="margin-bottom: 16px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Member Since</p>
+              <p style="color: white; font-size: 15px; margin: 0;"><%= @user.created_at.strftime("%B %Y") %></p>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Last Login</p>
+              <p style="color: white; font-size: 15px; margin: 0;"><%= @user.last_sign_in_at ? @user.last_sign_in_at.strftime("%b %d, %Y") : 'First login' %></p>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Promo Code</p>
+              <p style="color: white; font-size: 15px; margin: 0;"><%= @user.promo_code.try(:code) || 'None' %></p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
+  </div>
 </div>
