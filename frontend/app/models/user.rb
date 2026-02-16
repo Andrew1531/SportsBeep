@@ -22,7 +22,6 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, uniqueness: true
   validates :account, presence: true
-  validates :favorite_team, presence: true
   validates :platform, inclusion: { in: %w(android ios) }, allow_nil: true
 
   devise :database_authenticatable, :registerable, :recoverable,

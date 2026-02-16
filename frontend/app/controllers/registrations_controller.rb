@@ -5,14 +5,18 @@ class RegistrationsController < Devise::RegistrationsController
 
   def create
     build_resource(sign_up_params)
-    resource.promo_code_text = params[:user][:promo_code]
+    resource.promo_code_text = params[:user][:promo_code] if params[:user][:promo_code].present?
     if resource.save
       sign_up(resource_name, resource)
-      respond_with resource, status: :created
+      respond_with resource, location: after_sign_up_path_for(resource)
     else
       clean_up_passwords(resource)
-      respond_with resource, status: :created
+      respond_with resource
     end
+  end
+
+  def after_sign_up_path_for(*)
+    play_path
   end
 
   def after_update_path_for(*)
