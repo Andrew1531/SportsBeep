@@ -1,15 +1,40 @@
-<h2>Forgot your password?</h2>
+<div style="min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 40px 15px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+  <div style="width: 100%; max-width: 420px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <%= image_tag 'logo.png', height: '60px', width: '60px', style: 'margin-bottom: 10px;' %>
+      <h2 style="color: white; font-weight: 700; margin: 0 0 5px 0; font-size: 28px;">Reset Password</h2>
+      <p style="color: #8892b0; margin: 0; font-size: 15px;">Enter your email and we'll send you reset instructions</p>
+    </div>
 
-<%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
-  <%= f.error_notification %>
+    <div style="background: white; border-radius: 12px; padding: 35px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
 
-  <div class="form-inputs">
-    <%= f.input :email, :required => true, :autofocus => true %>
+      <% if resource.errors.any? %>
+        <div style="background: #fff5f5; border: 1px solid #fc8181; border-radius: 8px; padding: 12px 15px; margin-bottom: 20px;">
+          <% resource.errors.full_messages.each do |message| %>
+            <p style="color: #c53030; margin: 0 0 4px 0; font-size: 14px;"><%= message %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, style: 'margin: 0;' }) do |f| %>
+
+        <div style="margin-bottom: 22px;">
+          <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 6px;">Email Address</label>
+          <%= f.input_field :email, required: true, autofocus: true, class: 'form-control', style: 'border-radius: 8px; padding: 12px 14px; border: 1.5px solid #d1d5db; font-size: 15px;', placeholder: 'you@example.com' %>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 13px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);">
+          Send Reset Instructions
+        </button>
+
+      <% end %>
+
+      <div style="text-align: center; margin-top: 22px; padding-top: 18px; border-top: 1px solid #e5e7eb;">
+        <p style="color: #6b7280; font-size: 14px; margin: 0;">
+          Remember your password?
+          <%= link_to 'Sign in', new_session_path(resource_name), style: 'color: #e74c3c; font-weight: 600; text-decoration: none;' %>
+        </p>
+      </div>
+    </div>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

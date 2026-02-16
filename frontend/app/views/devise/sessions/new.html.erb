@@ -1,9 +1,59 @@
-<div class="well admin-login col-sm-6 col-sm-offset-3">
-  <h4>Login</h4>
-  <%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-    <%= devise_error_messages! %>
-    <%= f.input :email, :required => false, :autofocus => true %>
-    <%= f.input :password, :required => false %>
-    <%= f.button :submit, "Login", class: 'btn btn-primary' %>
-  <% end %>
+<div style="min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 40px 15px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+  <div style="width: 100%; max-width: 420px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <%= image_tag 'logo.png', height: '60px', width: '60px', style: 'margin-bottom: 10px;' %>
+      <h2 style="color: white; font-weight: 700; margin: 0 0 5px 0; font-size: 28px;">Welcome Back</h2>
+      <p style="color: #8892b0; margin: 0; font-size: 15px;">Sign in to your SportsBeep account</p>
+    </div>
+
+    <div style="background: white; border-radius: 12px; padding: 35px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+      <% if flash[:alert] %>
+        <div style="background: #fff5f5; border: 1px solid #fc8181; border-radius: 8px; padding: 12px 15px; margin-bottom: 20px;">
+          <p style="color: #c53030; margin: 0; font-size: 14px;"><%= flash[:alert] %></p>
+        </div>
+      <% end %>
+
+      <% if flash[:notice] %>
+        <div style="background: #f0fff4; border: 1px solid #68d391; border-radius: 8px; padding: 12px 15px; margin-bottom: 20px;">
+          <p style="color: #276749; margin: 0; font-size: 14px;"><%= flash[:notice] %></p>
+        </div>
+      <% end %>
+
+      <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: { style: 'margin: 0;' }) do |f| %>
+
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 6px;">Email Address</label>
+          <%= f.input_field :email, required: false, autofocus: true, class: 'form-control', style: 'border-radius: 8px; padding: 12px 14px; border: 1.5px solid #d1d5db; font-size: 15px; transition: border-color 0.2s;', placeholder: 'you@example.com' %>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+          <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 6px;">Password</label>
+          <%= f.input_field :password, required: false, class: 'form-control', style: 'border-radius: 8px; padding: 12px 14px; border: 1.5px solid #d1d5db; font-size: 15px; transition: border-color 0.2s;', placeholder: 'Enter your password' %>
+        </div>
+
+        <div style="text-align: right; margin-bottom: 22px;">
+          <%= link_to 'Forgot your password?', new_password_path(resource_name), style: 'color: #e74c3c; font-size: 13px; text-decoration: none; font-weight: 500;' %>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 13px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);">
+          Sign In
+        </button>
+
+      <% end %>
+
+      <div style="text-align: center; margin-top: 22px; padding-top: 18px; border-top: 1px solid #e5e7eb;">
+        <p style="color: #6b7280; font-size: 14px; margin: 0;">
+          Don't have an account?
+          <%= link_to 'Create one now', new_registration_path(resource_name), style: 'color: #e74c3c; font-weight: 600; text-decoration: none;' %>
+        </p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 25px;">
+      <p style="color: #4a5568; font-size: 13px; margin: 0;">
+        Powered by <strong style="color: #8892b0;">$BEEP</strong> on Cardano
+      </p>
+    </div>
+  </div>
 </div>
