@@ -17,9 +17,15 @@ SportsbeepWeb::Application.routes.draw do
   #   mount Sidekiq::Web => '/sidekiq'
   # end
 
-  get 'play', to: 'application#app'
+  get 'play', to: 'dashboard#index'
+  get 'dashboard', to: 'dashboard#index', as: :user_dashboard
+  get 'wallet', to: 'dashboard#wallet', as: :wallet
+  get 'transactions', to: 'dashboard#transactions', as: :user_transactions
+  get 'redeem', to: 'dashboard#redeem_promo', as: :redeem_promo
+  post 'redeem', to: 'dashboard#apply_promo', as: :apply_promo
   root to: 'application#landing'
 
+  get 'how-to-play', to: 'pages#how_to_play', as: :how_to_play
   get 'tos', to: 'pages#tos'
   get 'refund_policy', to: 'pages#refund_policy'
   get 'privacy_policy', to: 'pages#privacy_policy'

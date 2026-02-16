@@ -1,0 +1,68 @@
+<div class="container" style="padding-top: 20px; padding-bottom: 60px;">
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+  <% if flash[:alert] %>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <div class="row" style="margin-bottom: 25px;">
+    <div class="col-xs-12">
+      <h2 style="color: #e74c3c; margin-top: 0;">
+        <i class="glyphicon glyphicon-gift"></i> Redeem Promo Code
+      </h2>
+      <p class="text-muted">Enter a promotional code to receive bonus credits</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading" style="background-color: #34495e; color: white;">
+          <h4 class="panel-title text-center">Enter Your Promo Code</h4>
+        </div>
+        <div class="panel-body" style="padding: 30px;">
+          <% if @user.promo_code.present? %>
+            <div class="text-center">
+              <i class="glyphicon glyphicon-ok-circle" style="font-size: 48px; color: #27ae60;"></i>
+              <h4 style="color: #27ae60; margin-top: 15px;">Promo Code Already Applied!</h4>
+              <p>You are using promo code: <strong><%= @user.promo_code.code %></strong></p>
+              <p class="text-muted"><small>Each account can only use one promo code.</small></p>
+            </div>
+          <% else %>
+            <%= form_tag apply_promo_path, method: :post, class: 'form' do %>
+              <div class="form-group">
+                <label for="promo_code">Promo Code</label>
+                <div class="input-group input-group-lg">
+                  <input type="text" name="promo_code" id="promo_code" class="form-control" placeholder="Enter code here..." style="text-transform: uppercase;" required>
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-danger btn-lg">
+                      <i class="glyphicon glyphicon-ok"></i> Redeem
+                    </button>
+                  </span>
+                </div>
+              </div>
+            <% end %>
+            <p class="text-muted text-center" style="margin-top: 15px;">
+              <small>Promo codes are case-insensitive. Enter the code exactly as provided.</small>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <%= link_to '&larr; Back to Dashboard'.html_safe, user_dashboard_path, class: 'btn btn-default' %>
+    </div>
+  </div>
+
+</div>

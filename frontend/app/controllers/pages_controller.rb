@@ -1,5 +1,8 @@
 class PagesController < ApplicationController
 
+  def how_to_play
+  end
+
   def tos
   end
 
