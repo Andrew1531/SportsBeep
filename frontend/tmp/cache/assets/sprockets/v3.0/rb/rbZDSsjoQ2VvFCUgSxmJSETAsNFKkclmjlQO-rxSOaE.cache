@@ -1,0 +1,84 @@
+I"*(function() {
+  angular.module('sportsbeep.services').service('TimerStateDecoder', function($q, $timeout, TicketPlayer, TicketSquad, GamePositionService, GameSquadService, NullPlayer, NullTeam) {
+    var TimerStateDecoder;
+    TimerStateDecoder = (function() {
+      function TimerStateDecoder(timerStateTexts) {
+        this.mSeconds = 14;
+        this.mPrecision = 10;
+      }
+
+      TimerStateDecoder.prototype.generateTimerStateMap = function(ticketId, timerStateTexts) {
+        this.ticketId = ticketId;
+        this.timerStateMap = {};
+        return $q((function(_this) {
+          return function(resolve, reject) {
+            return _this.realFunction(timerStateTexts, 0, function() {
+              return resolve(_this.timerStateMap);
+            });
+          };
+        })(this));
+      };
+
+      TimerStateDecoder.prototype.realFunction = function(timerStateTexts, index, callback) {
+        var encryptedText, timeValue;
+        encryptedText = timerStateTexts[index].encrypted_text;
+        timeValue = this.decode(this.ticketId, encryptedText);
+        this.timerStateMap[timeValue] = encryptedText;
+        if (index < (timerStateTexts.length - 1)) {
+          return $timeout((function(_this) {
+            return function() {
+              return _this.realFunction(timerStateTexts, index + 1, callback);
+            };
+          })(this));
+        } else {
+          return callback();
+        }
+      };
+
+      TimerStateDecoder.prototype.decode = function(ticketId, timerStateText) {
+        var cipherText, decrypted, i, iv, j, k, key, p, plainText, positionalSalt, randomSalt, ref, ref1, s;
+        randomSalt = timerStateText.substring(0, 6);
+        cipherText = CryptoJS.enc.Base64.parse(timerStateText.substring(6));
+        for (s = i = 0, ref = this.mSeconds; 0 <= ref ? i <= ref : i >= ref; s = 0 <= ref ? ++i : --i) {
+          for (p = j = 0, ref1 = this.mPrecision; 0 <= ref1 ? j <= ref1 : j >= ref1; p = 0 <= ref1 ? ++j : --j) {
+            if (s > 0 && p === 0) {
+              continue;
+            }
+            positionalSalt = s + ":" + p;
+            key = "";
+            while (key.length < 32) {
+              key += ":" + randomSalt + ":" + positionalSalt + ":" + ticketId + ":" + randomSalt + ":";
+            }
+            if (key.length > 32) {
+              key = key.substring(0, 32);
+            }
+            iv = CryptoJS.enc.Utf8.parse(key.substring(0, 16));
+            k = CryptoJS.enc.Utf8.parse(key);
+            decrypted = CryptoJS.AES.decrypt({
+              ciphertext: cipherText
+            }, k, {
+              iv: iv,
+              mode: CryptoJS.mode.CBC,
+              padding: CryptoJS.pad.Pkcs7
+            });
+            try {
+              plainText = decrypted.toString(CryptoJS.enc.Utf8);
+              if (plainText.indexOf(positionalSalt) === 0) {
+                return plainText.substring(positionalSalt.length + 1);
+              }
+            } catch (error) {
+
+            }
+          }
+        }
+        return void 0;
+      };
+
+      return TimerStateDecoder;
+
+    })();
+    return new TimerStateDecoder;
+  });
+
+}).call(this);
+:ET

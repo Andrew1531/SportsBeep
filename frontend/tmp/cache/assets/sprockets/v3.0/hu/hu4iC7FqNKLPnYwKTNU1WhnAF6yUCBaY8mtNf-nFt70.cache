@@ -1,0 +1,22 @@
+I"Ú(function() {
+  angular.module('sportsbeep.controllers').controller('BestAndBustCtrl', function($scope, $stateParams, TicketService, Ticket, BestAndBustAnswerService, TeamService) {
+    return TicketService.find($stateParams.ticketId, function(data) {
+      $scope.ticket = new Ticket(data);
+      $scope.answers = [];
+      return BestAndBustAnswerService.all({
+        ticketId: $stateParams.ticketId
+      }).$promise.then(function(data) {
+        var d, i, len, results;
+        results = [];
+        for (undefined; i < len; i++) {
+          d = data[i];
+          d.team = TeamService.find(d.team.id);
+          results.push($scope.answers.push(d));
+        }
+        return results;
+      });
+    });
+  });
+
+}).call(this);
+:ET

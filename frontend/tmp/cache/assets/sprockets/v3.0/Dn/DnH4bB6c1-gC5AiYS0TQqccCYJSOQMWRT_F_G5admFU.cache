@@ -1,0 +1,32 @@
+I"%(function() {
+  $(document).on('ready page:load', function() {
+    return $('#games td.bettable-column input').on('change', function(e) {
+      if (!$(this).is(':checked')) {
+        return;
+      }
+      return $.ajax({
+        type: 'PUT',
+        url: $(this).data('href'),
+        data: {
+          game: {
+            bettable: true
+          }
+        },
+        success: (function(_this) {
+          return function() {
+            var $row;
+            $row = $(_this).closest('tr');
+            return $row.load(location.href + ' tr[data-href="' + $row.data('href') + '"] > *');
+          };
+        })(this),
+        error: (function(_this) {
+          return function() {
+            return $(_this).prop('checked', false);
+          };
+        })(this)
+      });
+    });
+  });
+
+}).call(this);
+:ET

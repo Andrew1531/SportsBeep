@@ -1,0 +1,21 @@
+I"m(function() {
+  angular.module('sportsbeep.services').service('GameSquadService', function($resource, GlobalOptions, GameSquad) {
+    var GameSquadService;
+    GameSquadService = (function() {
+      function GameSquadService() {}
+
+      GameSquadService.prototype.all = function() {
+        switch (GlobalOptions.get('sport')) {
+          case 'nfl':
+            return [new GameSquad('quarterbacks', 'Quarterback'), new GameSquad('defense', 'Defense'), new GameSquad('special_teams', 'Special teams')];
+        }
+      };
+
+      return GameSquadService;
+
+    })();
+    return new GameSquadService;
+  });
+
+}).call(this);
+:ET

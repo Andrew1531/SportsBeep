@@ -1,0 +1,16 @@
+I"O(function() {
+  angular.module('sportsbeep.controllers').controller('ContestShowCtrl', function($scope, $stateParams, ContestTicketService, ContestService, Contest, CurrentContest) {
+    return ContestService.find($stateParams.id, function(data) {
+      $scope.contest = new Contest(data);
+      $scope.tickets = ContestTicketService.index({
+        contestId: $stateParams.id
+      });
+      return $scope.tickets.$promise.then(function(data) {
+        CurrentContest.tickets = $scope.tickets;
+        return CurrentContest.contest = $scope.contest;
+      });
+    });
+  });
+
+}).call(this);
+:ET

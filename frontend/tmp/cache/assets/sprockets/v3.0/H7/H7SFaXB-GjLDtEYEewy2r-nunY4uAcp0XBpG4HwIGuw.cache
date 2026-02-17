@@ -1,0 +1,17 @@
+I"‘(function() {
+  angular.module('sportsbeep.factories').factory('TicketPlayer', function() {
+    var TicketPlayer;
+    return TicketPlayer = (function() {
+      function TicketPlayer(gamePosition, player) {
+        this.gamePosition = gamePosition;
+        this.player = player;
+        this.player.gamePosition = this.gamePosition;
+      }
+
+      return TicketPlayer;
+
+    })();
+  });
+
+}).call(this);
+:ET

@@ -2,7 +2,7 @@
 
   <div class="bets-header">
     <div class="container">
-      <h1>My Bets</h1>
+      <h1>MY BETS</h1>
       <p class="subtitle">Track your wagers and results</p>
     </div>
   </div>
@@ -13,13 +13,13 @@
       <div class="stat-card">
         <div class="stat-inner">
           <div class="stat-value"><%= Money.new(@total_wagered).format rescue '$0.00' %></div>
-          <div class="stat-label">Total Wagered</div>
+          <div class="stat-label">Wagered</div>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-inner">
           <div class="stat-value"><%= Money.new(@total_won).format rescue '$0.00' %></div>
-          <div class="stat-label">Total Won</div>
+          <div class="stat-label">Won</div>
         </div>
       </div>
       <div class="stat-card">
@@ -37,27 +37,46 @@
     </div>
 
     <div class="bets-section">
-      <h3 class="section-title"><i class="fa fa-clock"></i> Open Wagers</h3>
+      <h3 class="section-title"><i class="fa fa-clock"></i> OPEN WAGERS</h3>
 
       <% if @open_wagers.any? %>
         <% @open_wagers.each do |wager| %>
-          <div class="bet-card <%= wager.status %>">
-            <div class="bet-top">
-              <span class="bet-matchup"><%= wager.matchup %></span>
-              <span class="bet-status <%= wager.status %>"><%= wager.status_display %></span>
+          <%
+            away_city, away_mascot = split_team_name(wager.away_team)
+            home_city, home_mascot = split_team_name(wager.home_team)
+            away_color = team_color(wager.away_team, 0)
+            home_color = team_color(wager.home_team, 0)
+          %>
+          <div class="bet-card">
+            <div class="bet-card-matchup">
+              <div class="bet-split-away" style="background: <%= away_color %>;"></div>
+              <div class="bet-split-home" style="background: <%= home_color %>;"></div>
+              <%= image_tag 'at.png', class: 'bet-at-image' %>
+              <div class="bet-team-away">
+                <% if away_city.present? %>
+                  <div class="bet-team-city"><%= away_city %></div>
+                <% end %>
+                <div class="bet-team-mascot"><%= away_mascot %></div>
+              </div>
+              <div class="bet-team-home">
+                <% if home_city.present? %>
+                  <div class="bet-team-city"><%= home_city %></div>
+                <% end %>
+                <div class="bet-team-mascot"><%= home_mascot %></div>
+              </div>
             </div>
-            <div class="bet-details">
-              <span class="bet-selection-name"><%= wager.selection %></span> &mdash;
-              <%= wager.bet_type_display %> (<%= wager.odds_display %>)
+            <div class="bet-info-bar">
+              <div class="bet-type-info">
+                <span class="bet-selection-name"><%= wager.selection %></span>
+                <span class="bet-type-label"><%= wager.bet_type_display %></span>
+              </div>
+              <span class="bet-odds-badge"><%= wager.odds_display %></span>
             </div>
-            <div class="bet-bottom">
-              <span>
-                Wager: <span class="bet-wager"><%= wager.amount %> $BEEP</span>
-              </span>
-              <span>
-                Payout: <span class="bet-payout"><%= wager.potential_payout %></span>
-              </span>
+            <div class="bet-bottom-bar">
+              <span>Wager: <span class="bet-wager-amount"><%= wager.amount %> $BEEP</span></span>
+              <span>Payout: <span class="bet-payout-amount"><%= wager.potential_payout %></span></span>
             </div>
+            <div class="bet-status-strip status-<%= wager.status %>"><%= wager.status_display %></div>
           </div>
         <% end %>
       <% else %>
@@ -69,27 +88,46 @@
     </div>
 
     <div class="bets-section">
-      <h3 class="section-title"><i class="fa fa-flag-checkered"></i> Settled Bets</h3>
+      <h3 class="section-title"><i class="fa fa-flag-checkered"></i> SETTLED BETS</h3>
 
       <% if @settled_wagers.any? %>
         <% @settled_wagers.each do |wager| %>
-          <div class="bet-card <%= wager.status %>">
-            <div class="bet-top">
-              <span class="bet-matchup"><%= wager.matchup %></span>
-              <span class="bet-status <%= wager.status %>"><%= wager.status_display %></span>
+          <%
+            away_city, away_mascot = split_team_name(wager.away_team)
+            home_city, home_mascot = split_team_name(wager.home_team)
+            away_color = team_color(wager.away_team, 0)
+            home_color = team_color(wager.home_team, 0)
+          %>
+          <div class="bet-card">
+            <div class="bet-card-matchup">
+              <div class="bet-split-away" style="background: <%= away_color %>;"></div>
+              <div class="bet-split-home" style="background: <%= home_color %>;"></div>
+              <%= image_tag 'at.png', class: 'bet-at-image' %>
+              <div class="bet-team-away">
+                <% if away_city.present? %>
+                  <div class="bet-team-city"><%= away_city %></div>
+                <% end %>
+                <div class="bet-team-mascot"><%= away_mascot %></div>
+              </div>
+              <div class="bet-team-home">
+                <% if home_city.present? %>
+                  <div class="bet-team-city"><%= home_city %></div>
+                <% end %>
+                <div class="bet-team-mascot"><%= home_mascot %></div>
+              </div>
             </div>
-            <div class="bet-details">
-              <span class="bet-selection-name"><%= wager.selection %></span> &mdash;
-              <%= wager.bet_type_display %> (<%= wager.odds_display %>)
+            <div class="bet-info-bar">
+              <div class="bet-type-info">
+                <span class="bet-selection-name"><%= wager.selection %></span>
+                <span class="bet-type-label"><%= wager.bet_type_display %></span>
+              </div>
+              <span class="bet-odds-badge"><%= wager.odds_display %></span>
             </div>
-            <div class="bet-bottom">
-              <span>
-                Wager: <span class="bet-wager"><%= wager.amount %> $BEEP</span>
-              </span>
-              <span>
-                Payout: <span class="bet-payout"><%= wager.potential_payout %></span>
-              </span>
+            <div class="bet-bottom-bar">
+              <span>Wager: <span class="bet-wager-amount"><%= wager.amount %> $BEEP</span></span>
+              <span>Payout: <span class="bet-payout-amount"><%= wager.potential_payout %></span></span>
             </div>
+            <div class="bet-status-strip status-<%= wager.status %>"><%= wager.status_display %></div>
           </div>
         <% end %>
       <% else %>
@@ -101,7 +139,7 @@
     </div>
 
     <div class="back-to-sportsbook">
-      <%= link_to 'Back to Sportsbook', sportsbook_path %>
+      <%= link_to 'BACK TO SPORTSBOOK', sportsbook_path %>
     </div>
 
   </div>

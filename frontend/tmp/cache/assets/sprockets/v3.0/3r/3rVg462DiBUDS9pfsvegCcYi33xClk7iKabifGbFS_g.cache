@@ -1,0 +1,19 @@
+{:uriI"file://app/assets/javascripts/templates/games/show.html?type=text/ng-html&id=a6b0077dbe08b7be1c5732e0e1e34bb3cdfa036fb533b66c01871e93be0e59d5:ET:load_pathI"app/assets/javascripts;T:filenameI"5app/assets/javascripts/templates/games/show.html;T:	nameI"templates/games/show;T:logical_pathI"templates/games/show.html;T:content_typeI"text/ng-html;T:sourceI"G<div class="ticket-roster">
+  <div class="sidebar">
+    <h1>Build a team</h1>
+    <game-card sb-game="game" sb-include-start-time="true">
+    </game-card>
+    <ul id="game-positions">
+      <li ng-repeat="gamePosition in gamePositions" ui-sref="gameShow.players({ position: gamePosition.id })">{{gamePosition.name}}</span>
+      <li ng-repeat="ticketSquad in ticketSquads" ng-click="selectSquad(ticketSquad, game)">{{ticketSquad.name}} Squad</span>
+    </ul>
+  </div>
+  <mobile-game-card sb-game="game">
+  </mobile-game-card>
+  <div ui-view="content" class="players">
+  </div>
+</div>;T:metadata{	:dependencieso:Set:
+@hash}
+I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Cfile-digest://app/assets/javascripts/templates/games/show.html;TTF:charsetI"
+utf-8;F:digest"%Ûœ²Ş¹@9‹Â‡ÜÄ”ÃuùÏél²º¬ÿà:Jó²Ëg:lengthiG:dependencies_digest"%Ğ%ïw}\ñê–”\É;ï^^.1ƒÓs VûâSKĞ:idI"Ea6b0077dbe08b7be1c5732e0e1e34bb3cdfa036fb533b66c01871e93be0e59d5;F:
+mtimel+H³Éh

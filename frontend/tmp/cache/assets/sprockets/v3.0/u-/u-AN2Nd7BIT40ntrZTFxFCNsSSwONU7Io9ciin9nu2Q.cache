@@ -1,0 +1,9 @@
+{:uriI"êfile://app/assets/javascripts/templates/contests/show.html?type=text/ng-html&id=44485f0014a67225f1ee6201753edb23436a6798defa73a9be156b5a44120d85:ET:load_pathI"app/assets/javascripts;T:filenameI"8app/assets/javascripts/templates/contests/show.html;T:	nameI"templates/contests/show;T:logical_pathI"!templates/contests/show.html;T:content_typeI"text/ng-html;T:sourceI"≠<div class="tickets">
+  <a ng-repeat="ticket in tickets" ui-sref="dashboard.ticket.show({ id: ticket.id })">
+    <ticket-card sb-ticket="ticket"></ticket-card>
+  </a>
+</div>;T:metadata{	:dependencieso:Set:
+@hash}
+I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Ffile-digest://app/assets/javascripts/templates/contests/show.html;TTF:charsetI"
+utf-8;F:digest"%AÄ"^ﬂMê˛ŒÓ£mU+áUµU–Å.[{«âß	å:lengthi≠:dependencies_digest"%Ωã∆9Ô◊∆5å›2ÈjSÿ€∆siË•∫÷W›¿,:idI"E44485f0014a67225f1ee6201753edb23436a6798defa73a9be156b5a44120d85;F:
+mtimel+H≥…h

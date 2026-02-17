@@ -1,0 +1,29 @@
+I"8(function() {
+  angular.module('sportsbeep.directives').directive('squadCard', function() {
+    return {
+      restrict: 'E',
+      scope: {
+        squad: '=sbSquad',
+        flipper: '=sbFlipper'
+      },
+      templateUrl: 'directives/squad-card.html',
+      replace: true,
+      link: function(scope, element, _) {
+        if (scope.flipper !== false) {
+          return element.on('click', (function(_this) {
+            return function() {
+              angular.element(element).toggleClass('flip');
+              if (scope.stats == null) {
+                return scope.$parent.$parent.getSquadScoresheetFor(scope.squad).then(function() {
+                  return scope.stats = scope.$parent.stats;
+                });
+              }
+            };
+          })(this));
+        }
+      }
+    };
+  });
+
+}).call(this);
+:ET

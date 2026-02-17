@@ -1,0 +1,5 @@
+I"‚(function() {
+  angular.module('sportsbeep.controllers').controller('NoTicketSelectedCtrl', function($scope) {});
+
+}).call(this);
+:ET

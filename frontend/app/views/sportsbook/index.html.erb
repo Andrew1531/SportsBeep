@@ -12,10 +12,10 @@
 
   <ul class="sport-tabs">
     <% %w[mlb nfl nba nhl].each do |sport| %>
-      <% sport_icons = { 'mlb' => 'fa-baseball', 'nfl' => 'fa-football', 'nba' => 'fa-basketball', 'nhl' => 'fa-hockey-puck' } %>
+      <% sport_icons = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png', 'nba' => 'ic_basketball.png', 'nhl' => 'ic_hockey.png' } %>
       <li class="<%= 'active' if @sport == sport %>">
         <%= link_to sportsbook_path(sport: sport) do %>
-          <i class="fa <%= sport_icons[sport] %>"></i>
+          <%= image_tag sport_icons[sport], class: 'tab-icon' %>
           <%= sport.upcase %>
         <% end %>
       </li>
@@ -76,6 +76,8 @@
           <%
             away_city, away_mascot = split_team_name(game[:away_team])
             home_city, home_mascot = split_team_name(game[:home_team])
+            away_color = team_color(game[:away_team], 0)
+            home_color = team_color(game[:home_team], 0)
           %>
 
           <div class="game-card">
@@ -95,9 +97,9 @@
             </div>
 
             <div class="game-matchup-panel">
-              <div class="split-away"></div>
-              <div class="split-home"></div>
-              <span class="split-at-symbol">AT</span>
+              <div class="split-away" style="background: <%= away_color %>;"></div>
+              <div class="split-home" style="background: <%= home_color %>;"></div>
+              <%= image_tag 'at_large.png', class: 'split-at-image' %>
               <div class="team-block team-block-away">
                 <% if away_city.present? %>
                   <div class="team-city"><%= away_city %></div>
@@ -199,7 +201,7 @@
     <div class="bet-slip-card">
 
       <div class="bet-slip-header">
-        <h3><i class="fa fa-receipt"></i> Bet Slip</h3>
+        <h3><i class="fa fa-receipt"></i> BET SLIP</h3>
         <button class="close-btn" onclick="closeBetSlip()"><i class="fa fa-xmark"></i></button>
       </div>
 
@@ -231,7 +233,7 @@
         <input type="hidden" name="wager[league]" id="wager_league">
         <input type="hidden" name="wager[sportsbook]" value="DraftKings">
 
-        <label class="amount-label">Wager Amount ($BEEP)</label>
+        <label class="amount-label">WAGER AMOUNT ($BEEP)</label>
         <input type="number" name="wager[amount_cents]" id="wager_amount_cents" min="1" step="1" placeholder="Enter amount in cents" class="amount-input" oninput="updatePayout()">
 
         <div class="quick-amounts">
@@ -254,7 +256,7 @@
         </div>
 
         <button type="submit" class="place-bet-btn">
-          <i class="fa fa-check-circle"></i> Place Wager
+          <i class="fa fa-check-circle"></i> PLACE WAGER
         </button>
       <% end %>
 

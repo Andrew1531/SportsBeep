@@ -1,0 +1,23 @@
+I"—(function() {
+  angular.module('sportsbeep.services').factory('SportsbeepTokenAuthInterceptor', function() {
+    var SportsbeepTokenAuthInterceptor;
+    SportsbeepTokenAuthInterceptor = (function() {
+      function SportsbeepTokenAuthInterceptor() {}
+
+      SportsbeepTokenAuthInterceptor.prototype.request = function(config) {
+        var token;
+        token = localStorage.getItem('authToken');
+        if (token != null) {
+          config.headers['Authorization'] = "Token token=" + token;
+        }
+        return config;
+      };
+
+      return SportsbeepTokenAuthInterceptor;
+
+    })();
+    return new SportsbeepTokenAuthInterceptor;
+  });
+
+}).call(this);
+:ET

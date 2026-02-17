@@ -1,0 +1,26 @@
+I"ß(function() {
+  angular.module('sportsbeep.directives').directive('playerScoreCard', function() {
+    return {
+      restrict: 'E',
+      scope: {
+        player: '=sbPlayer'
+      },
+      templateUrl: 'directives/player-score-card.html',
+      replace: true,
+      link: function(scope, element, _) {
+        return element.on('click', (function(_this) {
+          return function() {
+            angular.element(element).toggleClass('flip');
+            if (scope.stats == null) {
+              return scope.$parent.$parent.getScoresheetFor(scope.player).then(function() {
+                return scope.stats = scope.$parent.stats;
+              });
+            }
+          };
+        })(this));
+      }
+    };
+  });
+
+}).call(this);
+:ET

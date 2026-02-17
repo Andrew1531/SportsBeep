@@ -1,0 +1,17 @@
+I"ö(function() {
+  $(document).on('ready page:load', function() {
+    return $(document).on('change', '#question_topic', function() {
+      var $connotation, selectedText;
+      selectedText = $('option:selected', $(this)).text();
+      $connotation = $('.connotation');
+      if (!!selectedText) {
+        $('.topic').text(selectedText.toLowerCase());
+        return $connotation.removeClass('hidden');
+      } else {
+        return $connotation.addClass('hidden');
+      }
+    });
+  });
+
+}).call(this);
+:ET
