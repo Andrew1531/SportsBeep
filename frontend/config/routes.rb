@@ -37,7 +37,7 @@ SportsbeepWeb::Application.routes.draw do
   get 'refund_policy', to: 'pages#refund_policy'
   get 'privacy_policy', to: 'pages#privacy_policy'
 
-  resources :users, only: [:show]
+  resources :users, only: [:show], constraints: { id: /\d+/ }
 
   namespace :api, defaults: { format: 'json' } do
     devise_for :users, path_names: { sign_in: 'login', sign_out: 'logout', sign_up: 'register' }
