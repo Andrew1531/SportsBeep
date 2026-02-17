@@ -69,10 +69,18 @@
           <p style="color: #8892b0; margin: 0; font-size: 14px;">Jump right into the action!</p>
         </div>
         <div class="col-xs-12 col-sm-6 text-right" style="padding-top: 5px;">
-          <a href="#" style="display: inline-block; padding: 11px 28px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(231,76,60,0.35); margin-right: 10px;">Browse Contests</a>
+          <%= link_to browse_games_path, style: 'display: inline-block; padding: 11px 28px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(231,76,60,0.35); margin-right: 10px;' do %>Browse Contests<% end %>
           <%= link_to 'How to Play', how_to_play_path, style: 'display: inline-block; padding: 11px 28px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none;' %>
         </div>
       </div>
+      <% if @account.balance_cents <= 0 %>
+        <div style="margin-top: 12px; background: rgba(253,203,110,0.1); border: 1px solid rgba(253,203,110,0.3); border-radius: 10px; padding: 12px 18px;">
+          <p style="color: #fdcb6e; margin: 0; font-size: 13px;">
+            <i class="fa fa-exclamation-triangle" style="margin-right: 6px;"></i>
+            You need <strong>$BEEP tokens</strong> to enter contests. <%= link_to 'Go to Wallet', wallet_path, style: 'color: #a29bfe; font-weight: 700; text-decoration: underline;' %> to swap ADA for $BEEP.
+          </p>
+        </div>
+      <% end %>
     </div>
 
     <% if @user.cardano_wallet_address.present? %>

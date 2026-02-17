@@ -4,6 +4,8 @@ class GamesController < ApplicationController
   def index
     @sport = params[:sport] || 'mlb'
     @user = current_user
+    @account = @user.account
+    @has_beep = @account.balance_cents > 0
 
     if @sport == 'nfl'
       @teams = safe_query { Nfl::Team.order(:name).to_a } || []

@@ -35,6 +35,7 @@ class Ticket < ActiveRecord::Base
   validate :must_not_join_the_same_contest_twice_per_user, on: :create
   validate :must_not_join_the_same_game_and_pool_more_than_5_times, on: :create
   validate :must_be_saved_before_game_time
+  validate :must_have_beep_balance, on: :create
 
   after_create { GenerateTimerStates.new.call(self) }
 
@@ -126,6 +127,13 @@ class Ticket < ActiveRecord::Base
     def must_be_saved_before_game_time
       if game.start_time.past?
         errors.add :base, "You cannot join a game that is already in progress"
+      end
+    end
+
+    def must_have_beep_balance
+      account = user&.account
+      if account.nil? || account.balance_cents <= 0
+        errors.add :base, 'You need $BEEP tokens to enter a contest. Visit your Wallet to swap ADA for $BEEP.'
       end
     end
 
