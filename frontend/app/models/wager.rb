@@ -21,7 +21,6 @@ class Wager < ActiveRecord::Base
   scope :recent, -> { order(created_at: :desc) }
 
   before_validation :calculate_potential_payout, on: :create
-  after_create :debit_user_account
 
   def settled?
     %w[won lost push].include?(status)
@@ -87,13 +86,17 @@ class Wager < ActiveRecord::Base
     end
   end
 
-  def debit_user_account
+  def debit_user_account!
     account = user.account
-    account.update!(balance_cents: account.balance_cents - amount_cents)
-
-    account.transactions.create!(
-      description: "Wager: #{bet_type_display} - #{matchup}",
-      amount_cents: -amount_cents
-    )
+    account.with_lock do
+      if account.balance_cents < amount_cents
+        raise ActiveRecord::Rollback, 'Insufficient balance'
+      end
+      account.update!(balance_cents: account.balance_cents - amount_cents)
+      account.transactions.create!(
+        description: "Wager: #{bet_type_display} - #{matchup}",
+        amount_cents: -amount_cents
+      )
+    end
   end
 end

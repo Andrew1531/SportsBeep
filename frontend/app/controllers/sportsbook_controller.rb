@@ -11,7 +11,15 @@ class SportsbookController < ApplicationController
   def place_wager
     @wager = @user.wagers.build(wager_params)
 
-    if @wager.save
+    success = false
+    ActiveRecord::Base.transaction do
+      if @wager.save
+        @wager.debit_user_account!
+        success = true
+      end
+    end
+
+    if success
       redirect_to sportsbook_path(sport: @wager.sport), notice: "Wager placed! #{@wager.amount} $BEEP on #{@wager.selection} (#{@wager.odds_display})"
     else
       @sport = @wager.sport || 'mlb'

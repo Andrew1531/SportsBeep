@@ -1,0 +1,108 @@
+<div class="my-bets-page">
+
+  <div class="bets-header">
+    <div class="container">
+      <h1>My Bets</h1>
+      <p class="subtitle">Track your wagers and results</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-inner">
+          <div class="stat-value"><%= Money.new(@total_wagered).format rescue '$0.00' %></div>
+          <div class="stat-label">Total Wagered</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-inner">
+          <div class="stat-value"><%= Money.new(@total_won).format rescue '$0.00' %></div>
+          <div class="stat-label">Total Won</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-inner wins">
+          <div class="stat-value"><%= @win_count %></div>
+          <div class="stat-label">Wins</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-inner losses">
+          <div class="stat-value"><%= @loss_count %></div>
+          <div class="stat-label">Losses</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bets-section">
+      <h3 class="section-title"><i class="fa fa-clock"></i> Open Wagers</h3>
+
+      <% if @open_wagers.any? %>
+        <% @open_wagers.each do |wager| %>
+          <div class="bet-card <%= wager.status %>">
+            <div class="bet-top">
+              <span class="bet-matchup"><%= wager.matchup %></span>
+              <span class="bet-status <%= wager.status %>"><%= wager.status_display %></span>
+            </div>
+            <div class="bet-details">
+              <span class="bet-selection-name"><%= wager.selection %></span> &mdash;
+              <%= wager.bet_type_display %> (<%= wager.odds_display %>)
+            </div>
+            <div class="bet-bottom">
+              <span>
+                Wager: <span class="bet-wager"><%= wager.amount %> $BEEP</span>
+              </span>
+              <span>
+                Payout: <span class="bet-payout"><%= wager.potential_payout %></span>
+              </span>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="no-bets">
+          <i class="fa fa-receipt"></i>
+          <p>No open wagers</p>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="bets-section">
+      <h3 class="section-title"><i class="fa fa-flag-checkered"></i> Settled Bets</h3>
+
+      <% if @settled_wagers.any? %>
+        <% @settled_wagers.each do |wager| %>
+          <div class="bet-card <%= wager.status %>">
+            <div class="bet-top">
+              <span class="bet-matchup"><%= wager.matchup %></span>
+              <span class="bet-status <%= wager.status %>"><%= wager.status_display %></span>
+            </div>
+            <div class="bet-details">
+              <span class="bet-selection-name"><%= wager.selection %></span> &mdash;
+              <%= wager.bet_type_display %> (<%= wager.odds_display %>)
+            </div>
+            <div class="bet-bottom">
+              <span>
+                Wager: <span class="bet-wager"><%= wager.amount %> $BEEP</span>
+              </span>
+              <span>
+                Payout: <span class="bet-payout"><%= wager.potential_payout %></span>
+              </span>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="no-bets">
+          <i class="fa fa-flag-checkered"></i>
+          <p>No settled bets yet</p>
+        </div>
+      <% end %>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <%= link_to 'Back to Sportsbook', sportsbook_path, style: "display: inline-block; padding: 12px 30px; background: #ed5133; color: #fff; text-decoration: none; font-family: 'BebasNeue', sans-serif; font-size: 22px; text-transform: uppercase; border-radius: 3px;" %>
+    </div>
+
+  </div>
+</div>

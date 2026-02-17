@@ -9,6 +9,8 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 - **JavaScript Runtime**: ✅ Node.js 20 installed  
 - **Asset Pipeline**: ✅ Sass/CSS compiling successfully (Rails 6 compatible)
 - **Cardano Blockchain**: ✅ Integrated with Blockfrost API for crypto wallet support
+- **Sportsbook**: ✅ Traditional sportsbook interface with MLB, NFL, NBA, NHL odds
+- **OpticOdds API**: ✅ Integrated for real-time odds data
 - **Backend Timer API**: ❌ Needs Rails 6+ upgrade for Ruby 3.2 compatibility
 - **Deployment**: ✅ Configured for Replit autoscale with PostgreSQL
 
