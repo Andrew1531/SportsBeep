@@ -1,0 +1,124 @@
+<div class="fantasy-page">
+
+  <div class="fantasy-header">
+    <div class="container">
+      <h1>DAILY FANTASY</h1>
+      <div class="balance-display">
+        <span class="balance-label">Balance</span>
+        <span class="balance-amount"><%= @account.balance rescue '0.00' %> <span class="currency">$BEEP</span></span>
+      </div>
+    </div>
+  </div>
+
+  <ul class="sport-tabs">
+    <% %w[mlb nfl].each do |sport| %>
+      <% sport_icons = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png' } %>
+      <li class="<%= 'active' if @sport == sport %>">
+        <%= link_to fantasy_path(sport: sport) do %>
+          <%= image_tag sport_icons[sport], class: 'tab-icon' %>
+          <%= sport.upcase %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="container">
+
+    <% if flash[:notice] %>
+      <div class="alert-notice"><%= flash[:notice] %></div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="alert-alert"><%= flash[:alert] %></div>
+    <% end %>
+
+    <% unless @has_beep %>
+      <div class="beep-warning">
+        <i class="fa fa-exclamation-triangle"></i>
+        You need <strong>$BEEP tokens</strong> to enter contests.
+        <%= link_to 'Go to Wallet', wallet_path %> to swap ADA for $BEEP.
+      </div>
+    <% end %>
+
+    <div class="fantasy-nav-bar">
+      <%= link_to 'Available Games', fantasy_path(sport: @sport), class: "fnav-link active" %>
+      <%= link_to 'My Entries', my_entries_path, class: "fnav-link" %>
+    </div>
+
+    <div class="games-section">
+      <div class="games-header">
+        <span class="games-title"><%= @sport.upcase %> GAMES</span>
+        <span class="games-count"><%= @games.size %> upcoming</span>
+      </div>
+
+      <% if @games.any? %>
+        <% @games.each do |game| %>
+          <%
+            home_name = game.home_team.to_s
+            away_name = game.away_team.to_s
+            away_city, away_mascot = split_team_name(away_name)
+            home_city, home_mascot = split_team_name(home_name)
+            away_color = team_color(away_name, 0)
+            home_color = team_color(home_name, 0)
+            game_contests = @contests.select { |c| c.game&.id == game.id }
+            pool_count = game_contests.size
+          %>
+
+          <div class="game-card fantasy-game-card">
+            <div class="game-date-bar">
+              <span><%= game.start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%A, %B %e').strip %></span>
+              <span>
+                <% if game.start_time.future? %>
+                  <span class="game-time"><%= game.start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%l:%M %p ET').strip %></span>
+                <% else %>
+                  <span class="live-badge"><i class="fa fa-circle"></i> LIVE</span>
+                <% end %>
+              </span>
+            </div>
+
+            <div class="game-matchup-panel">
+              <div class="split-away" style="background: <%= away_color %>;"></div>
+              <div class="split-home" style="background: <%= home_color %>;"></div>
+              <%= image_tag 'at_large.png', class: 'split-at-image' %>
+              <div class="team-block team-block-away">
+                <% if away_city.present? %>
+                  <div class="team-city"><%= away_city %></div>
+                <% end %>
+                <div class="team-mascot"><%= away_mascot %></div>
+              </div>
+              <div class="team-block team-block-home">
+                <% if home_city.present? %>
+                  <div class="team-city"><%= home_city %></div>
+                <% end %>
+                <div class="team-mascot"><%= home_mascot %></div>
+              </div>
+            </div>
+
+            <div class="fantasy-card-footer">
+              <div class="contest-info">
+                <% if pool_count > 0 %>
+                  <span class="contest-count"><i class="fa fa-trophy"></i> <%= pool_count %> <%= 'contest'.pluralize(pool_count) %> available</span>
+                <% else %>
+                  <span class="contest-count"><i class="fa fa-clock"></i> Contests coming soon</span>
+                <% end %>
+              </div>
+              <% if game.start_time.future? %>
+                <%= link_to fantasy_game_path(id: game.id, sport: @sport), class: 'enter-btn' do %>
+                  <i class="fa fa-play-circle"></i> VIEW GAME
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="no-games">
+          <i class="fa fa-calendar-xmark"></i>
+          <p>No upcoming <%= @sport.upcase %> games available right now.</p>
+          <p class="sub">Games will appear here when the schedule is imported.</p>
+          <p class="sub">Check the Sportsbook for live odds on today's games.</p>
+          <%= link_to 'Go to Sportsbook →', sportsbook_path, class: 'go-sportsbook-link' %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>

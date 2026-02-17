@@ -23,6 +23,9 @@ SportsbeepWeb::Application.routes.draw do
   get 'sportsbook', to: 'sportsbook#index', as: :sportsbook
   post 'sportsbook/place_wager', to: 'sportsbook#place_wager', as: :place_wager
   get 'my-bets', to: 'sportsbook#my_bets', as: :my_bets
+  get 'fantasy', to: 'fantasy#index', as: :fantasy
+  get 'fantasy/game/:id', to: 'fantasy#show', as: :fantasy_game
+  get 'fantasy/my-entries', to: 'fantasy#my_entries', as: :my_entries
   get 'wallet', to: 'dashboard#wallet', as: :wallet
   get 'transactions', to: 'dashboard#transactions', as: :user_transactions
   get 'redeem', to: 'dashboard#redeem_promo', as: :redeem_promo

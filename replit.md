@@ -83,6 +83,19 @@ The application automatically starts with the configured workflow:
 - **Admin Base Controller**: Removed missing Pundit and Responders dependencies, fixed set_current_sport method
 - **Admin User Management**: Built comprehensive user list with search, detailed user profiles with account/activity stats, N+1 query optimization with preloading
 
+## Daily Fantasy Sports (DFS)
+- **URL**: `/fantasy` (requires user authentication)
+- **My Entries**: `/fantasy/my-entries`
+- **Game Detail**: `/fantasy/game/:id?sport=mlb|nfl`
+- **Status**: ✅ Pages functional, awaiting game data import
+- **Features**:
+  - Browse upcoming MLB/NFL games with team-colored cards
+  - View available contests per game (entry fees, prize pools, player counts)
+  - Player roster listing with team filter (All / Away / Home)
+  - My Entries page showing all fantasy contest entries with scores and standings
+  - Same Android-style design as Sportsbook (team colors, BebasNeue, split backgrounds)
+- **Note**: DFS contests require admin-created games, pools, and contest templates before users can enter
+
 ## Known Issues
 
 ### Non-Critical

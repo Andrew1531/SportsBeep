@@ -1,0 +1,127 @@
+<div class="fantasy-page">
+
+  <div class="fantasy-header">
+    <div class="container">
+      <h1>MY ENTRIES</h1>
+      <div class="balance-display">
+        <span class="balance-label">Balance</span>
+        <span class="balance-amount"><%= @account.balance rescue '0.00' %> <span class="currency">$BEEP</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="fantasy-nav-bar">
+      <%= link_to 'Available Games', fantasy_path, class: "fnav-link" %>
+      <%= link_to 'My Entries', my_entries_path, class: "fnav-link active" %>
+    </div>
+
+    <div class="entries-stats-row">
+      <div class="entry-stat">
+        <div class="entry-stat-value"><%= @all_entries.size %></div>
+        <div class="entry-stat-label">Total</div>
+      </div>
+      <div class="entry-stat">
+        <div class="entry-stat-value mlb-color"><%= @mlb_tickets.size %></div>
+        <div class="entry-stat-label">MLB</div>
+      </div>
+      <div class="entry-stat">
+        <div class="entry-stat-value nfl-color"><%= @nfl_tickets.size %></div>
+        <div class="entry-stat-label">NFL</div>
+      </div>
+    </div>
+
+    <% if @all_entries.any? %>
+      <div class="entries-list">
+        <% @all_entries.each do |ticket| %>
+          <%
+            game = ticket.contest&.game rescue nil
+            next unless game
+            home_name = game.home_team.to_s rescue ''
+            away_name = game.away_team.to_s rescue ''
+            away_city, away_mascot = split_team_name(away_name)
+            home_city, home_mascot = split_team_name(home_name)
+            away_color = team_color(away_name, 0)
+            home_color = team_color(home_name, 0)
+            pool = ticket.contest&.template&.pool rescue nil
+            is_mlb = ticket.is_a?(Mlb::Ticket)
+          %>
+
+          <div class="entry-card">
+            <div class="entry-sport-badge <%= is_mlb ? 'mlb' : 'nfl' %>">
+              <%= is_mlb ? 'MLB' : 'NFL' %>
+            </div>
+
+            <div class="entry-matchup">
+              <div class="bet-split-away" style="background: <%= away_color %>;"></div>
+              <div class="bet-split-home" style="background: <%= home_color %>;"></div>
+              <%= image_tag 'at_large.png', class: 'bet-at-image' %>
+              <div class="bet-team-away">
+                <% if away_city.present? %>
+                  <div class="bet-team-city"><%= away_city %></div>
+                <% end %>
+                <div class="bet-team-mascot"><%= away_mascot %></div>
+              </div>
+              <div class="bet-team-home">
+                <% if home_city.present? %>
+                  <div class="bet-team-city"><%= home_city %></div>
+                <% end %>
+                <div class="bet-team-mascot"><%= home_mascot %></div>
+              </div>
+            </div>
+
+            <div class="entry-info-bar">
+              <div class="entry-details">
+                <div class="entry-contest-name"><%= pool&.name || "Contest ##{ticket.contest_id}" %></div>
+                <div class="entry-date">
+                  <i class="fa fa-calendar"></i>
+                  <%= game.start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%b %e, %Y %l:%M %p ET').strip rescue '' %>
+                </div>
+              </div>
+              <div class="entry-score-block">
+                <div class="entry-score"><%= ticket.cached_score || '--' %></div>
+                <div class="entry-placing">
+                  <% placing = ticket.cached_placing %>
+                  <% if placing %>
+                    #<%= placing %>
+                  <% else %>
+                    --
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <div class="entry-bottom-bar">
+              <span>Players: <%= ticket.players.size rescue 0 %></span>
+              <% if pool %>
+                <span>Prize Pool: <%= pool.prize_pool || 0 %> $BEEP</span>
+              <% end %>
+              <span>
+                <% if game.start_time.future? %>
+                  <span class="entry-status upcoming">UPCOMING</span>
+                <% elsif game.status.to_s == 'live' %>
+                  <span class="entry-status live">LIVE</span>
+                <% else %>
+                  <span class="entry-status final">FINAL</span>
+                <% end %>
+              </span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="no-entries">
+        <i class="fa fa-ticket"></i>
+        <p>You haven't entered any fantasy contests yet.</p>
+        <p class="sub">Browse available games and enter a contest to get started!</p>
+        <%= link_to 'Browse Games →', fantasy_path, class: 'go-sportsbook-link' %>
+      </div>
+    <% end %>
+
+    <div class="back-to-sportsbook">
+      <%= link_to 'Back to Sportsbook', sportsbook_path %>
+    </div>
+
+  </div>
+</div>

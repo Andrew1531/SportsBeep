@@ -1,0 +1,149 @@
+<div class="fantasy-page">
+
+  <div class="fantasy-header">
+    <div class="container">
+      <h1>BUILD YOUR ROSTER</h1>
+      <div class="balance-display">
+        <span class="balance-label">Balance</span>
+        <span class="balance-amount"><%= @account.balance rescue '0.00' %> <span class="currency">$BEEP</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <%
+      home_name = @game.home_team.to_s
+      away_name = @game.away_team.to_s
+      away_city, away_mascot = split_team_name(away_name)
+      home_city, home_mascot = split_team_name(home_name)
+      away_color = team_color(away_name, 0)
+      home_color = team_color(home_name, 0)
+    %>
+
+    <div class="game-card" style="margin-top: 15px;">
+      <div class="game-date-bar">
+        <span><%= @game.start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%A, %B %e').strip %></span>
+        <span class="game-time"><%= @game.start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%l:%M %p ET').strip %></span>
+      </div>
+
+      <div class="game-matchup-panel">
+        <div class="split-away" style="background: <%= away_color %>;"></div>
+        <div class="split-home" style="background: <%= home_color %>;"></div>
+        <%= image_tag 'at_large.png', class: 'split-at-image' %>
+        <div class="team-block team-block-away">
+          <% if away_city.present? %>
+            <div class="team-city"><%= away_city %></div>
+          <% end %>
+          <div class="team-mascot"><%= away_mascot %></div>
+        </div>
+        <div class="team-block team-block-home">
+          <% if home_city.present? %>
+            <div class="team-city"><%= home_city %></div>
+          <% end %>
+          <div class="team-mascot"><%= home_mascot %></div>
+        </div>
+      </div>
+    </div>
+
+    <% if @contests.present? %>
+      <div class="contests-section">
+        <div class="section-heading">
+          <i class="fa fa-trophy"></i> AVAILABLE CONTESTS
+        </div>
+
+        <% @contests.each do |contest| %>
+          <% pool = contest.template&.pool %>
+          <div class="contest-row">
+            <div class="contest-row-left">
+              <div class="contest-name">
+                <% if pool %>
+                  <%= pool.name || "Contest ##{contest.id}" %>
+                <% else %>
+                  Contest #<%= contest.id %>
+                <% end %>
+              </div>
+              <div class="contest-meta">
+                <span><i class="fa fa-users"></i> <%= contest.tickets_count || 0 %><% if pool %> / <%= pool.max_tickets_per_contest %><% end %></span>
+              </div>
+            </div>
+            <div class="contest-row-right">
+              <% if pool %>
+                <div class="contest-prize"><i class="fa fa-gem"></i> <%= pool.prize_pool || 0 %> $BEEP</div>
+                <div class="contest-fee"><%= pool.entry_fee.round(2) rescue '0' %> $BEEP entry</div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="no-contests-box">
+        <i class="fa fa-trophy"></i>
+        <p>No contests available for this game yet.</p>
+        <p class="sub">Contests will be created closer to game time by the admin.</p>
+      </div>
+    <% end %>
+
+    <div class="roster-section">
+      <div class="section-heading">
+        <i class="fa fa-users"></i> AVAILABLE PLAYERS
+      </div>
+
+      <div class="team-filter-bar">
+        <button class="team-filter-btn active" data-filter="all">All</button>
+        <button class="team-filter-btn" data-filter="away"><%= away_mascot %></button>
+        <button class="team-filter-btn" data-filter="home"><%= home_mascot %></button>
+      </div>
+
+      <% if @players.present? %>
+        <div class="players-table">
+          <div class="players-header">
+            <span class="ph-pos">POS</span>
+            <span class="ph-name">PLAYER</span>
+            <span class="ph-team">TEAM</span>
+          </div>
+
+          <% @players.each do |player| %>
+            <% is_home = player.team_id == @game.home_team_id %>
+            <div class="player-row" data-team="<%= is_home ? 'home' : 'away' %>">
+              <span class="pr-pos"><%= player.position %></span>
+              <span class="pr-name"><%= player.name %></span>
+              <span class="pr-team" style="color: <%= is_home ? home_color : away_color %>;">
+                <%= player.team&.abbr %>
+              </span>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="no-players-box">
+          <i class="fa fa-user-slash"></i>
+          <p>No player rosters loaded for this game yet.</p>
+          <p class="sub">Players will appear once lineups are imported.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="back-link">
+      <%= link_to '← Back to Games', fantasy_path(sport: @sport), class: 'back-btn' %>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.team-filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.team-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+
+      var filter = this.dataset.filter;
+      document.querySelectorAll('.player-row').forEach(function(row) {
+        if (filter === 'all' || row.dataset.team === filter) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
