@@ -152,7 +152,7 @@
         <div>
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
             <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0;">You Receive</p>
-            <p style="color: #8892b0; font-size: 12px; margin: 0;">Rate: <span style="color: #a29bfe;">1 ADA = 100 $BEEP</span></p>
+            <p style="color: #8892b0; font-size: 12px; margin: 0;">Rate: <span style="color: #a29bfe;">1 ADA = 5.48 $BEEP</span></p>
           </div>
           <div style="display: flex; align-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px;">
             <input type="text" id="beep-amount" placeholder="0.00" readonly style="flex: 1; background: transparent; border: none; color: white; font-size: 20px; font-weight: 600; outline: none; width: 100%;">
@@ -166,7 +166,7 @@
       <div style="background: rgba(0,0,0,0.15); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
           <span style="color: #8892b0; font-size: 13px;">Exchange Rate</span>
-          <span style="color: white; font-size: 13px; font-weight: 600;">1 ADA = 100 $BEEP</span>
+          <span style="color: white; font-size: 13px; font-weight: 600;">1 ADA = 5.48 $BEEP</span>
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
           <span style="color: #8892b0; font-size: 13px;">Network Fee</span>
@@ -249,7 +249,7 @@
     var adaInput = document.getElementById('ada-amount');
     var beepOutput = document.getElementById('beep-amount');
     var adaValue = parseFloat(adaInput.value) || 0;
-    var beepValue = adaValue * 100;
+    var beepValue = adaValue * 5.48;
     beepOutput.value = beepValue > 0 ? beepValue.toFixed(2) : '';
   }
 
@@ -263,7 +263,7 @@
       return;
     }
 
-    var beepAmount = (adaAmount * 100).toFixed(2);
+    var beepAmount = (adaAmount * 5.48).toFixed(2);
 
     statusDiv.style.display = 'block';
     statusDiv.innerHTML = '<div style="background: rgba(72,187,120,0.15); border: 1px solid rgba(72,187,120,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>Processing swap of ' + adaAmount + ' ADA for ' + beepAmount + ' $BEEP...</p></div>';
