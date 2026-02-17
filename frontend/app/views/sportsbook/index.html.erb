@@ -2,28 +2,33 @@
 
   <div class="sportsbook-header">
     <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-6">
-          <h1>Sportsbook</h1>
-          <p class="subtitle">Place wagers with $BEEP tokens</p>
-        </div>
-        <div class="col-xs-12 col-sm-6">
-          <div class="balance-display">
-            <span class="balance-label">$BEEP Balance</span>
-            <span class="balance-amount"><%= @account.balance rescue '0.00' %> <span class="currency">$BEEP</span></span>
-          </div>
-        </div>
+      <h1>SPORTSBOOK</h1>
+      <div class="balance-display">
+        <span class="balance-label">Balance</span>
+        <span class="balance-amount"><%= @account.balance rescue '0.00' %> <span class="currency">$BEEP</span></span>
       </div>
     </div>
   </div>
 
+  <ul class="sport-tabs">
+    <% %w[mlb nfl nba nhl].each do |sport| %>
+      <% sport_icons = { 'mlb' => 'fa-baseball', 'nfl' => 'fa-football', 'nba' => 'fa-basketball', 'nhl' => 'fa-hockey-puck' } %>
+      <li class="<%= 'active' if @sport == sport %>">
+        <%= link_to sportsbook_path(sport: sport) do %>
+          <i class="fa <%= sport_icons[sport] %>"></i>
+          <%= sport.upcase %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
   <div class="container">
 
     <% if flash[:notice] %>
-      <div class="alert alert-notice"><%= flash[:notice] %></div>
+      <div class="alert-notice"><%= flash[:notice] %></div>
     <% end %>
     <% if flash[:alert] %>
-      <div class="alert alert-alert"><%= flash[:alert] %></div>
+      <div class="alert-alert"><%= flash[:alert] %></div>
     <% end %>
 
     <% unless @has_beep %>
@@ -34,140 +39,157 @@
       </div>
     <% end %>
 
-    <ul class="sport-tabs">
-      <% %w[mlb nfl nba nhl].each do |sport| %>
-        <% sport_icons = { 'mlb' => 'fa-baseball', 'nfl' => 'fa-football', 'nba' => 'fa-basketball', 'nhl' => 'fa-hockey-puck' } %>
-        <li class="<%= 'active' if @sport == sport %>">
-          <%= link_to sportsbook_path(sport: sport) do %>
-            <i class="fa <%= sport_icons[sport] %>"></i>
-            <%= sport.upcase %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-
     <% if @open_wagers.present? %>
       <div class="active-wagers-bar">
         <h4 class="wagers-title"><i class="fa fa-receipt"></i> Active Wagers (<%= @open_wagers.size %>)</h4>
         <% @open_wagers.each do |wager| %>
           <div class="wager-item">
-            <span class="wager-payout">Win: <%= wager.potential_payout %></span>
-            <span class="wager-amount"><%= wager.amount %> $BEEP</span>
-            <span class="wager-selection"><%= wager.selection %></span>
-            <span class="wager-odds"><%= wager.bet_type_display %> (<%= wager.odds_display %>)</span>
+            <span>
+              <span class="wager-selection"><%= wager.selection %></span>
+              <span class="wager-odds"><%= wager.bet_type_display %> (<%= wager.odds_display %>)</span>
+            </span>
+            <span>
+              <span class="wager-amount"><%= wager.amount %> $BEEP</span>
+              <span class="wager-payout">Win: <%= wager.potential_payout %></span>
+            </span>
           </div>
         <% end %>
         <%= link_to 'View All Bets →', my_bets_path, class: 'view-all-link' %>
       </div>
     <% end %>
 
-    <div class="games-header clearfix">
-      <% league_labels = { 'mlb' => 'MLB Games', 'nfl' => 'NFL Games', 'nba' => 'NBA Games', 'nhl' => 'NHL Games' } %>
-      <span class="games-title"><%= league_labels[@sport] || 'Games' %></span>
-      <span class="games-count"><%= @games.size %> games available</span>
-    </div>
+    <div class="games-section">
+      <div class="games-header">
+        <% league_labels = { 'mlb' => 'MLB GAMES', 'nfl' => 'NFL GAMES', 'nba' => 'NBA GAMES', 'nhl' => 'NHL GAMES' } %>
+        <span class="games-title"><%= league_labels[@sport] || 'GAMES' %></span>
+        <span class="games-count"><%= @games.size %> games available</span>
+      </div>
 
-    <% if @games.any? %>
-      <div class="odds-table">
-        <div class="odds-table-header clearfix">
-          <span class="col-matchup">Matchup</span>
-          <span class="col-spread">Spread</span>
-          <span class="col-total">Total</span>
-          <span class="col-ml">Moneyline</span>
-        </div>
-
+      <% if @games.any? %>
         <% @games.each do |game| %>
           <% odds = game[:odds] || {} %>
           <% ml = odds[:moneyline] || {} %>
           <% sp = odds[:spread] || {} %>
           <% tot = odds[:total] || {} %>
           <% start_time = game[:start_date] ? Time.parse(game[:start_date]) : nil rescue nil %>
+          <% start_time_str = start_time ? start_time.iso8601 : '' %>
+          <%
+            away_city, away_mascot = split_team_name(game[:away_team])
+            home_city, home_mascot = split_team_name(game[:home_team])
+          %>
 
-          <div class="game-row">
-            <div class="game-time">
-              <% if start_time %>
-                <i class="fa fa-clock"></i> <%= start_time.strftime('%b %d, %l:%M %p') %>
-              <% end %>
-              <% if game[:is_live] %>
-                <span class="live-badge"><i class="fa fa-circle"></i> LIVE</span>
-              <% end %>
+          <div class="game-card">
+            <div class="game-date-bar">
+              <span>
+                <% if start_time %>
+                  <%= start_time.strftime('%A, %B %e').strip %>
+                <% end %>
+              </span>
+              <span>
+                <% if game[:is_live] %>
+                  <span class="live-badge"><i class="fa fa-circle"></i> LIVE</span>
+                <% elsif start_time %>
+                  <span class="game-time"><%= start_time.strftime('%l:%M %p ET').strip %></span>
+                <% end %>
+              </span>
             </div>
 
-            <div class="team-line">
-              <div class="team-name"><%= game[:away_team] %></div>
-              <div class="odds-cell">
+            <div class="game-matchup-panel">
+              <div class="split-away"></div>
+              <div class="split-home"></div>
+              <span class="split-at-symbol">AT</span>
+              <div class="team-block team-block-away">
+                <% if away_city.present? %>
+                  <div class="team-city"><%= away_city %></div>
+                <% end %>
+                <div class="team-mascot"><%= away_mascot %></div>
+              </div>
+              <div class="team-block team-block-home">
+                <% if home_city.present? %>
+                  <div class="team-city"><%= home_city %></div>
+                <% end %>
+                <div class="team-mascot"><%= home_mascot %></div>
+              </div>
+            </div>
+
+            <div class="odds-header-row">
+              <span class="oh-matchup"></span>
+              <span class="oh-spread">SPREAD</span>
+              <span class="oh-total">TOTAL</span>
+              <span class="oh-ml">MONEY</span>
+            </div>
+
+            <div class="odds-row">
+              <span class="or-team"><%= away_mascot %></span>
+              <div class="or-cells">
                 <% if sp[:away_points] && sp[:away] %>
-                  <button type="button" class="odds-btn" onclick="openBetSlip('<%= game[:fixture_id] %>', '<%= game[:game_id] %>', '<%= game[:away_team] %>', '<%= game[:home_team] %>', '<%= start_time %>', 'spread', '<%= game[:away_team] %>', '<%= sp[:away_points] %>', '<%= sp[:away] %>', '<%= @sport %>', '<%= game[:league] %>')">
+                  <button type="button" class="odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="spread" data-selection="<%= game[:away_team] %>" data-points="<%= sp[:away_points] %>" data-odds="<%= sp[:away] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
                     <span class="odds-line"><%= sp[:away_points].to_f > 0 ? "+#{sp[:away_points]}" : sp[:away_points] %></span>
                     <span class="odds-price"><%= sp[:away].to_i > 0 ? "+#{sp[:away].to_i}" : sp[:away].to_i %></span>
                   </button>
                 <% else %>
-                  <span style="color: #ccc;">--</span>
+                  <span class="odds-na">--</span>
                 <% end %>
-              </div>
-              <div class="odds-cell">
+
                 <% if tot[:over] && tot[:points] %>
-                  <button type="button" class="odds-btn" onclick="openBetSlip('<%= game[:fixture_id] %>', '<%= game[:game_id] %>', '<%= game[:away_team] %>', '<%= game[:home_team] %>', '<%= start_time %>', 'total', 'Over', '<%= tot[:points] %>', '<%= tot[:over] %>', '<%= @sport %>', '<%= game[:league] %>')">
+                  <button type="button" class="odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="total" data-selection="Over" data-points="<%= tot[:points] %>" data-odds="<%= tot[:over] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
                     <span class="odds-line">O <%= tot[:points] %></span>
                     <span class="odds-price"><%= tot[:over].to_i > 0 ? "+#{tot[:over].to_i}" : tot[:over].to_i %></span>
                   </button>
                 <% else %>
-                  <span style="color: #ccc;">--</span>
+                  <span class="odds-na">--</span>
                 <% end %>
-              </div>
-              <div class="odds-cell">
+
                 <% if ml[:away] %>
-                  <button type="button" class="odds-btn" onclick="openBetSlip('<%= game[:fixture_id] %>', '<%= game[:game_id] %>', '<%= game[:away_team] %>', '<%= game[:home_team] %>', '<%= start_time %>', 'moneyline', '<%= game[:away_team] %>', '', '<%= ml[:away] %>', '<%= @sport %>', '<%= game[:league] %>')">
-                    <span class="odds-price" style="font-size: 16px;"><%= ml[:away].to_i > 0 ? "+#{ml[:away].to_i}" : ml[:away].to_i %></span>
+                  <button type="button" class="odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="moneyline" data-selection="<%= game[:away_team] %>" data-points="" data-odds="<%= ml[:away] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
+                    <span class="odds-price" style="font-size: 14px;"><%= ml[:away].to_i > 0 ? "+#{ml[:away].to_i}" : ml[:away].to_i %></span>
                   </button>
                 <% else %>
-                  <span style="color: #ccc;">--</span>
+                  <span class="odds-na">--</span>
                 <% end %>
               </div>
             </div>
 
-            <div class="team-line">
-              <div class="team-name"><%= game[:home_team] %></div>
-              <div class="odds-cell">
+            <div class="odds-row">
+              <span class="or-team"><%= home_mascot %></span>
+              <div class="or-cells">
                 <% if sp[:home_points] && sp[:home] %>
-                  <button type="button" class="odds-btn" onclick="openBetSlip('<%= game[:fixture_id] %>', '<%= game[:game_id] %>', '<%= game[:away_team] %>', '<%= game[:home_team] %>', '<%= start_time %>', 'spread', '<%= game[:home_team] %>', '<%= sp[:home_points] %>', '<%= sp[:home] %>', '<%= @sport %>', '<%= game[:league] %>')">
+                  <button type="button" class="odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="spread" data-selection="<%= game[:home_team] %>" data-points="<%= sp[:home_points] %>" data-odds="<%= sp[:home] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
                     <span class="odds-line"><%= sp[:home_points].to_f > 0 ? "+#{sp[:home_points]}" : sp[:home_points] %></span>
                     <span class="odds-price"><%= sp[:home].to_i > 0 ? "+#{sp[:home].to_i}" : sp[:home].to_i %></span>
                   </button>
                 <% else %>
-                  <span style="color: #ccc;">--</span>
+                  <span class="odds-na">--</span>
                 <% end %>
-              </div>
-              <div class="odds-cell">
+
                 <% if tot[:under] && tot[:points] %>
-                  <button type="button" class="odds-btn" onclick="openBetSlip('<%= game[:fixture_id] %>', '<%= game[:game_id] %>', '<%= game[:away_team] %>', '<%= game[:home_team] %>', '<%= start_time %>', 'total', 'Under', '<%= tot[:points] %>', '<%= tot[:under] %>', '<%= @sport %>', '<%= game[:league] %>')">
+                  <button type="button" class="odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="total" data-selection="Under" data-points="<%= tot[:points] %>" data-odds="<%= tot[:under] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
                     <span class="odds-line">U <%= tot[:points] %></span>
                     <span class="odds-price"><%= tot[:under].to_i > 0 ? "+#{tot[:under].to_i}" : tot[:under].to_i %></span>
                   </button>
                 <% else %>
-                  <span style="color: #ccc;">--</span>
+                  <span class="odds-na">--</span>
                 <% end %>
-              </div>
-              <div class="odds-cell">
+
                 <% if ml[:home] %>
-                  <button type="button" class="odds-btn" onclick="openBetSlip('<%= game[:fixture_id] %>', '<%= game[:game_id] %>', '<%= game[:away_team] %>', '<%= game[:home_team] %>', '<%= start_time %>', 'moneyline', '<%= game[:home_team] %>', '', '<%= ml[:home] %>', '<%= @sport %>', '<%= game[:league] %>')">
-                    <span class="odds-price" style="font-size: 16px;"><%= ml[:home].to_i > 0 ? "+#{ml[:home].to_i}" : ml[:home].to_i %></span>
+                  <button type="button" class="odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="moneyline" data-selection="<%= game[:home_team] %>" data-points="" data-odds="<%= ml[:home] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
+                    <span class="odds-price" style="font-size: 14px;"><%= ml[:home].to_i > 0 ? "+#{ml[:home].to_i}" : ml[:home].to_i %></span>
                   </button>
                 <% else %>
-                  <span style="color: #ccc;">--</span>
+                  <span class="odds-na">--</span>
                 <% end %>
               </div>
             </div>
           </div>
         <% end %>
-      </div>
-    <% else %>
-      <div class="no-games">
-        <i class="fa fa-calendar-xmark"></i>
-        <p>No games available for <%= @sport.upcase %> right now.</p>
-        <p class="sub">Check back later or try a different sport.</p>
-      </div>
-    <% end %>
+      <% else %>
+        <div class="no-games">
+          <i class="fa fa-calendar-xmark"></i>
+          <p>No games available for <%= @sport.upcase %> right now.</p>
+          <p class="sub">Check back later or try a different sport.</p>
+        </div>
+      <% end %>
+    </div>
 
   </div>
 </div>
@@ -176,7 +198,7 @@
   <div class="bet-slip-content">
     <div class="bet-slip-card">
 
-      <div class="bet-slip-header clearfix">
+      <div class="bet-slip-header">
         <h3><i class="fa fa-receipt"></i> Bet Slip</h3>
         <button class="close-btn" onclick="closeBetSlip()"><i class="fa fa-xmark"></i></button>
       </div>
@@ -241,6 +263,13 @@
 </div>
 
 <script>
+  document.querySelectorAll('.js-bet-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var d = this.dataset;
+      openBetSlip(d.fixture, d.game, d.away, d.home, d.start, d.type, d.selection, d.points, d.odds, d.sport, d.league);
+    });
+  });
+
   function openBetSlip(fixtureId, gameId, awayTeam, homeTeam, startTime, betType, selection, points, odds, sport, league) {
     document.getElementById('wager_fixture_id').value = fixtureId;
     document.getElementById('wager_game_id').value = gameId;
@@ -250,7 +279,7 @@
     document.getElementById('wager_bet_type').value = betType;
     document.getElementById('wager_selection').value = selection;
     document.getElementById('wager_odds').value = odds;
-    document.getElementById('wager_points').value = points;
+    document.getElementById('wager_points').value = points || '';
     document.getElementById('wager_sport').value = sport;
     document.getElementById('wager_league').value = league;
 

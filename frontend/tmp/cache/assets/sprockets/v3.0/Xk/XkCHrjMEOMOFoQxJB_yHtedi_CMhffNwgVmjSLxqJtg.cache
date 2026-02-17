@@ -1,42 +1,0 @@
-{:uriI"Œfile://app/assets/javascripts/templates/dashboard.html?type=text/ng-html&id=e48e23e8291af692866490470fe87f035db6d8f4c413a6e54e7d0d9e1572c8ec:ET:load_pathI"app/assets/javascripts;T:filenameI"4app/assets/javascripts/templates/dashboard.html;T:	nameI"templates/dashboard;T:logical_pathI"templates/dashboard.html;T:content_typeI"text/ng-html;T:sourceI"$<h1 ng-class="{ 'hidden-xs': hasContest }">Dashboard</h1>
-<h1 class="current-contest-header"></h1>
-<div class="dashboard">
-  <div class="contests" ng-class="{ 'hidden-xs': hasContest }">
-    <a href="#/games" class="new-ticket">Start New Game</a>
-    <ul>
-      <li>
-        <button ng-click="filterContests('live')" class="contest-tab" ng-class="{selected: contestStatus=='live'}">
-          Live
-        </button>
-      </li>
-      <li class="middle-btn">
-        <button ng-click="filterContests('upcoming')" class="contest-tab" ng-class="{selected: contestStatus=='upcoming'}">
-          Upcoming
-        </button>
-      </li>
-      <li>
-        <button ng-click="filterContests('past')" class="contest-tab" ng-class="{selected: contestStatus=='past'}">
-          History
-        </button>
-      </li>
-      <div class="clearfix"></div>
-    </ul>
-    <div class="clearfix"></div>
-    <div class="contests-outer-container">
-      <div class="contest" ng-repeat="contest in contests">
-        <a ui-sref="dashboard.contestShow({ id: contest.id })">
-          <game-card sb-game="contest.game" sb-include-start-time="true">
-          </game-card>
-        </a>
-        <contest-tickets sb-contest="contest"></contest-tickets>
-      </div>
-    </div>
-  </div>
-  <div ui-view="content" class="players">
-  </div>
-</div>;T:metadata{	:dependencieso:Set:
-@hash}
-I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Bfile-digest://app/assets/javascripts/templates/dashboard.html;TTF:charsetI"
-utf-8;F:digest"%rº˜ªêÿ3úƒÞ]ü°ÏZ“ëè£ÞŸ7ÛÍ²Ô\8â`:lengthi$:dependencies_digest"%$Zèò
-ÕAMµ'B9dÎëŠç6,ÂÔ¸Ö>o/”:idI"Ee48e23e8291af692866490470fe87f035db6d8f4c413a6e54e7d0d9e1572c8ec;F:
-mtimel+H³Éh

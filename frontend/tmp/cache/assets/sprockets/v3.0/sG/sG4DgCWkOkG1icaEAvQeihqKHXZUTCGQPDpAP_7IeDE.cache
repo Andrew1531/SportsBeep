@@ -1,13 +1,0 @@
-{:uriI"file://app/assets/javascripts/templates/games/index.html?type=text/ng-html&id=d21a0fadc7fee6e91ebecb40e561c169ff94219ad37169128a069a72ff0530b6:ET:load_pathI"app/assets/javascripts;T:filenameI"6app/assets/javascripts/templates/games/index.html;T:	nameI"templates/games/index;T:logical_pathI"templates/games/index.html;T:content_typeI"text/ng-html;T:sourceI"ü<h1>Select a game</h1>
-<ul class="games-list row">
-  <li ng-repeat="game in games">
-    <a ng-href="#/games/{{game.id}}">
-      <game-card sb-game="game" sb-center-circle-text="AT" sb-include-start-time="true">
-      </game-card>
-    </a>
-  </li>
-</ul>;T:metadata{	:dependencieso:Set:
-@hash}
-I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Dfile-digest://app/assets/javascripts/templates/games/index.html;TTF:charsetI"
-utf-8;F:digest"%¬K8v¤aò€‚s;s° ú?®ÁÉt¬Ó©Œè:lengthiü:dependencies_digest"%—ãX?âŠƒeÇ–$Ò#.%ØèÀh;]ÀdKHÊÀ:idI"Ed21a0fadc7fee6e91ebecb40e561c169ff94219ad37169128a069a72ff0530b6;F:
-mtimel+H³Éh
