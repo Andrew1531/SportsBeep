@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
 
   has_many :transactions, through: :account
   has_many :tickets
+  has_many :wagers
   has_many :mlb_tickets, class_name: 'Mlb::Ticket'
   has_many :nfl_tickets, class_name: 'Nfl::Ticket'
 

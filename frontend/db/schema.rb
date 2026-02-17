@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_10_14_212347) do
+ActiveRecord::Schema.define(version: 2026_02_17_100000) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "user_id"
@@ -454,6 +454,33 @@ ActiveRecord::Schema.define(version: 2025_10_14_212347) do
     t.index ["promo_code_id"], name: "index_users_on_promo_code_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["user_id"], name: "index_users_on_user_id"
+  end
+
+  create_table "wagers", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "sport", null: false
+    t.string "league"
+    t.string "fixture_id"
+    t.string "game_id"
+    t.string "home_team"
+    t.string "away_team"
+    t.datetime "game_start_time"
+    t.string "bet_type", null: false
+    t.string "selection", null: false
+    t.string "selection_detail"
+    t.decimal "odds", precision: 10, scale: 2
+    t.decimal "points", precision: 5, scale: 1
+    t.integer "amount_cents", default: 0, null: false
+    t.integer "potential_payout_cents", default: 0, null: false
+    t.string "status", default: "pending", null: false
+    t.string "result"
+    t.string "sportsbook"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sport"], name: "index_wagers_on_sport"
+    t.index ["status"], name: "index_wagers_on_status"
+    t.index ["user_id", "status"], name: "index_wagers_on_user_id_and_status"
+    t.index ["user_id"], name: "index_wagers_on_user_id"
   end
 
 end
