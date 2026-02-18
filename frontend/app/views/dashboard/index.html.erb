@@ -68,7 +68,7 @@
         <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">
           <i class="fa fa-link" style="color: #a29bfe; margin-right: 8px;"></i>Connected Wallets
         </h4>
-        <%= link_to vending_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
+        <%= link_to wallet_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
           Manage Wallets <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
         <% end %>
       </div>
@@ -112,7 +112,7 @@
       </div>
       <% unless @user.ethereum_wallet_address.present? && @user.cardano_wallet_address.present? %>
         <div style="margin-top: 10px; text-align: center;">
-          <%= link_to vending_path, style: 'display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
+          <%= link_to wallet_path, style: 'display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
             <i class="fa fa-plus" style="margin-right: 6px;"></i> Connect a Wallet
           <% end %>
         </div>

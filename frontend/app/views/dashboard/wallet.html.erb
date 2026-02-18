@@ -12,267 +12,489 @@
       </div>
     <% end %>
 
-    <div style="margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    <div style="margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
       <div>
-        <h2 style="color: white; font-weight: 700; margin: 0 0 4px 0; font-size: 26px;">
-          <i class="fa fa-wallet" style="color: #a29bfe; margin-right: 8px;"></i>My Wallet
+        <h2 style="color: white; font-weight: 700; margin: 0 0 4px 0; font-size: 28px; font-family: 'BebasNeue', sans-serif; letter-spacing: 1px;">
+          <i class="fa fa-wallet" style="color: #a29bfe; margin-right: 10px;"></i>MY WALLET
         </h2>
-        <p style="color: #8892b0; margin: 0; font-size: 15px;">Manage your $BEEP tokens, ADA balance & swaps</p>
-        <div style="margin-top: 10px;">
-          <%= render 'shared/wallet_status_bar' %>
-        </div>
+        <p style="color: #8892b0; margin: 0; font-size: 14px;">Balances, wallets, swaps & transactions — all in one place</p>
       </div>
-      <%= link_to user_dashboard_path, style: 'display: inline-block; padding: 11px 28px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; margin-top: 5px;' do %>
-        <i class="fa fa-arrow-left" style="margin-right: 6px;"></i> Back to Dashboard
+      <%= link_to user_dashboard_path, style: 'display: inline-block; padding: 10px 22px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 5px;' do %>
+        <i class="fa fa-arrow-left" style="margin-right: 6px;"></i> Dashboard
       <% end %>
     </div>
 
-    <div class="row" style="margin-bottom: 20px;">
-      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center; transition: transform 0.2s;">
-          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
-            <i class="fa fa-coins" style="color: white; font-size: 20px;"></i>
+    <div class="row" style="margin-bottom: 24px;">
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 16px; text-align: center;">
+          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+            <i class="fa fa-coins" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">$BEEP Balance</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 24px;"><%= @account.balance rescue '0.00' %></h3>
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">$BEEP</p>
+          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @account.balance rescue '0.00' %></h3>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
-          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
-            <i class="fa fa-gift" style="color: white; font-size: 20px;"></i>
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 16px; text-align: center;">
+          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+            <i class="fa fa-gift" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Promo Balance</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 24px;"><%= @account.promo_balance rescue '0.00' %></h3>
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Promo</p>
+          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @account.promo_balance rescue '0.00' %></h3>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
-          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00b894, #00cec9); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
-            <i class="fa fa-sack-dollar" style="color: white; font-size: 20px;"></i>
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 16px; text-align: center;">
+          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #00b894, #00cec9); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+            <i class="fa fa-sack-dollar" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Total Value</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 24px;"><%= (@account.balance + @account.promo_balance) rescue '$0.00' %></h3>
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Total</p>
+          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= (@account.balance + @account.promo_balance) rescue '0.00' %></h3>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
-          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00b4d8, #0077b6); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
-            <i class="fa fa-clock-rotate-left" style="color: white; font-size: 20px;"></i>
+      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 16px; text-align: center;">
+          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #00b4d8, #0077b6); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+            <i class="fa fa-clock-rotate-left" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Transactions</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 24px;"><%= @transactions.size %></h3>
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Txns</p>
+          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @transactions.size %></h3>
         </div>
       </div>
     </div>
 
-    <% if @user.cardano_wallet_address.present? %>
-      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px;">
-          <div style="display: flex; align-items: center;">
-            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0088cc, #00b4d8); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-              <i class="fa fa-wallet" style="color: white; font-size: 18px;"></i>
+    <div style="display: flex; gap: 6px; margin-bottom: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 4px;">
+      <button onclick="showWalletTab('wallets')" id="tab-wallets" style="flex: 1; padding: 11px 0; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;">
+        <i class="fa fa-link" style="margin-right: 5px;"></i> WALLETS
+      </button>
+      <button onclick="showWalletTab('swap')" id="tab-swap" style="flex: 1; padding: 11px 0; background: transparent; color: #8892b0; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;">
+        <i class="fa fa-right-left" style="margin-right: 5px;"></i> SWAP
+      </button>
+      <button onclick="showWalletTab('history')" id="tab-history" style="flex: 1; padding: 11px 0; background: transparent; color: #8892b0; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;">
+        <i class="fa fa-receipt" style="margin-right: 5px;"></i> HISTORY
+      </button>
+    </div>
+
+    <div id="panel-wallets">
+      <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;">
+          <div style="background: linear-gradient(135deg, rgba(246,133,27,0.12), rgba(226,118,27,0.08)); border: 1px solid rgba(246,133,27,0.3); border-radius: 14px; padding: 24px 28px; height: 100%;">
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+              <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #f6851b, #e2761b); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 14px;">
+                <i class="fa-brands fa-ethereum" style="color: white; font-size: 24px;"></i>
+              </div>
+              <div style="flex: 1;">
+                <h4 style="color: white; font-weight: 700; margin: 0; font-size: 18px;">MetaMask</h4>
+                <p style="color: #8892b0; margin: 0; font-size: 13px;">Ethereum / EVM</p>
+              </div>
+              <% if @user.ethereum_wallet_address.present? %>
+                <span style="padding: 5px 14px; background: rgba(72,187,120,0.15); color: #68d391; border: 1px solid rgba(72,187,120,0.3); border-radius: 20px; font-size: 12px; font-weight: 600;"><i class="fa fa-circle" style="font-size: 6px; margin-right: 4px; vertical-align: middle;"></i> Connected</span>
+              <% else %>
+                <span style="padding: 5px 14px; background: rgba(245,101,101,0.1); color: #fc8181; border: 1px solid rgba(245,101,101,0.2); border-radius: 20px; font-size: 12px; font-weight: 600;">Not Connected</span>
+              <% end %>
             </div>
-            <div>
-              <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">Cardano Wallet</h4>
-              <p style="color: #8892b0; margin: 0; font-size: 12px;">Connected to Mainnet</p>
-            </div>
+
+            <% if @user.ethereum_wallet_address.present? %>
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px;">
+                <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Address</p>
+                <code style="color: #f6851b; word-break: break-all; font-size: 13px; line-height: 1.5;"><%= @user.ethereum_wallet_address %></code>
+              </div>
+              <div id="eth-balance-display" style="background: rgba(0,0,0,0.15); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: #8892b0; font-size: 13px;">ETH Balance</span>
+                  <span style="color: #f6851b; font-weight: 700; font-size: 18px;" id="eth-balance-value">
+                    <i class="fa fa-spinner fa-spin" style="font-size: 14px;"></i>
+                  </span>
+                </div>
+              </div>
+              <%= link_to disconnect_metamask_path(redirect_to: wallet_path), method: :delete, data: { confirm: 'Disconnect your MetaMask wallet?' }, style: 'display: inline-block; padding: 9px 20px; background: rgba(245,101,101,0.15); color: #fc8181; border: 1px solid rgba(245,101,101,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
+                <i class="fa fa-unlink" style="margin-right: 5px;"></i> Disconnect
+              <% end %>
+            <% else %>
+              <div style="text-align: center; padding: 10px 0 16px;">
+                <p style="color: #8892b0; margin: 0 0 18px; font-size: 14px; line-height: 1.6;">
+                  Connect your MetaMask browser extension to link your Ethereum wallet.
+                </p>
+                <button onclick="connectMetaMask()" id="metamask-connect-btn" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #f6851b, #e2761b); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(246,133,27,0.35); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                  <i class="fa-brands fa-ethereum" style="margin-right: 8px;"></i> Connect MetaMask
+                </button>
+                <p style="color: #8892b0; margin: 10px 0 0; font-size: 12px;">
+                  <i class="fa fa-shield-halved" style="margin-right: 4px;"></i>
+                  Don't have MetaMask? <a href="https://metamask.io/download/" target="_blank" style="color: #f6851b; text-decoration: underline;">Download here</a>
+                </p>
+              </div>
+            <% end %>
+            <div id="metamask-status" style="display: none; margin-top: 14px;"></div>
           </div>
-          <% if @wallet_info %>
-            <div style="text-align: right; margin-top: 5px;">
-              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">ADA Balance</p>
-              <h3 style="color: #00b4d8; font-weight: 700; margin: 0; font-size: 26px;"><%= sprintf('%.2f', @wallet_info[:ada_balance]) %> <span style="font-size: 14px; color: #8892b0;">ADA</span></h3>
+        </div>
+
+        <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;">
+          <div style="background: linear-gradient(135deg, rgba(0,136,204,0.12), rgba(0,180,216,0.08)); border: 1px solid rgba(0,180,216,0.3); border-radius: 14px; padding: 24px 28px; height: 100%;">
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+              <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #0088cc, #00b4d8); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 14px;">
+                <i class="fa fa-wallet" style="color: white; font-size: 22px;"></i>
+              </div>
+              <div style="flex: 1;">
+                <h4 style="color: white; font-weight: 700; margin: 0; font-size: 18px;">Cardano</h4>
+                <p style="color: #8892b0; margin: 0; font-size: 13px;">ADA / $BEEP</p>
+              </div>
+              <% if @user.cardano_wallet_address.present? %>
+                <span style="padding: 5px 14px; background: rgba(72,187,120,0.15); color: #68d391; border: 1px solid rgba(72,187,120,0.3); border-radius: 20px; font-size: 12px; font-weight: 600;"><i class="fa fa-circle" style="font-size: 6px; margin-right: 4px; vertical-align: middle;"></i> Connected</span>
+              <% else %>
+                <span style="padding: 5px 14px; background: rgba(245,101,101,0.1); color: #fc8181; border: 1px solid rgba(245,101,101,0.2); border-radius: 20px; font-size: 12px; font-weight: 600;">Not Connected</span>
+              <% end %>
             </div>
-          <% end %>
-        </div>
 
-        <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px;">
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Wallet Address</p>
-          <code style="color: #00b4d8; word-break: break-all; font-size: 12px; line-height: 1.5;"><%= @user.cardano_wallet_address %></code>
-        </div>
-
-        <% if @wallet_info && @wallet_info[:stake_address].present? %>
-          <div style="background: rgba(0,0,0,0.15); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
-            <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Stake Address</p>
-            <code style="color: #63b3ed; word-break: break-all; font-size: 11px;"><%= @wallet_info[:stake_address] %></code>
-          </div>
-        <% end %>
-
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-          <p style="color: #8892b0; margin: 0; font-size: 13px;">
-            <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
-            $BEEP token rewards will be sent to this wallet
-          </p>
-          <% if @wallet_info && @wallet_info[:status] == 'empty' %>
-            <span style="display: inline-block; padding: 4px 12px; background: rgba(253,203,110,0.15); color: #fdcb6e; border: 1px solid rgba(253,203,110,0.3); border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 5px;">No transactions yet</span>
-          <% elsif @wallet_info && @wallet_info[:status] == 'active' %>
-            <span style="display: inline-block; padding: 4px 12px; background: rgba(72,187,120,0.15); color: #68d391; border: 1px solid rgba(72,187,120,0.3); border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 5px;">Active</span>
-          <% end %>
-        </div>
-      </div>
-    <% else %>
-      <div style="background: rgba(0,136,204,0.1); border: 1px solid rgba(0,136,204,0.25); border-radius: 14px; padding: 18px 24px; margin-bottom: 20px;">
-        <p style="color: #63b3ed; margin: 0; font-size: 14px;">
-          <i class="fa fa-wallet" style="margin-right: 6px;"></i>
-          <strong>Connect your Cardano wallet!</strong> Link your wallet address in your account settings to receive $BEEP token rewards.
-        </p>
-      </div>
-    <% end %>
-
-    <div style="background: linear-gradient(135deg, rgba(108,92,231,0.12), rgba(162,155,254,0.08)); border: 1px solid rgba(162,155,254,0.25); border-radius: 14px; padding: 24px 28px; margin-bottom: 20px;">
-      <div style="display: flex; align-items: center; margin-bottom: 20px;">
-        <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 14px;">
-          <i class="fa fa-right-left" style="color: white; font-size: 18px;"></i>
-        </div>
-        <div>
-          <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">Swap ADA for $BEEP</h4>
-          <p style="color: #8892b0; margin: 0; font-size: 12px;">Exchange your ADA tokens for $BEEP</p>
-        </div>
-      </div>
-
-      <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 20px; margin-bottom: 14px;">
-        <div style="margin-bottom: 16px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-            <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0;">You Send</p>
-            <% if @wallet_info %>
-              <p style="color: #8892b0; font-size: 12px; margin: 0;">Balance: <span style="color: #00b4d8;"><%= sprintf('%.2f', @wallet_info[:ada_balance]) %> ADA</span></p>
+            <% if @user.cardano_wallet_address.present? %>
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px;">
+                <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Address</p>
+                <code style="color: #00b4d8; word-break: break-all; font-size: 13px; line-height: 1.5;"><%= @user.cardano_wallet_address %></code>
+              </div>
+              <% if @wallet_info %>
+                <div style="background: rgba(0,0,0,0.15); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #8892b0; font-size: 13px;">ADA Balance</span>
+                    <span style="color: #00b4d8; font-weight: 700; font-size: 18px;"><%= sprintf('%.2f', @wallet_info[:ada_balance]) %> ADA</span>
+                  </div>
+                </div>
+                <% if @wallet_info[:stake_address].present? rescue false %>
+                  <div style="background: rgba(0,0,0,0.1); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
+                    <p style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Stake</p>
+                    <code style="color: #63b3ed; word-break: break-all; font-size: 11px;"><%= @wallet_info[:stake_address] %></code>
+                  </div>
+                <% end %>
+              <% end %>
+              <%= link_to disconnect_cardano_path(redirect_to: wallet_path), method: :delete, data: { confirm: 'Disconnect your Cardano wallet?' }, style: 'display: inline-block; padding: 9px 20px; background: rgba(245,101,101,0.15); color: #fc8181; border: 1px solid rgba(245,101,101,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
+                <i class="fa fa-unlink" style="margin-right: 5px;"></i> Disconnect
+              <% end %>
+            <% else %>
+              <div style="text-align: center; padding: 10px 0 16px;">
+                <p style="color: #8892b0; margin: 0 0 18px; font-size: 14px; line-height: 1.6;">
+                  Enter your Cardano wallet address to receive $BEEP token rewards.
+                </p>
+                <%= form_tag(connect_cardano_path, method: :post, id: 'cardano-form') do %>
+                  <input type="hidden" name="redirect_to" value="<%= wallet_path %>">
+                  <div style="position: relative; margin-bottom: 12px;">
+                    <input type="text" name="cardano_address" id="cardano-address-input" placeholder="addr1q..." style="width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: white; font-size: 14px; outline: none; box-sizing: border-box;" oninput="validateCardanoAddress()">
+                  </div>
+                  <button type="submit" id="cardano-connect-btn" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,136,204,0.35); transition: opacity 0.2s; opacity: 0.5;" disabled onmouseover="if(!this.disabled)this.style.opacity='0.9'" onmouseout="this.style.opacity=this.disabled?'0.5':'1'">
+                    <i class="fa fa-wallet" style="margin-right: 8px;"></i> Connect Cardano
+                  </button>
+                <% end %>
+                <p style="color: #8892b0; margin: 10px 0 0; font-size: 12px;">
+                  <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
+                  Nami, Eternl, Yoroi & more supported
+                </p>
+              </div>
             <% end %>
           </div>
-          <div style="display: flex; align-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px;">
-            <input type="number" id="ada-amount" placeholder="0.00" min="0" step="0.01" style="flex: 1; background: transparent; border: none; color: white; font-size: 20px; font-weight: 600; outline: none; width: 100%;" oninput="updateBeepAmount()">
-            <div style="display: flex; align-items: center; background: rgba(0,136,204,0.2); padding: 6px 14px; border-radius: 8px; margin-left: 10px;">
-              <span style="color: #00b4d8; font-weight: 700; font-size: 14px;">ADA</span>
+        </div>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 22px;">
+        <h5 style="color: #8892b0; font-weight: 600; margin: 0 0 14px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">
+          <i class="fa fa-circle-question" style="margin-right: 6px;"></i>Supported Wallets
+        </h5>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6" style="margin-bottom: 10px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <span style="padding: 5px 12px; background: rgba(246,133,27,0.1); color: #f6851b; border-radius: 6px; font-size: 12px; font-weight: 600;"><i class="fa-brands fa-ethereum" style="margin-right: 4px;"></i> MetaMask</span>
+              <span style="padding: 5px 12px; background: rgba(246,133,27,0.1); color: #f6851b; border-radius: 6px; font-size: 12px; font-weight: 600;">WalletConnect</span>
+              <span style="padding: 5px 12px; background: rgba(246,133,27,0.1); color: #f6851b; border-radius: 6px; font-size: 12px; font-weight: 600;">Coinbase</span>
+              <span style="padding: 5px 12px; background: rgba(246,133,27,0.1); color: #f6851b; border-radius: 6px; font-size: 12px; font-weight: 600;">Trust</span>
             </div>
           </div>
-        </div>
-
-        <div style="text-align: center; margin: 12px 0;">
-          <div style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(108,92,231,0.3); border: 1px solid rgba(162,155,254,0.4); border-radius: 50%;">
-            <i class="fa fa-arrow-down" style="color: #a29bfe; font-size: 14px;"></i>
-          </div>
-        </div>
-
-        <div>
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-            <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0;">You Receive</p>
-            <p style="color: #8892b0; font-size: 12px; margin: 0;">Rate: <span style="color: #a29bfe;">1 ADA = 5.48 $BEEP</span></p>
-          </div>
-          <div style="display: flex; align-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px;">
-            <input type="text" id="beep-amount" placeholder="0.00" readonly style="flex: 1; background: transparent; border: none; color: white; font-size: 20px; font-weight: 600; outline: none; width: 100%;">
-            <div style="display: flex; align-items: center; background: rgba(231,76,60,0.2); padding: 6px 14px; border-radius: 8px; margin-left: 10px;">
-              <span style="color: #e74c3c; font-weight: 700; font-size: 14px;">$BEEP</span>
+          <div class="col-xs-12 col-sm-6" style="margin-bottom: 10px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <span style="padding: 5px 12px; background: rgba(0,180,216,0.1); color: #00b4d8; border-radius: 6px; font-size: 12px; font-weight: 600;"><i class="fa fa-wallet" style="margin-right: 4px;"></i> Nami</span>
+              <span style="padding: 5px 12px; background: rgba(0,180,216,0.1); color: #00b4d8; border-radius: 6px; font-size: 12px; font-weight: 600;">Eternl</span>
+              <span style="padding: 5px 12px; background: rgba(0,180,216,0.1); color: #00b4d8; border-radius: 6px; font-size: 12px; font-weight: 600;">Yoroi</span>
+              <span style="padding: 5px 12px; background: rgba(0,180,216,0.1); color: #00b4d8; border-radius: 6px; font-size: 12px; font-weight: 600;">Flint</span>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div style="background: rgba(0,0,0,0.15); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span style="color: #8892b0; font-size: 13px;">Exchange Rate</span>
-          <span style="color: white; font-size: 13px; font-weight: 600;">1 ADA = 5.48 $BEEP</span>
+    <div id="panel-swap" style="display: none;">
+      <div style="background: linear-gradient(135deg, rgba(108,92,231,0.12), rgba(162,155,254,0.08)); border: 1px solid rgba(162,155,254,0.25); border-radius: 14px; padding: 24px 28px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 14px;">
+            <i class="fa fa-right-left" style="color: white; font-size: 18px;"></i>
+          </div>
+          <div>
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">Token Swap</h4>
+            <p style="color: #8892b0; margin: 0; font-size: 12px;">Exchange crypto for $BEEP tokens</p>
+          </div>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span style="color: #8892b0; font-size: 13px;">Network Fee</span>
-          <span style="color: white; font-size: 13px; font-weight: 600;">~0.17 ADA</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: #8892b0; font-size: 13px;">Estimated Time</span>
-          <span style="color: white; font-size: 13px; font-weight: 600;">~1-2 minutes</span>
-        </div>
-      </div>
 
-      <% if @user.cardano_wallet_address.present? %>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+          <button onclick="selectSwapChain('ada')" id="swap-ada-btn" style="flex: 1; padding: 12px; background: rgba(0,136,204,0.2); color: #00b4d8; border: 2px solid rgba(0,180,216,0.4); border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+            <i class="fa fa-wallet" style="margin-right: 6px;"></i> ADA &rarr; $BEEP
+          </button>
+          <button onclick="selectSwapChain('eth')" id="swap-eth-btn" style="flex: 1; padding: 12px; background: rgba(246,133,27,0.1); color: #8892b0; border: 2px solid rgba(255,255,255,0.1); border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+            <i class="fa-brands fa-ethereum" style="margin-right: 6px;"></i> ETH &rarr; $BEEP
+          </button>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 20px; margin-bottom: 14px;">
+          <div style="margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0;">You Send</p>
+            </div>
+            <div style="display: flex; align-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px;">
+              <input type="number" id="swap-input-amount" placeholder="0.00" min="0" step="0.01" style="flex: 1; background: transparent; border: none; color: white; font-size: 20px; font-weight: 600; outline: none; width: 100%;" oninput="updateSwapOutput()">
+              <div id="swap-input-label" style="display: flex; align-items: center; background: rgba(0,136,204,0.2); padding: 6px 14px; border-radius: 8px; margin-left: 10px;">
+                <span style="color: #00b4d8; font-weight: 700; font-size: 14px;">ADA</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin: 12px 0;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(108,92,231,0.3); border: 1px solid rgba(162,155,254,0.4); border-radius: 50%;">
+              <i class="fa fa-arrow-down" style="color: #a29bfe; font-size: 14px;"></i>
+            </div>
+          </div>
+
+          <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0;">You Receive</p>
+              <p style="color: #8892b0; font-size: 12px; margin: 0;" id="swap-rate-label">Rate: <span style="color: #a29bfe;">1 ADA = 5.48 $BEEP</span></p>
+            </div>
+            <div style="display: flex; align-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px;">
+              <input type="text" id="swap-output-amount" placeholder="0.00" readonly style="flex: 1; background: transparent; border: none; color: white; font-size: 20px; font-weight: 600; outline: none; width: 100%;">
+              <div style="display: flex; align-items: center; background: rgba(231,76,60,0.2); padding: 6px 14px; border-radius: 8px; margin-left: 10px;">
+                <span style="color: #e74c3c; font-weight: 700; font-size: 14px;">$BEEP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.15); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="color: #8892b0; font-size: 13px;">Exchange Rate</span>
+            <span style="color: white; font-size: 13px; font-weight: 600;" id="swap-rate-detail">1 ADA = 5.48 $BEEP</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="color: #8892b0; font-size: 13px;">Network Fee</span>
+            <span style="color: white; font-size: 13px; font-weight: 600;" id="swap-fee-detail">~0.17 ADA</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #8892b0; font-size: 13px;">Estimated Time</span>
+            <span style="color: white; font-size: 13px; font-weight: 600;">~1-2 minutes</span>
+          </div>
+        </div>
+
         <button onclick="initiateSwap()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(108,92,231,0.35); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-          Swap ADA for $BEEP
+          Swap for $BEEP
         </button>
         <p style="text-align: center; color: #8892b0; margin: 10px 0 0; font-size: 12px;">
           <i class="fa fa-shield-halved" style="margin-right: 4px;"></i>
-          Powered by Cardano smart contracts
+          Powered by blockchain smart contracts
         </p>
-      <% else %>
-        <div style="text-align: center; padding: 10px;">
-          <p style="color: #fdcb6e; font-size: 14px; margin: 0 0 10px;">
-            <i class="fa fa-exclamation-triangle" style="margin-right: 6px;"></i>
-            Connect your Cardano wallet to swap tokens
-          </p>
-          <%= link_to 'Connect Wallet', '#', style: 'display: inline-block; padding: 10px 24px; background: rgba(108,92,231,0.3); color: #a29bfe; border: 1px solid rgba(108,92,231,0.3); border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none;' %>
-        </div>
-      <% end %>
-
-      <div id="swap-status" style="display: none; margin-top: 14px;"></div>
+        <div id="swap-status" style="display: none; margin-top: 14px;"></div>
+      </div>
     </div>
 
-    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
-      <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between;">
-        <div style="display: flex; align-items: center;">
-          <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #fdcb6e, #e17055); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-            <i class="fa fa-clock-rotate-left" style="color: white; font-size: 16px;"></i>
+    <div id="panel-history" style="display: none;">
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
+        <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #fdcb6e, #e17055); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+              <i class="fa fa-clock-rotate-left" style="color: white; font-size: 16px;"></i>
+            </div>
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;">Transaction History</h4>
           </div>
-          <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;">Recent Transactions</h4>
-        </div>
-        <% if @transactions.any? %>
-          <%= link_to user_transactions_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
-            View All <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
+          <% if @transactions.any? %>
+            <%= link_to user_transactions_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
+              View All <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
+            <% end %>
           <% end %>
+        </div>
+
+        <% if @transactions.any? %>
+          <% @transactions.each do |txn| %>
+            <div style="padding: 14px 22px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center;">
+                <% amount_val = txn.amount_cents.to_i rescue 0 %>
+                <div style="width: 36px; height: 36px; background: <%= amount_val >= 0 ? 'rgba(0,184,148,0.15)' : 'rgba(231,76,60,0.15)' %>; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                  <i class="fa <%= amount_val >= 0 ? 'fa-arrow-down' : 'fa-arrow-up' %>" style="color: <%= amount_val >= 0 ? '#00b894' : '#e74c3c' %>; font-size: 14px;"></i>
+                </div>
+                <div>
+                  <p style="color: white; margin: 0; font-size: 14px; font-weight: 600;"><%= txn.description %></p>
+                  <p style="color: #8892b0; margin: 0; font-size: 12px;"><%= txn.created_at.strftime("%b %d, %Y %I:%M %p") %></p>
+                </div>
+              </div>
+              <span style="color: <%= amount_val >= 0 ? '#00b894' : '#e74c3c' %>; font-weight: 700; font-size: 15px;">
+                <%= amount_val >= 0 ? '+' : '' %><%= txn.amount %>
+              </span>
+            </div>
+          <% end %>
+        <% else %>
+          <div style="padding: 50px 20px; text-align: center;">
+            <i class="fa fa-receipt" style="font-size: 40px; color: rgba(255,255,255,0.12); margin-bottom: 14px; display: block;"></i>
+            <p style="color: #8892b0; margin: 0 0 4px; font-size: 15px; font-weight: 600;">No transactions yet</p>
+            <p style="color: rgba(255,255,255,0.3); margin: 0; font-size: 13px;">Enter a contest or swap tokens to get started!</p>
+          </div>
         <% end %>
       </div>
-
-      <% if @transactions.any? %>
-        <% @transactions.each do |txn| %>
-          <div style="padding: 14px 22px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center;">
-              <% amount_val = txn.amount_cents.to_i rescue 0 %>
-              <div style="width: 36px; height: 36px; background: <%= amount_val >= 0 ? 'rgba(0,184,148,0.15)' : 'rgba(231,76,60,0.15)' %>; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-                <i class="fa <%= amount_val >= 0 ? 'fa-arrow-down' : 'fa-arrow-up' %>" style="color: <%= amount_val >= 0 ? '#00b894' : '#e74c3c' %>; font-size: 14px;"></i>
-              </div>
-              <div>
-                <p style="color: white; margin: 0; font-size: 14px; font-weight: 600;"><%= txn.description %></p>
-                <p style="color: #8892b0; margin: 0; font-size: 12px;"><%= txn.created_at.strftime("%b %d, %Y %I:%M %p") %></p>
-              </div>
-            </div>
-            <span style="color: <%= amount_val >= 0 ? '#00b894' : '#e74c3c' %>; font-weight: 700; font-size: 15px;">
-              <%= amount_val >= 0 ? '+' : '' %><%= txn.amount %>
-            </span>
-          </div>
-        <% end %>
-      <% else %>
-        <div style="padding: 40px 20px; text-align: center;">
-          <i class="fa fa-receipt" style="font-size: 36px; color: rgba(255,255,255,0.15); margin-bottom: 12px;"></i>
-          <p style="color: #8892b0; margin: 0 0 4px; font-size: 15px; font-weight: 600;">No transactions yet</p>
-          <p style="color: rgba(255,255,255,0.3); margin: 0; font-size: 13px;">Enter a contest to get started!</p>
-        </div>
-      <% end %>
     </div>
 
   </div>
 </div>
 
+<%= form_tag(connect_metamask_path, method: :post, id: 'metamask-hidden-form', style: 'display:none;') do %>
+  <input type="hidden" name="ethereum_address" id="metamask-address-field" value="">
+  <input type="hidden" name="redirect_to" value="<%= wallet_path %>">
+<% end %>
+
 <script>
-  function updateBeepAmount() {
-    var adaInput = document.getElementById('ada-amount');
-    var beepOutput = document.getElementById('beep-amount');
-    var adaValue = parseFloat(adaInput.value) || 0;
-    var beepValue = adaValue * 5.48;
-    beepOutput.value = beepValue > 0 ? beepValue.toFixed(2) : '';
+  function showWalletTab(tab) {
+    var panels = ['wallets', 'swap', 'history'];
+    panels.forEach(function(p) {
+      var panel = document.getElementById('panel-' + p);
+      var tabBtn = document.getElementById('tab-' + p);
+      if (panel) panel.style.display = (p === tab) ? 'block' : 'none';
+      if (tabBtn) {
+        if (p === tab) {
+          tabBtn.style.background = 'linear-gradient(135deg, #6c5ce7, #a29bfe)';
+          tabBtn.style.color = 'white';
+        } else {
+          tabBtn.style.background = 'transparent';
+          tabBtn.style.color = '#8892b0';
+        }
+      }
+    });
+  }
+
+  var currentSwapChain = 'ada';
+  var ADA_RATE = 5.48;
+  var ETH_RATE = 14250;
+
+  function selectSwapChain(chain) {
+    currentSwapChain = chain;
+    var adaBtn = document.getElementById('swap-ada-btn');
+    var ethBtn = document.getElementById('swap-eth-btn');
+    var inputLabel = document.getElementById('swap-input-label');
+    var rateLabel = document.getElementById('swap-rate-label');
+    var rateDetail = document.getElementById('swap-rate-detail');
+    var feeDetail = document.getElementById('swap-fee-detail');
+
+    if (chain === 'ada') {
+      adaBtn.style.background = 'rgba(0,136,204,0.2)';
+      adaBtn.style.color = '#00b4d8';
+      adaBtn.style.borderColor = 'rgba(0,180,216,0.4)';
+      ethBtn.style.background = 'rgba(246,133,27,0.1)';
+      ethBtn.style.color = '#8892b0';
+      ethBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+      inputLabel.innerHTML = '<span style="color: #00b4d8; font-weight: 700; font-size: 14px;">ADA</span>';
+      rateLabel.innerHTML = 'Rate: <span style="color: #a29bfe;">1 ADA = 5.48 $BEEP</span>';
+      rateDetail.textContent = '1 ADA = 5.48 $BEEP';
+      feeDetail.textContent = '~0.17 ADA';
+    } else {
+      ethBtn.style.background = 'rgba(246,133,27,0.2)';
+      ethBtn.style.color = '#f6851b';
+      ethBtn.style.borderColor = 'rgba(246,133,27,0.4)';
+      adaBtn.style.background = 'rgba(0,136,204,0.1)';
+      adaBtn.style.color = '#8892b0';
+      adaBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+      inputLabel.innerHTML = '<span style="color: #f6851b; font-weight: 700; font-size: 14px;">ETH</span>';
+      rateLabel.innerHTML = 'Rate: <span style="color: #a29bfe;">1 ETH = 14,250 $BEEP</span>';
+      rateDetail.textContent = '1 ETH = 14,250 $BEEP';
+      feeDetail.textContent = '~0.005 ETH';
+    }
+    updateSwapOutput();
+  }
+
+  function updateSwapOutput() {
+    var input = document.getElementById('swap-input-amount');
+    var output = document.getElementById('swap-output-amount');
+    var val = parseFloat(input.value) || 0;
+    var rate = currentSwapChain === 'ada' ? ADA_RATE : ETH_RATE;
+    output.value = val > 0 ? (val * rate).toFixed(2) : '';
   }
 
   function initiateSwap() {
-    var adaAmount = parseFloat(document.getElementById('ada-amount').value);
+    var amount = parseFloat(document.getElementById('swap-input-amount').value);
     var statusDiv = document.getElementById('swap-status');
 
-    if (!adaAmount || adaAmount <= 0) {
+    if (!amount || amount <= 0) {
       statusDiv.style.display = 'block';
-      statusDiv.innerHTML = '<div style="background: rgba(245,101,101,0.15); border: 1px solid rgba(245,101,101,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fc8181; margin: 0; font-size: 14px;"><i class="fa fa-exclamation-circle" style="margin-right: 6px;"></i>Please enter a valid ADA amount to swap.</p></div>';
+      statusDiv.innerHTML = '<div style="background: rgba(245,101,101,0.15); border: 1px solid rgba(245,101,101,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fc8181; margin: 0; font-size: 14px;"><i class="fa fa-exclamation-circle" style="margin-right: 6px;"></i>Please enter a valid amount to swap.</p></div>';
       return;
     }
 
-    var beepAmount = (adaAmount * 5.48).toFixed(2);
+    var rate = currentSwapChain === 'ada' ? ADA_RATE : ETH_RATE;
+    var beepAmount = (amount * rate).toFixed(2);
+    var currencyLabel = currentSwapChain === 'ada' ? 'ADA' : 'ETH';
 
     statusDiv.style.display = 'block';
-    statusDiv.innerHTML = '<div style="background: rgba(72,187,120,0.15); border: 1px solid rgba(72,187,120,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>Processing swap of ' + adaAmount + ' ADA for ' + beepAmount + ' $BEEP...</p></div>';
+    statusDiv.innerHTML = '<div style="background: rgba(72,187,120,0.15); border: 1px solid rgba(72,187,120,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>Processing swap of ' + amount + ' ' + currencyLabel + ' for ' + beepAmount + ' $BEEP...</p></div>';
 
     setTimeout(function() {
-      statusDiv.innerHTML = '<div style="background: rgba(253,203,110,0.15); border: 1px solid rgba(253,203,110,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fdcb6e; margin: 0; font-size: 14px;"><i class="fa fa-clock" style="margin-right: 6px;"></i>$BEEP token smart contract is being deployed. Swap functionality will be available once the token is live on Cardano mainnet.</p></div>';
+      statusDiv.innerHTML = '<div style="background: rgba(253,203,110,0.15); border: 1px solid rgba(253,203,110,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fdcb6e; margin: 0; font-size: 14px;"><i class="fa fa-clock" style="margin-right: 6px;"></i>$BEEP token smart contract is being deployed. Swap functionality will be available once the token is live on mainnet.</p></div>';
     }, 2000);
   }
+
+  function connectMetaMask() {
+    var btn = document.getElementById('metamask-connect-btn');
+    var statusDiv = document.getElementById('metamask-status');
+    if (!btn || !statusDiv) return;
+
+    if (typeof window.ethereum === 'undefined') {
+      statusDiv.style.display = 'block';
+      statusDiv.innerHTML = '<div style="background: rgba(245,101,101,0.15); border: 1px solid rgba(245,101,101,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fc8181; margin: 0; font-size: 14px;"><i class="fa fa-exclamation-circle" style="margin-right: 6px;"></i>MetaMask not detected. Please <a href="https://metamask.io/download/" target="_blank" style="color: #f6851b; text-decoration: underline;">install MetaMask</a> first.</p></div>';
+      return;
+    }
+
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i> Connecting...';
+    btn.disabled = true;
+
+    window.ethereum.request({ method: 'eth_requestAccounts' })
+      .then(function(accounts) {
+        if (accounts && accounts.length > 0) {
+          document.getElementById('metamask-address-field').value = accounts[0];
+          document.getElementById('metamask-hidden-form').submit();
+        }
+      })
+      .catch(function(error) {
+        btn.innerHTML = '<i class="fa-brands fa-ethereum" style="margin-right: 8px;"></i> Connect MetaMask';
+        btn.disabled = false;
+        statusDiv.style.display = 'block';
+        if (error.code === 4001) {
+          statusDiv.innerHTML = '<div style="background: rgba(253,203,110,0.15); border: 1px solid rgba(253,203,110,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fdcb6e; margin: 0; font-size: 14px;"><i class="fa fa-exclamation-triangle" style="margin-right: 6px;"></i>Connection rejected. Please try again.</p></div>';
+        } else {
+          statusDiv.innerHTML = '<div style="background: rgba(245,101,101,0.15); border: 1px solid rgba(245,101,101,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fc8181; margin: 0; font-size: 14px;"><i class="fa fa-exclamation-circle" style="margin-right: 6px;"></i>Error: ' + (error.message || 'Unknown error') + '</p></div>';
+        }
+      });
+  }
+
+  function validateCardanoAddress() {
+    var input = document.getElementById('cardano-address-input');
+    var btn = document.getElementById('cardano-connect-btn');
+    if (!input || !btn) return;
+    var val = input.value.trim();
+    var valid = val.length > 50 && (val.startsWith('addr1') || val.startsWith('addr_test1'));
+    btn.disabled = !valid;
+    btn.style.opacity = valid ? '1' : '0.5';
+  }
+
+  <% if @user.ethereum_wallet_address.present? %>
+  (function() {
+    if (typeof window.ethereum !== 'undefined') {
+      window.ethereum.request({ method: 'eth_getBalance', params: ['<%= @user.ethereum_wallet_address %>', 'latest'] })
+      .then(function(balance) {
+        var ethBalance = parseInt(balance, 16) / 1e18;
+        var el = document.getElementById('eth-balance-value');
+        if (el) el.textContent = ethBalance.toFixed(4) + ' ETH';
+      }).catch(function() {
+        var el = document.getElementById('eth-balance-value');
+        if (el) el.textContent = 'N/A';
+      });
+    } else {
+      var el = document.getElementById('eth-balance-value');
+      if (el) el.textContent = 'Install MetaMask to view';
+    }
+  })();
+  <% end %>
 </script>

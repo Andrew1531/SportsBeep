@@ -16,6 +16,7 @@ class DashboardController < ApplicationController
     @account = @user.account
     @transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(20) }
     load_wallet_info
+    load_referral_info
   end
 
   def transactions
@@ -104,7 +105,7 @@ class DashboardController < ApplicationController
     if redirect_path.present? && redirect_path.start_with?('/') && !redirect_path.start_with?('//') && !redirect_path.include?('\\')
       redirect_path
     else
-      vending_path
+      wallet_path
     end
   end
 

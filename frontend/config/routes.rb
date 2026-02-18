@@ -27,7 +27,7 @@ SportsbeepWeb::Application.routes.draw do
   get 'fantasy/game/:id', to: 'fantasy#show', as: :fantasy_game
   get 'fantasy/my-entries', to: 'fantasy#my_entries', as: :my_entries
   get 'wallet', to: 'dashboard#wallet', as: :wallet
-  get 'vending', to: 'dashboard#vending', as: :vending
+  get 'vending', to: redirect('/wallet')
   post 'wallet/connect_metamask', to: 'dashboard#connect_metamask', as: :connect_metamask
   post 'wallet/connect_cardano', to: 'dashboard#connect_cardano', as: :connect_cardano
   delete 'wallet/disconnect_metamask', to: 'dashboard#disconnect_metamask', as: :disconnect_metamask
