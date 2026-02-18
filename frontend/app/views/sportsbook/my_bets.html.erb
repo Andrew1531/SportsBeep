@@ -2,8 +2,15 @@
 
   <div class="bets-header">
     <div class="container">
-      <h1>MY BETS</h1>
-      <p class="subtitle">Track your wagers and results</p>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div>
+          <h1>MY BETS</h1>
+          <p class="subtitle">Track your wagers and results</p>
+        </div>
+        <div style="padding-top: 4px;">
+          <%= render 'shared/wallet_status_bar' %>
+        </div>
+      </div>
     </div>
   </div>
 

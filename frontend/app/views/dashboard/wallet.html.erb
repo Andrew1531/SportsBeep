@@ -18,6 +18,9 @@
           <i class="fa fa-wallet" style="color: #a29bfe; margin-right: 8px;"></i>My Wallet
         </h2>
         <p style="color: #8892b0; margin: 0; font-size: 15px;">Manage your $BEEP tokens, ADA balance & swaps</p>
+        <div style="margin-top: 10px;">
+          <%= render 'shared/wallet_status_bar' %>
+        </div>
       </div>
       <%= link_to user_dashboard_path, style: 'display: inline-block; padding: 11px 28px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; margin-top: 5px;' do %>
         <i class="fa fa-arrow-left" style="margin-right: 6px;"></i> Back to Dashboard

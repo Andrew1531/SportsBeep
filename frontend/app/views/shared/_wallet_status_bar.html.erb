@@ -1,0 +1,29 @@
+<% eth_connected = current_user&.ethereum_wallet_address.present? %>
+<% ada_connected = current_user&.cardano_wallet_address.present? %>
+<% both_connected = eth_connected && ada_connected %>
+<div class="wallet-status-bar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+  <% if eth_connected %>
+    <span style="display: inline-flex; align-items: center; padding: 4px 12px; background: rgba(246,133,27,0.12); border: 1px solid rgba(246,133,27,0.25); border-radius: 20px; font-size: 11px; color: #f6851b; font-weight: 600; gap: 5px;">
+      <i class="fa-brands fa-ethereum" style="font-size: 12px;"></i>
+      <%= current_user.ethereum_wallet_address[0..5] %>...<%= current_user.ethereum_wallet_address[-4..] %>
+    </span>
+  <% end %>
+  <% if ada_connected %>
+    <span style="display: inline-flex; align-items: center; padding: 4px 12px; background: rgba(0,180,216,0.12); border: 1px solid rgba(0,180,216,0.25); border-radius: 20px; font-size: 11px; color: #00b4d8; font-weight: 600; gap: 5px;">
+      <i class="fa fa-wallet" style="font-size: 10px;"></i>
+      <%= current_user.cardano_wallet_address[0..5] %>...<%= current_user.cardano_wallet_address[-4..] %>
+    </span>
+  <% end %>
+  <% unless both_connected %>
+    <button onclick="openWalletModal()" style="display: inline-flex; align-items: center; padding: 5px 14px; background: linear-gradient(135deg, rgba(108,92,231,0.3), rgba(162,155,254,0.2)); border: 1px solid rgba(162,155,254,0.35); border-radius: 20px; font-size: 11px; color: #a29bfe; font-weight: 600; cursor: pointer; gap: 5px; transition: all 0.2s;" onmouseover="this.style.background='linear-gradient(135deg, rgba(108,92,231,0.5), rgba(162,155,254,0.35))'" onmouseout="this.style.background='linear-gradient(135deg, rgba(108,92,231,0.3), rgba(162,155,254,0.2))'">
+      <i class="fa fa-link" style="font-size: 10px;"></i>
+      <% if !eth_connected && !ada_connected %>
+        Connect Wallet
+      <% elsif !eth_connected %>
+        + MetaMask
+      <% else %>
+        + Cardano
+      <% end %>
+    </button>
+  <% end %>
+</div>

@@ -199,6 +199,19 @@
           <li><%= link_to wallet_path, class: ('sb-nav-active' if action_name == 'wallet') do %><i class="fa fa-wallet"></i> WALLET<% end %></li>
           <li><%= link_to vending_path, class: ('sb-nav-active' if action_name == 'vending') do %><i class="fa fa-store"></i> VENDING<% end %></li>
           <li class="sb-nav-divider"></li>
+          <li>
+            <a href="javascript:void(0)" onclick="openWalletModal()" class="sb-nav-wallet-btn" style="<%= current_user.ethereum_wallet_address.present? || current_user.cardano_wallet_address.present? ? 'color: #68d391;' : 'color: #a29bfe;' %>">
+              <i class="fa fa-link"></i>
+              <% if current_user.ethereum_wallet_address.present? && current_user.cardano_wallet_address.present? %>
+                2/2 WALLETS
+              <% elsif current_user.ethereum_wallet_address.present? || current_user.cardano_wallet_address.present? %>
+                1/2 WALLETS
+              <% else %>
+                CONNECT
+              <% end %>
+            </a>
+          </li>
+          <li class="sb-nav-divider"></li>
           <li><%= link_to destroy_user_session_path, method: :delete, class: 'sb-nav-logout' do %><i class="fa fa-arrow-right-from-bracket"></i> LOGOUT<% end %></li>
         <% else %>
           <li><%= link_to new_user_registration_path do %><i class="fa fa-user-plus"></i> SIGN UP<% end %></li>
@@ -209,6 +222,10 @@
   </nav>
 
   <%= yield %>
+
+  <% if current_user %>
+    <%= render 'shared/wallet_connect_js' %>
+  <% end %>
 
   <footer class="sb-footer">
     <div class="sb-footer-grid">

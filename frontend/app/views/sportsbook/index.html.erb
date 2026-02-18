@@ -2,10 +2,17 @@
 
   <div class="sportsbook-header">
     <div class="container">
-      <h1>SPORTSBOOK</h1>
-      <div class="balance-display">
-        <span class="balance-label">Balance</span>
-        <span class="balance-amount"><%= @account.balance rescue '0.00' %> <span class="currency">$BEEP</span></span>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div>
+          <h1>SPORTSBOOK</h1>
+          <div class="balance-display">
+            <span class="balance-label">Balance</span>
+            <span class="balance-amount"><%= @account.balance rescue '0.00' %> <span class="currency">$BEEP</span></span>
+          </div>
+        </div>
+        <div style="padding-top: 4px;">
+          <%= render 'shared/wallet_status_bar' %>
+        </div>
       </div>
     </div>
   </div>

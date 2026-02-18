@@ -1,0 +1,166 @@
+<%= form_tag(connect_metamask_path, method: :post, id: 'global-metamask-form', style: 'display:none;') do %>
+  <input type="hidden" name="ethereum_address" id="global-metamask-address" value="">
+  <input type="hidden" name="redirect_to" id="global-metamask-redirect" value="<%= request.fullpath %>">
+<% end %>
+
+<%= form_tag(connect_cardano_path, method: :post, id: 'global-cardano-form', style: 'display:none;') do %>
+  <input type="hidden" name="cardano_address" id="global-cardano-address" value="">
+  <input type="hidden" name="redirect_to" id="global-cardano-redirect" value="<%= request.fullpath %>">
+<% end %>
+
+<div id="wallet-connect-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto;">
+  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:440px; max-width:95%;">
+    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; overflow: hidden;">
+      <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <h3 style="font-family: 'BebasNeue', sans-serif; font-size: 24px; color: white; margin: 0; letter-spacing: 1px;"><i class="fa fa-link" style="margin-right: 8px;"></i>CONNECT WALLET</h3>
+        <button onclick="closeWalletModal()" style="background:none; border:none; color:rgba(255,255,255,0.7); font-size:20px; cursor:pointer; padding:4px;"><i class="fa fa-xmark"></i></button>
+      </div>
+
+      <div style="padding: 24px;">
+        <div style="background: linear-gradient(135deg, rgba(246,133,27,0.12), rgba(226,118,27,0.08)); border: 1px solid rgba(246,133,27,0.3); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center;">
+              <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #f6851b, #e2761b); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                <i class="fa-brands fa-ethereum" style="color: white; font-size: 20px;"></i>
+              </div>
+              <div>
+                <p style="color: white; font-weight: 700; margin: 0; font-size: 15px;">MetaMask</p>
+                <p style="color: #8892b0; margin: 0; font-size: 12px;">Ethereum / EVM</p>
+              </div>
+            </div>
+            <% if current_user&.ethereum_wallet_address.present? %>
+              <span style="padding: 4px 12px; background: rgba(72,187,120,0.15); color: #68d391; border-radius: 20px; font-size: 11px; font-weight: 600;"><i class="fa fa-circle" style="font-size: 6px; margin-right: 4px;"></i>Connected</span>
+            <% end %>
+          </div>
+          <% if current_user&.ethereum_wallet_address.present? %>
+            <div style="background: rgba(0,0,0,0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px;">
+              <code style="color: #f6851b; word-break: break-all; font-size: 12px;"><%= current_user.ethereum_wallet_address %></code>
+            </div>
+            <%= link_to disconnect_metamask_path(redirect_to: request.fullpath), method: :delete, data: { confirm: 'Disconnect your MetaMask wallet?' }, style: 'display: inline-block; padding: 8px 16px; background: rgba(245,101,101,0.15); color: #fc8181; border: 1px solid rgba(245,101,101,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;' do %>
+              <i class="fa fa-unlink" style="margin-right: 4px;"></i> Disconnect
+            <% end %>
+          <% else %>
+            <button onclick="globalConnectMetaMask()" id="modal-metamask-btn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #f6851b, #e2761b); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s;">
+              <i class="fa-brands fa-ethereum" style="margin-right: 8px;"></i> Connect MetaMask
+            </button>
+          <% end %>
+        </div>
+
+        <div style="background: linear-gradient(135deg, rgba(0,136,204,0.12), rgba(0,180,216,0.08)); border: 1px solid rgba(0,180,216,0.3); border-radius: 12px; padding: 18px 20px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center;">
+              <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0088cc, #00b4d8); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                <i class="fa fa-wallet" style="color: white; font-size: 18px;"></i>
+              </div>
+              <div>
+                <p style="color: white; font-weight: 700; margin: 0; font-size: 15px;">Cardano</p>
+                <p style="color: #8892b0; margin: 0; font-size: 12px;">ADA / $BEEP</p>
+              </div>
+            </div>
+            <% if current_user&.cardano_wallet_address.present? %>
+              <span style="padding: 4px 12px; background: rgba(72,187,120,0.15); color: #68d391; border-radius: 20px; font-size: 11px; font-weight: 600;"><i class="fa fa-circle" style="font-size: 6px; margin-right: 4px;"></i>Connected</span>
+            <% end %>
+          </div>
+          <% if current_user&.cardano_wallet_address.present? %>
+            <div style="background: rgba(0,0,0,0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px;">
+              <code style="color: #00b4d8; word-break: break-all; font-size: 12px;"><%= current_user.cardano_wallet_address %></code>
+            </div>
+            <%= link_to disconnect_cardano_path(redirect_to: request.fullpath), method: :delete, data: { confirm: 'Disconnect your Cardano wallet?' }, style: 'display: inline-block; padding: 8px 16px; background: rgba(245,101,101,0.15); color: #fc8181; border: 1px solid rgba(245,101,101,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;' do %>
+              <i class="fa fa-unlink" style="margin-right: 4px;"></i> Disconnect
+            <% end %>
+          <% else %>
+            <div style="margin-bottom: 10px;">
+              <input type="text" id="modal-cardano-input" placeholder="addr1q..." style="width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: white; font-size: 14px; outline: none; box-sizing: border-box;" oninput="modalValidateCardano()">
+            </div>
+            <button onclick="globalConnectCardano()" id="modal-cardano-btn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; opacity: 0.5;" disabled>
+              <i class="fa fa-wallet" style="margin-right: 8px;"></i> Connect Cardano
+            </button>
+          <% end %>
+        </div>
+
+        <div id="modal-wallet-status" style="display: none; margin-top: 14px;"></div>
+
+        <div style="text-align: center; margin-top: 16px;">
+          <p style="color: #8892b0; font-size: 12px; margin: 0;">
+            <i class="fa fa-shield-halved" style="margin-right: 4px;"></i>
+            Don't have MetaMask? <a href="https://metamask.io/download/" target="_blank" style="color: #f6851b; text-decoration: underline;">Download here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openWalletModal() {
+    var modal = document.getElementById('wallet-connect-modal');
+    if (modal) modal.style.display = 'block';
+  }
+  function closeWalletModal() {
+    var modal = document.getElementById('wallet-connect-modal');
+    if (modal) modal.style.display = 'none';
+  }
+  (function() {
+    var modal = document.getElementById('wallet-connect-modal');
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) closeWalletModal();
+      });
+    }
+  })();
+
+  function globalConnectMetaMask() {
+    var btn = document.getElementById('modal-metamask-btn');
+    var statusDiv = document.getElementById('modal-wallet-status');
+    if (!btn || !statusDiv) return;
+
+    if (typeof window.ethereum === 'undefined') {
+      statusDiv.style.display = 'block';
+      statusDiv.innerHTML = '<div style="background: rgba(245,101,101,0.15); border: 1px solid rgba(245,101,101,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fc8181; margin: 0; font-size: 13px;"><i class="fa fa-exclamation-circle" style="margin-right: 6px;"></i>MetaMask not detected. Please <a href="https://metamask.io/download/" target="_blank" style="color: #f6851b; text-decoration: underline;">install MetaMask</a> first.</p></div>';
+      return;
+    }
+
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right: 8px;"></i> Connecting...';
+    btn.disabled = true;
+
+    window.ethereum.request({ method: 'eth_requestAccounts' })
+      .then(function(accounts) {
+        if (accounts && accounts.length > 0) {
+          document.getElementById('global-metamask-address').value = accounts[0];
+          document.getElementById('global-metamask-redirect').value = window.location.pathname;
+          document.getElementById('global-metamask-form').submit();
+        }
+      })
+      .catch(function(error) {
+        btn.innerHTML = '<i class="fa-brands fa-ethereum" style="margin-right: 8px;"></i> Connect MetaMask';
+        btn.disabled = false;
+        statusDiv.style.display = 'block';
+        if (error.code === 4001) {
+          statusDiv.innerHTML = '<div style="background: rgba(253,203,110,0.15); border: 1px solid rgba(253,203,110,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fdcb6e; margin: 0; font-size: 13px;"><i class="fa fa-exclamation-triangle" style="margin-right: 6px;"></i>Connection rejected. Please try again.</p></div>';
+        } else {
+          statusDiv.innerHTML = '<div style="background: rgba(245,101,101,0.15); border: 1px solid rgba(245,101,101,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fc8181; margin: 0; font-size: 13px;"><i class="fa fa-exclamation-circle" style="margin-right: 6px;"></i>Error: ' + (error.message || 'Unknown error') + '</p></div>';
+        }
+      });
+  }
+
+  function modalValidateCardano() {
+    var input = document.getElementById('modal-cardano-input');
+    var btn = document.getElementById('modal-cardano-btn');
+    if (!input || !btn) return;
+    var val = input.value.trim();
+    var valid = val.length >= 30 && val.startsWith('addr');
+    btn.disabled = !valid;
+    btn.style.opacity = valid ? '1' : '0.5';
+  }
+
+  function globalConnectCardano() {
+    var input = document.getElementById('modal-cardano-input');
+    if (!input) return;
+    var address = input.value.trim();
+    if (address.length >= 30 && address.startsWith('addr')) {
+      document.getElementById('global-cardano-address').value = address;
+      document.getElementById('global-cardano-redirect').value = window.location.pathname;
+      document.getElementById('global-cardano-form').submit();
+    }
+  }
+</script>

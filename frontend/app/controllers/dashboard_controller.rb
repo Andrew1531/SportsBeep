@@ -64,7 +64,7 @@ class DashboardController < ApplicationController
     else
       flash[:alert] = "Invalid Ethereum address format."
     end
-    redirect_to vending_path
+    redirect_to safe_redirect_path
   end
 
   def connect_cardano
@@ -76,19 +76,19 @@ class DashboardController < ApplicationController
     else
       flash[:alert] = "Invalid Cardano address format."
     end
-    redirect_to vending_path
+    redirect_to safe_redirect_path
   end
 
   def disconnect_metamask
     current_user.update(ethereum_wallet_address: nil)
     flash[:notice] = "MetaMask wallet disconnected."
-    redirect_to vending_path
+    redirect_to safe_redirect_path
   end
 
   def disconnect_cardano
     current_user.update(cardano_wallet_address: nil)
     flash[:notice] = "Cardano wallet disconnected."
-    redirect_to vending_path
+    redirect_to safe_redirect_path
   end
 
   private
@@ -97,6 +97,15 @@ class DashboardController < ApplicationController
     yield
   rescue NameError, NoMethodError
     []
+  end
+
+  def safe_redirect_path
+    redirect_path = params[:redirect_to].to_s
+    if redirect_path.present? && redirect_path.start_with?('/') && !redirect_path.start_with?('//') && !redirect_path.include?('\\')
+      redirect_path
+    else
+      vending_path
+    end
   end
 
   def load_wallet_info
