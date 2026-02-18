@@ -48,6 +48,48 @@ class DashboardController < ApplicationController
     redirect_to redeem_promo_path
   end
 
+  def vending
+    @user = current_user
+    @account = @user.account
+    load_wallet_info
+  end
+
+  def connect_metamask
+    @user = current_user
+    address = params[:ethereum_address].to_s.strip
+    if address.match?(/\A0x[0-9a-fA-F]{40}\z/)
+      @user.update(ethereum_wallet_address: address)
+      flash[:notice] = "MetaMask wallet connected successfully!"
+    else
+      flash[:alert] = "Invalid Ethereum address format."
+    end
+    redirect_to vending_path
+  end
+
+  def connect_cardano
+    @user = current_user
+    address = params[:cardano_address].to_s.strip
+    if address.length > 50 && (address.start_with?('addr1') || address.start_with?('addr_test1'))
+      @user.update(cardano_wallet_address: address)
+      flash[:notice] = "Cardano wallet connected successfully!"
+    else
+      flash[:alert] = "Invalid Cardano address format."
+    end
+    redirect_to vending_path
+  end
+
+  def disconnect_metamask
+    current_user.update(ethereum_wallet_address: nil)
+    flash[:notice] = "MetaMask wallet disconnected."
+    redirect_to vending_path
+  end
+
+  def disconnect_cardano
+    current_user.update(cardano_wallet_address: nil)
+    flash[:notice] = "Cardano wallet disconnected."
+    redirect_to vending_path
+  end
+
   private
 
   def safe_collection

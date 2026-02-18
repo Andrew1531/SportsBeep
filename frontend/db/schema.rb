@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_02_17_100000) do
+ActiveRecord::Schema.define(version: 2026_02_18_100000) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "user_id"
@@ -448,6 +448,7 @@ ActiveRecord::Schema.define(version: 2026_02_17_100000) do
     t.boolean "avatar_processing", default: false, null: false
     t.string "avatar_uuid"
     t.string "cardano_wallet_address"
+    t.string "ethereum_wallet_address"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
