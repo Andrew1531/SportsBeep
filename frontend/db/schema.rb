@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_02_18_100000) do
+ActiveRecord::Schema.define(version: 2026_02_18_200000) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "user_id"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 2026_02_18_100000) do
     t.datetime "updated_at"
     t.integer "clearing_expense_cents", default: 0
     t.integer "promo_balance_cents", default: 0
+    t.integer "promo_earnings_cents", default: 0
+    t.integer "referral_winnings_cents", default: 0
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
@@ -196,6 +198,10 @@ ActiveRecord::Schema.define(version: 2026_02_18_100000) do
     t.integer "users_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "owner_user_id"
+    t.decimal "commission_rate", precision: 8, scale: 5, default: "0.0001"
+    t.decimal "treasury_rate", precision: 8, scale: 5, default: "0.01"
+    t.index ["owner_user_id"], name: "index_promo_codes_on_owner_user_id"
   end
 
   create_table "question_answers", force: :cascade do |t|
