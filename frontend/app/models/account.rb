@@ -10,10 +10,24 @@ class Account < ActiveRecord::Base
     self.balance_cents ||= 0
     self.promo_balance_cents ||= 0
     self.clearing_expense_cents ||= 0
+    self.promo_earnings_cents ||= 0
+    self.referral_winnings_cents ||= 0
   end
 
   def subtract_from_clearing_expense!(amount)
     update! clearing_expense: (clearing_expense - amount)
+  end
+
+  def promo_earnings_dollars
+    (promo_earnings_cents || 0) / 100.0
+  end
+
+  def referral_winnings_dollars
+    (referral_winnings_cents || 0) / 100.0
+  end
+
+  def total_referral_earnings_dollars
+    promo_earnings_dollars + referral_winnings_dollars
   end
 
 end

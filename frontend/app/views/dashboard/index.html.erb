@@ -20,44 +20,24 @@
     </div>
 
     <div class="row" style="margin-bottom: 20px;">
-      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center; transition: transform 0.2s;">
-          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
-            <i class="fa fa-coins" style="color: white; font-size: 20px;"></i>
+      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 24px; text-align: center; transition: transform 0.2s;">
+          <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+            <i class="fa fa-coins" style="color: white; font-size: 24px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">$BEEP Balance</p>
-          <h3 style="color: white; font-weight: 700; margin: 0 0 14px; font-size: 24px;"><%= @account.balance rescue '0.00' %></h3>
-          <%= link_to 'View Wallet', wallet_path, style: 'display: inline-block; padding: 7px 18px; background: rgba(231,76,60,0.2); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;' %>
+          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 8px;">$BEEP Balance</p>
+          <h3 style="color: white; font-weight: 700; margin: 0 0 16px; font-size: 32px;"><%= @account.balance rescue '0.00' %></h3>
+          <%= link_to 'View Wallet', wallet_path, style: 'display: inline-block; padding: 9px 24px; background: rgba(231,76,60,0.2); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' %>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
-          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
-            <i class="fa fa-gift" style="color: white; font-size: 20px;"></i>
+      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 24px; text-align: center; transition: transform 0.2s;">
+          <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+            <i class="fa fa-gift" style="color: white; font-size: 24px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Promo Balance</p>
-          <h3 style="color: white; font-weight: 700; margin: 0 0 14px; font-size: 24px;"><%= @account.promo_balance rescue '0.00' %></h3>
-          <%= link_to 'Redeem Code', redeem_promo_path, style: 'display: inline-block; padding: 7px 18px; background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;' %>
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
-          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00b894, #00cec9); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
-            <i class="fa fa-baseball" style="color: white; font-size: 20px;"></i>
-          </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">MLB Contests</p>
-          <h3 style="color: white; font-weight: 700; margin: 0 0 14px; font-size: 24px;"><%= @mlb_tickets.size %></h3>
-          <a href="#mlb-entries" style="display: inline-block; padding: 7px 18px; background: rgba(0,184,148,0.2); color: #00b894; border: 1px solid rgba(0,184,148,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;">View Entries</a>
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; text-align: center;">
-          <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #fdcb6e, #e17055); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;">
-            <i class="fa fa-football" style="color: white; font-size: 20px;"></i>
-          </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">NFL Contests</p>
-          <h3 style="color: white; font-weight: 700; margin: 0 0 14px; font-size: 24px;"><%= @nfl_tickets.size %></h3>
-          <a href="#nfl-entries" style="display: inline-block; padding: 7px 18px; background: rgba(253,203,110,0.2); color: #fdcb6e; border: 1px solid rgba(253,203,110,0.3); border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;">View Entries</a>
+          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 8px;">Promo Balance</p>
+          <h3 style="color: white; font-weight: 700; margin: 0 0 16px; font-size: 32px;"><%= @account.promo_balance rescue '0.00' %></h3>
+          <%= link_to 'Redeem Code', redeem_promo_path, style: 'display: inline-block; padding: 9px 24px; background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' %>
         </div>
       </div>
     </div>
@@ -140,7 +120,7 @@
     </div>
 
     <div class="row" style="margin-bottom: 20px;">
-      <div class="col-xs-12 col-md-6" style="margin-bottom: 15px;">
+      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
         <div id="mlb-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
           <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
             <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-baseball" style="color: #00b894; margin-right: 8px;"></i>Recent MLB Entries</h4>
@@ -175,7 +155,7 @@
         </div>
       </div>
 
-      <div class="col-xs-12 col-md-6" style="margin-bottom: 15px;">
+      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
         <div id="nfl-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
           <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
             <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-football" style="color: #fdcb6e; margin-right: 8px;"></i>Recent NFL Entries</h4>
@@ -204,6 +184,76 @@
               <div style="text-align: center; padding: 25px 0;">
                 <i class="fa fa-football" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
                 <p style="color: #8892b0; margin: 0; font-size: 14px;">No NFL entries yet</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
+        <div id="nba-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
+          <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-basketball" style="color: #e17055; margin-right: 8px;"></i>Recent NBA Entries</h4>
+          </div>
+          <div style="padding: 18px 22px;">
+            <% if defined?(@nba_tickets) && @nba_tickets.any? %>
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Contest</th>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: center;">Score</th>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @nba_tickets.each do |ticket| %>
+                    <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                      <td style="color: white; padding: 10px 0; font-size: 14px;"><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
+                      <td style="color: #a29bfe; padding: 10px 0; font-size: 14px; text-align: center;"><%= ticket.score rescue 'N/A' %></td>
+                      <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              <div style="text-align: center; padding: 25px 0;">
+                <i class="fa fa-basketball" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+                <p style="color: #8892b0; margin: 0; font-size: 14px;">No NBA entries yet</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
+        <div id="nhl-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
+          <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-hockey-puck" style="color: #63b3ed; margin-right: 8px;"></i>Recent NHL Entries</h4>
+          </div>
+          <div style="padding: 18px 22px;">
+            <% if defined?(@nhl_tickets) && @nhl_tickets.any? %>
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Contest</th>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: center;">Score</th>
+                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @nhl_tickets.each do |ticket| %>
+                    <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
+                      <td style="color: white; padding: 10px 0; font-size: 14px;"><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
+                      <td style="color: #a29bfe; padding: 10px 0; font-size: 14px; text-align: center;"><%= ticket.score rescue 'N/A' %></td>
+                      <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              <div style="text-align: center; padding: 25px 0;">
+                <i class="fa fa-hockey-puck" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+                <p style="color: #8892b0; margin: 0; font-size: 14px;">No NHL entries yet</p>
               </div>
             <% end %>
           </div>

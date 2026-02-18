@@ -8,6 +8,7 @@ class DashboardController < ApplicationController
     @mlb_tickets = safe_collection { @user.mlb_tickets.includes(:contest).order(created_at: :desc).limit(5) }
     @nfl_tickets = safe_collection { @user.nfl_tickets.includes(:contest).order(created_at: :desc).limit(5) }
     load_wallet_info
+    load_referral_info
   end
 
   def wallet
@@ -110,5 +111,13 @@ class DashboardController < ApplicationController
     else
       @wallet_info = nil
     end
+  end
+
+  def load_referral_info
+    @owned_promo = safe_collection { PromoCode.where(owner_user_id: @user.id) }.first
+    @referral_count = @owned_promo ? @owned_promo.referral_count : 0
+    @promo_earnings = @account.promo_earnings_dollars
+    @referral_winnings = @account.referral_winnings_dollars
+    @total_referral_earnings = @account.total_referral_earnings_dollars
   end
 end
