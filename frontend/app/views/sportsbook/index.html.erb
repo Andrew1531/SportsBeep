@@ -193,7 +193,8 @@
         <% end %>
       <% else %>
         <div class="no-games">
-          <i class="fa fa-calendar-xmark"></i>
+          <% no_game_icons = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png', 'nba' => 'ic_basketball.png', 'nhl' => 'ic_hockey.png' } %>
+          <%= image_tag no_game_icons[@sport] || 'ic_baseball.png', style: 'width: 64px; height: 64px; opacity: 0.25; margin-bottom: 16px;' %>
           <p>No games available for <%= @sport.upcase %> right now.</p>
           <p class="sub">Check back later or try a different sport.</p>
         </div>

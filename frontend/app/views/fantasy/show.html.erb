@@ -56,7 +56,7 @@
     <% if @contests.present? %>
       <div class="contests-section">
         <div class="section-heading">
-          <i class="fa fa-trophy"></i> AVAILABLE CONTESTS
+          <%= image_tag 'ic_contests.png', style: 'width: 22px; height: 22px; vertical-align: middle; margin-right: 8px; opacity: 0.9;' %> AVAILABLE CONTESTS
         </div>
 
         <% @contests.each do |contest| %>
@@ -85,7 +85,7 @@
       </div>
     <% else %>
       <div class="no-contests-box">
-        <i class="fa fa-trophy"></i>
+        <%= image_tag 'ic_contests.png', style: 'width: 48px; height: 48px; opacity: 0.25; margin-bottom: 12px;' %>
         <p>No contests available for this game yet.</p>
         <p class="sub">Contests will be created closer to game time by the admin.</p>
       </div>
@@ -93,7 +93,7 @@
 
     <div class="roster-section">
       <div class="section-heading">
-        <i class="fa fa-users"></i> AVAILABLE PLAYERS
+        <%= image_tag 'player_silhouette.png', style: 'width: 22px; height: 22px; vertical-align: middle; margin-right: 8px; opacity: 0.85; border-radius: 50%; background: rgba(255,255,255,0.1);' %> AVAILABLE PLAYERS
       </div>
 
       <div class="team-filter-bar">
@@ -114,7 +114,7 @@
             <% is_home = player.team_id == @game.home_team_id %>
             <div class="player-row" data-team="<%= is_home ? 'home' : 'away' %>">
               <span class="pr-pos"><%= player.position %></span>
-              <span class="pr-name"><%= player.name %></span>
+              <span class="pr-name"><%= image_tag 'player_silhouette.png', style: 'width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; margin-right: 8px; background: rgba(255,255,255,0.08); object-fit: cover;' %><%= player.name %></span>
               <span class="pr-team" style="color: <%= is_home ? home_color : away_color %>;">
                 <%= player.team&.abbr %>
               </span>
@@ -123,7 +123,7 @@
         </div>
       <% else %>
         <div class="no-players-box">
-          <i class="fa fa-user-slash"></i>
+          <%= image_tag 'player_silhouette.png', style: 'width: 48px; height: 48px; opacity: 0.2; margin-bottom: 12px; border-radius: 50%;' %>
           <p>No player rosters loaded for this game yet.</p>
           <p class="sub">Players will appear once lineups are imported.</p>
         </div>

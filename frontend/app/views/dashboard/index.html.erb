@@ -123,7 +123,7 @@
       <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
         <div id="mlb-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
           <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-baseball" style="color: #00b894; margin-right: 8px;"></i>Recent MLB Entries</h4>
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><%= image_tag 'ic_baseball.png', style: 'width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;' %>Recent MLB Entries</h4>
           </div>
           <div style="padding: 18px 22px;">
             <% if @mlb_tickets.any? %>
@@ -147,7 +147,7 @@
               </table>
             <% else %>
               <div style="text-align: center; padding: 25px 0;">
-                <i class="fa fa-baseball" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+                <%= image_tag 'ic_baseball.png', style: 'width: 40px; height: 40px; opacity: 0.2; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;' %>
                 <p style="color: #8892b0; margin: 0; font-size: 14px;">No MLB entries yet</p>
               </div>
             <% end %>
@@ -158,7 +158,7 @@
       <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
         <div id="nfl-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
           <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-football" style="color: #fdcb6e; margin-right: 8px;"></i>Recent NFL Entries</h4>
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><%= image_tag 'ic_football.png', style: 'width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;' %>Recent NFL Entries</h4>
           </div>
           <div style="padding: 18px 22px;">
             <% if @nfl_tickets.any? %>
@@ -182,7 +182,7 @@
               </table>
             <% else %>
               <div style="text-align: center; padding: 25px 0;">
-                <i class="fa fa-football" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+                <%= image_tag 'ic_football.png', style: 'width: 40px; height: 40px; opacity: 0.2; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;' %>
                 <p style="color: #8892b0; margin: 0; font-size: 14px;">No NFL entries yet</p>
               </div>
             <% end %>
@@ -193,7 +193,7 @@
       <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
         <div id="nba-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
           <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-basketball" style="color: #e17055; margin-right: 8px;"></i>Recent NBA Entries</h4>
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><%= image_tag 'ic_basketball.png', style: 'width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;' %>Recent NBA Entries</h4>
           </div>
           <div style="padding: 18px 22px;">
             <% if defined?(@nba_tickets) && @nba_tickets.any? %>
@@ -217,7 +217,7 @@
               </table>
             <% else %>
               <div style="text-align: center; padding: 25px 0;">
-                <i class="fa fa-basketball" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+                <%= image_tag 'ic_basketball.png', style: 'width: 40px; height: 40px; opacity: 0.2; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;' %>
                 <p style="color: #8892b0; margin: 0; font-size: 14px;">No NBA entries yet</p>
               </div>
             <% end %>
@@ -228,7 +228,7 @@
       <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
         <div id="nhl-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
           <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-hockey-puck" style="color: #63b3ed; margin-right: 8px;"></i>Recent NHL Entries</h4>
+            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><%= image_tag 'ic_hockey.png', style: 'width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;' %>Recent NHL Entries</h4>
           </div>
           <div style="padding: 18px 22px;">
             <% if defined?(@nhl_tickets) && @nhl_tickets.any? %>
@@ -252,7 +252,7 @@
               </table>
             <% else %>
               <div style="text-align: center; padding: 25px 0;">
-                <i class="fa fa-hockey-puck" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
+                <%= image_tag 'ic_hockey.png', style: 'width: 40px; height: 40px; opacity: 0.2; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;' %>
                 <p style="color: #8892b0; margin: 0; font-size: 14px;">No NHL entries yet</p>
               </div>
             <% end %>

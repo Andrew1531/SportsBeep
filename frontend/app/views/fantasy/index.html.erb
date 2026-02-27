@@ -103,14 +103,14 @@
             <div class="fantasy-card-footer">
               <div class="contest-info">
                 <% if pool_count > 0 %>
-                  <span class="contest-count"><i class="fa fa-trophy"></i> <%= pool_count %> <%= 'contest'.pluralize(pool_count) %> available</span>
+                  <span class="contest-count"><%= image_tag 'ic_contests.png', style: 'width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;' %> <%= pool_count %> <%= 'contest'.pluralize(pool_count) %> available</span>
                 <% else %>
-                  <span class="contest-count"><i class="fa fa-clock"></i> Contests coming soon</span>
+                  <span class="contest-count"><%= image_tag 'ic_contests.png', style: 'width: 16px; height: 16px; vertical-align: middle; margin-right: 4px; opacity: 0.5;' %> Contests coming soon</span>
                 <% end %>
               </div>
               <% if game.start_time.future? %>
                 <%= link_to fantasy_game_path(id: game.id, sport: @sport), class: 'enter-btn' do %>
-                  <i class="fa fa-play-circle"></i> VIEW GAME
+                  <%= image_tag 'ic_pickgame.png', style: 'width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;' %> VIEW GAME
                 <% end %>
               <% end %>
             </div>
@@ -118,7 +118,8 @@
         <% end %>
       <% else %>
         <div class="no-games">
-          <i class="fa fa-calendar-xmark"></i>
+          <% no_game_icon = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png' } %>
+          <%= image_tag no_game_icon[@sport] || 'ic_baseball.png', style: 'width: 64px; height: 64px; opacity: 0.25; margin-bottom: 16px;' %>
           <p>No upcoming <%= @sport.upcase %> games available right now.</p>
           <p class="sub">Games will appear here when the schedule is imported.</p>
           <p class="sub">Check the Sportsbook for live odds on today's games.</p>
