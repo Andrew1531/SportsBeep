@@ -1,20 +1,13 @@
 <div class="my-bets-page">
 
   <div class="bets-header">
-    <div class="container">
-      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-        <div>
-          <h1>MY BETS</h1>
-          <p class="subtitle">Track your wagers and results</p>
-        </div>
-        <div style="padding-top: 4px;">
-          <%= render 'shared/wallet_status_bar' %>
-        </div>
-      </div>
+    <div class="container" style="max-width: 960px; margin: 0 auto;">
+      <h1>MY BETS</h1>
+      <p class="subtitle">Track your wagers and results</p>
     </div>
   </div>
 
-  <div class="container">
+  <div class="container" style="max-width: 960px; margin: 0 auto;">
 
     <div class="stats-row">
       <div class="stat-card">
@@ -146,7 +139,7 @@
     </div>
 
     <div class="back-to-sportsbook">
-      <%= link_to 'BACK TO SPORTSBOOK', sportsbook_path %>
+      <%= link_to 'Back to Sportsbook', sportsbook_path %>
     </div>
 
   </div>

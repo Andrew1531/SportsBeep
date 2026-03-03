@@ -1,694 +1,738 @@
 @import 'variables';
 @import 'colors';
 
-$sb-dark: #1b1f2e;
-$sb-panel: #394263;
-$sb-option: #50597a;
-$sb-edit: #515a7a;
-$sb-red: #cc3347;
-$sb-green: #86ab66;
-$sb-orange: #eba236;
-$sb-blue: #3767ab;
-$sb-blue-gray: #4d5c7d;
-$sb-lavender: #868fad;
-$sb-sky: #46bcf2;
-$sb-light-red: #e34d69;
-$sb-baby-blue: #5ec3eb;
+$dk-bg: #0b0e14;
+$dk-surface: #1a1e27;
+$dk-card: #1e2330;
+$dk-border: #2a3040;
+$dk-cell: #252b3b;
+$dk-cell-hover: #2f3750;
+$dk-green: #00c853;
+$dk-green-dark: #00a844;
+$dk-accent: #4fc3f7;
+$dk-yellow: #ffc107;
+$dk-red: #f44336;
+$dk-text: #ffffff;
+$dk-text-secondary: #8a93a6;
+$dk-text-muted: #555e73;
+$dk-tab-active: #00c853;
 
-.sportsbook-page {
-  background: $sb-dark;
+.dk-sportsbook {
+  background: $dk-bg;
   min-height: 100vh;
-  padding-bottom: 40px;
+  @include sans-serif;
+  color: $dk-text;
+}
 
-  .container {
-    overflow: visible;
+.dk-top-bar {
+  background: $dk-surface;
+  border-bottom: 1px solid $dk-border;
+}
+
+.dk-top-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dk-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dk-logo {
+  height: 28px;
+  width: auto;
+}
+
+.dk-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: $dk-text;
+}
+
+.dk-balance {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.dk-bal-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $dk-text-secondary;
+}
+
+.dk-bal-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: $dk-green;
+}
+
+.dk-bal-currency {
+  font-size: 11px;
+  font-weight: 600;
+  color: $dk-text-secondary;
+}
+
+.dk-sport-nav {
+  display: flex;
+  background: $dk-surface;
+  border-bottom: 2px solid $dk-border;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.dk-sport-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 0;
+  text-decoration: none;
+  color: $dk-text-secondary;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+
+  &:hover {
+    color: $dk-text;
+    text-decoration: none;
   }
 
-  .sportsbook-header {
-    background: $sb-panel;
-    padding: 16px 0 12px;
-    text-align: center;
-    border-bottom: 2px solid rgba(0,0,0,0.3);
-
-    h1 {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      color: #fff;
-      font-size: 32px;
-      margin: 0;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-
-    .balance-display {
-      @include sans-serif;
-      color: #fff;
-      text-align: center;
-      padding-top: 2px;
-
-      .balance-label {
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: rgba(255,255,255,0.5);
-      }
-
-      .balance-amount {
-        font-size: 26px;
-        font-family: 'BebasNeue', Impact, sans-serif;
-        color: $sb-green;
-        margin-left: 8px;
-
-        .currency {
-          font-size: 13px;
-          color: rgba(255,255,255,0.6);
-        }
-      }
-    }
-  }
-
-  .sport-tabs {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    background: darken($sb-dark, 2%);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-
-    li {
-      flex: 1;
-
-      a {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-family: 'BebasNeue', Impact, sans-serif;
-        font-size: 18px;
-        text-align: center;
-        padding: 10px 0 8px;
-        color: $sb-lavender;
-        text-decoration: none;
-        border-bottom: 3px solid transparent;
-        transition: all 0.2s;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-
-        &:hover {
-          color: #fff;
-          background: rgba(255,255,255,0.04);
-        }
-
-        .tab-icon {
-          width: 24px;
-          height: 24px;
-          margin-bottom: 2px;
-          opacity: 0.6;
-        }
-      }
-
-      &.active a {
-        color: #fff;
-        border-bottom-color: $sb-red;
-        background: rgba(255,255,255,0.06);
-
-        .tab-icon { opacity: 1; }
-      }
-    }
-  }
-
-  .alert-notice {
-    background: $sb-green;
-    color: #fff;
-    @include sans-serif;
-    padding: 12px 20px;
-    margin: 12px 0 0;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-
-  .alert-alert {
-    background: $sb-red;
-    color: #fff;
-    @include sans-serif;
-    padding: 12px 20px;
-    margin: 12px 0 0;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-
-  .beep-warning {
-    background: $sb-orange;
-    color: #fff;
-    @include sans-serif;
-    padding: 12px 20px;
-    margin: 12px 0 0;
-    border-radius: 4px;
-    font-size: 14px;
-
-    a {
-      color: #fff;
-      font-weight: bold;
-      text-decoration: underline;
-    }
-  }
-
-  .active-wagers-bar {
-    background: $sb-panel;
-    padding: 12px 15px;
-    margin: 12px 0 0;
-    border-radius: 4px;
-
-    .wagers-title {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      color: #fff;
-      font-size: 18px;
-      margin: 0 0 8px;
-    }
-
-    .wager-item {
-      background: $sb-blue-gray;
-      padding: 8px 12px;
-      margin-bottom: 4px;
-      border-radius: 3px;
-      @include sans-serif;
-      color: #fff;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .wager-selection { font-weight: bold; }
-      .wager-odds { color: $sb-lavender; margin-left: 6px; }
-      .wager-amount { color: $sb-green; font-weight: bold; }
-      .wager-payout { color: $sb-green; font-size: 12px; margin-left: 12px; }
-    }
-
-    .view-all-link {
-      display: inline-block;
-      margin-top: 6px;
-      color: $sb-orange;
-      @include sans-serif;
-      font-size: 13px;
-      &:hover { color: lighten($sb-orange, 10%); }
-    }
-  }
-
-  .games-section {
-    padding: 15px 0 0;
-  }
-
-  .games-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-
-    .games-title {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 22px;
-      color: #fff;
-      letter-spacing: 2px;
-    }
-
-    .games-count {
-      @include sans-serif;
-      color: $sb-lavender;
-      font-size: 12px;
-    }
-  }
-
-  .game-card {
-    background: #000;
-    margin-bottom: 2px;
-    overflow: hidden;
-  }
-
-  .game-date-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 8px;
-    background: #000;
-    @include sans-serif;
-    font-size: 12px;
-    color: #fff;
-
-    .game-time {
-      color: rgba(255,255,255,0.7);
-    }
-
-    .live-badge {
-      background: $sb-red;
-      color: #fff;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 1px 8px;
-      border-radius: 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      animation: livePulse 2s infinite;
-
-      i { margin-right: 3px; }
-    }
-  }
-
-  @keyframes livePulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-  }
-
-  .game-matchup-panel {
-    position: relative;
-    height: 120px;
-    overflow: hidden;
-    cursor: default;
-  }
-
-  .split-away {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    clip-path: polygon(0 0, 100% 0, 0 100%);
-    z-index: 1;
-  }
-
-  .split-home {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-  }
-
-  .split-at-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 3;
-    width: 36px;
-    height: auto;
-    opacity: 0.9;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-  }
-
-  .team-block {
-    position: absolute;
-    z-index: 2;
-    color: #fff;
-    max-width: 48%;
-
-    .team-city {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 14px;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.8);
-      line-height: 1;
-      text-transform: uppercase;
-      margin-bottom: -3px;
-    }
-
-    .team-mascot {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 36px;
-      line-height: 0.95;
-      color: #fff;
-      text-transform: uppercase;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-    }
-  }
-
-  .team-block-away {
-    top: 8px;
-    left: 8px;
-  }
-
-  .team-block-home {
-    bottom: 8px;
-    right: 8px;
-    text-align: right;
-  }
-
-  .odds-header-row {
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    padding: 5px 10px;
-    font-family: 'BebasNeue', Impact, sans-serif;
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: $sb-lavender;
-
-    .oh-matchup { flex: 1; }
-    .oh-spread, .oh-total, .oh-ml {
-      width: 80px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-  }
-
-  .odds-row {
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    background: $sb-panel;
-    border-top: 1px solid rgba(255,255,255,0.06);
-
-    .or-team {
-      flex: 1;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 15px;
-      color: #fff;
-      padding: 6px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-transform: uppercase;
-    }
-
-    .or-cells {
-      display: flex;
-      gap: 4px;
-      padding: 4px 0;
-    }
-  }
-
-  .odds-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: $sb-blue-gray;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 3px;
-    padding: 4px 4px;
-    width: 76px;
-    min-height: 38px;
-    cursor: pointer;
-    transition: all 0.15s;
-    flex-shrink: 0;
-
-    &:hover {
-      background: lighten($sb-blue-gray, 8%);
-      border-color: $sb-sky;
-    }
-
-    &:active {
-      background: $sb-blue;
-    }
-
-    .odds-line {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 12px;
-      color: #fff;
-      line-height: 1.1;
-    }
-
-    .odds-price {
-      @include sans-serif;
-      font-size: 12px;
-      color: $sb-green;
-      font-weight: bold;
-      line-height: 1.2;
-    }
-  }
-
-  .odds-na {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 76px;
-    min-height: 38px;
-    color: rgba(255,255,255,0.2);
-    font-size: 12px;
-    @include sans-serif;
-    flex-shrink: 0;
-  }
-
-  .no-games {
-    text-align: center;
-    padding: 60px 20px;
-    background: $sb-panel;
-    border-radius: 4px;
-
-    i {
-      font-size: 48px;
-      color: $sb-blue-gray;
-      margin-bottom: 14px;
-    }
-
-    p {
-      @include sans-serif;
-      color: $sb-lavender;
-      font-size: 16px;
-      margin: 0;
-
-      &.sub {
-        font-size: 13px;
-        margin-top: 6px;
-        color: $sb-blue-gray;
-      }
-    }
+  &.active {
+    color: $dk-green;
+    border-bottom-color: $dk-green;
   }
 }
 
-#bet-slip-overlay {
+.dk-sport-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.6;
+
+  .active & {
+    opacity: 1;
+  }
+}
+
+.dk-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 0 60px;
+}
+
+.dk-alert {
+  padding: 10px 16px;
+  margin: 12px 16px 0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+}
+
+.dk-alert-success {
+  background: rgba($dk-green, 0.12);
+  color: $dk-green;
+  border: 1px solid rgba($dk-green, 0.25);
+}
+
+.dk-alert-error {
+  background: rgba($dk-red, 0.12);
+  color: #ff7b72;
+  border: 1px solid rgba($dk-red, 0.25);
+}
+
+.dk-alert-warning {
+  background: rgba($dk-yellow, 0.1);
+  color: $dk-yellow;
+  border: 1px solid rgba($dk-yellow, 0.2);
+}
+
+.dk-active-bets {
+  margin: 12px 16px 0;
+  background: $dk-surface;
+  border-radius: 6px;
+  border: 1px solid $dk-border;
+  overflow: hidden;
+}
+
+.dk-active-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $dk-text;
+  border-bottom: 1px solid $dk-border;
+  background: rgba(0,0,0,0.2);
+
+  i { margin-right: 6px; color: $dk-green; }
+}
+
+.dk-view-all {
+  font-size: 12px;
+  color: $dk-accent;
+  text-decoration: none;
+  font-weight: 500;
+  &:hover { text-decoration: underline; color: lighten($dk-accent, 10%); }
+}
+
+.dk-active-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-bottom: 1px solid $dk-border;
+  font-size: 12px;
+
+  &:last-child { border-bottom: none; }
+}
+
+.dk-active-sel {
+  font-weight: 600;
+  color: $dk-text;
+  flex: 1;
+}
+
+.dk-active-type {
+  color: $dk-text-secondary;
+  margin-right: 16px;
+}
+
+.dk-active-amt {
+  color: $dk-green;
+  font-weight: 700;
+}
+
+.dk-odds-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: $dk-bg;
+}
+
+.dk-oh-left {
+  font-size: 14px;
+  font-weight: 700;
+  color: $dk-text;
+  letter-spacing: 0.3px;
+}
+
+.dk-oh-right {
+  display: flex;
+  gap: 4px;
+}
+
+.dk-oh-col {
+  width: 92px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: $dk-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  @media (max-width: 600px) {
+    width: 72px;
+    font-size: 10px;
+  }
+}
+
+.dk-date-divider {
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: $dk-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  background: rgba(0,0,0,0.3);
+  border-top: 1px solid $dk-border;
+}
+
+.dk-game-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid $dk-border;
+  background: $dk-card;
+  transition: background 0.1s;
+
+  &:hover {
+    background: lighten($dk-card, 2%);
+  }
+}
+
+.dk-game-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  gap: 14px;
+  min-width: 0;
+}
+
+.dk-time {
+  width: 55px;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: $dk-text-secondary;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+
+  @media (max-width: 600px) {
+    width: 45px;
+    font-size: 11px;
+  }
+}
+
+.dk-live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $dk-red;
+  animation: dk-pulse 1.5s infinite;
+  margin-right: 4px;
+}
+
+.dk-live-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: $dk-red;
+  letter-spacing: 0.5px;
+}
+
+@keyframes dk-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.dk-teams {
+  flex: 1;
+  min-width: 0;
+}
+
+.dk-team-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.dk-team-color {
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.dk-team-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: $dk-text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+}
+
+.dk-odds-cells {
+  display: flex;
+  gap: 4px;
+  padding: 6px 8px 6px 0;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    gap: 2px;
+    padding-right: 4px;
+  }
+}
+
+.dk-odds-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 92px;
+
+  @media (max-width: 600px) {
+    width: 72px;
+  }
+}
+
+.dk-odds-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $dk-cell;
+  border: 1px solid $dk-border;
+  border-radius: 4px;
+  padding: 4px 6px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 0.12s;
+  width: 100%;
+
+  &:hover {
+    background: $dk-cell-hover;
+    border-color: $dk-green;
+  }
+
+  &:active {
+    background: rgba($dk-green, 0.15);
+    border-color: $dk-green;
+  }
+
+  &.selected {
+    background: rgba($dk-green, 0.18);
+    border-color: $dk-green;
+  }
+
+  .dk-line {
+    font-size: 11px;
+    font-weight: 600;
+    color: $dk-text;
+    line-height: 1;
+  }
+
+  .dk-price {
+    font-size: 12px;
+    font-weight: 700;
+    color: $dk-green;
+    line-height: 1.3;
+  }
+}
+
+.dk-odds-ml {
+  justify-content: center;
+
+  .dk-price {
+    font-size: 13px;
+  }
+}
+
+.dk-odds-empty {
+  height: 36px;
+  background: $dk-cell;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  opacity: 0.3;
+}
+
+.dk-empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: $dk-text-secondary;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: $dk-text;
+    margin: 16px 0 6px;
+  }
+
+  p {
+    font-size: 14px;
+    color: $dk-text-muted;
+    margin: 0;
+  }
+}
+
+.dk-empty-icon {
+  width: 56px;
+  height: 56px;
+  opacity: 0.2;
+}
+
+.dk-betslip-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.85);
-  z-index: 98;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
   display: none;
-  overflow-y: auto;
+  align-items: flex-end;
+  justify-content: center;
 
-  .bet-slip-content {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 420px;
-    max-width: 95%;
-  }
-
-  .bet-slip-card {
-    background: $sb-dark;
-    border-radius: 5px;
-    border: 2px solid $sb-blue-gray;
-    overflow: hidden;
-  }
-
-  .bet-slip-header {
-    background: $sb-red;
-    padding: 10px 20px;
-    color: #fff;
+  &.open {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    h3 {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 28px;
-      margin: 0;
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.7);
-      font-size: 22px;
-      cursor: pointer;
-      padding: 4px;
-      line-height: 1;
-      &:hover { color: #fff; }
-    }
   }
 
-  .bet-slip-matchup {
-    background: $sb-panel;
-    padding: 14px 20px;
-    position: relative;
-    overflow: hidden;
+  @media (min-width: 600px) {
+    align-items: center;
+  }
+}
+
+.dk-betslip-panel {
+  background: $dk-surface;
+  border-radius: 12px 12px 0 0;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid $dk-border;
+
+  @media (min-width: 600px) {
+    border-radius: 12px;
+  }
+}
+
+.dk-bs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid $dk-border;
+}
+
+.dk-bs-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: $dk-text;
+}
+
+.dk-bs-close {
+  background: none;
+  border: none;
+  color: $dk-text-secondary;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+
+  &:hover { color: $dk-text; }
+}
+
+.dk-bs-pick {
+  padding: 14px 16px;
+  border-bottom: 1px solid $dk-border;
+}
+
+.dk-bs-pick-sel {
+  font-size: 16px;
+  font-weight: 700;
+  color: $dk-text;
+}
+
+.dk-bs-pick-detail {
+  font-size: 12px;
+  color: $dk-green;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.dk-bs-pick-matchup {
+  font-size: 12px;
+  color: $dk-text-secondary;
+  margin-top: 4px;
+}
+
+.dk-bs-odds-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid $dk-border;
+  background: rgba(0,0,0,0.15);
+}
+
+.dk-bs-odds-label {
+  font-size: 12px;
+  color: $dk-text-secondary;
+  font-weight: 500;
+}
+
+.dk-bs-odds-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: $dk-green;
+}
+
+.dk-bs-amount-section {
+  padding: 16px;
+}
+
+.dk-bs-amount-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: $dk-text-secondary;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dk-bs-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dk-bs-dollar {
+  position: absolute;
+  left: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: $dk-text-secondary;
+}
+
+.dk-bs-input {
+  width: 100%;
+  background: $dk-bg;
+  border: 2px solid $dk-border;
+  border-radius: 8px;
+  padding: 12px 12px 12px 28px;
+  font-size: 18px;
+  font-weight: 700;
+  color: $dk-text;
+  outline: none;
+  @include sans-serif;
+  -moz-appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus {
+    border-color: $dk-green;
+  }
+
+  &::placeholder {
+    color: $dk-text-muted;
+  }
+}
+
+.dk-bs-quick {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+
+  button {
+    flex: 1;
+    padding: 8px 0;
+    background: $dk-cell;
+    border: 1px solid $dk-border;
+    border-radius: 6px;
+    color: $dk-text;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.12s;
     @include sans-serif;
 
-    &::before {
-      content: '@';
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 30px;
-      color: rgba(255,255,255,0.1);
-    }
-
-    .matchup-teams {
-      color: #fff;
-      font-size: 16px;
-      font-weight: bold;
-      margin: 0 0 2px;
-    }
-
-    .matchup-type {
-      color: $sb-lavender;
-      font-size: 13px;
-      margin: 0;
-    }
-  }
-
-  .bet-slip-selection {
-    background: $sb-blue-gray;
-    border-left: 4px solid $sb-green;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .selection-name {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 22px;
-      color: #fff;
-      margin: 0;
-    }
-
-    .selection-detail {
-      @include sans-serif;
-      font-size: 12px;
-      color: $sb-lavender;
-      margin: 2px 0 0;
-    }
-
-    .selection-odds {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 32px;
-      color: $sb-green;
-    }
-  }
-
-  .bet-slip-form {
-    padding: 20px;
-    background: $sb-dark;
-
-    .amount-label {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 16px;
-      color: $sb-lavender;
-      margin-bottom: 8px;
-      display: block;
-      letter-spacing: 1px;
-    }
-
-    .amount-input {
-      width: 100%;
-      background: $sb-edit;
-      border: 2px solid $sb-blue-gray;
-      border-radius: 4px;
-      padding: 12px 14px;
-      font-size: 18px;
-      font-weight: bold;
-      @include sans-serif;
-      outline: none;
-      color: #fff;
-
-      &:focus { border-color: $sb-sky; }
-      &::placeholder { color: $sb-lavender; }
-    }
-
-    .quick-amounts {
-      display: flex;
-      gap: 4px;
-      margin-top: 8px;
-      margin-bottom: 16px;
-
-      button {
-        flex: 1;
-        font-family: 'BebasNeue', Impact, sans-serif;
-        font-size: 16px;
-        padding: 8px 0;
-        background: $sb-panel;
-        color: #fff;
-        border: 1px solid $sb-blue-gray;
-        border-radius: 4px;
-        cursor: pointer;
-
-        &:hover {
-          background: $sb-blue-gray;
-          border-color: $sb-orange;
-          color: $sb-orange;
-        }
-      }
-    }
-
-    .payout-summary {
-      background: $sb-panel;
-      border: 1px solid $sb-blue-gray;
-      border-radius: 4px;
-      padding: 12px 14px;
-      margin-bottom: 16px;
-      @include sans-serif;
-
-      .payout-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 4px;
-        font-size: 14px;
-
-        .label { color: $sb-lavender; }
-        .value { color: #fff; font-weight: bold; }
-        &.total .value { color: $sb-green; font-size: 20px; }
-      }
-    }
-
-    .place-bet-btn {
-      width: 100%;
-      padding: 14px;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 24px;
-      background-color: $sb-red;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      letter-spacing: 1px;
-      transition: background 0.15s;
-
-      &:hover { background-color: $sb-light-red; }
-      i { margin-right: 8px; }
+    &:hover {
+      background: $dk-cell-hover;
+      border-color: $dk-green;
+      color: $dk-green;
     }
   }
 }
 
+.dk-bs-payout {
+  padding: 0 16px 16px;
+}
+
+.dk-bs-payout-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+  color: $dk-text-secondary;
+
+  span:last-child {
+    font-weight: 600;
+    color: $dk-text;
+  }
+}
+
+.dk-bs-payout-total {
+  border-top: 1px solid $dk-border;
+  padding-top: 8px;
+  margin-top: 4px;
+  font-weight: 700;
+
+  span:last-child {
+    color: $dk-green;
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.dk-bs-submit {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 0 16px 16px;
+  padding: 14px;
+  background: $dk-green;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  @include sans-serif;
+
+  &:hover {
+    background: $dk-green-dark;
+  }
+}
+
 .my-bets-page {
-  background: $sb-dark;
+  background: $dk-bg;
   min-height: 100vh;
+  @include sans-serif;
+  color: $dk-text;
   padding-bottom: 40px;
 
   .bets-header {
-    background: $sb-panel;
+    background: $dk-surface;
     padding: 16px 0 12px;
     text-align: center;
-    border-bottom: 2px solid rgba(0,0,0,0.3);
+    border-bottom: 1px solid $dk-border;
 
     h1 {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      color: #fff;
+      color: $dk-text;
       margin: 0;
-      font-size: 32px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
     }
 
     .subtitle {
-      @include sans-serif;
-      color: rgba(255,255,255,0.5);
+      color: $dk-text-secondary;
       font-size: 13px;
       margin: 0;
     }
@@ -697,70 +741,70 @@ $sb-baby-blue: #5ec3eb;
   .stats-row {
     display: flex;
     gap: 6px;
-    padding: 10px 15px;
+    padding: 12px 16px;
     flex-wrap: wrap;
+    max-width: 960px;
+    margin: 0 auto;
 
     .stat-card {
       flex: 1;
       min-width: 70px;
 
       .stat-inner {
-        background: $sb-panel;
+        background: $dk-surface;
         padding: 12px 8px;
         text-align: center;
-        border-radius: 4px;
+        border-radius: 6px;
+        border: 1px solid $dk-border;
 
         .stat-value {
-          font-family: 'BebasNeue', Impact, sans-serif;
-          font-size: 26px;
-          color: #fff;
+          font-size: 24px;
+          font-weight: 700;
+          color: $dk-text;
         }
 
         .stat-label {
-          @include sans-serif;
           font-size: 10px;
           text-transform: uppercase;
           letter-spacing: 1px;
-          color: $sb-lavender;
+          color: $dk-text-secondary;
         }
 
-        &.wins .stat-value { color: $sb-green; }
-        &.losses .stat-value { color: $sb-red; }
+        &.wins .stat-value { color: $dk-green; }
+        &.losses .stat-value { color: $dk-red; }
       }
     }
   }
 
   .bets-section {
-    padding: 0 15px;
+    padding: 0 16px;
     margin-bottom: 20px;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
 
     .section-title {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 20px;
-      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      color: $dk-text;
       margin-bottom: 10px;
       padding-bottom: 6px;
-      border-bottom: 2px solid $sb-blue-gray;
-      letter-spacing: 2px;
+      border-bottom: 1px solid $dk-border;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
     }
   }
 
   .bet-card {
-    background: #000;
-    margin-bottom: 2px;
+    background: $dk-card;
+    margin-bottom: 4px;
     overflow: hidden;
-    @include sans-serif;
-
-    &.won { }
-    &.lost { }
-    &.push { }
-    &.pending { }
-    &.active { }
+    border-radius: 6px;
+    border: 1px solid $dk-border;
 
     .bet-card-matchup {
       position: relative;
-      height: 70px;
+      height: 60px;
       overflow: hidden;
     }
 
@@ -781,199 +825,140 @@ $sb-baby-blue: #5ec3eb;
 
     .bet-team-away {
       position: absolute;
-      top: 6px;
-      left: 10px;
+      top: 6px; left: 10px;
       z-index: 2;
-      font-family: 'BebasNeue', Impact, sans-serif;
       color: #fff;
-      text-transform: uppercase;
 
-      .bet-team-city {
-        font-size: 10px;
-        color: rgba(255,255,255,0.75);
-        letter-spacing: 1px;
-        line-height: 1;
-        margin-bottom: -2px;
-      }
-
-      .bet-team-mascot {
-        font-size: 22px;
-        line-height: 0.95;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-      }
+      .bet-team-city { font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; line-height: 1; margin-bottom: -1px; }
+      .bet-team-mascot { font-size: 18px; font-weight: 700; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
     }
 
     .bet-team-home {
       position: absolute;
-      bottom: 6px;
-      right: 10px;
+      bottom: 6px; right: 10px;
       z-index: 2;
       text-align: right;
-      font-family: 'BebasNeue', Impact, sans-serif;
       color: #fff;
-      text-transform: uppercase;
 
-      .bet-team-city {
-        font-size: 10px;
-        color: rgba(255,255,255,0.75);
-        letter-spacing: 1px;
-        line-height: 1;
-        margin-bottom: -2px;
-      }
-
-      .bet-team-mascot {
-        font-size: 22px;
-        line-height: 0.95;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-      }
+      .bet-team-city { font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; line-height: 1; margin-bottom: -1px; }
+      .bet-team-mascot { font-size: 18px; font-weight: 700; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
     }
 
     .bet-at-image {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       z-index: 3;
-      width: 24px;
+      width: 20px;
       height: auto;
-      opacity: 0.85;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+      opacity: 0.7;
     }
 
     .bet-info-bar {
-      background: $sb-panel;
+      background: $dk-surface;
       padding: 8px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
 
       .bet-type-info {
-        .bet-selection-name {
-          font-family: 'BebasNeue', Impact, sans-serif;
-          font-size: 16px;
-          color: #fff;
-          text-transform: uppercase;
-        }
-
-        .bet-type-label {
-          font-size: 12px;
-          color: $sb-lavender;
-        }
+        .bet-selection-name { font-size: 14px; font-weight: 700; color: $dk-text; }
+        .bet-type-label { font-size: 11px; color: $dk-text-secondary; }
       }
 
       .bet-odds-badge {
-        font-family: 'BebasNeue', Impact, sans-serif;
-        font-size: 22px;
-        color: $sb-green;
+        font-size: 20px;
+        font-weight: 700;
+        color: $dk-green;
       }
     }
 
     .bet-bottom-bar {
-      background: $sb-blue-gray;
+      background: rgba(0,0,0,0.2);
       padding: 6px 12px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       font-size: 12px;
-      color: $sb-lavender;
+      color: $dk-text-secondary;
 
-      .bet-wager-amount {
-        font-weight: bold;
-        color: $sb-orange;
-      }
-
-      .bet-payout-amount {
-        font-weight: bold;
-        color: $sb-green;
-      }
+      .bet-wager-amount { font-weight: 700; color: $dk-yellow; }
+      .bet-payout-amount { font-weight: 700; color: $dk-green; }
     }
 
     .bet-status-strip {
       padding: 3px 12px;
       text-align: center;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 13px;
-      letter-spacing: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
       text-transform: uppercase;
       color: #fff;
 
-      &.status-pending { background: $sb-blue; }
-      &.status-active { background: $sb-sky; color: $sb-dark; }
-      &.status-won { background: $sb-green; }
-      &.status-lost { background: $sb-red; }
-      &.status-push { background: $sb-orange; }
+      &.status-pending { background: #3366cc; }
+      &.status-active { background: $dk-accent; color: $dk-bg; }
+      &.status-won { background: $dk-green; }
+      &.status-lost { background: $dk-red; }
+      &.status-push { background: $dk-yellow; color: $dk-bg; }
     }
   }
 
   .no-bets {
     text-align: center;
     padding: 40px;
-    background: $sb-panel;
-    border-radius: 4px;
+    background: $dk-surface;
+    border-radius: 6px;
+    border: 1px solid $dk-border;
 
-    i {
-      font-size: 40px;
-      color: $sb-blue-gray;
-      margin-bottom: 10px;
-    }
-
-    p {
-      @include sans-serif;
-      color: $sb-lavender;
-      font-size: 15px;
-      margin: 0;
-    }
+    i { font-size: 40px; color: $dk-text-muted; margin-bottom: 10px; }
+    p { color: $dk-text-secondary; font-size: 14px; margin: 0; }
   }
 
   .back-to-sportsbook {
     display: block;
     text-align: center;
-    margin: 20px 15px 0;
+    margin: 20px 16px 0;
 
     a {
       display: inline-block;
       padding: 12px 40px;
-      background: $sb-red;
+      background: $dk-green;
       color: #fff;
       text-decoration: none;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 22px;
-      border-radius: 4px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
 
-      &:hover { background: $sb-light-red; }
+      &:hover { background: $dk-green-dark; }
     }
   }
 }
 
 .fantasy-page {
-  background: $sb-dark;
+  background: $dk-bg;
   min-height: 100vh;
+  @include sans-serif;
+  color: $dk-text;
   padding-bottom: 40px;
 
-  .container {
-    overflow: visible;
-  }
+  .container { overflow: visible; }
 
   .fantasy-header {
-    background: $sb-panel;
+    background: $dk-surface;
     padding: 16px 0 12px;
     text-align: center;
-    border-bottom: 2px solid rgba(0,0,0,0.3);
+    border-bottom: 1px solid $dk-border;
 
     h1 {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      color: #fff;
-      font-size: 32px;
+      color: $dk-text;
+      font-size: 20px;
+      font-weight: 700;
       margin: 0;
-      letter-spacing: 4px;
-      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .balance-display {
-      @include sans-serif;
-      color: #fff;
+      color: $dk-text;
       text-align: center;
       padding-top: 2px;
 
@@ -981,18 +966,18 @@ $sb-baby-blue: #5ec3eb;
         font-size: 11px;
         text-transform: uppercase;
         letter-spacing: 1px;
-        color: rgba(255,255,255,0.5);
+        color: $dk-text-secondary;
       }
 
       .balance-amount {
-        font-size: 26px;
-        font-family: 'BebasNeue', Impact, sans-serif;
-        color: $sb-green;
+        font-size: 22px;
+        font-weight: 700;
+        color: $dk-green;
         margin-left: 8px;
 
         .currency {
-          font-size: 13px;
-          color: rgba(255,255,255,0.6);
+          font-size: 12px;
+          color: $dk-text-secondary;
         }
       }
     }
@@ -1003,8 +988,8 @@ $sb-baby-blue: #5ec3eb;
     margin: 0;
     padding: 0;
     display: flex;
-    background: darken($sb-dark, 2%);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: $dk-surface;
+    border-bottom: 2px solid $dk-border;
 
     li {
       flex: 1;
@@ -1014,112 +999,90 @@ $sb-baby-blue: #5ec3eb;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        font-family: 'BebasNeue', Impact, sans-serif;
-        font-size: 18px;
+        font-size: 13px;
+        font-weight: 600;
         text-align: center;
         padding: 10px 0 8px;
-        color: $sb-lavender;
+        color: $dk-text-secondary;
         text-decoration: none;
-        border-bottom: 3px solid transparent;
-        transition: all 0.2s;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        transition: all 0.15s;
 
-        &:hover {
-          color: #fff;
-          background: rgba(255,255,255,0.04);
-        }
+        &:hover { color: $dk-text; }
 
         .tab-icon {
-          width: 24px;
-          height: 24px;
+          width: 18px;
+          height: 18px;
           margin-bottom: 2px;
           opacity: 0.6;
         }
       }
 
       &.active a {
-        color: #fff;
-        border-bottom-color: $sb-orange;
-        background: rgba(255,255,255,0.06);
-
+        color: $dk-green;
+        border-bottom-color: $dk-green;
         .tab-icon { opacity: 1; }
       }
     }
   }
 
   .alert-notice {
-    background: $sb-green;
-    color: #fff;
-    @include sans-serif;
-    padding: 12px 20px;
+    background: rgba($dk-green, 0.12);
+    color: $dk-green;
+    border: 1px solid rgba($dk-green, 0.25);
+    padding: 10px 16px;
     margin: 12px 0 0;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 6px;
+    font-size: 13px;
   }
 
   .alert-alert {
-    background: $sb-red;
-    color: #fff;
-    @include sans-serif;
-    padding: 12px 20px;
+    background: rgba($dk-red, 0.12);
+    color: #ff7b72;
+    border: 1px solid rgba($dk-red, 0.25);
+    padding: 10px 16px;
     margin: 12px 0 0;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 6px;
+    font-size: 13px;
   }
 
   .beep-warning {
-    background: $sb-orange;
-    color: #fff;
-    @include sans-serif;
-    padding: 12px 20px;
+    background: rgba($dk-yellow, 0.1);
+    color: $dk-yellow;
+    border: 1px solid rgba($dk-yellow, 0.2);
+    padding: 10px 16px;
     margin: 12px 0 0;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 6px;
+    font-size: 13px;
 
-    a {
-      color: #fff;
-      font-weight: bold;
-      text-decoration: underline;
-    }
+    a { color: $dk-yellow; font-weight: 700; text-decoration: underline; }
   }
 
   .fantasy-nav-bar {
     display: flex;
     gap: 2px;
     margin: 15px 0;
-    background: darken($sb-dark, 2%);
-    border-radius: 4px;
     overflow: hidden;
 
     .fnav-link {
       flex: 1;
       text-align: center;
-      padding: 12px 0;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 18px;
-      color: $sb-lavender;
+      padding: 10px 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: $dk-text-secondary;
       text-decoration: none;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      background: $sb-panel;
-      transition: all 0.2s;
+      letter-spacing: 0.5px;
+      background: $dk-surface;
+      transition: all 0.15s;
 
-      &:hover {
-        color: #fff;
-        background: lighten($sb-panel, 5%);
-      }
-
-      &.active {
-        background: $sb-orange;
-        color: #fff;
-      }
+      &:hover { color: $dk-text; background: lighten($dk-surface, 3%); }
+      &.active { background: $dk-green; color: #fff; }
     }
   }
 
-  .games-section {
-    padding: 0;
-  }
+  .games-section { padding: 0; }
 
   .games-header {
     display: flex;
@@ -1128,51 +1091,48 @@ $sb-baby-blue: #5ec3eb;
     margin-bottom: 10px;
 
     .games-title {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 22px;
-      color: #fff;
-      letter-spacing: 2px;
+      font-size: 16px;
+      font-weight: 700;
+      color: $dk-text;
     }
 
     .games-count {
-      @include sans-serif;
-      color: $sb-lavender;
+      color: $dk-text-secondary;
       font-size: 12px;
     }
   }
 
   .game-card {
-    background: #000;
-    margin-bottom: 2px;
+    background: $dk-card;
+    margin-bottom: 4px;
     overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid $dk-border;
   }
 
   .game-date-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 8px;
-    background: #000;
-    @include sans-serif;
+    padding: 6px 12px;
+    background: rgba(0,0,0,0.3);
     font-size: 12px;
-    color: #fff;
+    color: $dk-text-secondary;
 
-    .game-time { color: rgba(255,255,255,0.7); }
+    .game-time { color: $dk-text-secondary; }
     .live-badge {
-      background: $sb-red;
+      background: $dk-red;
       color: #fff;
       font-size: 10px;
-      font-weight: bold;
+      font-weight: 700;
       padding: 1px 8px;
       border-radius: 8px;
-      text-transform: uppercase;
-      i { margin-right: 3px; }
     }
   }
 
   .game-matchup-panel {
     position: relative;
-    height: 120px;
+    height: 100px;
     overflow: hidden;
   }
 
@@ -1196,9 +1156,9 @@ $sb-baby-blue: #5ec3eb;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     z-index: 3;
-    width: 36px;
+    width: 30px;
     height: auto;
-    opacity: 0.9;
+    opacity: 0.8;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
   }
 
@@ -1209,19 +1169,19 @@ $sb-baby-blue: #5ec3eb;
     max-width: 48%;
 
     .team-city {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 14px;
-      letter-spacing: 2px;
+      font-size: 12px;
+      letter-spacing: 1px;
       color: rgba(255,255,255,0.8);
       line-height: 1;
       text-transform: uppercase;
-      margin-bottom: -3px;
+      margin-bottom: -2px;
+      font-weight: 500;
     }
 
     .team-mascot {
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 36px;
-      line-height: 0.95;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
       color: #fff;
       text-transform: uppercase;
       text-shadow: 0 2px 4px rgba(0,0,0,0.4);
@@ -1232,7 +1192,7 @@ $sb-baby-blue: #5ec3eb;
   .team-block-home { bottom: 8px; right: 8px; text-align: right; }
 
   .fantasy-card-footer {
-    background: $sb-panel;
+    background: $dk-surface;
     padding: 10px 12px;
     display: flex;
     align-items: center;
@@ -1240,27 +1200,25 @@ $sb-baby-blue: #5ec3eb;
 
     .contest-info {
       .contest-count {
-        @include sans-serif;
         font-size: 13px;
-        color: $sb-lavender;
-        i { margin-right: 4px; color: $sb-orange; }
+        color: $dk-text-secondary;
+        i { margin-right: 4px; color: $dk-green; }
       }
     }
 
     .enter-btn {
       display: inline-block;
       padding: 8px 20px;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 16px;
-      letter-spacing: 1px;
-      background: $sb-orange;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: $dk-green;
       color: #fff;
       text-decoration: none;
-      border-radius: 4px;
+      border-radius: 6px;
       transition: background 0.15s;
-      text-transform: uppercase;
 
-      &:hover { background: darken($sb-orange, 8%); }
+      &:hover { background: $dk-green-dark; }
       i { margin-right: 4px; }
     }
   }
@@ -1268,135 +1226,84 @@ $sb-baby-blue: #5ec3eb;
   .no-games {
     text-align: center;
     padding: 60px 20px;
-    background: $sb-panel;
-    border-radius: 4px;
+    background: $dk-surface;
+    border-radius: 6px;
+    border: 1px solid $dk-border;
 
-    i {
-      font-size: 48px;
-      color: $sb-blue-gray;
-      margin-bottom: 14px;
-    }
+    i { font-size: 48px; color: $dk-text-muted; margin-bottom: 14px; }
 
     p {
-      @include sans-serif;
-      color: $sb-lavender;
-      font-size: 16px;
+      color: $dk-text-secondary;
+      font-size: 14px;
       margin: 0;
 
-      &.sub {
-        font-size: 13px;
-        margin-top: 6px;
-        color: $sb-blue-gray;
-      }
+      &.sub { font-size: 12px; margin-top: 6px; color: $dk-text-muted; }
     }
 
     .go-sportsbook-link {
       display: inline-block;
       margin-top: 16px;
       padding: 10px 30px;
-      background: $sb-red;
+      background: $dk-green;
       color: #fff;
       text-decoration: none;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 18px;
-      border-radius: 4px;
-      letter-spacing: 1px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 6px;
 
-      &:hover { background: $sb-light-red; }
+      &:hover { background: $dk-green-dark; }
     }
   }
 
   .section-heading {
-    font-family: 'BebasNeue', Impact, sans-serif;
-    font-size: 20px;
-    color: #fff;
-    letter-spacing: 2px;
+    font-size: 14px;
+    font-weight: 700;
+    color: $dk-text;
+    letter-spacing: 0.5px;
     padding: 12px 0 8px;
-    border-bottom: 2px solid $sb-blue-gray;
+    border-bottom: 1px solid $dk-border;
     margin-bottom: 10px;
     text-transform: uppercase;
 
-    i { color: $sb-orange; margin-right: 8px; }
+    i { color: $dk-green; margin-right: 8px; }
   }
 
-  .contests-section {
-    margin-top: 15px;
-  }
+  .contests-section { margin-top: 15px; }
 
   .contest-row {
-    background: $sb-panel;
+    background: $dk-surface;
     padding: 12px 14px;
     margin-bottom: 2px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-radius: 4px;
 
     .contest-row-left {
-      .contest-name {
-        font-family: 'BebasNeue', Impact, sans-serif;
-        font-size: 17px;
-        color: #fff;
-        text-transform: uppercase;
-      }
-
-      .contest-meta {
-        @include sans-serif;
-        font-size: 12px;
-        color: $sb-lavender;
-
-        i { margin-right: 3px; }
-      }
+      .contest-name { font-size: 14px; font-weight: 700; color: $dk-text; }
+      .contest-meta { font-size: 12px; color: $dk-text-secondary; i { margin-right: 3px; } }
     }
 
     .contest-row-right {
       text-align: right;
-
-      .contest-prize {
-        font-family: 'BebasNeue', Impact, sans-serif;
-        font-size: 18px;
-        color: $sb-green;
-
-        i { margin-right: 3px; font-size: 14px; }
-      }
-
-      .contest-fee {
-        @include sans-serif;
-        font-size: 11px;
-        color: $sb-lavender;
-      }
+      .contest-prize { font-size: 16px; font-weight: 700; color: $dk-green; i { margin-right: 3px; font-size: 13px; } }
+      .contest-fee { font-size: 11px; color: $dk-text-secondary; }
     }
   }
 
   .no-contests-box, .no-players-box {
     text-align: center;
     padding: 40px 20px;
-    background: $sb-panel;
-    border-radius: 4px;
+    background: $dk-surface;
+    border-radius: 6px;
+    border: 1px solid $dk-border;
     margin-top: 15px;
 
-    i {
-      font-size: 40px;
-      color: $sb-blue-gray;
-      margin-bottom: 10px;
-    }
-
-    p {
-      @include sans-serif;
-      color: $sb-lavender;
-      font-size: 15px;
-      margin: 0;
-
-      &.sub {
-        font-size: 12px;
-        margin-top: 4px;
-        color: $sb-blue-gray;
-      }
-    }
+    i { font-size: 40px; color: $dk-text-muted; margin-bottom: 10px; }
+    p { color: $dk-text-secondary; font-size: 14px; margin: 0; &.sub { font-size: 12px; margin-top: 4px; color: $dk-text-muted; } }
   }
 
-  .roster-section {
-    margin-top: 20px;
-  }
+  .roster-section { margin-top: 20px; }
 
   .team-filter-bar {
     display: flex;
@@ -1406,33 +1313,24 @@ $sb-baby-blue: #5ec3eb;
     .team-filter-btn {
       flex: 1;
       padding: 8px 0;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 15px;
-      letter-spacing: 1px;
-      background: $sb-panel;
-      color: $sb-lavender;
-      border: 1px solid $sb-blue-gray;
-      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      background: $dk-surface;
+      color: $dk-text-secondary;
+      border: 1px solid $dk-border;
+      border-radius: 6px;
       cursor: pointer;
-      text-transform: uppercase;
       transition: all 0.15s;
 
-      &:hover {
-        background: lighten($sb-panel, 5%);
-        color: #fff;
-      }
-
-      &.active {
-        background: $sb-orange;
-        color: #fff;
-        border-color: $sb-orange;
-      }
+      &:hover { background: lighten($dk-surface, 3%); color: $dk-text; }
+      &.active { background: $dk-green; color: #fff; border-color: $dk-green; }
     }
   }
 
   .players-table {
-    background: $sb-panel;
-    border-radius: 4px;
+    background: $dk-surface;
+    border-radius: 6px;
+    border: 1px solid $dk-border;
     overflow: hidden;
   }
 
@@ -1440,10 +1338,10 @@ $sb-baby-blue: #5ec3eb;
     display: flex;
     padding: 8px 12px;
     background: rgba(0,0,0,0.3);
-    font-family: 'BebasNeue', Impact, sans-serif;
-    font-size: 12px;
-    letter-spacing: 1px;
-    color: $sb-lavender;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: $dk-text-secondary;
 
     .ph-pos { width: 50px; }
     .ph-name { flex: 1; }
@@ -1454,35 +1352,16 @@ $sb-baby-blue: #5ec3eb;
     display: flex;
     align-items: center;
     padding: 8px 12px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    @include sans-serif;
-    font-size: 14px;
-    color: #fff;
+    border-top: 1px solid $dk-border;
+    font-size: 13px;
+    color: $dk-text;
     transition: background 0.1s;
 
-    &:hover { background: lighten($sb-panel, 3%); }
+    &:hover { background: lighten($dk-surface, 2%); }
 
-    .pr-pos {
-      width: 50px;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 13px;
-      color: $sb-lavender;
-      letter-spacing: 1px;
-    }
-
-    .pr-name {
-      flex: 1;
-      font-weight: 500;
-    }
-
-    .pr-team {
-      width: 60px;
-      text-align: right;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 14px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+    .pr-pos { width: 50px; font-size: 12px; color: $dk-text-secondary; font-weight: 600; }
+    .pr-name { flex: 1; font-weight: 500; }
+    .pr-team { width: 60px; text-align: right; font-size: 13px; font-weight: 700; }
   }
 
   .back-link {
@@ -1492,15 +1371,15 @@ $sb-baby-blue: #5ec3eb;
     .back-btn {
       display: inline-block;
       padding: 10px 30px;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 18px;
-      color: #fff;
-      background: $sb-panel;
-      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: $dk-text;
+      background: $dk-surface;
+      border-radius: 6px;
+      border: 1px solid $dk-border;
       text-decoration: none;
-      letter-spacing: 1px;
 
-      &:hover { background: lighten($sb-panel, 5%); }
+      &:hover { background: lighten($dk-surface, 3%); }
     }
   }
 
@@ -1511,172 +1390,109 @@ $sb-baby-blue: #5ec3eb;
 
     .entry-stat {
       flex: 1;
-      background: $sb-panel;
+      background: $dk-surface;
       text-align: center;
       padding: 14px 8px;
-      border-radius: 4px;
+      border-radius: 6px;
+      border: 1px solid $dk-border;
 
       .entry-stat-value {
-        font-family: 'BebasNeue', Impact, sans-serif;
-        font-size: 30px;
-        color: #fff;
-
-        &.mlb-color { color: $sb-red; }
-        &.nfl-color { color: $sb-green; }
+        font-size: 26px;
+        font-weight: 700;
+        color: $dk-text;
+        &.mlb-color { color: $dk-red; }
+        &.nfl-color { color: $dk-green; }
       }
 
       .entry-stat-label {
-        @include sans-serif;
-        font-size: 11px;
+        font-size: 10px;
         text-transform: uppercase;
         letter-spacing: 1px;
-        color: $sb-lavender;
+        color: $dk-text-secondary;
       }
     }
   }
 
   .entry-card {
-    background: #000;
+    background: $dk-card;
     margin-bottom: 6px;
     overflow: hidden;
     position: relative;
+    border-radius: 6px;
+    border: 1px solid $dk-border;
 
     .entry-sport-badge {
       position: absolute;
-      top: 6px;
-      right: 6px;
+      top: 6px; right: 6px;
       z-index: 5;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 11px;
+      font-size: 10px;
+      font-weight: 700;
       letter-spacing: 1px;
       padding: 2px 8px;
       border-radius: 3px;
       color: #fff;
 
-      &.mlb { background: $sb-red; }
-      &.nfl { background: $sb-green; }
+      &.mlb { background: $dk-red; }
+      &.nfl { background: $dk-green; }
     }
 
-    .entry-matchup {
-      position: relative;
-      height: 70px;
-      overflow: hidden;
-    }
+    .entry-matchup { position: relative; height: 60px; overflow: hidden; }
 
-    .bet-split-away {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      clip-path: polygon(0 0, 100% 0, 0 100%);
-      z-index: 1;
-    }
-
-    .bet-split-home {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-    }
-
-    .bet-at-image {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 3;
-      width: 24px;
-      height: auto;
-      opacity: 0.85;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
-    }
+    .bet-split-away { position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(0 0, 100% 0, 0 100%); z-index: 1; }
+    .bet-split-home { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+    .bet-at-image { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; width: 20px; height: auto; opacity: 0.7; }
 
     .bet-team-away {
-      position: absolute;
-      top: 6px; left: 10px;
-      z-index: 2;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      color: #fff;
-      text-transform: uppercase;
-
-      .bet-team-city { font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 1px; line-height: 1; margin-bottom: -2px; }
-      .bet-team-mascot { font-size: 22px; line-height: 0.95; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+      position: absolute; top: 6px; left: 10px; z-index: 2; color: #fff;
+      .bet-team-city { font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; line-height: 1; margin-bottom: -1px; }
+      .bet-team-mascot { font-size: 18px; font-weight: 700; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
     }
 
     .bet-team-home {
-      position: absolute;
-      bottom: 6px; right: 10px;
-      z-index: 2;
-      text-align: right;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      color: #fff;
-      text-transform: uppercase;
-
-      .bet-team-city { font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 1px; line-height: 1; margin-bottom: -2px; }
-      .bet-team-mascot { font-size: 22px; line-height: 0.95; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+      position: absolute; bottom: 6px; right: 10px; z-index: 2; text-align: right; color: #fff;
+      .bet-team-city { font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; line-height: 1; margin-bottom: -1px; }
+      .bet-team-mascot { font-size: 18px; font-weight: 700; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
     }
 
     .entry-info-bar {
-      background: $sb-panel;
+      background: $dk-surface;
       padding: 10px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
 
       .entry-details {
-        .entry-contest-name {
-          font-family: 'BebasNeue', Impact, sans-serif;
-          font-size: 16px;
-          color: #fff;
-          text-transform: uppercase;
-        }
-
-        .entry-date {
-          @include sans-serif;
-          font-size: 12px;
-          color: $sb-lavender;
-          i { margin-right: 4px; }
-        }
+        .entry-contest-name { font-size: 14px; font-weight: 700; color: $dk-text; }
+        .entry-date { font-size: 12px; color: $dk-text-secondary; i { margin-right: 4px; } }
       }
 
       .entry-score-block {
         text-align: right;
-
-        .entry-score {
-          font-family: 'BebasNeue', Impact, sans-serif;
-          font-size: 28px;
-          color: $sb-green;
-          line-height: 1;
-        }
-
-        .entry-placing {
-          @include sans-serif;
-          font-size: 12px;
-          color: $sb-orange;
-          font-weight: bold;
-        }
+        .entry-score { font-size: 24px; font-weight: 700; color: $dk-green; line-height: 1; }
+        .entry-placing { font-size: 12px; color: $dk-yellow; font-weight: 700; }
       }
     }
 
     .entry-bottom-bar {
-      background: $sb-blue-gray;
+      background: rgba(0,0,0,0.2);
       padding: 6px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      @include sans-serif;
       font-size: 12px;
-      color: $sb-lavender;
+      color: $dk-text-secondary;
 
       .entry-status {
-        font-family: 'BebasNeue', Impact, sans-serif;
-        font-size: 12px;
+        font-size: 10px;
+        font-weight: 700;
         letter-spacing: 1px;
         padding: 2px 10px;
         border-radius: 3px;
         color: #fff;
 
-        &.upcoming { background: $sb-blue; }
-        &.live { background: $sb-red; animation: livePulse 2s infinite; }
-        &.final { background: $sb-blue-gray; border: 1px solid rgba(255,255,255,0.2); }
+        &.upcoming { background: #3366cc; }
+        &.live { background: $dk-red; animation: dk-pulse 1.5s infinite; }
+        &.final { background: $dk-text-muted; }
       }
     }
   }
@@ -1684,41 +1500,24 @@ $sb-baby-blue: #5ec3eb;
   .no-entries {
     text-align: center;
     padding: 60px 20px;
-    background: $sb-panel;
-    border-radius: 4px;
+    background: $dk-surface;
+    border-radius: 6px;
+    border: 1px solid $dk-border;
 
-    i {
-      font-size: 48px;
-      color: $sb-blue-gray;
-      margin-bottom: 14px;
-    }
-
-    p {
-      @include sans-serif;
-      color: $sb-lavender;
-      font-size: 16px;
-      margin: 0;
-
-      &.sub {
-        font-size: 13px;
-        margin-top: 6px;
-        color: $sb-blue-gray;
-      }
-    }
+    i { font-size: 48px; color: $dk-text-muted; margin-bottom: 14px; }
+    p { color: $dk-text-secondary; font-size: 14px; margin: 0; &.sub { font-size: 12px; margin-top: 6px; color: $dk-text-muted; } }
 
     .go-sportsbook-link {
       display: inline-block;
       margin-top: 16px;
       padding: 10px 30px;
-      background: $sb-orange;
+      background: $dk-green;
       color: #fff;
       text-decoration: none;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 18px;
-      border-radius: 4px;
-      letter-spacing: 1px;
-
-      &:hover { background: darken($sb-orange, 8%); }
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 6px;
+      &:hover { background: $dk-green-dark; }
     }
   }
 
@@ -1730,21 +1529,19 @@ $sb-baby-blue: #5ec3eb;
     a {
       display: inline-block;
       padding: 12px 40px;
-      background: $sb-red;
+      background: $dk-green;
       color: #fff;
       text-decoration: none;
-      font-family: 'BebasNeue', Impact, sans-serif;
-      font-size: 22px;
-      border-radius: 4px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 8px;
 
-      &:hover { background: $sb-light-red; }
+      &:hover { background: $dk-green-dark; }
     }
   }
 
-  @keyframes livePulse {
+  @keyframes dk-pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+    50% { opacity: 0.3; }
   }
 }

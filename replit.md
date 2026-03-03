@@ -9,7 +9,7 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 - **JavaScript Runtime**: ✅ Node.js 20 installed  
 - **Asset Pipeline**: ✅ Sass/CSS compiling successfully (Rails 6 compatible)
 - **Cardano Blockchain**: ✅ Integrated with Blockfrost API for crypto wallet support
-- **Sportsbook**: ✅ Traditional sportsbook interface with MLB, NFL, NBA, NHL odds
+- **Sportsbook**: ✅ DraftKings-style sportsbook with table-grid odds layout (MLB, NFL, NBA, NHL)
 - **OpticOdds API**: ✅ Integrated for real-time odds data
 - **Backend Timer API**: ❌ Needs Rails 6+ upgrade for Ruby 3.2 compatibility
 - **Deployment**: ✅ Configured for Replit autoscale with PostgreSQL
@@ -82,6 +82,7 @@ The application automatically starts with the configured workflow:
 - **Admin Sessions Controller**: Fixed after_sign_in redirect to properly route to admin dashboard
 - **Admin Base Controller**: Removed missing Pundit and Responders dependencies, fixed set_current_sport method
 - **Admin User Management**: Built comprehensive user list with search, detailed user profiles with account/activity stats, N+1 query optimization with preloading
+- **Sportsbook UI Redesign**: Complete rebuild to DraftKings/FanDuel style — dark background (#0b0e14), table-grid odds layout with SPREAD/TOTAL/MONEYLINE columns, team color indicator bars, compact game rows, slide-up bet slip panel, green accent (#00c853) for odds/CTA buttons
 
 ## Daily Fantasy Sports (DFS)
 - **URL**: `/fantasy` (requires user authentication)
