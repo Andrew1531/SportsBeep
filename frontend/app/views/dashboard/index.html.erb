@@ -73,25 +73,7 @@
         <% end %>
       </div>
       <div class="row">
-        <div class="col-xs-12 col-sm-6" style="margin-bottom: 10px;">
-          <div style="background: rgba(246,133,27,0.08); border: 1px solid rgba(246,133,27,0.2); border-radius: 10px; padding: 14px 18px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center;">
-                <i class="fa-brands fa-ethereum" style="color: #f6851b; font-size: 20px; margin-right: 10px;"></i>
-                <div>
-                  <p style="color: white; font-weight: 600; margin: 0; font-size: 14px;">MetaMask</p>
-                  <% if @user.ethereum_wallet_address.present? %>
-                    <code style="color: #8892b0; font-size: 11px;"><%= @user.ethereum_wallet_address[0..5] %>...<%= @user.ethereum_wallet_address[-4..] %></code>
-                  <% else %>
-                    <p style="color: #8892b0; margin: 0; font-size: 12px;">Not connected</p>
-                  <% end %>
-                </div>
-              </div>
-              <span style="padding: 4px 10px; background: <%= @user.ethereum_wallet_address.present? ? 'rgba(72,187,120,0.15)' : 'rgba(255,255,255,0.06)' %>; color: <%= @user.ethereum_wallet_address.present? ? '#68d391' : '#8892b0' %>; border-radius: 20px; font-size: 11px; font-weight: 600;"><%= @user.ethereum_wallet_address.present? ? 'Connected' : 'Inactive' %></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-12 col-sm-6" style="margin-bottom: 10px;">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2" style="margin-bottom: 10px;">
           <div style="background: rgba(0,136,204,0.08); border: 1px solid rgba(0,180,216,0.2); border-radius: 10px; padding: 14px 18px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <div style="display: flex; align-items: center;">
@@ -110,10 +92,10 @@
           </div>
         </div>
       </div>
-      <% unless @user.ethereum_wallet_address.present? && @user.cardano_wallet_address.present? %>
+      <% unless @user.cardano_wallet_address.present? %>
         <div style="margin-top: 10px; text-align: center;">
           <%= link_to wallet_path, style: 'display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
-            <i class="fa fa-plus" style="margin-right: 6px;"></i> Connect a Wallet
+            <i class="fa fa-plus" style="margin-right: 6px;"></i> Connect Cardano Wallet
           <% end %>
         </div>
       <% end %>

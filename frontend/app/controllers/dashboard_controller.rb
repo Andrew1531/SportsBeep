@@ -56,18 +56,6 @@ class DashboardController < ApplicationController
     load_wallet_info
   end
 
-  def connect_metamask
-    @user = current_user
-    address = params[:ethereum_address].to_s.strip
-    if address.match?(/\A0x[0-9a-fA-F]{40}\z/)
-      @user.update(ethereum_wallet_address: address)
-      flash[:notice] = "MetaMask wallet connected successfully!"
-    else
-      flash[:alert] = "Invalid Ethereum address format."
-    end
-    redirect_to safe_redirect_path
-  end
-
   def connect_cardano
     @user = current_user
     address = params[:cardano_address].to_s.strip
@@ -77,12 +65,6 @@ class DashboardController < ApplicationController
     else
       flash[:alert] = "Invalid Cardano address format."
     end
-    redirect_to safe_redirect_path
-  end
-
-  def disconnect_metamask
-    current_user.update(ethereum_wallet_address: nil)
-    flash[:notice] = "MetaMask wallet disconnected."
     redirect_to safe_redirect_path
   end
 

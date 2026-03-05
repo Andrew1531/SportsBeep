@@ -28,7 +28,7 @@ class RegistrationsController < Devise::RegistrationsController
     def permit_parameters!
       params[:user][:avatar_uuid] = SecureRandom.uuid if params[:user][:avatar]
       devise_parameter_sanitizer.permit(:account_update, keys: [:email, :username, :password, :current_password, :avatar, :avatar_uuid])
-      devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :username, :password, :first_name, :last_name, :cardano_wallet_address, :ethereum_wallet_address])
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :username, :password, :first_name, :last_name, :cardano_wallet_address])
     end
 
     def logout_current_user

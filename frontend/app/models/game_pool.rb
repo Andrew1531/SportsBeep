@@ -2,6 +2,6 @@ class GamePool < ActiveRecord::Base
   belongs_to :game
   belongs_to :pool
 
-  validate :game, uniqueness: { scope: :pool }
+  validates :game_id, uniqueness: { scope: :pool_id }
 
 end

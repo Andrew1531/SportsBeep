@@ -86,14 +86,27 @@ class ThesportsdbService
 
   def search_teams_by_names(team_names)
     results = []
-    team_names.each do |name|
-      team_data = search_team(name)
-      if team_data
-        results << team_data
-      else
-        Rails.logger.warn "TheSportsDB: Could not find team '#{name}'"
+    team_names.each_with_index do |name, i|
+      retries = 0
+      begin
+        team_data = search_team(name)
+        if team_data
+          results << team_data
+        else
+          Rails.logger.warn "TheSportsDB: Could not find team '#{name}'"
+        end
+      rescue StandardError => e
+        if retries < 3
+          retries += 1
+          wait = 5 * retries
+          Rails.logger.warn "TheSportsDB: Rate limited on '#{name}', retrying in #{wait}s (attempt #{retries})"
+          sleep(wait)
+          retry
+        else
+          Rails.logger.error "TheSportsDB: Failed to fetch '#{name}' after 3 retries: #{e.message}"
+        end
       end
-      sleep(0.3)
+      sleep(1.5)
     end
     results
   end
@@ -102,17 +115,24 @@ class ThesportsdbService
     url = "#{BASE_URL}/#{@api_key}/#{endpoint}"
     uri = URI(url)
 
-    response = Net::HTTP.get_response(uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+    http.ssl_version = :TLSv1_2
+
+    store = OpenSSL::X509::Store.new
+    store.set_default_paths
+    store.flags = OpenSSL::X509::V_FLAG_PARTIAL_CHAIN
+    http.cert_store = store
+
+    request = Net::HTTP::Get.new(uri.request_uri)
+    response = http.request(request)
 
     if response.is_a?(Net::HTTPSuccess)
       JSON.parse(response.body)
     else
-      Rails.logger.error "TheSportsDB API error: #{response.code} - #{response.message}"
-      {}
+      raise "API error: #{response.code} - #{response.message}"
     end
-  rescue StandardError => e
-    Rails.logger.error "TheSportsDB API request failed: #{e.message}"
-    {}
   end
 
   def current_mlb_season

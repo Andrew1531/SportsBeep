@@ -199,9 +199,8 @@
           <li>
             <%= link_to wallet_path, class: ('sb-nav-active' if action_name == 'wallet' || action_name == 'vending') do %>
               <i class="fa fa-wallet"></i> WALLET
-              <% connected = [current_user.ethereum_wallet_address, current_user.cardano_wallet_address].compact.reject(&:blank?).size %>
-              <% if connected > 0 %>
-                <span style="display: inline-block; background: rgba(72,187,120,0.25); color: #68d391; font-size: 10px; padding: 1px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;"><%= connected %>/2</span>
+              <% if current_user.cardano_wallet_address.present? %>
+                <span style="display: inline-block; background: rgba(72,187,120,0.25); color: #68d391; font-size: 10px; padding: 1px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">1</span>
               <% end %>
             <% end %>
           </li>

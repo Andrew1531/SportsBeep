@@ -114,7 +114,7 @@ namespace :sports do
         away_team: away_team,
         start_time: start_time,
         status: event_data['strStatus'] || 'NS',
-        bettable: true
+        bettable: false
       )
 
       if game.save
@@ -140,7 +140,7 @@ namespace :sports do
     if events_data.empty?
       puts "No NFL games found for #{season} season."
       puts "NFL season may not have started yet or data is not available."
-      return
+      next
     end
 
     puts "Found #{events_data.length} NFL events. Importing..."
@@ -168,7 +168,7 @@ namespace :sports do
         away_team: away_team,
         start_time: start_time,
         status: event_data['strStatus'] || 'NS',
-        bettable: true
+        bettable: false
       )
 
       if game.save
