@@ -1545,3 +1545,140 @@ $dk-tab-active: #00c853;
     50% { opacity: 0.3; }
   }
 }
+
+.sb-date-label {
+  padding: 8px 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: $dk-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.sb-game-card {
+  margin-bottom: 10px;
+}
+
+.sb-live-badge {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  background: rgba(0,0,0,0.6);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  color: $dk-red;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sb-time-badge {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  background: rgba(0,0,0,0.55);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.3px;
+}
+
+.sb-odds-grid {
+  border-top: 1px solid $dk-border;
+}
+
+.sb-odds-grid-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(0,0,0,0.25);
+  border-bottom: 1px solid $dk-border;
+}
+
+.sb-og-team-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.sb-og-col {
+  width: 80px;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: $dk-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+
+  @media (max-width: 500px) {
+    width: 64px;
+    font-size: 8px;
+  }
+}
+
+.sb-odds-grid-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-bottom: 1px solid rgba($dk-border, 0.5);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .dk-odds-btn {
+    width: 80px;
+    height: 34px;
+    flex-shrink: 0;
+
+    @media (max-width: 500px) {
+      width: 64px;
+      height: 30px;
+    }
+  }
+
+  .dk-odds-empty {
+    width: 80px;
+    height: 34px;
+    flex-shrink: 0;
+
+    @media (max-width: 500px) {
+      width: 64px;
+      height: 30px;
+    }
+  }
+}
+
+.sb-og-team {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: $dk-text;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
+}
+
+.sb-og-color {
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}

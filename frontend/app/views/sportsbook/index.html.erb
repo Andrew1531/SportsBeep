@@ -1,45 +1,38 @@
-<div class="dk-sportsbook">
+<div class="my-bets-page">
 
-  <div class="dk-top-bar">
-    <div class="dk-top-inner">
-      <div class="dk-brand">
-        <%= (image_tag 'logo.png', class: 'dk-logo') rescue nil %>
-        <span class="dk-title">SPORTSBOOK</span>
-      </div>
-      <div class="dk-balance">
-        <span class="dk-bal-label">Balance</span>
-        <span class="dk-bal-value"><%= number_with_precision(@account.balance, precision: 2) rescue '0.00' %></span>
-        <span class="dk-bal-currency">$BEEP</span>
-      </div>
+  <div class="bets-header">
+    <div class="container" style="max-width: 960px; margin: 0 auto;">
+      <h1>SPORTSBOOK</h1>
+      <p class="subtitle">Balance: <span style="color: #00c853; font-weight: 700;"><%= number_with_precision(@account.balance, precision: 2) rescue '0.00' %> $BEEP</span></p>
     </div>
   </div>
 
-  <nav class="dk-sport-nav">
-    <% sports = [
-      { key: 'mlb', label: 'MLB', icon: 'ic_baseball.png' },
-      { key: 'nfl', label: 'NFL', icon: 'ic_football.png' },
-      { key: 'nba', label: 'NBA', icon: 'ic_basketball.png' },
-      { key: 'nhl', label: 'NHL', icon: 'ic_hockey.png' }
-    ] %>
-    <% sports.each do |s| %>
-      <%= link_to sportsbook_path(sport: s[:key]), class: "dk-sport-tab #{'active' if @sport == s[:key]}" do %>
-        <%= image_tag s[:icon], class: 'dk-sport-icon' %>
-        <span><%= s[:label] %></span>
-      <% end %>
-    <% end %>
-  </nav>
+  <div class="container" style="max-width: 960px; margin: 0 auto;">
 
-  <div class="dk-content">
+    <nav class="dk-sport-nav">
+      <% sports = [
+        { key: 'mlb', label: 'MLB', icon: 'ic_baseball.png' },
+        { key: 'nfl', label: 'NFL', icon: 'ic_football.png' },
+        { key: 'nba', label: 'NBA', icon: 'ic_basketball.png' },
+        { key: 'nhl', label: 'NHL', icon: 'ic_hockey.png' }
+      ] %>
+      <% sports.each do |s| %>
+        <%= link_to sportsbook_path(sport: s[:key]), class: "dk-sport-tab #{'active' if @sport == s[:key]}" do %>
+          <%= image_tag s[:icon], class: 'dk-sport-icon' %>
+          <span><%= s[:label] %></span>
+        <% end %>
+      <% end %>
+    </nav>
 
     <% if flash[:notice] %>
-      <div class="dk-alert dk-alert-success"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></div>
+      <div class="dk-alert dk-alert-success" style="margin: 12px 16px 0;"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></div>
     <% end %>
     <% if flash[:alert] %>
-      <div class="dk-alert dk-alert-error"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div>
+      <div class="dk-alert dk-alert-error" style="margin: 12px 16px 0;"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div>
     <% end %>
 
     <% unless @has_beep %>
-      <div class="dk-alert dk-alert-warning">
+      <div class="dk-alert dk-alert-warning" style="margin: 12px 16px 0;">
         <i class="fa fa-exclamation-triangle"></i>
         You need <strong>$BEEP tokens</strong> to place wagers.
         <%= link_to 'Get $BEEP', wallet_path %>
@@ -47,137 +40,162 @@
     <% end %>
 
     <% if @open_wagers.present? %>
-      <div class="dk-active-bets">
-        <div class="dk-active-header">
-          <span><i class="fa fa-receipt"></i> Active Wagers (<%= @open_wagers.size %>)</span>
-          <%= link_to 'View All', my_bets_path, class: 'dk-view-all' %>
-        </div>
+      <div class="bets-section" style="margin-top: 12px;">
+        <h3 class="section-title"><i class="fa fa-receipt" style="color: #00c853; margin-right: 6px;"></i> ACTIVE WAGERS (<%= @open_wagers.size %>)  <%= link_to 'View All', my_bets_path, style: 'float: right; font-size: 12px; color: #4fc3f7; text-decoration: none; font-weight: 500; text-transform: none; letter-spacing: 0;' %></h3>
         <% @open_wagers.each do |wager| %>
-          <div class="dk-active-row">
-            <div class="dk-active-sel"><%= wager.selection %></div>
-            <div class="dk-active-type"><%= wager.bet_type_display %> (<%= wager.odds_display %>)</div>
-            <div class="dk-active-amt"><%= wager.amount %> $BEEP</div>
+          <%
+            w_away_city, w_away_mascot = split_team_name(wager.away_team)
+            w_home_city, w_home_mascot = split_team_name(wager.home_team)
+            w_away_color = team_color(wager.away_team, 0)
+            w_home_color = team_color(wager.home_team, 0)
+          %>
+          <div class="bet-card">
+            <div class="bet-card-matchup">
+              <div class="bet-split-away" style="background: <%= w_away_color %>;"></div>
+              <div class="bet-split-home" style="background: <%= w_home_color %>;"></div>
+              <div class="bet-team-away">
+                <% if w_away_city.present? %><div class="bet-team-city"><%= w_away_city %></div><% end %>
+                <div class="bet-team-mascot"><%= w_away_mascot %></div>
+              </div>
+              <div class="bet-team-home">
+                <% if w_home_city.present? %><div class="bet-team-city"><%= w_home_city %></div><% end %>
+                <div class="bet-team-mascot"><%= w_home_mascot %></div>
+              </div>
+            </div>
+            <div class="bet-info-bar">
+              <div class="bet-type-info">
+                <span class="bet-selection-name"><%= wager.selection %></span>
+                <span class="bet-type-label"><%= wager.bet_type_display %></span>
+              </div>
+              <span class="bet-odds-badge"><%= wager.odds_display %></span>
+            </div>
+            <div class="bet-bottom-bar">
+              <span>Wager: <span class="bet-wager-amount"><%= wager.amount %> $BEEP</span></span>
+              <span>Payout: <span class="bet-payout-amount"><%= wager.potential_payout %></span></span>
+            </div>
           </div>
         <% end %>
       </div>
     <% end %>
 
     <% if @games.any? %>
-      <div class="dk-odds-header">
-        <div class="dk-oh-left"><%= @sport.upcase %> — <%= @games.size %> Games</div>
-        <div class="dk-oh-right">
-          <span class="dk-oh-col">SPREAD</span>
-          <span class="dk-oh-col">TOTAL</span>
-          <span class="dk-oh-col">MONEYLINE</span>
+      <div class="bets-section" style="margin-top: 16px;">
+        <h3 class="section-title"><i class="fa fa-calendar" style="color: #00c853; margin-right: 6px;"></i> <%= @sport.upcase %> LINES &mdash; <%= @games.size %> GAMES</h3>
+
+        <% grouped = @games.group_by { |g| g[:start_date] ? Time.parse(g[:start_date]).strftime('%A, %b %-d') : 'TBD' } rescue { 'Today' => @games } %>
+        <% grouped.each do |date_label, games| %>
+          <div class="sb-date-label"><%= date_label %></div>
+
+          <% games.each do |game| %>
+            <% odds = game[:odds] || {} %>
+            <% ml = odds[:moneyline] || {} %>
+            <% sp = odds[:spread] || {} %>
+            <% tot = odds[:total] || {} %>
+            <% start_time = game[:start_date] ? Time.parse(game[:start_date]) : nil rescue nil %>
+            <% start_time_str = start_time ? start_time.iso8601 : '' %>
+            <%
+              away_city, away_mascot = split_team_name(game[:away_team])
+              home_city, home_mascot = split_team_name(game[:home_team])
+              away_color = team_color(game[:away_team], 0)
+              home_color = team_color(game[:home_team], 0)
+            %>
+
+            <div class="bet-card sb-game-card">
+              <div class="bet-card-matchup">
+                <div class="bet-split-away" style="background: <%= away_color %>;"></div>
+                <div class="bet-split-home" style="background: <%= home_color %>;"></div>
+                <div class="bet-team-away">
+                  <% if away_city.present? %><div class="bet-team-city"><%= away_city %></div><% end %>
+                  <div class="bet-team-mascot"><%= away_mascot %></div>
+                </div>
+                <div class="bet-team-home">
+                  <% if home_city.present? %><div class="bet-team-city"><%= home_city %></div><% end %>
+                  <div class="bet-team-mascot"><%= home_mascot %></div>
+                </div>
+                <% if game[:is_live] %>
+                  <div class="sb-live-badge"><span class="dk-live-dot"></span> LIVE</div>
+                <% elsif start_time %>
+                  <div class="sb-time-badge"><%= start_time.strftime('%-I:%M %p') %></div>
+                <% end %>
+              </div>
+
+              <div class="sb-odds-grid">
+                <div class="sb-odds-grid-header">
+                  <span class="sb-og-team-col"></span>
+                  <span class="sb-og-col">SPREAD</span>
+                  <span class="sb-og-col">TOTAL</span>
+                  <span class="sb-og-col">ML</span>
+                </div>
+                <div class="sb-odds-grid-row">
+                  <span class="sb-og-team"><span class="sb-og-color" style="background: <%= away_color %>;"></span> <%= away_mascot %></span>
+                  <% if sp[:away_points] && sp[:away] %>
+                    <button type="button" class="dk-odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="spread" data-selection="<%= game[:away_team] %>" data-points="<%= sp[:away_points] %>" data-odds="<%= sp[:away] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
+                      <span class="dk-line"><%= sp[:away_points].to_f > 0 ? "+#{sp[:away_points]}" : sp[:away_points] %></span>
+                      <span class="dk-price"><%= sp[:away].to_i > 0 ? "+#{sp[:away].to_i}" : sp[:away].to_i %></span>
+                    </button>
+                  <% else %>
+                    <div class="dk-odds-empty"></div>
+                  <% end %>
+                  <% if tot[:over] && tot[:points] %>
+                    <button type="button" class="dk-odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="total" data-selection="Over" data-points="<%= tot[:points] %>" data-odds="<%= tot[:over] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
+                      <span class="dk-line">O <%= tot[:points] %></span>
+                      <span class="dk-price"><%= tot[:over].to_i > 0 ? "+#{tot[:over].to_i}" : tot[:over].to_i %></span>
+                    </button>
+                  <% else %>
+                    <div class="dk-odds-empty"></div>
+                  <% end %>
+                  <% if ml[:away] %>
+                    <button type="button" class="dk-odds-btn dk-odds-ml js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="moneyline" data-selection="<%= game[:away_team] %>" data-points="" data-odds="<%= ml[:away] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
+                      <span class="dk-price"><%= ml[:away].to_i > 0 ? "+#{ml[:away].to_i}" : ml[:away].to_i %></span>
+                    </button>
+                  <% else %>
+                    <div class="dk-odds-empty"></div>
+                  <% end %>
+                </div>
+                <div class="sb-odds-grid-row">
+                  <span class="sb-og-team"><span class="sb-og-color" style="background: <%= home_color %>;"></span> <%= home_mascot %></span>
+                  <% if sp[:home_points] && sp[:home] %>
+                    <button type="button" class="dk-odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="spread" data-selection="<%= game[:home_team] %>" data-points="<%= sp[:home_points] %>" data-odds="<%= sp[:home] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
+                      <span class="dk-line"><%= sp[:home_points].to_f > 0 ? "+#{sp[:home_points]}" : sp[:home_points] %></span>
+                      <span class="dk-price"><%= sp[:home].to_i > 0 ? "+#{sp[:home].to_i}" : sp[:home].to_i %></span>
+                    </button>
+                  <% else %>
+                    <div class="dk-odds-empty"></div>
+                  <% end %>
+                  <% if tot[:under] && tot[:points] %>
+                    <button type="button" class="dk-odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="total" data-selection="Under" data-points="<%= tot[:points] %>" data-odds="<%= tot[:under] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
+                      <span class="dk-line">U <%= tot[:points] %></span>
+                      <span class="dk-price"><%= tot[:under].to_i > 0 ? "+#{tot[:under].to_i}" : tot[:under].to_i %></span>
+                    </button>
+                  <% else %>
+                    <div class="dk-odds-empty"></div>
+                  <% end %>
+                  <% if ml[:home] %>
+                    <button type="button" class="dk-odds-btn dk-odds-ml js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="moneyline" data-selection="<%= game[:home_team] %>" data-points="" data-odds="<%= ml[:home] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
+                      <span class="dk-price"><%= ml[:home].to_i > 0 ? "+#{ml[:home].to_i}" : ml[:home].to_i %></span>
+                    </button>
+                  <% else %>
+                    <div class="dk-odds-empty"></div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bets-section" style="margin-top: 16px;">
+        <div class="no-bets">
+          <% no_game_icons = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png', 'nba' => 'ic_basketball.png', 'nhl' => 'ic_hockey.png' } %>
+          <%= image_tag no_game_icons[@sport] || 'ic_baseball.png', style: 'width: 48px; height: 48px; opacity: 0.2; margin-bottom: 8px;' %>
+          <p>No <%= @sport.upcase %> games available. Check back later.</p>
         </div>
       </div>
-
-      <% grouped = @games.group_by { |g| g[:start_date] ? Time.parse(g[:start_date]).strftime('%A, %b %-d') : 'TBD' } rescue { 'Today' => @games } %>
-      <% grouped.each do |date_label, games| %>
-        <div class="dk-date-divider"><%= date_label %></div>
-
-        <% games.each do |game| %>
-          <% odds = game[:odds] || {} %>
-          <% ml = odds[:moneyline] || {} %>
-          <% sp = odds[:spread] || {} %>
-          <% tot = odds[:total] || {} %>
-          <% start_time = game[:start_date] ? Time.parse(game[:start_date]) : nil rescue nil %>
-          <% start_time_str = start_time ? start_time.iso8601 : '' %>
-          <%
-            away_city, away_mascot = split_team_name(game[:away_team])
-            home_city, home_mascot = split_team_name(game[:home_team])
-            away_color = team_color(game[:away_team], 0)
-            home_color = team_color(game[:home_team], 0)
-          %>
-
-          <div class="dk-game-row">
-            <div class="dk-game-info">
-              <div class="dk-time">
-                <% if game[:is_live] %>
-                  <span class="dk-live-dot"></span><span class="dk-live-text">LIVE</span>
-                <% elsif start_time %>
-                  <%= start_time.strftime('%-I:%M %p') %>
-                <% end %>
-              </div>
-              <div class="dk-teams">
-                <div class="dk-team-row">
-                  <span class="dk-team-color" style="background: <%= away_color %>;"></span>
-                  <span class="dk-team-name"><%= game[:away_team] %></span>
-                </div>
-                <div class="dk-team-row">
-                  <span class="dk-team-color" style="background: <%= home_color %>;"></span>
-                  <span class="dk-team-name"><%= game[:home_team] %></span>
-                </div>
-              </div>
-            </div>
-
-            <div class="dk-odds-cells">
-              <div class="dk-odds-col">
-                <% if sp[:away_points] && sp[:away] %>
-                  <button type="button" class="dk-odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="spread" data-selection="<%= game[:away_team] %>" data-points="<%= sp[:away_points] %>" data-odds="<%= sp[:away] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
-                    <span class="dk-line"><%= sp[:away_points].to_f > 0 ? "+#{sp[:away_points]}" : sp[:away_points] %></span>
-                    <span class="dk-price"><%= sp[:away].to_i > 0 ? "+#{sp[:away].to_i}" : sp[:away].to_i %></span>
-                  </button>
-                <% else %>
-                  <div class="dk-odds-empty"></div>
-                <% end %>
-                <% if sp[:home_points] && sp[:home] %>
-                  <button type="button" class="dk-odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="spread" data-selection="<%= game[:home_team] %>" data-points="<%= sp[:home_points] %>" data-odds="<%= sp[:home] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
-                    <span class="dk-line"><%= sp[:home_points].to_f > 0 ? "+#{sp[:home_points]}" : sp[:home_points] %></span>
-                    <span class="dk-price"><%= sp[:home].to_i > 0 ? "+#{sp[:home].to_i}" : sp[:home].to_i %></span>
-                  </button>
-                <% else %>
-                  <div class="dk-odds-empty"></div>
-                <% end %>
-              </div>
-
-              <div class="dk-odds-col">
-                <% if tot[:over] && tot[:points] %>
-                  <button type="button" class="dk-odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="total" data-selection="Over" data-points="<%= tot[:points] %>" data-odds="<%= tot[:over] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
-                    <span class="dk-line">O <%= tot[:points] %></span>
-                    <span class="dk-price"><%= tot[:over].to_i > 0 ? "+#{tot[:over].to_i}" : tot[:over].to_i %></span>
-                  </button>
-                <% else %>
-                  <div class="dk-odds-empty"></div>
-                <% end %>
-                <% if tot[:under] && tot[:points] %>
-                  <button type="button" class="dk-odds-btn js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="total" data-selection="Under" data-points="<%= tot[:points] %>" data-odds="<%= tot[:under] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
-                    <span class="dk-line">U <%= tot[:points] %></span>
-                    <span class="dk-price"><%= tot[:under].to_i > 0 ? "+#{tot[:under].to_i}" : tot[:under].to_i %></span>
-                  </button>
-                <% else %>
-                  <div class="dk-odds-empty"></div>
-                <% end %>
-              </div>
-
-              <div class="dk-odds-col">
-                <% if ml[:away] %>
-                  <button type="button" class="dk-odds-btn dk-odds-ml js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="moneyline" data-selection="<%= game[:away_team] %>" data-points="" data-odds="<%= ml[:away] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
-                    <span class="dk-price"><%= ml[:away].to_i > 0 ? "+#{ml[:away].to_i}" : ml[:away].to_i %></span>
-                  </button>
-                <% else %>
-                  <div class="dk-odds-empty"></div>
-                <% end %>
-                <% if ml[:home] %>
-                  <button type="button" class="dk-odds-btn dk-odds-ml js-bet-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="moneyline" data-selection="<%= game[:home_team] %>" data-points="" data-odds="<%= ml[:home] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>">
-                    <span class="dk-price"><%= ml[:home].to_i > 0 ? "+#{ml[:home].to_i}" : ml[:home].to_i %></span>
-                  </button>
-                <% else %>
-                  <div class="dk-odds-empty"></div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-    <% else %>
-      <div class="dk-empty-state">
-        <% no_game_icons = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png', 'nba' => 'ic_basketball.png', 'nhl' => 'ic_hockey.png' } %>
-        <%= image_tag no_game_icons[@sport] || 'ic_baseball.png', class: 'dk-empty-icon' %>
-        <h3>No <%= @sport.upcase %> Games Available</h3>
-        <p>Check back later or browse another sport.</p>
-      </div>
     <% end %>
+
+    <div class="back-to-sportsbook" style="margin-top: 12px;">
+      <%= link_to 'My Bets', my_bets_path %>
+    </div>
 
   </div>
 </div>
