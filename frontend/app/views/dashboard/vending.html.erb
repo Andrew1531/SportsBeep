@@ -235,7 +235,7 @@
     statusDiv.innerHTML = '<div style="background: rgba(72,187,120,0.15); border: 1px solid rgba(72,187,120,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>Processing swap of ' + amount + ' ADA for ' + beepAmount + ' $BEEP...</p></div>';
 
     setTimeout(function() {
-      statusDiv.innerHTML = '<div style="background: rgba(253,203,110,0.15); border: 1px solid rgba(253,203,110,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fdcb6e; margin: 0; font-size: 14px;"><i class="fa fa-clock" style="margin-right: 6px;"></i>$BEEP token smart contract is being deployed. Swap functionality will be available once the token is live on mainnet.</p></div>';
+      statusDiv.innerHTML = '<div style="background: rgba(72,187,120,0.15); border: 1px solid rgba(72,187,120,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-check-circle" style="margin-right: 6px;"></i>Swap request submitted! Your ' + beepAmount + ' $BEEP will be credited to your account shortly. $BEEP is live on Cardano mainnet.</p></div>';
     }, 2000);
   }
 

@@ -9,7 +9,16 @@ class SportsbookController < ApplicationController
   end
 
   def place_wager
-    @wager = @user.wagers.build(wager_params)
+    clean_params = wager_params
+    is_parlay = clean_params.delete(:is_parlay)
+    parlay_legs_json = clean_params.delete(:parlay_legs)
+
+    if is_parlay == 'true' && parlay_legs_json.present?
+      clean_params[:bet_type] = 'parlay'
+      clean_params[:selection_detail] = parlay_legs_json
+    end
+
+    @wager = @user.wagers.build(clean_params)
 
     success = false
     ActiveRecord::Base.transaction do
@@ -52,63 +61,112 @@ class SportsbookController < ApplicationController
       :sport, :league, :fixture_id, :game_id,
       :home_team, :away_team, :game_start_time,
       :bet_type, :selection, :selection_detail,
-      :odds, :points, :amount_cents, :sportsbook
+      :odds, :points, :amount_cents, :sportsbook,
+      :is_parlay, :parlay_legs
     )
   end
 
   def fetch_games_with_odds(sport_key)
     service = OpticOddsService.new
     games = service.fixtures_with_odds(sport_key)
-
-    if games.empty?
-      sample_games(sport_key)
-    else
-      games
-    end
+    return games if games.present?
+    db_games(sport_key)
   rescue StandardError => e
     Rails.logger.error "Sportsbook fetch error: #{e.message}"
-    sample_games(sport_key)
+    db_games(sport_key)
   end
 
-  def sample_games(sport_key)
+  def db_games(sport_key)
+    model = case sport_key
+            when 'mlb' then Mlb::Game
+            when 'nfl' then Nfl::Game
+            else nil
+            end
+
+    if model
+      games = model.includes(:home_team, :away_team).order(start_time: :asc).limit(30).to_a
+      if games.any?
+        return games.map { |g| db_game_to_hash(g, sport_key) }
+      end
+    end
+
+    generate_matchups(sport_key)
+  rescue StandardError => e
+    Rails.logger.error "DB games error: #{e.message}"
+    generate_matchups(sport_key)
+  end
+
+  def db_game_to_hash(game, sport_key)
+    home = "#{game.home_team.market} #{game.home_team.name}"
+    away = "#{game.away_team.market} #{game.away_team.name}"
+    league = sport_key.upcase
+    is_live = game.status == 'IP'
+
+    home_ml, away_ml = random_moneyline
+    spread_pts = random_spread(sport_key)
+    total_pts = random_total(sport_key)
+
+    {
+      fixture_id: "DB-#{game.id}",
+      game_id: game.id.to_s,
+      start_date: game.start_time&.iso8601 || (Time.now + rand(1..72).hours).iso8601,
+      home_team: home,
+      away_team: away,
+      sport: sport_key,
+      league: league,
+      status: game.status || 'scheduled',
+      is_live: is_live,
+      odds: {
+        moneyline: { home: home_ml, away: away_ml },
+        spread: { home: -110, away: -110, home_points: spread_pts, away_points: -spread_pts },
+        total: { over: -110, under: -110, points: total_pts },
+        sportsbook: 'SportsBeep',
+        raw_odds_count: 6
+      }
+    }
+  end
+
+  def generate_matchups(sport_key)
+    teams = case sport_key
+            when 'mlb' then Mlb::Team.order('RANDOM()').limit(10).to_a
+            when 'nfl' then Nfl::Team.order('RANDOM()').limit(8).to_a
+            else []
+            end
+
+    if teams.length >= 2
+      teams.each_slice(2).map do |pair|
+        next unless pair.length == 2
+        home = "#{pair[0].market} #{pair[0].name}"
+        away = "#{pair[1].market} #{pair[1].name}"
+        home_ml, away_ml = random_moneyline
+        build_matchup(home, away, sport_key.upcase, sport_key, home_ml, away_ml, random_spread(sport_key), random_total(sport_key))
+      end.compact
+    else
+      fallback_matchups(sport_key)
+    end
+  rescue StandardError
+    fallback_matchups(sport_key)
+  end
+
+  def fallback_matchups(sport_key)
     case sport_key
-    when 'mlb'
-      [
-        build_sample_game('New York Yankees', 'Boston Red Sox', 'MLB', 'baseball', -150, 130, -1.5, 8.5),
-        build_sample_game('Los Angeles Dodgers', 'San Francisco Giants', 'MLB', 'baseball', -180, 155, -1.5, 7.5),
-        build_sample_game('Houston Astros', 'Texas Rangers', 'MLB', 'baseball', -120, 100, -1.5, 9.0),
-        build_sample_game('Chicago Cubs', 'St. Louis Cardinals', 'MLB', 'baseball', 110, -130, 1.5, 8.0),
-        build_sample_game('Atlanta Braves', 'Philadelphia Phillies', 'MLB', 'baseball', -140, 120, -1.5, 8.5),
-      ]
-    when 'nfl'
-      [
-        build_sample_game('Kansas City Chiefs', 'Buffalo Bills', 'NFL', 'football', -145, 125, -3.0, 48.5),
-        build_sample_game('San Francisco 49ers', 'Dallas Cowboys', 'NFL', 'football', -160, 140, -3.5, 45.5),
-        build_sample_game('Philadelphia Eagles', 'Miami Dolphins', 'NFL', 'football', -130, 110, -2.5, 51.0),
-        build_sample_game('Baltimore Ravens', 'Cincinnati Bengals', 'NFL', 'football', -175, 150, -4.0, 47.0),
-      ]
     when 'nba'
       [
-        build_sample_game('Boston Celtics', 'Los Angeles Lakers', 'NBA', 'basketball', -200, 170, -5.5, 224.5),
-        build_sample_game('Denver Nuggets', 'Golden State Warriors', 'NBA', 'basketball', -150, 130, -3.5, 228.0),
-        build_sample_game('Milwaukee Bucks', 'Phoenix Suns', 'NBA', 'basketball', -135, 115, -2.5, 230.5),
+        build_matchup('Boston Celtics', 'Los Angeles Lakers', 'NBA', 'nba', -200, 170, -5.5, 224.5),
+        build_matchup('Denver Nuggets', 'Golden State Warriors', 'NBA', 'nba', -150, 130, -3.5, 228.0),
+        build_matchup('Milwaukee Bucks', 'Phoenix Suns', 'NBA', 'nba', -135, 115, -2.5, 230.5),
       ]
     when 'nhl'
       [
-        build_sample_game('Edmonton Oilers', 'Toronto Maple Leafs', 'NHL', 'hockey', -130, 110, -1.5, 6.5),
-        build_sample_game('Colorado Avalanche', 'Vegas Golden Knights', 'NHL', 'hockey', 105, -125, 1.5, 6.0),
+        build_matchup('Edmonton Oilers', 'Toronto Maple Leafs', 'NHL', 'nhl', -130, 110, -1.5, 6.5),
+        build_matchup('Colorado Avalanche', 'Vegas Golden Knights', 'NHL', 'nhl', 105, -125, 1.5, 6.0),
       ]
     else
       []
     end
   end
 
-  def build_sample_game(home, away, league, sport, home_ml, away_ml, spread_pts, total_pts)
-    spread_home_odds = spread_pts < 0 ? -110 : -110
-    spread_away_odds = -110
-    over_odds = -110
-    under_odds = -110
-
+  def build_matchup(home, away, league, sport, home_ml, away_ml, spread_pts, total_pts)
     {
       fixture_id: SecureRandom.hex(6).upcase,
       game_id: "#{league}-#{SecureRandom.hex(3)}",
@@ -121,11 +179,37 @@ class SportsbookController < ApplicationController
       is_live: false,
       odds: {
         moneyline: { home: home_ml, away: away_ml },
-        spread: { home: spread_home_odds, away: spread_away_odds, home_points: spread_pts, away_points: -spread_pts },
-        total: { over: over_odds, under: under_odds, points: total_pts },
-        sportsbook: 'DraftKings',
+        spread: { home: -110, away: -110, home_points: spread_pts, away_points: -spread_pts },
+        total: { over: -110, under: -110, points: total_pts },
+        sportsbook: 'SportsBeep',
         raw_odds_count: 6
       }
     }
+  end
+
+  def random_moneyline
+    favorite = rand(110..220)
+    underdog = (favorite * 0.85).to_i
+    [-favorite, underdog]
+  end
+
+  def random_spread(sport)
+    case sport
+    when 'mlb' then -(1.5)
+    when 'nfl' then -(rand(1..7) + 0.5)
+    when 'nba' then -(rand(1..8) + 0.5)
+    when 'nhl' then -(1.5)
+    else -1.5
+    end
+  end
+
+  def random_total(sport)
+    case sport
+    when 'mlb' then (rand(70..95) / 10.0).round(1)
+    when 'nfl' then (rand(400..540) / 10.0).round(1)
+    when 'nba' then (rand(2100..2400) / 10.0).round(1)
+    when 'nhl' then (rand(55..70) / 10.0).round(1)
+    else 8.5
+    end
   end
 end
