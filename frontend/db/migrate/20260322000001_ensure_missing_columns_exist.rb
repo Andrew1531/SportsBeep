@@ -8,12 +8,9 @@ class EnsureMissingColumnsExist < ActiveRecord::Migration[6.1]
       add_column :accounts, :referral_winnings_cents, :integer, default: 0
     end
 
-    # users — wallet addresses
+    # users — Cardano wallet address only
     unless column_exists?(:users, :cardano_wallet_address)
       add_column :users, :cardano_wallet_address, :string
-    end
-    unless column_exists?(:users, :ethereum_wallet_address)
-      add_column :users, :ethereum_wallet_address, :string
     end
 
     # promo_codes — MLM fields
@@ -60,6 +57,5 @@ class EnsureMissingColumnsExist < ActiveRecord::Migration[6.1]
   end
 
   def down
-    # intentionally left empty — safe to re-run
   end
 end
