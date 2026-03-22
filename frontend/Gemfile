@@ -38,4 +38,5 @@ gem 'angular-rails-templates'
 gem 'bootstrap-sass', '~> 3.4'
 gem 'font-awesome-sass', '~> 4.7'
 gem 'money-rails', '~> 1.12'
+gem 'kaminari'
 
