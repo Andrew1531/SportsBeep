@@ -30,17 +30,19 @@
           <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
             <i class="fa fa-coins" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">$BEEP</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @account.balance rescue '0.00' %></h3>
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">$BEEP</p>
+          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">On-Chain</p>
+          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @on_chain_beep.to_i rescue 0 %></h3>
         </div>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
         <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 16px; text-align: center;">
           <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
-            <i class="fa fa-gift" style="color: white; font-size: 18px;"></i>
+            <i class="fa fa-users" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Promo</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @account.promo_balance rescue '0.00' %></h3>
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Referrals</p>
+          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">Signups</p>
+          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @referral_count rescue 0 %></h3>
         </div>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
@@ -48,8 +50,9 @@
           <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #00b894, #00cec9); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
             <i class="fa fa-sack-dollar" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Total</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= (@account.balance + @account.promo_balance) rescue '0.00' %></h3>
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Total</p>
+          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">In Play</p>
+          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= number_with_precision(@active_wager_total, precision: 2) rescue '0.00' %></h3>
         </div>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
@@ -57,8 +60,9 @@
           <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #00b4d8, #0077b6); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
             <i class="fa fa-clock-rotate-left" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Txns</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @transactions.size %></h3>
+          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Wagers</p>
+          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">All-Time</p>
+          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @total_wager_count rescue 0 %></h3>
         </div>
       </div>
     </div>
