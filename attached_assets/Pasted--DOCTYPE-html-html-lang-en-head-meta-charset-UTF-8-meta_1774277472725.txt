@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportsbook - SB UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #1a1e2e;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header-bg {
+            background-color: #242b42;
+        }
+        .tab-active {
+            background-color: #313a5c;
+            border-bottom: 3px solid #f59e0b; /* Amber accent from logo */
+        }
+        .tab-inactive {
+            background-color: #242b42;
+            opacity: 0.6;
+        }
+        .card-bg {
+            background-color: #2b3452;
+        }
+        .btn-primary {
+            background-color: #cc4c4c;
+            transition: transform 0.1s;
+        }
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col max-w-md mx-auto border-x border-gray-800">
+
+    <!-- Top Navigation Bar -->
+    <header class="header-bg p-4 flex justify-between items-center border-b border-gray-700">
+        <div class="flex items-center gap-2">
+            <div class="bg-orange-500 rounded p-1 w-8 h-8 flex items-center justify-center font-bold italic text-white shadow-lg">SB</div>
+        </div>
+        <button class="text-gray-400 p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+        </button>
+    </header>
+
+    <!-- Page Title & Balance Section -->
+    <div class="p-6">
+        <h1 class="text-3xl font-bold tracking-wider mb-4">SPORTSBOOK</h1>
+        <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+                <span class="text-xs text-gray-400 uppercase tracking-widest">Balance</span>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-2xl font-bold text-green-400">0.00</span>
+                    <span class="text-sm text-gray-400">$BEEP</span>
+                </div>
+            </div>
+            <!-- Wallet Address Bubble -->
+            <div class="bg-blue-900/40 border border-blue-500/30 rounded-full px-4 py-1 flex items-center gap-2">
+                <div class="w-4 h-4 rounded-full bg-blue-400"></div>
+                <span class="text-xs font-mono text-blue-200">addr1q...0vc3</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sport Selector (Segmented UI from Fantasy Screen) -->
+    <div class="grid grid-cols-4 w-full px-1">
+        <button class="py-4 flex flex-col items-center gap-1 tab-active">
+            <span class="text-lg">⚾</span>
+            <span class="text-xs font-bold">MLB</span>
+        </button>
+        <button class="py-4 flex flex-col items-center gap-1 tab-inactive border-l border-gray-800">
+            <span class="text-lg">🏈</span>
+            <span class="text-xs font-bold">NFL</span>
+        </button>
+        <button class="py-4 flex flex-col items-center gap-1 tab-inactive border-l border-gray-800">
+            <span class="text-lg">🏀</span>
+            <span class="text-xs font-bold">NBA</span>
+        </button>
+        <button class="py-4 flex flex-col items-center gap-1 tab-inactive border-l border-gray-800">
+            <span class="text-lg">🏒</span>
+            <span class="text-xs font-bold">NHL</span>
+        </button>
+    </div>
+
+    <!-- Alert Banner -->
+    <div class="p-4">
+        <div class="bg-amber-500/10 border border-amber-500/40 rounded p-4 flex gap-3">
+            <span class="text-amber-500 text-xl font-bold">⚠️</span>
+            <p class="text-sm text-amber-100 leading-tight">
+                You need <span class="font-bold">$BEEP</span> tokens to place wagers. 
+                <a href="#" class="underline font-bold">Go to Wallet</a> to swap ADA for $BEEP.
+            </p>
+        </div>
+    </div>
+
+    <!-- Available Games Toggle -->
+    <div class="flex px-4 mt-2">
+        <button class="flex-1 py-3 text-sm font-bold uppercase tracking-widest border border-gray-600 bg-gray-700/50 rounded-l-md">
+            Available Lines
+        </button>
+        <button class="flex-1 py-3 text-sm font-bold uppercase tracking-widest border-y border-r border-gray-600 opacity-50 rounded-r-md">
+            My Wagers
+        </button>
+    </div>
+
+    <!-- Games Placeholder Container -->
+    <div class="flex-grow p-4 mt-4">
+        <div class="card-bg rounded-lg h-80 flex flex-col items-center justify-center text-center p-8 border border-white/5">
+            <!-- Iconic Representation -->
+            <div class="w-20 h-20 bg-gray-600/20 rounded-full flex items-center justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-300 mb-2">MLB LINES</h3>
+            <p class="text-sm text-gray-500 mb-8 max-w-xs">
+                No upcoming MLB lines available right now. Lines will appear here when the schedule is imported.
+            </p>
+
+            <button class="btn-primary w-full max-w-xs py-4 rounded-md font-bold text-white shadow-xl uppercase tracking-widest flex items-center justify-center gap-2">
+                Go to Fantasy
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Status -->
+    <footer class="p-4 text-center">
+        <span class="text-xs text-gray-600 uppercase tracking-tighter">0 upcoming games found</span>
+    </footer>
+
+</body>
+</html>
