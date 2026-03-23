@@ -150,16 +150,37 @@ class SportsbookController < ApplicationController
 
   def fallback_matchups(sport_key)
     case sport_key
+    when 'mlb'
+      [
+        build_matchup('New York Yankees', 'Boston Red Sox',       'MLB', 'mlb', -175, 148,  -1.5, 8.5),
+        build_matchup('Los Angeles Dodgers', 'San Francisco Giants', 'MLB', 'mlb', -160, 138, -1.5, 7.5),
+        build_matchup('Houston Astros', 'Texas Rangers',          'MLB', 'mlb', -130, 110,  -1.5, 8.0),
+        build_matchup('Atlanta Braves', 'New York Mets',          'MLB', 'mlb', -145, 122,  -1.5, 8.5),
+        build_matchup('Chicago Cubs', 'Milwaukee Brewers',        'MLB', 'mlb',  115, -135,   1.5, 8.0),
+        build_matchup('Philadelphia Phillies', 'Miami Marlins',   'MLB', 'mlb', -165, 140,  -1.5, 7.5),
+      ]
+    when 'nfl'
+      [
+        build_matchup('Kansas City Chiefs', 'Buffalo Bills',      'NFL', 'nfl', -155, 132,  -3.5, 47.5),
+        build_matchup('Philadelphia Eagles', 'Dallas Cowboys',    'NFL', 'nfl', -135, 114,  -2.5, 46.0),
+        build_matchup('San Francisco 49ers', 'Seattle Seahawks',  'NFL', 'nfl', -180, 152,  -4.5, 44.5),
+        build_matchup('Baltimore Ravens', 'Cincinnati Bengals',   'NFL', 'nfl', -145, 122,  -3.0, 48.5),
+        build_matchup('Miami Dolphins', 'New York Jets',          'NFL', 'nfl', -170, 144,  -4.0, 43.0),
+      ]
     when 'nba'
       [
-        build_matchup('Boston Celtics', 'Los Angeles Lakers', 'NBA', 'nba', -200, 170, -5.5, 224.5),
-        build_matchup('Denver Nuggets', 'Golden State Warriors', 'NBA', 'nba', -150, 130, -3.5, 228.0),
-        build_matchup('Milwaukee Bucks', 'Phoenix Suns', 'NBA', 'nba', -135, 115, -2.5, 230.5),
+        build_matchup('Boston Celtics', 'Los Angeles Lakers',     'NBA', 'nba', -200, 170,  -5.5, 224.5),
+        build_matchup('Denver Nuggets', 'Golden State Warriors',  'NBA', 'nba', -150, 130,  -3.5, 228.0),
+        build_matchup('Milwaukee Bucks', 'Phoenix Suns',          'NBA', 'nba', -135, 115,  -2.5, 230.5),
+        build_matchup('Oklahoma City Thunder', 'Minnesota Timberwolves', 'NBA', 'nba', -125, 105, -2.0, 222.0),
+        build_matchup('Cleveland Cavaliers', 'Indiana Pacers',    'NBA', 'nba', -160, 136,  -4.0, 226.5),
       ]
     when 'nhl'
       [
-        build_matchup('Edmonton Oilers', 'Toronto Maple Leafs', 'NHL', 'nhl', -130, 110, -1.5, 6.5),
-        build_matchup('Colorado Avalanche', 'Vegas Golden Knights', 'NHL', 'nhl', 105, -125, 1.5, 6.0),
+        build_matchup('Edmonton Oilers', 'Toronto Maple Leafs',   'NHL', 'nhl', -130, 110,  -1.5, 6.5),
+        build_matchup('Colorado Avalanche', 'Vegas Golden Knights','NHL', 'nhl',  105, -125,  1.5, 6.0),
+        build_matchup('Florida Panthers', 'New York Rangers',     'NHL', 'nhl', -120, 100,  -1.5, 5.5),
+        build_matchup('Dallas Stars', 'Winnipeg Jets',            'NHL', 'nhl', -140, 118,  -1.5, 5.5),
       ]
     else
       []
