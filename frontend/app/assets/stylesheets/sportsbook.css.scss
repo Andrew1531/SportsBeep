@@ -804,7 +804,7 @@ $dk-tab-active: #00c853;
 
     .bet-card-matchup {
       position: relative;
-      height: 60px;
+      height: 100px;
       overflow: hidden;
     }
 
@@ -825,23 +825,23 @@ $dk-tab-active: #00c853;
 
     .bet-team-away {
       position: absolute;
-      top: 6px; left: 10px;
+      top: 8px; left: 10px;
       z-index: 2;
       color: #fff;
 
-      .bet-team-city { font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; line-height: 1; margin-bottom: -1px; }
-      .bet-team-mascot { font-size: 18px; font-weight: 700; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+      .bet-team-city { font-size: 12px; color: rgba(255,255,255,0.8); letter-spacing: 1px; line-height: 1; text-transform: uppercase; font-weight: 500; margin-bottom: -2px; }
+      .bet-team-mascot { font-size: 28px; font-weight: 700; line-height: 1; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.4); }
     }
 
     .bet-team-home {
       position: absolute;
-      bottom: 6px; right: 10px;
+      bottom: 8px; right: 10px;
       z-index: 2;
       text-align: right;
       color: #fff;
 
-      .bet-team-city { font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; line-height: 1; margin-bottom: -1px; }
-      .bet-team-mascot { font-size: 18px; font-weight: 700; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+      .bet-team-city { font-size: 12px; color: rgba(255,255,255,0.8); letter-spacing: 1px; line-height: 1; text-transform: uppercase; font-weight: 500; margin-bottom: -2px; }
+      .bet-team-mascot { font-size: 28px; font-weight: 700; line-height: 1; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.4); }
     }
 
     .bet-at-image {
@@ -1731,16 +1731,16 @@ $dk-tab-active: #00c853;
 .sb-green { color: $dk-green; }
 
 .sb-odds-grid {
-  border-top: 1px solid rgba($dk-border, 0.4);
-  background: #1c2233;
+  border-top: 1px solid $dk-border;
+  background: $dk-surface;
 }
 
 .sb-odds-grid-header {
   display: flex;
   align-items: center;
-  padding: 6px 12px;
-  background: rgba(255,255,255,0.03);
-  border-bottom: 1px solid rgba($dk-border, 0.3);
+  padding: 7px 12px;
+  background: rgba(0,0,0,0.25);
+  border-bottom: 1px solid $dk-border;
 }
 
 .sb-og-team-col {
@@ -1751,45 +1751,46 @@ $dk-tab-active: #00c853;
 .sb-og-col {
   width: 80px;
   text-align: center;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
-  color: $dk-text-secondary;
+  color: $dk-text;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 
   @media (max-width: 500px) {
     width: 64px;
-    font-size: 8px;
+    font-size: 10px;
   }
 }
 
 .sb-odds-grid-row {
   display: flex;
   align-items: center;
-  padding: 5px 12px;
-  border-bottom: 1px solid rgba($dk-border, 0.2);
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba($dk-border, 0.5);
 
   &:last-child {
     border-bottom: none;
+    padding-bottom: 10px;
   }
 }
 
 .sb-og-team {
   flex: 1;
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   color: $dk-text;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding-right: 8px;
 
   @media (max-width: 500px) {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 
@@ -2068,7 +2069,7 @@ $dk-tab-active: #00c853;
 
 .sb-parlay-empty {
   text-align: center;
-  color: $dk-text-muted;
+  color: $dk-text-secondary;
   font-size: 13px;
   padding: 16px 0;
 }
@@ -2090,7 +2091,7 @@ $dk-tab-active: #00c853;
 
 .sb-parlay-leg-matchup {
   font-size: 11px;
-  color: $dk-text-muted;
+  color: $dk-text-secondary;
   flex: 1;
 }
 
@@ -2604,7 +2605,7 @@ $dk-tab-active: #00c853;
 
 .sb-parlay-empty-msg {
   text-align: center;
-  color: $dk-text-muted;
+  color: $dk-text-secondary;
   font-size: 13px;
   padding: 16px 0;
 }
@@ -2720,14 +2721,14 @@ $dk-tab-active: #00c853;
 }
 
 .sb-date-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  color: $dk-text-muted;
+  color: $dk-text-secondary;
   text-transform: uppercase;
   letter-spacing: 1px;
-  padding: 10px 0 6px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  margin-bottom: 8px;
+  padding: 12px 0 8px;
+  border-bottom: 2px solid $dk-border;
+  margin-bottom: 10px;
 }
 
 // ─── Odds grid buttons (sb-odds-btn) ──────────────────────────────────────
@@ -2738,55 +2739,57 @@ $dk-tab-active: #00c853;
   align-items: center;
   justify-content: center;
   width: 80px;
-  height: 40px;
-  background: $dk-surface;
+  height: 46px;
+  background: $dk-cell;
   border: 1px solid $dk-border;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.15s ease;
   margin-left: 4px;
   flex-shrink: 0;
 
   &:hover {
-    background: lighten($dk-surface, 4%);
-    border-color: rgba($dk-green, 0.5);
+    background: $dk-cell-hover;
+    border-color: rgba($dk-green, 0.6);
+    transform: translateY(-1px);
   }
 
   &.sb-selected {
-    background: rgba($dk-green, 0.15);
+    background: rgba($dk-green, 0.18);
     border-color: $dk-green;
-    box-shadow: 0 0 6px rgba($dk-green, 0.2);
+    box-shadow: 0 0 8px rgba($dk-green, 0.25);
   }
 
   &.sb-btn-empty {
     cursor: default;
-    opacity: 0.35;
+    opacity: 0.3;
     &:hover {
-      background: $dk-surface;
+      background: $dk-cell;
       border-color: $dk-border;
       box-shadow: none;
+      transform: none;
     }
   }
 
   @media (max-width: 500px) {
     width: 64px;
-    height: 36px;
+    height: 40px;
     margin-left: 2px;
   }
 }
 
 .sb-btn-line {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: $dk-text;
   line-height: 1;
 }
 
 .sb-btn-price {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: $dk-green;
-  line-height: 1.3;
+  line-height: 1.4;
 }
 
 // ─── Inline bet-area (wager input section) ─────────────────────────────────

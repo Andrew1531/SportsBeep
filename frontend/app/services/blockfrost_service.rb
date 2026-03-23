@@ -10,35 +10,11 @@ class BlockfrostService
   end
 
   def get_address_info(address)
-    response = make_request("/addresses/#{address}")
-
-    if response.nil?
-      return { ada_balance: 0.0, tokens: [], stake_address: nil, type: 'byron', status: 'empty' }
+    if stake_address?(address)
+      get_info_by_stake(address)
+    else
+      get_info_by_payment(address)
     end
-
-    ada_balance = 0.0
-    tokens = []
-
-    if response['amount'].is_a?(Array)
-      response['amount'].each do |asset|
-        if asset['unit'] == 'lovelace'
-          ada_balance = asset['quantity'].to_f / LOVELACE_PER_ADA
-        else
-          tokens << asset
-        end
-      end
-    end
-
-    {
-      ada_balance: ada_balance,
-      tokens: tokens,
-      stake_address: response['stake_address'],
-      type: response['type'],
-      status: 'active'
-    }
-  rescue StandardError => e
-    Rails.logger.error "Blockfrost get_address_info error: #{e.message}"
-    { ada_balance: 0.0, tokens: [], stake_address: nil, type: nil, status: 'error' }
   end
 
   def get_balance(address)
@@ -48,7 +24,7 @@ class BlockfrostService
 
   def validate_address(address)
     return false if address.blank?
-    address.start_with?('addr1')
+    address.start_with?('addr1') || address.start_with?('stake1')
   end
 
   def get_beep_balance(address)
@@ -59,7 +35,7 @@ class BlockfrostService
 
     tokens.each do |token|
       unit = token['unit'].to_s
-      qty = token['quantity'].to_i
+      qty  = token['quantity'].to_i
 
       if beep_policy_id.present?
         beep_qty += qty if unit.start_with?(beep_policy_id)
@@ -82,13 +58,104 @@ class BlockfrostService
 
   private
 
+  def stake_address?(address)
+    address.to_s.start_with?('stake1')
+  end
+
+  def get_info_by_payment(address)
+    response = make_request("/addresses/#{address}")
+
+    if response.nil?
+      # Try to derive stake address and fall back to stake query
+      return { ada_balance: 0.0, tokens: [], stake_address: nil, type: nil, status: 'not_found' }
+    end
+
+    ada_balance = 0.0
+    tokens = []
+
+    if response['amount'].is_a?(Array)
+      response['amount'].each do |asset|
+        if asset['unit'] == 'lovelace'
+          ada_balance = asset['quantity'].to_f / LOVELACE_PER_ADA
+        else
+          tokens << asset
+        end
+      end
+    end
+
+    stake_addr = response['stake_address']
+
+    # If the payment address has no tokens, supplement with stake-level asset query
+    if tokens.empty? && stake_addr.present?
+      stake_tokens = get_stake_assets(stake_addr)
+      tokens = stake_tokens if stake_tokens.any?
+    end
+
+    # Also get ADA across all stake addresses if payment address shows 0
+    if ada_balance == 0.0 && stake_addr.present?
+      stake_info = make_request("/accounts/#{stake_addr}")
+      if stake_info && stake_info['controlled_amount']
+        ada_balance = stake_info['controlled_amount'].to_f / LOVELACE_PER_ADA
+      end
+    end
+
+    {
+      ada_balance: ada_balance,
+      tokens: tokens,
+      stake_address: stake_addr,
+      type: response['type'],
+      status: 'active'
+    }
+  rescue StandardError => e
+    Rails.logger.error "Blockfrost get_address_info error: #{e.message}"
+    { ada_balance: 0.0, tokens: [], stake_address: nil, type: nil, status: 'error' }
+  end
+
+  def get_info_by_stake(stake_address)
+    stake_info = make_request("/accounts/#{stake_address}")
+
+    if stake_info.nil?
+      return { ada_balance: 0.0, tokens: [], stake_address: stake_address, type: nil, status: 'not_found' }
+    end
+
+    ada_balance = stake_info['controlled_amount'].to_f / LOVELACE_PER_ADA
+    tokens = get_stake_assets(stake_address)
+
+    {
+      ada_balance: ada_balance,
+      tokens: tokens,
+      stake_address: stake_address,
+      type: 'stake',
+      status: 'active'
+    }
+  rescue StandardError => e
+    Rails.logger.error "Blockfrost get_info_by_stake error: #{e.message}"
+    { ada_balance: 0.0, tokens: [], stake_address: stake_address, type: nil, status: 'error' }
+  end
+
+  def get_stake_assets(stake_address)
+    all_assets = []
+    page = 1
+    loop do
+      batch = make_request("/accounts/#{stake_address}/addresses/assets?count=100&page=#{page}")
+      break if batch.nil? || !batch.is_a?(Array) || batch.empty?
+      all_assets.concat(batch.map { |a| { 'unit' => a['unit'], 'quantity' => a['quantity'] } })
+      break if batch.size < 100
+      page += 1
+    end
+    all_assets
+  rescue StandardError => e
+    Rails.logger.error "Blockfrost get_stake_assets error: #{e.message}"
+    []
+  end
+
   def make_request(endpoint)
     uri = URI("#{BASE_URL}#{endpoint}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     http.open_timeout = 10
-    http.read_timeout = 10
+    http.read_timeout = 15
 
     request = Net::HTTP::Get.new(uri)
     request['project_id'] = @project_id

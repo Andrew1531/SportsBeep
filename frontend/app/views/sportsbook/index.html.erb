@@ -53,6 +53,7 @@
             <div class="bet-card-matchup">
               <div class="bet-split-away" style="background: <%= w_away_color %>;"></div>
               <div class="bet-split-home" style="background: <%= w_home_color %>;"></div>
+              <%= image_tag 'at_large.png', class: 'bet-at-image', style: 'width:28px;height:auto;opacity:0.85;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));' rescue nil %>
               <div class="bet-team-away">
                 <% if w_away_city.present? %><div class="bet-team-city"><%= w_away_city %></div><% end %>
                 <div class="bet-team-mascot"><%= w_away_mascot %></div>
@@ -105,6 +106,7 @@
               <div class="bet-card-matchup">
                 <div class="bet-split-away" style="background: <%= away_color %>;"></div>
                 <div class="bet-split-home" style="background: <%= home_color %>;"></div>
+                <%= image_tag 'at_large.png', class: 'bet-at-image', style: 'width:28px;height:auto;opacity:0.85;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));' rescue nil %>
                 <div class="bet-team-away">
                   <% if away_city.present? %><div class="bet-team-city"><%= away_city %></div><% end %>
                   <div class="bet-team-mascot"><%= away_mascot %></div>

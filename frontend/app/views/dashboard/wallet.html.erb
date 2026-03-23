@@ -100,7 +100,39 @@
                 <code style="color: #00b4d8; word-break: break-all; font-size: 13px; line-height: 1.5;"><%= @user.cardano_wallet_address %></code>
               </div>
 
-              <% if @wallet_info %>
+              <% wallet_status = @wallet_info ? @wallet_info[:status] : nil %>
+
+              <% if wallet_status == 'not_found' %>
+                <%# Address unused on-chain — help user connect the right address %>
+                <div style="background: rgba(255,165,0,0.12); border: 1px solid rgba(255,165,0,0.35); border-radius: 10px; padding: 16px 18px; margin-bottom: 14px;">
+                  <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <i class="fa fa-triangle-exclamation" style="color: #f6ad55; font-size: 20px; margin-top: 2px; flex-shrink: 0;"></i>
+                    <div>
+                      <p style="color: #f6ad55; font-weight: 700; font-size: 14px; margin: 0 0 6px;">Address has no on-chain activity</p>
+                      <p style="color: #a0aec0; font-size: 13px; margin: 0 0 8px; line-height: 1.5;">
+                        Your connected address hasn't been used on Cardano yet, or your tokens are held across multiple wallet addresses. Try connecting your <strong style="color: #f6ad55;">stake address</strong> instead — it covers all addresses in your wallet.
+                      </p>
+                      <p style="color: #a0aec0; font-size: 12px; margin: 0;">
+                        In <strong>Eternl</strong>: Settings → Account → copy the <code style="background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 3px;">stake1...</code> address<br>
+                        In <strong>Nami</strong>: click your address → copy the Stake Key<br>
+                        In <strong>Yoroi</strong>: Wallet → Receive → Stake address
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="margin-bottom: 14px;">
+                  <p style="color: #8892b0; font-size: 12px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px;">Update address</p>
+                  <%= form_tag(connect_cardano_path, method: :post) do %>
+                    <input type="hidden" name="redirect_to" value="<%= wallet_path %>">
+                    <input type="text" name="cardano_address" placeholder="stake1... or addr1..." style="width: 100%; padding: 11px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,165,0,0.4); border-radius: 8px; color: white; font-size: 13px; outline: none; box-sizing: border-box; margin-bottom: 8px;">
+                    <button type="submit" style="width: 100%; padding: 11px; background: rgba(255,165,0,0.2); color: #f6ad55; border: 1px solid rgba(255,165,0,0.4); border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">
+                      <i class="fa fa-rotate" style="margin-right: 6px;"></i> Update Address
+                    </button>
+                  <% end %>
+                </div>
+
+              <% elsif @wallet_info && wallet_status == 'active' %>
                 <div style="display: flex; gap: 10px; margin-bottom: 14px;">
                   <div style="flex: 1; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px 16px;">
                     <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">ADA Balance</p>
@@ -138,14 +170,14 @@
                     <% end %>
                     <p style="color: #8892b0; font-size: 12px; text-align: center; margin: 8px 0 0;">
                       <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
-                      This credits your on-chain $BEEP to your SportsBeep account for betting and contests.
+                      Credits your on-chain $BEEP to your SportsBeep account.
                     </p>
                   <% else %>
                     <div style="background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3); border-radius: 8px; padding: 10px 14px; text-align: center;">
                       <i class="fa fa-check-circle" style="color: #00c853; margin-right: 6px;"></i>
                       <span style="color: #68d391; font-size: 13px; font-weight: 600;">
                         <% if @on_chain_beep.to_i == 0 %>
-                          No $BEEP tokens detected in this wallet yet.
+                          No $BEEP tokens detected at this address.
                         <% else %>
                           Platform balance is up to date.
                         <% end %>
@@ -156,10 +188,11 @@
 
                 <% if (begin; @wallet_info[:stake_address].present?; rescue; false; end) %>
                   <div style="background: rgba(0,0,0,0.1); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
-                    <p style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Stake</p>
+                    <p style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Stake Key</p>
                     <code style="color: #63b3ed; word-break: break-all; font-size: 11px;"><%= @wallet_info[:stake_address] %></code>
                   </div>
                 <% end %>
+
               <% else %>
                 <div style="background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.2); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; text-align: center;">
                   <i class="fa fa-spinner fa-spin" style="color: #ffc107; margin-right: 6px;"></i>
@@ -178,7 +211,7 @@
                 <%= form_tag(connect_cardano_path, method: :post, id: 'cardano-form') do %>
                   <input type="hidden" name="redirect_to" value="<%= wallet_path %>">
                   <div style="position: relative; margin-bottom: 12px;">
-                    <input type="text" name="cardano_address" id="cardano-address-input" placeholder="addr1q..." style="width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: white; font-size: 14px; outline: none; box-sizing: border-box;" oninput="validateCardanoAddress()">
+                    <input type="text" name="cardano_address" id="cardano-address-input" placeholder="addr1q... or stake1..." style="width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: white; font-size: 14px; outline: none; box-sizing: border-box;" oninput="validateCardanoAddress()">
                   </div>
                   <button type="submit" id="cardano-connect-btn" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,136,204,0.35); transition: opacity 0.2s; opacity: 0.5;" disabled onmouseover="if(!this.disabled)this.style.opacity='0.9'" onmouseout="this.style.opacity=this.disabled?'0.5':'1'">
                     <i class="fa fa-wallet" style="margin-right: 8px;"></i> Connect Cardano
@@ -384,7 +417,7 @@
     var btn = document.getElementById('cardano-connect-btn');
     if (!input || !btn) return;
     var val = input.value.trim();
-    var valid = val.length > 50 && (val.startsWith('addr1') || val.startsWith('addr_test1'));
+    var valid = val.length > 50 && (val.startsWith('addr1') || val.startsWith('addr_test1') || val.startsWith('stake1') || val.startsWith('stake_test1'));
     btn.disabled = !valid;
     btn.style.opacity = valid ? '1' : '0.5';
   }

@@ -59,11 +59,18 @@ class DashboardController < ApplicationController
   def connect_cardano
     @user = current_user
     address = params[:cardano_address].to_s.strip
-    if address.length > 50 && (address.start_with?('addr1') || address.start_with?('addr_test1'))
+    valid = address.length > 50 && (
+      address.start_with?('addr1') ||
+      address.start_with?('addr_test1') ||
+      address.start_with?('stake1') ||
+      address.start_with?('stake_test1')
+    )
+    if valid
       @user.update(cardano_wallet_address: address)
-      flash[:notice] = "Cardano wallet connected successfully!"
+      type = address.start_with?('stake') ? 'stake address' : 'payment address'
+      flash[:notice] = "Cardano wallet connected (#{type})!"
     else
-      flash[:alert] = "Invalid Cardano address format."
+      flash[:alert] = "Invalid Cardano address. Use addr1... (payment) or stake1... (stake) format."
     end
     redirect_to safe_redirect_path
   end
