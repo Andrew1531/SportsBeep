@@ -51,6 +51,35 @@ class BlockfrostService
     address.start_with?('addr1')
   end
 
+  def get_beep_balance(address)
+    info = get_address_info(address)
+    tokens = info[:tokens] || []
+    beep_policy_id = ENV['BEEP_POLICY_ID'].to_s.strip
+    beep_qty = 0
+
+    tokens.each do |token|
+      unit = token['unit'].to_s
+      qty = token['quantity'].to_i
+
+      if beep_policy_id.present?
+        beep_qty += qty if unit.start_with?(beep_policy_id)
+      else
+        asset_name_hex = unit.length > 56 ? unit[56..] : ''
+        begin
+          asset_name = [asset_name_hex].pack('H*').upcase
+          beep_qty += qty if asset_name.include?('BEEP')
+        rescue
+          beep_qty += qty if unit.downcase.include?('beep')
+        end
+      end
+    end
+
+    beep_qty
+  rescue StandardError => e
+    Rails.logger.error "Blockfrost get_beep_balance error: #{e.message}"
+    0
+  end
+
   private
 
   def make_request(endpoint)

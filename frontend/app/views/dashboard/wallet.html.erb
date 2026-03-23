@@ -99,20 +99,74 @@
                 <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Address</p>
                 <code style="color: #00b4d8; word-break: break-all; font-size: 13px; line-height: 1.5;"><%= @user.cardano_wallet_address %></code>
               </div>
+
               <% if @wallet_info %>
-                <div style="background: rgba(0,0,0,0.15); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px;">
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #8892b0; font-size: 13px;">ADA Balance</span>
-                    <span style="color: #00b4d8; font-weight: 700; font-size: 18px;"><%= sprintf('%.2f', @wallet_info[:ada_balance]) %> ADA</span>
+                <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+                  <div style="flex: 1; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px 16px;">
+                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">ADA Balance</p>
+                    <span style="color: #00b4d8; font-weight: 700; font-size: 20px;"><%= sprintf('%.2f', @wallet_info[:ada_balance]) %></span>
+                    <span style="color: #8892b0; font-size: 12px; margin-left: 4px;">ADA</span>
+                  </div>
+                  <div style="flex: 1; background: rgba(231,76,60,0.12); border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; padding: 12px 16px;">
+                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">$BEEP On-Chain</p>
+                    <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @on_chain_beep.to_i %></span>
+                    <span style="color: #8892b0; font-size: 12px; margin-left: 4px;">$BEEP</span>
                   </div>
                 </div>
+
+                <% platform_beep = (@account.balance_cents.to_i / 100) rescue 0 %>
+                <% can_sync = @on_chain_beep.to_i > platform_beep %>
+
+                <div style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Platform Balance</p>
+                      <span style="color: #00c853; font-weight: 700; font-size: 20px;"><%= platform_beep %> <span style="font-size: 12px; color: #8892b0;">$BEEP</span></span>
+                    </div>
+                    <div style="text-align: right;">
+                      <p style="color: #8892b0; font-size: 11px; margin: 0 0 2px;">On-Chain</p>
+                      <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @on_chain_beep.to_i %> <span style="font-size: 12px; color: #8892b0;">$BEEP</span></span>
+                    </div>
+                  </div>
+
+                  <% if can_sync %>
+                    <% new_beep = @on_chain_beep.to_i - platform_beep %>
+                    <%= form_tag(sync_beep_path, method: :post) do %>
+                      <button type="submit" style="width: 100%; padding: 13px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(231,76,60,0.35);">
+                        <i class="fa fa-download" style="margin-right: 8px;"></i> Load <%= new_beep %> $BEEP to Platform
+                      </button>
+                    <% end %>
+                    <p style="color: #8892b0; font-size: 12px; text-align: center; margin: 8px 0 0;">
+                      <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
+                      This credits your on-chain $BEEP to your SportsBeep account for betting and contests.
+                    </p>
+                  <% else %>
+                    <div style="background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3); border-radius: 8px; padding: 10px 14px; text-align: center;">
+                      <i class="fa fa-check-circle" style="color: #00c853; margin-right: 6px;"></i>
+                      <span style="color: #68d391; font-size: 13px; font-weight: 600;">
+                        <% if @on_chain_beep.to_i == 0 %>
+                          No $BEEP tokens detected in this wallet yet.
+                        <% else %>
+                          Platform balance is up to date.
+                        <% end %>
+                      </span>
+                    </div>
+                  <% end %>
+                </div>
+
                 <% if (begin; @wallet_info[:stake_address].present?; rescue; false; end) %>
                   <div style="background: rgba(0,0,0,0.1); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
                     <p style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Stake</p>
                     <code style="color: #63b3ed; word-break: break-all; font-size: 11px;"><%= @wallet_info[:stake_address] %></code>
                   </div>
                 <% end %>
+              <% else %>
+                <div style="background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.2); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; text-align: center;">
+                  <i class="fa fa-spinner fa-spin" style="color: #ffc107; margin-right: 6px;"></i>
+                  <span style="color: #ffc107; font-size: 13px;">Reading blockchain data...</span>
+                </div>
               <% end %>
+
               <%= link_to disconnect_cardano_path(redirect_to: wallet_path), method: :delete, data: { confirm: 'Disconnect your Cardano wallet?' }, style: 'display: inline-block; padding: 9px 20px; background: rgba(245,101,101,0.15); color: #fc8181; border: 1px solid rgba(245,101,101,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
                 <i class="fa fa-unlink" style="margin-right: 5px;"></i> Disconnect
               <% end %>

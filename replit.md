@@ -46,11 +46,15 @@ The application automatically starts with the configured workflow:
 - **BlockfrostService**: Service class for interacting with Cardano blockchain via Blockfrost API
 - **API Key Management**: Secure storage of Blockfrost project ID in environment variables
 - **Features**:
-  - Retrieve wallet balances
+  - Retrieve wallet balances (ADA + tokens)
+  - Query on-chain $BEEP token balance (`get_beep_balance`)
+  - Sync $BEEP to platform account (`POST /wallet/sync_beep` → `DashboardController#sync_beep`)
   - Query stake pools
   - Validate Cardano addresses
   - Direct HTTPS API integration (uses Net::HTTP)
 - **Database**: `cardano_wallet_address` field added to users table
+- **BEEP Policy ID**: Set `BEEP_POLICY_ID` env var for exact token matching. If absent, falls back to hex-decoding asset name and looking for "BEEP"
+- **Sync Logic**: Credits the DIFFERENCE between on-chain BEEP and current platform balance — prevents double-counting; allows top-ups when user acquires more BEEP
 
 ## Admin Portal Access
 - **URL**: `/admin` (requires administrator authentication)

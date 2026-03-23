@@ -74,6 +74,62 @@ class DashboardController < ApplicationController
     redirect_to safe_redirect_path
   end
 
+  def sync_beep
+    @user = current_user
+    @account = @user.account
+
+    unless @user.cardano_wallet_address.present?
+      flash[:alert] = "Connect your Cardano wallet first."
+      return redirect_to wallet_path
+    end
+
+    unless ENV['BLOCKFROST_PROJECT_ID'].present?
+      flash[:alert] = "Blockchain service is not configured."
+      return redirect_to wallet_path
+    end
+
+    begin
+      service = BlockfrostService.new
+      on_chain_beep = service.get_beep_balance(@user.cardano_wallet_address)
+
+      if on_chain_beep <= 0
+        flash[:alert] = "No $BEEP tokens detected in your connected wallet. Make sure you have $BEEP tokens at the connected address."
+        return redirect_to wallet_path
+      end
+
+      on_chain_cents = on_chain_beep * 100
+      current_cents  = @account.balance_cents.to_i
+      beep_synced    = (current_cents / 100).to_i
+
+      if on_chain_beep <= beep_synced && current_cents > 0
+        flash[:notice] = "Your platform balance already reflects your on-chain $BEEP holdings (#{on_chain_beep} $BEEP)."
+        return redirect_to wallet_path
+      end
+
+      credit_cents = [on_chain_cents - current_cents, 0].max
+
+      if credit_cents > 0
+        @account.update!(balance_cents: current_cents + credit_cents)
+        Transaction.create!(
+          account:     @account,
+          amount_cents: credit_cents,
+          type:        'AdjustmentTransaction',
+          description: "Synced #{on_chain_beep} $BEEP from Cardano wallet (#{@user.cardano_wallet_address.first(20)}...)",
+          status:      'completed'
+        )
+        credited_beep = credit_cents / 100
+        flash[:notice] = "#{credited_beep} $BEEP loaded to your platform account!"
+      else
+        flash[:notice] = "Balance already up to date (#{on_chain_beep} $BEEP on-chain)."
+      end
+    rescue => e
+      Rails.logger.error "BEEP sync error for user #{@user.id}: #{e.message}"
+      flash[:alert] = "Could not read wallet balance. Please try again shortly."
+    end
+
+    redirect_to wallet_path
+  end
+
   private
 
   def safe_collection
@@ -96,12 +152,15 @@ class DashboardController < ApplicationController
       begin
         service = BlockfrostService.new
         @wallet_info = service.get_address_info(@user.cardano_wallet_address)
+        @on_chain_beep = service.get_beep_balance(@user.cardano_wallet_address)
       rescue => e
         Rails.logger.error "Wallet info error: #{e.message}"
         @wallet_info = { ada_balance: 0.0, tokens: [], status: 'error' }
+        @on_chain_beep = 0
       end
     else
       @wallet_info = nil
+      @on_chain_beep = 0
     end
   end
 
