@@ -1551,6 +1551,12 @@ $dk-tab-active: #00c853;
   min-height: 100vh;
   color: $dk-text;
   @include sans-serif;
+
+  &.fantasy-page .sport-tabs li.active a {
+    color: $dk-yellow;
+    border-bottom-color: $dk-yellow;
+    .tab-icon { opacity: 1; }
+  }
 }
 
 .sb-hero {

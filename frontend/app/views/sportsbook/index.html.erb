@@ -1,47 +1,68 @@
-<div class="my-bets-page">
+<div class="fantasy-page sb-page">
 
-  <div class="bets-header">
-    <div class="container" style="max-width: 960px; margin: 0 auto;">
-      <h1>SPORTSBOOK</h1>
-      <p class="subtitle">Balance: <span style="color: #00c853; font-weight: 700;"><%= number_with_precision(@account.balance, precision: 2) rescue '0.00' %> $BEEP</span></p>
+  <div class="fantasy-header">
+    <div class="container">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+        <div>
+          <h1>SPORTSBOOK</h1>
+          <div class="balance-display">
+            <span class="balance-label">Balance</span>
+            <span class="balance-amount"><%= number_with_precision(@account.balance, precision: 2) rescue '0.00' %> <span class="currency">$BEEP</span></span>
+          </div>
+        </div>
+        <div style="padding-top: 4px;">
+          <%= render 'shared/wallet_status_bar' %>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="container" style="max-width: 960px; margin: 0 auto;">
-
-    <nav class="dk-sport-nav">
-      <% sports = [
-        { key: 'mlb', label: 'MLB', icon: 'ic_baseball.png' },
-        { key: 'nfl', label: 'NFL', icon: 'ic_football.png' },
-        { key: 'nba', label: 'NBA', icon: 'ic_basketball.png' },
-        { key: 'nhl', label: 'NHL', icon: 'ic_hockey.png' }
-      ] %>
-      <% sports.each do |s| %>
-        <%= link_to sportsbook_path(sport: s[:key]), class: "dk-sport-tab #{'active' if @sport == s[:key]}" do %>
-          <%= (image_tag s[:icon], class: 'dk-sport-icon') rescue nil %>
-          <span><%= s[:label] %></span>
+  <ul class="sport-tabs">
+    <% sports = [
+      { key: 'mlb', label: 'MLB', icon: 'ic_baseball.png' },
+      { key: 'nfl', label: 'NFL', icon: 'ic_football.png' },
+      { key: 'nba', label: 'NBA', icon: 'ic_basketball.png' },
+      { key: 'nhl', label: 'NHL', icon: 'ic_hockey.png' }
+    ] %>
+    <% sports.each do |s| %>
+      <li class="<%= 'active' if @sport == s[:key] %>">
+        <%= link_to sportsbook_path(sport: s[:key]) do %>
+          <%= (image_tag s[:icon], class: 'tab-icon') rescue nil %>
+          <%= s[:label] %>
         <% end %>
-      <% end %>
-    </nav>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="container">
 
     <% if flash[:notice] %>
-      <div class="dk-alert dk-alert-success" style="margin: 12px 16px 0;"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></div>
+      <div class="alert-notice"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></div>
     <% end %>
     <% if flash[:alert] %>
-      <div class="dk-alert dk-alert-error" style="margin: 12px 16px 0;"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div>
+      <div class="alert-alert"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div>
     <% end %>
 
     <% unless @has_beep %>
-      <div class="dk-alert dk-alert-warning" style="margin: 12px 16px 0;">
+      <div class="beep-warning">
         <i class="fa fa-exclamation-triangle"></i>
         You need <strong>$BEEP tokens</strong> to place wagers.
-        <%= link_to 'Get $BEEP', wallet_path %>
+        <%= link_to 'Go to Wallet', wallet_path %> to swap ADA for $BEEP.
       </div>
     <% end %>
 
-    <% if @open_wagers.present? %>
-      <div class="bets-section" style="margin-top: 12px;">
-        <h3 class="section-title"><i class="fa fa-receipt" style="color: #00c853; margin-right: 6px;"></i> ACTIVE WAGERS (<%= @open_wagers.size %>)  <%= link_to 'View All', my_bets_path, style: 'float: right; font-size: 12px; color: #4fc3f7; text-decoration: none; font-weight: 500; text-transform: none; letter-spacing: 0;' %></h3>
+    <div class="fantasy-nav-bar">
+      <a class="fnav-link active" href="<%= sportsbook_path(sport: @sport) %>">Available Lines</a>
+      <%= link_to 'My Wagers', my_bets_path, class: 'fnav-link' %>
+    </div>
+
+    <div class="games-section">
+
+      <% if @open_wagers.present? %>
+        <div class="games-header" style="margin-top: 4px;">
+          <span class="games-title"><i class="fa fa-receipt" style="color: #ffc107; margin-right: 6px; font-size: 14px;"></i>ACTIVE WAGERS</span>
+          <span class="games-count"><%= @open_wagers.size %> open &nbsp;·&nbsp; <%= link_to 'View All', my_bets_path, style: 'color: #4fc3f7; font-weight: 600; text-decoration: none;' %></span>
+        </div>
         <% @open_wagers.each do |wager| %>
           <%
             w_away_city, w_away_mascot = split_team_name(wager.away_team)
@@ -49,18 +70,18 @@
             w_away_color = team_color(wager.away_team, 0)
             w_home_color = team_color(wager.home_team, 0)
           %>
-          <div class="bet-card">
-            <div class="bet-card-matchup">
-              <div class="bet-split-away" style="background: <%= w_away_color %>;"></div>
-              <div class="bet-split-home" style="background: <%= w_home_color %>;"></div>
-              <%= image_tag 'at_large.png', class: 'bet-at-image', style: 'width:28px;height:auto;opacity:0.85;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));' rescue nil %>
-              <div class="bet-team-away">
-                <% if w_away_city.present? %><div class="bet-team-city"><%= w_away_city %></div><% end %>
-                <div class="bet-team-mascot"><%= w_away_mascot %></div>
+          <div class="game-card">
+            <div class="game-matchup-panel">
+              <div class="split-away" style="background: <%= w_away_color %>;"></div>
+              <div class="split-home" style="background: <%= w_home_color %>;"></div>
+              <%= image_tag 'at_large.png', class: 'split-at-image' rescue nil %>
+              <div class="team-block team-block-away">
+                <% if w_away_city.present? %><div class="team-city"><%= w_away_city %></div><% end %>
+                <div class="team-mascot"><%= w_away_mascot %></div>
               </div>
-              <div class="bet-team-home">
-                <% if w_home_city.present? %><div class="bet-team-city"><%= w_home_city %></div><% end %>
-                <div class="bet-team-mascot"><%= w_home_mascot %></div>
+              <div class="team-block team-block-home">
+                <% if w_home_city.present? %><div class="team-city"><%= w_home_city %></div><% end %>
+                <div class="team-mascot"><%= w_home_mascot %></div>
               </div>
             </div>
             <div class="bet-info-bar">
@@ -76,13 +97,14 @@
             </div>
           </div>
         <% end %>
+      <% end %>
+
+      <div class="games-header" style="margin-top: <%= @open_wagers.present? ? '18px' : '4px' %>;">
+        <span class="games-title"><%= @sport.upcase %> LINES</span>
+        <span class="games-count"><%= @games.size %> games</span>
       </div>
-    <% end %>
 
-    <% if @games.any? %>
-      <div class="bets-section" style="margin-top: 16px;">
-        <h3 class="section-title"><i class="fa fa-calendar" style="color: #00c853; margin-right: 6px;"></i> <%= @sport.upcase %> LINES &mdash; <%= @games.size %> GAMES</h3>
-
+      <% if @games.any? %>
         <% grouped = @games.group_by { |g| g[:start_date] ? Time.parse(g[:start_date]).strftime('%A, %b %-d') : 'TBD' } rescue { 'Today' => @games } %>
         <% grouped.each do |date_label, games| %>
           <div class="sb-date-label"><%= date_label %></div>
@@ -102,24 +124,30 @@
               home_color = team_color(game[:home_team], 0)
             %>
 
-            <div class="bet-card sb-game-card" id="<%= card_id %>">
-              <div class="bet-card-matchup">
-                <div class="bet-split-away" style="background: <%= away_color %>;"></div>
-                <div class="bet-split-home" style="background: <%= home_color %>;"></div>
-                <%= image_tag 'at_large.png', class: 'bet-at-image', style: 'width:28px;height:auto;opacity:0.85;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));' rescue nil %>
-                <div class="bet-team-away">
-                  <% if away_city.present? %><div class="bet-team-city"><%= away_city %></div><% end %>
-                  <div class="bet-team-mascot"><%= away_mascot %></div>
+            <div class="game-card sb-game-card" id="<%= card_id %>">
+              <div class="game-date-bar">
+                <span></span>
+                <span>
+                  <% if game[:is_live] %>
+                    <span class="live-badge"><i class="fa fa-circle"></i> LIVE</span>
+                  <% elsif start_time %>
+                    <span class="game-time"><%= start_time.strftime('%-I:%M %p') %></span>
+                  <% end %>
+                </span>
+              </div>
+
+              <div class="game-matchup-panel">
+                <div class="split-away" style="background: <%= away_color %>;"></div>
+                <div class="split-home" style="background: <%= home_color %>;"></div>
+                <%= image_tag 'at_large.png', class: 'split-at-image' rescue nil %>
+                <div class="team-block team-block-away">
+                  <% if away_city.present? %><div class="team-city"><%= away_city %></div><% end %>
+                  <div class="team-mascot"><%= away_mascot %></div>
                 </div>
-                <div class="bet-team-home">
-                  <% if home_city.present? %><div class="bet-team-city"><%= home_city %></div><% end %>
-                  <div class="bet-team-mascot"><%= home_mascot %></div>
+                <div class="team-block team-block-home">
+                  <% if home_city.present? %><div class="team-city"><%= home_city %></div><% end %>
+                  <div class="team-mascot"><%= home_mascot %></div>
                 </div>
-                <% if game[:is_live] %>
-                  <div class="sb-live-badge"><span class="dk-live-dot"></span> LIVE</div>
-                <% elsif start_time %>
-                  <div class="sb-time-badge"><%= start_time.strftime('%-I:%M %p') %></div>
-                <% end %>
               </div>
 
               <div class="sb-odds-grid">
@@ -215,21 +243,18 @@
             </div>
           <% end %>
         <% end %>
-      </div>
-    <% else %>
-      <div class="bets-section" style="margin-top: 16px;">
-        <div class="no-bets">
+
+      <% else %>
+        <div class="no-games">
           <% no_game_icons = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png', 'nba' => 'ic_basketball.png', 'nhl' => 'ic_hockey.png' } %>
-          <%= (image_tag no_game_icons[@sport] || 'ic_baseball.png', style: 'width: 48px; height: 48px; opacity: 0.2; margin-bottom: 8px;') rescue nil %>
-          <p>No <%= @sport.upcase %> games available. Check back later.</p>
+          <%= (image_tag no_game_icons[@sport] || 'ic_baseball.png', style: 'width: 64px; height: 64px; opacity: 0.25; margin-bottom: 16px;') rescue nil %>
+          <p>No <%= @sport.upcase %> lines available right now.</p>
+          <p class="sub">Check back soon or browse another sport.</p>
+          <%= link_to 'Go to Fantasy →', fantasy_path, class: 'go-sportsbook-link' %>
         </div>
-      </div>
-    <% end %>
+      <% end %>
 
-    <div class="back-to-sportsbook" style="margin-top: 12px;">
-      <%= link_to 'My Bets', my_bets_path %>
     </div>
-
   </div>
 </div>
 
