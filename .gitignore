@@ -5,3 +5,10 @@ frontend/db/development.sqlite3
 frontend/tmp/pids/
 frontend/tmp/cache/
 frontend/tmp/sockets/
+
+# Sprockets compiled assets (never commit - regenerated at runtime)
+frontend/public/assets/.sprockets-manifest-*
+frontend/public/assets/application-*.js
+frontend/public/assets/application-*.js.gz
+frontend/public/assets/application-*.css
+frontend/public/assets/application-*.css.gz
