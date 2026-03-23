@@ -1,12 +1,0 @@
-{:uriI"file://app/assets/javascripts/templates/players/index.html?type=text/ng-html&id=c9d811560ebc1d70deeb998fa7890014fd77fdacb0d8bc05246af6565b17c509:ET:load_pathI"app/assets/javascripts;T:filenameI"8app/assets/javascripts/templates/players/index.html;T:	nameI"templates/players/index;T:logical_pathI"!templates/players/index.html;T:content_typeI"text/ng-html;T:sourceI"ÿ<h1 class="text-center">{{ headerText || 'Your Players' }}</h1>
-<div class="player-cards">
-  <a ui-sref="gameShow.ticketRoster" ng-click="selectPlayer(player)" ng-repeat="player in players">
-    <player-card sb-player="player"></player-card>
-  </a>
-</div>;T:metadata{	:dependencieso:Set:
-@hash}
-I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Ffile-digest://app/assets/javascripts/templates/players/index.html;TTF:charsetI"
-utf-8;F:digest"%­ãUÁÙƒíæ"q)è
-8m4*¯œçl=ux¦ü
-:lengthiÿ:dependencies_digest"%XKó{k¹jÛĞ^K©Ş¬cYñç±¸V¬½?¯#^ë:idI"Ec9d811560ebc1d70deeb998fa7890014fd77fdacb0d8bc05246af6565b17c509;F:
-mtimel+H³Éh

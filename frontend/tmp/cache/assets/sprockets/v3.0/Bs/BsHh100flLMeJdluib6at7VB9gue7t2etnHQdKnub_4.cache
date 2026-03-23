@@ -1,9 +1,0 @@
-{:uriI"’file://app/assets/javascripts/templates/tickets/players.html?type=text/ng-html&id=416fa62b0769b0c1c06f4691abd39c2c244ecc297d438f180c9efa099acc946c:ET:load_pathI"app/assets/javascripts;T:filenameI":app/assets/javascripts/templates/tickets/players.html;T:	nameI"templates/tickets/players;T:logical_pathI"#templates/tickets/players.html;T:content_typeI"text/ng-html;T:sourceI"Ü<div class="player-cards">
-  <a ui-sref="dashboard.ticket.show({ id: ticket.id })" ng-click="selectPlayer(player, position)" ng-repeat="player in players">
-    <player-card sb-player="player"></player-card>
-  </a>
-</div>;T:metadata{	:dependencieso:Set:
-@hash}
-I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Hfile-digest://app/assets/javascripts/templates/tickets/players.html;TTF:charsetI"
-utf-8;F:digest"%ò¡rX¤‘Á{†œ¯kpëðA²öîÎ‘êvzã¦»?:lengthiÜ:dependencies_digest"%ëÕ%0ªTÜÛD”Öãœmõ±ÃJÜhÆ¥EÅÅ75¥:idI"E416fa62b0769b0c1c06f4691abd39c2c244ecc297d438f180c9efa099acc946c;F:
-mtimel+H³Éh

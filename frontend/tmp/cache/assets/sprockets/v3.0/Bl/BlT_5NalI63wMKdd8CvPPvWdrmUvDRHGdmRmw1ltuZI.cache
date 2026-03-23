@@ -1,13 +1,0 @@
-{:uriI"file://app/assets/javascripts/templates/games/index.html?type=text/ng-html&id=a54dc97752fd42373d31b40d2c4d180f70d98aaf071d3691c4f7abb1fbca6391:ET:load_pathI"app/assets/javascripts;T:filenameI"6app/assets/javascripts/templates/games/index.html;T:	nameI"templates/games/index;T:logical_pathI"templates/games/index.html;T:content_typeI"text/ng-html;T:sourceI"ü<h1>Select a game</h1>
-<ul class="games-list row">
-  <li ng-repeat="game in games">
-    <a ng-href="#/games/{{game.id}}">
-      <game-card sb-game="game" sb-center-circle-text="AT" sb-include-start-time="true">
-      </game-card>
-    </a>
-  </li>
-</ul>;T:metadata{	:dependencieso:Set:
-@hash}
-I"environment-version;TTI"environment-paths;TTI"rails-env;TTI"8processors:type=text/ng-html&file_type=text/ng-html;TTI"Dfile-digest://app/assets/javascripts/templates/games/index.html;TTF:charsetI"
-utf-8;F:digest"%¬K8v¤aò€‚s;s° ú?®ÁÉt¬Ó©Œè:lengthiü:dependencies_digest"%²@©×O°…[o›€¥TÎ£’\oû$h–+şuÿµ¶À:idI"Ea54dc97752fd42373d31b40d2c4d180f70d98aaf071d3691c4f7abb1fbca6391;F:
-mtimel+H³Éh
