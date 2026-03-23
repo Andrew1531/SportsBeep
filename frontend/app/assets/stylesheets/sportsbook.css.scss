@@ -1557,6 +1557,37 @@ $dk-tab-active: #00c853;
     border-bottom-color: $dk-yellow;
     .tab-icon { opacity: 1; }
   }
+
+  .bet-info-bar {
+    background: $dk-surface;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .bet-type-info {
+      .bet-selection-name { font-size: 14px; font-weight: 700; color: $dk-text; }
+      .bet-type-label { font-size: 11px; color: $dk-text-secondary; }
+    }
+
+    .bet-odds-badge {
+      font-size: 20px;
+      font-weight: 700;
+      color: $dk-green;
+    }
+  }
+
+  .bet-bottom-bar {
+    background: rgba(0,0,0,0.2);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: $dk-text-secondary;
+
+    .bet-wager-amount { font-weight: 700; color: $dk-yellow; }
+    .bet-payout-amount { font-weight: 700; color: $dk-green; }
+  }
 }
 
 .sb-hero {
