@@ -17,6 +17,16 @@ class DashboardController < ApplicationController
     @transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(20) }
     load_wallet_info
     load_referral_info
+    sportsbook_in_play = safe_collection { @user.wagers.open }.sum(&:amount_cents) / 100.0
+    active_tickets = safe_collection do
+      @user.tickets
+           .joins(contest: { template: :pool })
+           .where.not(contests: { status: 'finalized' })
+           .includes(contest: { template: :pool })
+    end
+    fantasy_in_play = active_tickets.sum { |t| t.contest.pool.entry_fee }
+    @active_wager_total = sportsbook_in_play + fantasy_in_play
+    @total_wager_count = safe_collection { @user.wagers }.size
   end
 
   def transactions
