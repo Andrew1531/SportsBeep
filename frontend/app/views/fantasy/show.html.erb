@@ -295,8 +295,22 @@ function togglePlayer(id) {
     var prev = document.getElementById('actions-' + expandedPlayer);
     if (prev) prev.style.display = 'none';
   }
-  actions.style.display = (actions.style.display === 'none' || !actions.style.display) ? 'flex' : 'none';
-  expandedPlayer = actions.style.display === 'flex' ? id : null;
+  var opening = (actions.style.display === 'none' || !actions.style.display);
+  actions.style.display = opening ? 'flex' : 'none';
+  expandedPlayer = opening ? id : null;
+  if (opening) {
+    setTimeout(function() {
+      var card = document.getElementById('pc-' + id);
+      if (card) {
+        var rect = card.getBoundingClientRect();
+        var panelHeight = 160;
+        var viewportBottom = window.innerHeight - panelHeight;
+        if (rect.bottom > viewportBottom) {
+          window.scrollBy({ top: rect.bottom - viewportBottom + 8, behavior: 'smooth' });
+        }
+      }
+    }, 50);
+  }
 }
 
 function pickPlayer(id, name, type) {
