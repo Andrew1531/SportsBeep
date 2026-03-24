@@ -19,7 +19,7 @@
     </div>
     <div class="bb-modal-actions">
       <% if user_signed_in? %>
-        <%= link_to 'Go to Wallet →', dashboard_path, class: 'bb-btn-primary' %>
+        <%= link_to 'Go to Wallet →', wallet_path, class: 'bb-btn-primary' %>
       <% else %>
         <%= link_to 'Sign Up Free', new_user_registration_path, class: 'bb-btn-primary' %>
       <% end %>
