@@ -1,3 +1,85 @@
+<style>
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .sb-ticker-wrap {
+    overflow: hidden;
+    background: #0b0e14;
+    border-bottom: 1px solid rgba(0,200,83,0.25);
+    border-top: 1px solid rgba(0,200,83,0.15);
+    position: relative;
+  }
+  .sb-ticker-wrap::before {
+    content: 'LIVE';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: #00c853;
+    color: #000;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+  }
+  .sb-ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 60s linear infinite;
+    padding: 10px 0 10px 70px;
+  }
+  .sb-ticker-wrap:hover .sb-ticker-track {
+    animation-play-state: paused;
+  }
+  .sb-ticker-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 28px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    white-space: nowrap;
+    font-size: 12px;
+    color: #cdd6f4;
+    font-family: monospace;
+    gap: 6px;
+  }
+  .sb-ticker-sport {
+    background: rgba(0,200,83,0.15);
+    color: #00c853;
+    border: 1px solid rgba(0,200,83,0.3);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .sb-ticker-ml-fav  { color: #fc8181; font-weight: 600; }
+  .sb-ticker-ml-dog  { color: #68d391; font-weight: 600; }
+  .sb-ticker-time    { color: #8892b0; font-size: 11px; }
+  .sb-ticker-sep     { color: rgba(255,255,255,0.2); }
+  .txn-row { transition: background 0.15s; }
+  .txn-row:hover { background: rgba(255,255,255,0.03); border-radius: 6px; }
+</style>
+
+<div class="sb-ticker-wrap">
+  <div class="sb-ticker-track">
+    <% items = @ticker_items + @ticker_items %>
+    <% items.each do |t| %>
+      <span class="sb-ticker-item">
+        <span class="sb-ticker-sport"><%= t[:sport] %></span>
+        <%= t[:emoji] %>
+        <strong><%= t[:away] %></strong>
+        <span class="sb-ticker-sep">@</span>
+        <strong><%= t[:home] %></strong>
+        <span class="sb-ticker-sep">|</span>
+        <span class="<%= t[:home_ml] < 0 ? 'sb-ticker-ml-fav' : 'sb-ticker-ml-dog' %>"><%= t[:home_ml] > 0 ? "+#{t[:home_ml]}" : t[:home_ml] %></span>
+        <span class="sb-ticker-sep">/</span>
+        <span class="<%= t[:away_ml] < 0 ? 'sb-ticker-ml-fav' : 'sb-ticker-ml-dog' %>"><%= t[:away_ml] > 0 ? "+#{t[:away_ml]}" : t[:away_ml] %></span>
+        <span class="sb-ticker-time">— <%= t[:status] %></span>
+      </span>
+    <% end %>
+  </div>
+</div>
+
 <div style="min-height: calc(100vh - 200px); background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 30px 15px 60px;">
   <div class="container">
 
@@ -19,9 +101,10 @@
       <p style="color: #8892b0; margin: 0; font-size: 15px;">Your SportsBeep Dashboard</p>
     </div>
 
+    <%# Balance cards %>
     <div class="row" style="margin-bottom: 20px;">
       <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 24px; text-align: center; transition: transform 0.2s;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 24px; text-align: center;">
           <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
             <i class="fa fa-coins" style="color: white; font-size: 24px;"></i>
           </div>
@@ -31,7 +114,7 @@
         </div>
       </div>
       <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 24px; text-align: center; transition: transform 0.2s;">
+        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 24px; text-align: center;">
           <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
             <i class="fa fa-gift" style="color: white; font-size: 24px;"></i>
           </div>
@@ -42,6 +125,7 @@
       </div>
     </div>
 
+    <%# Quick actions %>
     <div style="background: linear-gradient(135deg, rgba(231,76,60,0.15), rgba(192,57,43,0.1)); border: 1px solid rgba(231,76,60,0.25); border-radius: 14px; padding: 24px 28px; margin-bottom: 20px;">
       <div class="row" style="display: flex; align-items: center; flex-wrap: wrap;">
         <div class="col-xs-12 col-sm-6" style="margin-bottom: 10px;">
@@ -63,17 +147,70 @@
       <% end %>
     </div>
 
+    <%# Recent Transactions — main content area %>
+    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
+      <div style="padding: 18px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between;">
+        <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">
+          <i class="fa fa-arrow-right-arrow-left" style="color: #00c853; margin-right: 10px;"></i>Recent Transactions
+        </h4>
+        <%= link_to user_transactions_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
+          View All <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
+        <% end %>
+      </div>
+      <div style="padding: 6px 24px 18px;">
+        <% if @recent_transactions.any? %>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <th style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; padding: 14px 0 10px; text-align: left;">Description</th>
+                <th style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; padding: 14px 0 10px; text-align: center;">Type</th>
+                <th style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; padding: 14px 0 10px; text-align: right;">Amount</th>
+                <th style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; padding: 14px 0 10px; text-align: right;">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @recent_transactions.each do |txn| %>
+                <%
+                  is_credit = txn.amount_cents.to_i >= 0 rescue true
+                  type_label = txn.type.to_s.gsub('Transaction','').gsub(/([A-Z])/,' \1').strip.presence || 'Adjustment'
+                  amt_color  = is_credit ? '#68d391' : '#fc8181'
+                  amt_prefix = is_credit ? '+' : ''
+                %>
+                <tr class="txn-row" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                  <td style="color: white; padding: 12px 0; font-size: 14px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= txn.description %></td>
+                  <td style="padding: 12px 8px; text-align: center;">
+                    <span style="background: rgba(255,255,255,0.07); color: #8892b0; border-radius: 20px; padding: 3px 10px; font-size: 11px; white-space: nowrap;"><%= type_label %></span>
+                  </td>
+                  <td style="color: <%= amt_color %>; padding: 12px 0; font-size: 14px; text-align: right; font-weight: 700; font-family: monospace;"><%= amt_prefix %><%= txn.amount %></td>
+                  <td style="color: #8892b0; padding: 12px 0; font-size: 12px; text-align: right; white-space: nowrap;"><%= txn.created_at.strftime("%b %d, %Y") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div style="text-align: center; padding: 40px 0;">
+            <i class="fa fa-arrow-right-arrow-left" style="font-size: 38px; color: rgba(255,255,255,0.1); margin-bottom: 14px; display: block;"></i>
+            <p style="color: #8892b0; margin: 0 0 16px; font-size: 15px;">No transactions yet</p>
+            <%= link_to sportsbook_path, style: 'display: inline-block; padding: 10px 26px; background: linear-gradient(135deg,#e74c3c,#c0392b); color: white; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;' do %>
+              Place Your First Bet
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Connected Wallets %>
     <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;">
       <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px;">
         <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">
           <i class="fa fa-link" style="color: #a29bfe; margin-right: 8px;"></i>Connected Wallets
         </h4>
         <%= link_to wallet_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
-          Manage Wallets <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
+          Manage <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
         <% end %>
       </div>
       <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-offset-2" style="margin-bottom: 10px;">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
           <div style="background: rgba(0,136,204,0.08); border: 1px solid rgba(0,180,216,0.2); border-radius: 10px; padding: 14px 18px;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <div style="display: flex; align-items: center;">
@@ -93,7 +230,7 @@
         </div>
       </div>
       <% unless @user.cardano_wallet_address.present? %>
-        <div style="margin-top: 10px; text-align: center;">
+        <div style="margin-top: 14px; text-align: center;">
           <%= link_to wallet_path, style: 'display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
             <i class="fa fa-plus" style="margin-right: 6px;"></i> Connect Cardano Wallet
           <% end %>
@@ -101,184 +238,7 @@
       <% end %>
     </div>
 
-    <div class="row" style="margin-bottom: 20px;">
-      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
-        <div id="mlb-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
-          <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><%= image_tag 'ic_baseball.png', style: 'width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;' %>Recent MLB Entries</h4>
-          </div>
-          <div style="padding: 18px 22px;">
-            <% if @mlb_tickets.any? %>
-              <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                  <tr>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Contest</th>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: center;">Score</th>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @mlb_tickets.each do |ticket| %>
-                    <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
-                      <td style="color: white; padding: 10px 0; font-size: 14px;"><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
-                      <td style="color: #a29bfe; padding: 10px 0; font-size: 14px; text-align: center;"><%= ticket.score rescue 'N/A' %></td>
-                      <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            <% else %>
-              <div style="text-align: center; padding: 25px 0;">
-                <%= image_tag 'ic_baseball.png', style: 'width: 40px; height: 40px; opacity: 0.2; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;' %>
-                <p style="color: #8892b0; margin: 0; font-size: 14px;">No MLB entries yet</p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
-        <div id="nfl-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
-          <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><%= image_tag 'ic_football.png', style: 'width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;' %>Recent NFL Entries</h4>
-          </div>
-          <div style="padding: 18px 22px;">
-            <% if @nfl_tickets.any? %>
-              <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                  <tr>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Contest</th>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: center;">Score</th>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @nfl_tickets.each do |ticket| %>
-                    <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
-                      <td style="color: white; padding: 10px 0; font-size: 14px;"><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
-                      <td style="color: #a29bfe; padding: 10px 0; font-size: 14px; text-align: center;"><%= ticket.score rescue 'N/A' %></td>
-                      <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            <% else %>
-              <div style="text-align: center; padding: 25px 0;">
-                <%= image_tag 'ic_football.png', style: 'width: 40px; height: 40px; opacity: 0.2; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;' %>
-                <p style="color: #8892b0; margin: 0; font-size: 14px;">No NFL entries yet</p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
-        <div id="nba-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
-          <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><%= image_tag 'ic_basketball.png', style: 'width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;' %>Recent NBA Entries</h4>
-          </div>
-          <div style="padding: 18px 22px;">
-            <% if defined?(@nba_tickets) && @nba_tickets.any? %>
-              <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                  <tr>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Contest</th>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: center;">Score</th>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @nba_tickets.each do |ticket| %>
-                    <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
-                      <td style="color: white; padding: 10px 0; font-size: 14px;"><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
-                      <td style="color: #a29bfe; padding: 10px 0; font-size: 14px; text-align: center;"><%= ticket.score rescue 'N/A' %></td>
-                      <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            <% else %>
-              <div style="text-align: center; padding: 25px 0;">
-                <%= image_tag 'ic_basketball.png', style: 'width: 40px; height: 40px; opacity: 0.2; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;' %>
-                <p style="color: #8892b0; margin: 0; font-size: 14px;">No NBA entries yet</p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
-        <div id="nhl-entries" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;">
-          <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-            <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><%= image_tag 'ic_hockey.png', style: 'width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;' %>Recent NHL Entries</h4>
-          </div>
-          <div style="padding: 18px 22px;">
-            <% if defined?(@nhl_tickets) && @nhl_tickets.any? %>
-              <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                  <tr>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Contest</th>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: center;">Score</th>
-                    <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @nhl_tickets.each do |ticket| %>
-                    <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
-                      <td style="color: white; padding: 10px 0; font-size: 14px;"><%= ticket.contest.try(:name) || "Contest ##{ticket.contest_id}" %></td>
-                      <td style="color: #a29bfe; padding: 10px 0; font-size: 14px; text-align: center;"><%= ticket.score rescue 'N/A' %></td>
-                      <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= ticket.created_at.strftime("%b %d, %Y") %></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            <% else %>
-              <div style="text-align: center; padding: 25px 0;">
-                <%= image_tag 'ic_hockey.png', style: 'width: 40px; height: 40px; opacity: 0.2; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;' %>
-                <p style="color: #8892b0; margin: 0; font-size: 14px;">No NHL entries yet</p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
-      <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-        <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-arrow-right-arrow-left" style="color: #a29bfe; margin-right: 8px;"></i>Recent Transactions</h4>
-      </div>
-      <div style="padding: 18px 22px;">
-        <% if @recent_transactions.any? %>
-          <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-              <tr>
-                <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: left;">Description</th>
-                <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Amount</th>
-                <th style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 0 0 12px; text-align: right;">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @recent_transactions.each do |txn| %>
-                <tr style="border-top: 1px solid rgba(255,255,255,0.06);">
-                  <td style="color: white; padding: 10px 0; font-size: 14px;"><%= txn.description %></td>
-                  <td style="color: #68d391; padding: 10px 0; font-size: 14px; text-align: right; font-weight: 600;"><%= txn.amount %></td>
-                  <td style="color: #8892b0; padding: 10px 0; font-size: 13px; text-align: right;"><%= txn.created_at.strftime("%b %d, %Y") %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-          <div style="margin-top: 14px;">
-            <%= link_to 'View All Transactions', user_transactions_path, style: 'color: #a29bfe; font-size: 13px; font-weight: 600; text-decoration: none;' %>
-          </div>
-        <% else %>
-          <div style="text-align: center; padding: 25px 0;">
-            <i class="fa fa-arrow-right-arrow-left" style="font-size: 32px; color: rgba(255,255,255,0.15); margin-bottom: 10px; display: block;"></i>
-            <p style="color: #8892b0; margin: 0; font-size: 14px;">No transactions yet</p>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
+    <%# Account Info %>
     <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
       <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
         <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-user" style="color: #63b3ed; margin-right: 8px;"></i>Account Info</h4>

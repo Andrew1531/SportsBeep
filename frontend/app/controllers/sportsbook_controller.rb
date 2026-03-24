@@ -1,11 +1,11 @@
 class SportsbookController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:place_wager, :my_bets]
   before_action :set_user_and_account
 
   def index
     @sport = params[:sport] || 'mlb'
     @games = fetch_games_with_odds(@sport)
-    @open_wagers = @user.wagers.open.recent.limit(5) rescue []
+    @open_wagers = @user ? @user.wagers.open.recent.limit(5) : []
   end
 
   def place_wager
@@ -33,7 +33,7 @@ class SportsbookController < ApplicationController
     else
       @sport = @wager.sport || 'mlb'
       @games = fetch_games_with_odds(@sport)
-      @open_wagers = @user.wagers.open.recent.limit(5) rescue []
+      @open_wagers = @user ? @user.wagers.open.recent.limit(5) : []
       flash.now[:alert] = @wager.errors.full_messages.join(', ')
       render :index
     end
@@ -52,8 +52,8 @@ class SportsbookController < ApplicationController
 
   def set_user_and_account
     @user = current_user
-    @account = @user.account
-    @has_beep = @account.balance_cents > 0 rescue false
+    @account = @user&.account
+    @has_beep = @account&.balance_cents.to_i > 0
   end
 
   def wager_params

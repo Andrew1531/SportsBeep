@@ -4,11 +4,10 @@ class DashboardController < ApplicationController
   def index
     @user = current_user
     @account = @user.account
-    @recent_transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(5) }
-    @mlb_tickets = safe_collection { @user.mlb_tickets.includes(:contest).order(created_at: :desc).limit(5) }
-    @nfl_tickets = safe_collection { @user.nfl_tickets.includes(:contest).order(created_at: :desc).limit(5) }
+    @recent_transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(10) }
     load_wallet_info
     load_referral_info
+    @ticker_items = build_ticker_items
   end
 
   def wallet
@@ -187,5 +186,23 @@ class DashboardController < ApplicationController
     @promo_earnings = @account.promo_earnings_dollars
     @referral_winnings = @account.referral_winnings_dollars
     @total_referral_earnings = @account.total_referral_earnings_dollars
+  end
+
+  def build_ticker_items
+    items = []
+    items += [
+      { sport: 'MLB', emoji: '⚾', home: 'Yankees', away: 'Red Sox',       home_ml: -175, away_ml: +148, status: 'Today 7:05 PM ET' },
+      { sport: 'MLB', emoji: '⚾', home: 'Dodgers',  away: 'Giants',        home_ml: -160, away_ml: +138, status: 'Today 10:10 PM ET' },
+      { sport: 'MLB', emoji: '⚾', home: 'Astros',   away: 'Rangers',       home_ml: -130, away_ml: +110, status: 'Today 8:10 PM ET' },
+      { sport: 'MLB', emoji: '⚾', home: 'Braves',   away: 'Mets',          home_ml: -145, away_ml: +122, status: 'Today 7:20 PM ET' },
+      { sport: 'NBA', emoji: '🏀', home: 'Celtics',  away: 'Lakers',        home_ml: -200, away_ml: +170, status: 'Tonight 7:30 PM ET' },
+      { sport: 'NBA', emoji: '🏀', home: 'Nuggets',  away: 'Warriors',      home_ml: -150, away_ml: +130, status: 'Tonight 10:00 PM ET' },
+      { sport: 'NBA', emoji: '🏀', home: 'Bucks',    away: 'Suns',          home_ml: -135, away_ml: +115, status: 'Tonight 8:00 PM ET' },
+      { sport: 'NHL', emoji: '🏒', home: 'Oilers',   away: 'Maple Leafs',   home_ml: -130, away_ml: +110, status: 'Tonight 7:00 PM ET' },
+      { sport: 'NHL', emoji: '🏒', home: 'Avalanche',away: 'Golden Knights', home_ml: +105, away_ml: -125, status: 'Tonight 9:30 PM ET' },
+      { sport: 'NFL', emoji: '🏈', home: 'Chiefs',   away: 'Bills',         home_ml: -155, away_ml: +132, status: 'Sun 4:25 PM ET' },
+      { sport: 'NFL', emoji: '🏈', home: 'Eagles',   away: 'Cowboys',       home_ml: -135, away_ml: +114, status: 'Sun 8:20 PM ET' },
+    ]
+    items
   end
 end
