@@ -9,8 +9,12 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 - **JavaScript Runtime**: ✅ Node.js 20 installed  
 - **Asset Pipeline**: ✅ Sass/CSS compiling successfully (Rails 6 compatible)
 - **Cardano Blockchain**: ✅ Integrated with Blockfrost API for crypto wallet support
-- **Sportsbook**: ✅ DraftKings-style sportsbook with table-grid odds layout (MLB, NFL, NBA, NHL)
-- **OpticOdds API**: ✅ Integrated for real-time odds data
+- **Sportsbook**: ✅ DraftKings-style with team logos, balance guard, bet slip
+- **OpticOdds API**: ⚠️ Returns 403 (key permissions issue) — falls back to DB games with random odds
+- **Balance Guard**: ✅ Inline warning + "Insufficient $BEEP" modal blocks overspending
+- **Team Logos**: ✅ ESPN CDN logos displayed in sportsbook rows (MLB/NFL/NBA/NHL)
+- **Fantasy Player Cards**: ✅ Smooth accordion expand — overflow:hidden bug fixed
+- **Wallet Display**: ✅ Total In Play shown as whole $BEEP with amber warning if over on-chain
 - **Backend Timer API**: ❌ Needs Rails 6+ upgrade for Ruby 3.2 compatibility
 - **Deployment**: ✅ Configured for Replit autoscale with PostgreSQL
 
@@ -73,6 +77,13 @@ The application automatically starts with the configured workflow:
   - ✅ Promo Code Management - Full CRUD, usage analytics, top performing codes
   - ✅ Push Notifications - Send test notifications, notification types
   - ✅ Settings Page - Registration settings, system info, API configuration status
+
+## Session — March 24, 2026
+- **Team Logos in Sportsbook**: Replaced diagonal color-split panel with two stacked ESPN CDN logo images per game row. Added `.dk-logo-panel` / `.dk-logo-slot` / `.dk-team-logo-img` CSS. Fixed oversizing with `max-width/height: 36px` and `overflow: hidden`.
+- **$BEEP Balance Guard (Sportsbook)**: Exposed `SB_BALANCE_CENTS` to page JS. `sbUpdatePayout()` shows inline red warning when amount > balance. `sbPlaceBet()` intercepts and shows "Insufficient $BEEP" modal with "Go to Wallet →" CTA. Server-side `must_have_sufficient_balance` validation remains as safety net.
+- **Wallet "Total In Play" Fix**: Changed display from `200.00` decimal format to whole integer with `$BEEP` label. Card turns amber with `!` badge and sync hint when in-play exceeds on-chain balance.
+- **Fantasy Player Card Accordion**: Fixed `overflow: hidden` on `.player-card` that was clipping BEST/BUST buttons. Replaced `display: none/flex` toggle with CSS grid accordion (`grid-template-rows: 0fr → 1fr`, 220ms ease). Added `.expanded` border glow, auto-scroll after animation, bigger tap targets.
+- **Sportsbook 500 Error Fix**: `dashboard_path` in Buy BEEP modal was undefined in non-admin context — corrected to `wallet_path`.
 
 ## Recent Fixes
 - **Devise Parameter Sanitizer**: Updated from Rails 4 `.for()` syntax to Rails 6 `.permit()` syntax for user registration
