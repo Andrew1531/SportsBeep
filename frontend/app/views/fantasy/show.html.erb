@@ -46,10 +46,11 @@
   .filter-btn.active { background: #1e2d40; border-color: #3767ab; color: #fff; }
 
   .players-list { display: flex; flex-direction: column; gap: 6px; }
-  .player-card { background: #131a24; border: 1px solid #1e2d40; border-radius: 10px; overflow: hidden; transition: border-color .2s; }
+  .player-card { background: #131a24; border: 1px solid #1e2d40; border-radius: 10px; transition: border-color .2s, box-shadow .2s; }
   .player-card.picked-best { border-color: #00c853; background: #071a0c; }
   .player-card.picked-bust { border-color: #ef4444; background: #1a0707; }
-  .player-row-top { display: flex; align-items: center; padding: 12px 14px; cursor: pointer; gap: 12px; }
+  .player-card.expanded { border-color: #2a3a54; box-shadow: 0 0 0 2px rgba(255,255,255,0.06); }
+  .player-row-top { display: flex; align-items: center; padding: 12px 14px; cursor: pointer; gap: 12px; user-select: none; }
   .player-pos { font-size: 11px; font-weight: 700; color: #4a5568; width: 30px; text-transform: uppercase; }
   .player-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; color: #fff; flex-shrink: 0; }
   .player-info { flex: 1; min-width: 0; }
@@ -59,21 +60,35 @@
   .stat-pill { text-align: center; }
   .stat-val { font-size: 14px; font-weight: 700; color: #c5d0de; }
   .stat-lbl { font-size: 9px; color: #4a5568; text-transform: uppercase; }
-  .player-pick-badge { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; flex-shrink: 0; }
+  .player-pick-badge { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; flex-shrink: 0; }
   .pick-badge-best { background: #00c853; color: #000; }
   .pick-badge-bust { background: #ef4444; color: #fff; }
   .pick-badge-none { background: transparent; }
 
-  .player-actions { display: flex; gap: 8px; padding: 0 14px 12px; }
-  .pick-btn { flex: 1; padding: 10px 0; border-radius: 8px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; transition: all .2s; text-transform: uppercase; letter-spacing: 1px; }
+  /* Smooth accordion expand for action buttons */
+  .player-actions-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.22s ease;
+  }
+  .player-actions-wrap.open {
+    grid-template-rows: 1fr;
+  }
+  .player-actions-inner {
+    overflow: hidden;
+  }
+  .player-actions { display: flex; gap: 8px; padding: 2px 14px 14px; }
+  .pick-btn { flex: 1; padding: 13px 0; border-radius: 10px; font-size: 14px; font-weight: 800; border: none; cursor: pointer; transition: all .18s; text-transform: uppercase; letter-spacing: 1px; }
   .pick-btn-best { background: #00c853; color: #000; }
-  .pick-btn-best:hover { background: #00e85e; }
+  .pick-btn-best:hover { background: #00e85e; transform: translateY(-1px); }
   .pick-btn-best.selected { background: #00c853; box-shadow: 0 0 0 2px #00c853, 0 0 16px rgba(0,200,83,.4); }
   .pick-btn-bust { background: #ef4444; color: #fff; }
-  .pick-btn-bust:hover { background: #ff5555; }
+  .pick-btn-bust:hover { background: #ff5555; transform: translateY(-1px); }
   .pick-btn-bust.selected { background: #ef4444; box-shadow: 0 0 0 2px #ef4444, 0 0 16px rgba(239,68,68,.4); }
-  .pick-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .pick-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
   .player-card.hidden { display: none; }
+  /* Divider above action row */
+  .player-actions-divider { height: 1px; background: #1e2d40; margin: 0 14px; }
 
   .picks-panel { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1520; border-top: 1px solid #1e2d40; z-index: 100; padding: 12px 16px; box-shadow: 0 -8px 32px rgba(0,0,0,.7); }
   .picks-slots { display: flex; gap: 6px; margin-bottom: 10px; }
@@ -187,15 +202,20 @@
                 </div>
                 <div class="player-pick-badge pick-badge-none" id="badge-<%= player.id %>"></div>
               </div>
-              <div class="player-actions" id="actions-<%= player.id %>" style="display: none;">
-                <button class="pick-btn pick-btn-best" id="best-btn-<%= player.id %>"
-                        onclick="pickPlayer(<%= player.id %>, '<%= h(player.name) %>', 'best')">
-                  🔥 Best Pick
-                </button>
-                <button class="pick-btn pick-btn-bust" id="bust-btn-<%= player.id %>"
-                        onclick="pickPlayer(<%= player.id %>, '<%= h(player.name) %>', 'bust')">
-                  💀 Bust Pick
-                </button>
+              <div class="player-actions-wrap" id="actions-wrap-<%= player.id %>">
+                <div class="player-actions-inner">
+                  <div class="player-actions-divider"></div>
+                  <div class="player-actions" id="actions-<%= player.id %>">
+                    <button class="pick-btn pick-btn-best" id="best-btn-<%= player.id %>"
+                            onclick="pickPlayer(<%= player.id %>, '<%= h(player.name) %>', 'best')">
+                      🔥 Best Pick
+                    </button>
+                    <button class="pick-btn pick-btn-bust" id="bust-btn-<%= player.id %>"
+                            onclick="pickPlayer(<%= player.id %>, '<%= h(player.name) %>', 'bust')">
+                      💀 Bust Pick
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           <% end %>
@@ -289,27 +309,38 @@ var selectedContest = null;
 var expandedPlayer  = null;
 
 function togglePlayer(id) {
-  var actions = document.getElementById('actions-' + id);
-  if (!actions) return;
+  var wrap = document.getElementById('actions-wrap-' + id);
+  if (!wrap) return;
+
+  // Collapse previously open card
   if (expandedPlayer && expandedPlayer !== id) {
-    var prev = document.getElementById('actions-' + expandedPlayer);
-    if (prev) prev.style.display = 'none';
+    var prevWrap = document.getElementById('actions-wrap-' + expandedPlayer);
+    var prevCard = document.getElementById('pc-' + expandedPlayer);
+    if (prevWrap) prevWrap.classList.remove('open');
+    if (prevCard) prevCard.classList.remove('expanded');
   }
-  var opening = (actions.style.display === 'none' || !actions.style.display);
-  actions.style.display = opening ? 'flex' : 'none';
-  expandedPlayer = opening ? id : null;
+
+  var opening = !wrap.classList.contains('open');
+  var card    = document.getElementById('pc-' + id);
+
   if (opening) {
+    wrap.classList.add('open');
+    if (card) card.classList.add('expanded');
+    expandedPlayer = id;
+    // Scroll card into view (above fixed picks panel) after animation
     setTimeout(function() {
-      var card = document.getElementById('pc-' + id);
-      if (card) {
-        var rect = card.getBoundingClientRect();
-        var panelHeight = 160;
-        var viewportBottom = window.innerHeight - panelHeight;
-        if (rect.bottom > viewportBottom) {
-          window.scrollBy({ top: rect.bottom - viewportBottom + 8, behavior: 'smooth' });
-        }
+      if (!card) return;
+      var rect        = card.getBoundingClientRect();
+      var panelHeight = 170;
+      var viewBottom  = window.innerHeight - panelHeight;
+      if (rect.bottom > viewBottom) {
+        window.scrollBy({ top: rect.bottom - viewBottom + 12, behavior: 'smooth' });
       }
-    }, 50);
+    }, 240);
+  } else {
+    wrap.classList.remove('open');
+    if (card) card.classList.remove('expanded');
+    expandedPlayer = null;
   }
 }
 
@@ -348,8 +379,11 @@ function pickPlayer(id, name, type) {
   updateSlots();
   updateSubmit();
 
-  var actions = document.getElementById('actions-' + id);
-  if (actions) actions.style.display = 'none';
+  // Close accordion after pick
+  var wrap = document.getElementById('actions-wrap-' + id);
+  var card = document.getElementById('pc-' + id);
+  if (wrap) wrap.classList.remove('open');
+  if (card) card.classList.remove('expanded');
   expandedPlayer = null;
 }
 
