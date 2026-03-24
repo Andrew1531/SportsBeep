@@ -60,6 +60,21 @@ class Wager < ActiveRecord::Base
     "#{away_team} @ #{home_team}"
   end
 
+  def debit_user_account!
+    account = user.account
+    account.with_lock do
+      if account.balance_cents < amount_cents
+        raise ActiveRecord::Rollback, 'Insufficient balance'
+      end
+      account.update!(balance_cents: account.balance_cents - amount_cents)
+      AdjustmentTransaction.create!(
+        account: account,
+        description: "Wager: #{bet_type_display} - #{matchup}",
+        amount_cents: -amount_cents
+      )
+    end
+  end
+
   private
 
   def calculate_potential_payout
@@ -86,17 +101,4 @@ class Wager < ActiveRecord::Base
     end
   end
 
-  def debit_user_account!
-    account = user.account
-    account.with_lock do
-      if account.balance_cents < amount_cents
-        raise ActiveRecord::Rollback, 'Insufficient balance'
-      end
-      account.update!(balance_cents: account.balance_cents - amount_cents)
-      account.transactions.create!(
-        description: "Wager: #{bet_type_display} - #{matchup}",
-        amount_cents: -amount_cents
-      )
-    end
-  end
 end
