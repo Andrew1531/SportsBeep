@@ -1,483 +1,351 @@
-<script>
-  var sbActivePicks = {};
-  var sbParlayLegs = [];
+<%# Hidden form that submits wagers to the backend %>
+<%= form_tag place_wager_path, method: :post, id: 'hidden-bet-form', style: 'display:none' do %>
+  <input type="hidden" id="wager_fixture_id"      name="wager[fixture_id]">
+  <input type="hidden" id="wager_game_id"         name="wager[game_id]">
+  <input type="hidden" id="wager_away_team"       name="wager[away_team]">
+  <input type="hidden" id="wager_home_team"       name="wager[home_team]">
+  <input type="hidden" id="wager_game_start_time" name="wager[game_start_time]">
+  <input type="hidden" id="wager_bet_type"        name="wager[bet_type]">
+  <input type="hidden" id="wager_selection"       name="wager[selection]">
+  <input type="hidden" id="wager_selection_detail" name="wager[selection_detail]">
+  <input type="hidden" id="wager_odds"            name="wager[odds]">
+  <input type="hidden" id="wager_points"          name="wager[points]">
+  <input type="hidden" id="wager_sport"           name="wager[sport]">
+  <input type="hidden" id="wager_league"          name="wager[league]">
+  <input type="hidden" id="wager_amount_cents"    name="wager[amount_cents]">
+  <input type="hidden" id="wager_is_parlay"       name="wager[is_parlay]" value="false">
+  <input type="hidden" id="wager_parlay_legs"     name="wager[parlay_legs]">
+<% end %>
 
-  window.sbSelectPick = function(cardId, fixtureId, gameId, away, home, start, type, selection, points, odds, sport, league, btnEl) {
-    var card = document.getElementById(cardId);
-    if (!card) return;
-    card.querySelectorAll('.sb-odds-btn').forEach(function(b) { b.classList.remove('sb-selected'); });
-    btnEl.classList.add('sb-selected');
-    var oddsNum = parseInt(odds);
-    var oddsText = oddsNum > 0 ? '+' + oddsNum : oddsNum.toString();
-    var pickLabel = '', detailText = '';
-    if (type === 'moneyline') { pickLabel = selection + ' ML'; }
-    else if (type === 'spread') { var pts = parseFloat(points); pickLabel = selection + ' ' + (pts > 0 ? '+' + pts : pts); detailText = pts > 0 ? '+' + pts : pts.toString(); }
-    else if (type === 'total') { pickLabel = selection + ' ' + points; detailText = selection; }
-    document.getElementById(cardId + '-pick-name').textContent = pickLabel;
-    document.getElementById(cardId + '-pick-odds').textContent = oddsText;
-    var betArea = document.getElementById(cardId + '-bet');
-    if (betArea) { betArea.style.display = 'block'; }
-    sbActivePicks[cardId] = { fixtureId: fixtureId, gameId: gameId, away: away, home: home, start: start, type: type, selection: selection, detail: detailText, points: points, odds: odds, oddsNum: oddsNum, sport: sport, league: league, pickLabel: pickLabel };
-    sbUpdateCardPayout(cardId);
-  };
+<div class="dk-sportsbook">
 
-  window.sbRemovePick = function(cardId) {
-    var betArea = document.getElementById(cardId + '-bet');
-    if (betArea) betArea.style.display = 'none';
-    var card = document.getElementById(cardId);
-    if (card) card.querySelectorAll('.sb-odds-btn').forEach(function(b) { b.classList.remove('sb-selected'); });
-    delete sbActivePicks[cardId];
-    sbRemoveFromParlay(cardId);
-  };
-
-  window.sbSetCardAmount = function(cardId, cents) {
-    var el = document.getElementById(cardId + '-amount');
-    if (el) { el.value = cents; sbUpdateCardPayout(cardId); }
-  };
-
-  window.sbUpdateCardPayout = function(cardId) {
-    var el = document.getElementById(cardId + '-amount');
-    var amountCents = el ? (parseInt(el.value) || 0) : 0;
-    var pick = sbActivePicks[cardId]; if (!pick) return;
-    var payout = document.getElementById(cardId + '-payout');
-    if (payout) payout.textContent = '$' + sbCalcProfit(amountCents / 100.0, pick.oddsNum).toFixed(2);
-  };
-
-  window.sbCalcProfit = function(amount, odds) {
-    if (odds > 0) return amount * odds / 100;
-    if (odds < 0) return amount * 100 / Math.abs(odds);
-    return 0;
-  };
-
-  window.sbPlaceSingleBet = function(cardId) {
-    var pick = sbActivePicks[cardId]; if (!pick) { alert('Select a pick first'); return; }
-    var el = document.getElementById(cardId + '-amount');
-    var amountCents = el ? (parseInt(el.value) || 0) : 0;
-    if (amountCents < 1) { alert('Enter a wager amount'); return; }
-    document.getElementById('wager_fixture_id').value = pick.fixtureId;
-    document.getElementById('wager_game_id').value = pick.gameId;
-    document.getElementById('wager_away_team').value = pick.away;
-    document.getElementById('wager_home_team').value = pick.home;
-    document.getElementById('wager_game_start_time').value = pick.start;
-    document.getElementById('wager_bet_type').value = pick.type;
-    document.getElementById('wager_selection').value = pick.selection;
-    document.getElementById('wager_selection_detail').value = pick.detail;
-    document.getElementById('wager_odds').value = pick.odds;
-    document.getElementById('wager_points').value = pick.points || '';
-    document.getElementById('wager_sport').value = pick.sport;
-    document.getElementById('wager_league').value = pick.league;
-    document.getElementById('wager_amount_cents').value = amountCents;
-    document.getElementById('wager_is_parlay').value = 'false';
-    document.getElementById('wager_parlay_legs').value = '';
-    document.getElementById('hidden-bet-form').submit();
-  };
-
-  window.sbAddToParlay = function(cardId) {
-    var pick = sbActivePicks[cardId]; if (!pick) return;
-    sbParlayLegs = sbParlayLegs.filter(function(l) { return l.cardId !== cardId; });
-    sbParlayLegs.push({ cardId: cardId, pick: pick });
-    sbRenderParlay(); sbShowParlayTray();
-  };
-
-  window.sbRemoveFromParlay = function(cardId) {
-    sbParlayLegs = sbParlayLegs.filter(function(l) { return l.cardId !== cardId; });
-    sbRenderParlay();
-  };
-
-  window.sbRenderParlay = function() {
-    var legsDiv = document.getElementById('parlay-legs');
-    var emptyMsg = document.getElementById('parlay-empty-msg');
-    var summary = document.getElementById('parlay-summary');
-    var countEl = document.getElementById('parlay-count');
-    if (!legsDiv) return;
-    legsDiv.querySelectorAll('.sb-parlay-leg').forEach(function(el) { el.remove(); });
-    if (sbParlayLegs.length === 0) {
-      if (emptyMsg) emptyMsg.style.display = 'block';
-      if (summary) summary.style.display = 'none';
-      if (countEl) countEl.textContent = '0 Legs';
-      return;
-    }
-    if (emptyMsg) emptyMsg.style.display = 'none';
-    if (summary) summary.style.display = 'block';
-    if (countEl) countEl.textContent = sbParlayLegs.length + (sbParlayLegs.length === 1 ? ' Leg' : ' Legs');
-    sbParlayLegs.forEach(function(leg) {
-      var div = document.createElement('div'); div.className = 'sb-parlay-leg';
-      var ot = leg.pick.oddsNum > 0 ? '+' + leg.pick.oddsNum : leg.pick.oddsNum;
-      div.innerHTML = '<span class="sb-pl-name">' + leg.pick.pickLabel + '</span><span class="sb-pl-matchup">' + leg.pick.away + ' @ ' + leg.pick.home + '</span><span class="sb-pl-odds">' + ot + '</span><button type="button" class="sb-pl-remove" onclick="sbRemoveFromParlay(\'' + leg.cardId + '\')"><i class="fa fa-times"></i></button>';
-      legsDiv.appendChild(div);
-    });
-    var combinedDecimal = 1;
-    sbParlayLegs.forEach(function(leg) {
-      var d = leg.pick.oddsNum >= 0 ? (leg.pick.oddsNum / 100 + 1) : (100 / Math.abs(leg.pick.oddsNum) + 1);
-      combinedDecimal *= d;
-    });
-    var ca = combinedDecimal >= 2 ? '+' + Math.round((combinedDecimal - 1) * 100) : '-' + Math.round(100 / (combinedDecimal - 1));
-    var comboEl = document.getElementById('parlay-combined-odds');
-    if (comboEl) { comboEl.textContent = ca; comboEl.dataset.decimal = combinedDecimal; }
-    sbUpdateParlayPayout();
-  };
-
-  window.sbSetParlayAmount = function(cents) {
-    var el = document.getElementById('parlay-amount');
-    if (el) { el.value = cents; sbUpdateParlayPayout(); }
-  };
-
-  window.sbUpdateParlayPayout = function() {
-    var a = parseInt((document.getElementById('parlay-amount') || {}).value) || 0;
-    var comboEl = document.getElementById('parlay-combined-odds');
-    var d = comboEl ? (parseFloat(comboEl.dataset.decimal) || 1) : 1;
-    var p = document.getElementById('parlay-payout');
-    if (p) p.textContent = '$' + (a / 100.0 * d).toFixed(2);
-  };
-
-  window.sbToggleParlayTray = function() {
-    var t = document.getElementById('parlay-tray');
-    if (t) t.classList.toggle('open');
-  };
-
-  window.sbShowParlayTray = function() {
-    var t = document.getElementById('parlay-tray');
-    if (t) t.classList.add('open');
-  };
-
-  window.sbSubmitParlay = function() {
-    if (sbParlayLegs.length < 2) { alert('Add at least 2 legs to your parlay'); return; }
-    var amountCents = parseInt((document.getElementById('parlay-amount') || {}).value) || 0;
-    if (amountCents < 1) { alert('Enter a wager amount'); return; }
-    var fl = sbParlayLegs[0].pick;
-    document.getElementById('wager_fixture_id').value = fl.fixtureId;
-    document.getElementById('wager_game_id').value = fl.gameId;
-    document.getElementById('wager_away_team').value = fl.away;
-    document.getElementById('wager_home_team').value = fl.home;
-    document.getElementById('wager_game_start_time').value = fl.start;
-    document.getElementById('wager_bet_type').value = 'parlay';
-    document.getElementById('wager_selection').value = sbParlayLegs.length + '-Leg Parlay';
-    document.getElementById('wager_selection_detail').value = sbParlayLegs.map(function(l) { return l.pick.pickLabel; }).join(' | ');
-    var comboEl = document.getElementById('parlay-combined-odds');
-    var dec = comboEl ? (parseFloat(comboEl.dataset.decimal) || 1) : 1;
-    document.getElementById('wager_odds').value = dec >= 2 ? Math.round((dec - 1) * 100) : -Math.round(100 / (dec - 1));
-    document.getElementById('wager_sport').value = fl.sport;
-    document.getElementById('wager_league').value = fl.league;
-    document.getElementById('wager_amount_cents').value = amountCents;
-    document.getElementById('wager_is_parlay').value = 'true';
-    document.getElementById('wager_parlay_legs').value = JSON.stringify(sbParlayLegs.map(function(l) {
-      return { fixture_id: l.pick.fixtureId, game_id: l.pick.gameId, bet_type: l.pick.type, selection: l.pick.selection, odds: l.pick.odds, points: l.pick.points };
-    }));
-    document.getElementById('hidden-bet-form').submit();
-  };
-</script>
-
-<div class="fantasy-page sb-page">
-
-  <div class="fantasy-header">
-    <div class="container">
-      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-        <div>
-          <h1>SPORTSBOOK</h1>
-          <div class="balance-display">
-            <span class="balance-label">Balance</span>
-            <span class="balance-amount"><%= number_with_precision(@account.balance, precision: 2) rescue '0.00' %> <span class="currency">$BEEP</span></span>
-          </div>
-        </div>
-        <div style="padding-top: 4px;">
-          <%= render 'shared/wallet_status_bar' %>
-        </div>
+  <%# TOP BAR %>
+  <div class="dk-top-bar">
+    <div class="dk-top-inner">
+      <div class="dk-brand">
+        <span class="dk-title">SPORTSBOOK</span>
+      </div>
+      <div class="dk-balance">
+        <span class="dk-bal-label">Balance</span>
+        <span class="dk-bal-value"><%= number_with_precision(@account.balance, precision: 2) rescue '0.00' %></span>
+        <span class="dk-bal-currency">$BEEP</span>
       </div>
     </div>
   </div>
 
-  <ul class="sport-tabs">
-    <% sports = [
-      { key: 'mlb', label: 'MLB', icon: 'ic_baseball.png' },
-      { key: 'nfl', label: 'NFL', icon: 'ic_football.png' },
-      { key: 'nba', label: 'NBA', icon: 'ic_basketball.png' },
-      { key: 'nhl', label: 'NHL', icon: 'ic_hockey.png' }
-    ] %>
-    <% sports.each do |s| %>
-      <li class="<%= 'active' if @sport == s[:key] %>">
-        <%= link_to sportsbook_path(sport: s[:key]) do %>
-          <%= (image_tag s[:icon], class: 'tab-icon') rescue nil %>
-          <%= s[:label] %>
-        <% end %>
-      </li>
+  <%# SPORT TABS %>
+  <div class="dk-sport-nav">
+    <% [['mlb','MLB','ic_baseball.png'],['nfl','NFL','ic_football.png'],['nba','NBA','ic_basketball.png'],['nhl','NHL','ic_hockey.png']].each do |key, label, icon| %>
+      <%= link_to sportsbook_path(sport: key), class: "dk-sport-tab#{' active' if @sport == key}" do %>
+        <%= (image_tag icon, class: 'dk-sport-icon') rescue nil %>
+        <%= label %>
+      <% end %>
     <% end %>
-  </ul>
+  </div>
 
-  <div class="container">
+  <div class="dk-content" style="padding: 0 16px 80px;">
 
+    <%# FLASH MESSAGES %>
     <% if flash[:notice] %>
-      <div class="alert-notice"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></div>
+      <div class="dk-alert dk-alert-success" style="margin-top:12px;"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></div>
     <% end %>
     <% if flash[:alert] %>
-      <div class="alert-alert"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div>
+      <div class="dk-alert dk-alert-error" style="margin-top:12px;"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div>
+    <% end %>
+    <% unless @has_beep %>
+      <div class="dk-alert dk-alert-warning" style="margin-top:12px;"><i class="fa fa-exclamation-triangle"></i> You need <strong>$BEEP tokens</strong> to place wagers. <%= link_to 'Go to Wallet →', wallet_path %></div>
     <% end %>
 
-    <% unless @has_beep %>
-      <div class="beep-warning">
-        <i class="fa fa-exclamation-triangle"></i>
-        You need <strong>$BEEP tokens</strong> to place wagers.
-        <%= link_to 'Go to Wallet', wallet_path %> to swap ADA for $BEEP.
+    <%# ACTIVE WAGERS (compact list) %>
+    <% if @open_wagers.present? %>
+      <div class="dk-active-bets" style="margin-top:16px;">
+        <div class="dk-active-header">
+          <span><i class="fa fa-receipt"></i> ACTIVE WAGERS</span>
+          <%= link_to 'View All →', my_bets_path, class: 'dk-view-all' %>
+        </div>
+        <% @open_wagers.each do |w| %>
+          <div class="dk-active-row">
+            <span class="dk-active-sel"><%= w.selection %></span>
+            <span class="dk-active-type"><%= w.bet_type_display rescue w.bet_type %></span>
+            <span class="dk-active-amt"><%= w.amount %> $BEEP</span>
+          </div>
+        <% end %>
       </div>
     <% end %>
 
-    <div class="fantasy-nav-bar">
+    <%# NAV TABS %>
+    <div class="fantasy-nav-bar" style="margin-top:16px;">
       <a class="fnav-link active" href="<%= sportsbook_path(sport: @sport) %>">Available Lines</a>
       <%= link_to 'My Wagers', my_bets_path, class: 'fnav-link' %>
     </div>
 
-    <div class="games-section">
-
-      <% if @open_wagers.present? %>
-        <div class="games-header" style="margin-top: 4px;">
-          <span class="games-title"><i class="fa fa-receipt" style="color: #ffc107; margin-right: 6px; font-size: 14px;"></i>ACTIVE WAGERS</span>
-          <span class="games-count"><%= @open_wagers.size %> open &nbsp;·&nbsp; <%= link_to 'View All', my_bets_path, style: 'color: #4fc3f7; font-weight: 600; text-decoration: none;' %></span>
+    <% if @games.any? %>
+      <%# STICKY ODDS COLUMNS HEADER %>
+      <div class="dk-odds-header">
+        <div class="dk-oh-left"><%= @sport.upcase %> LINES &nbsp;·&nbsp; <span style="color:#555e73;font-weight:500;font-size:13px;"><%= @games.size %> games</span></div>
+        <div class="dk-oh-right">
+          <span class="dk-oh-col">SPREAD</span>
+          <span class="dk-oh-col">TOTAL</span>
+          <span class="dk-oh-col">ML</span>
         </div>
-        <% @open_wagers.each do |wager| %>
-          <%
-            w_away_city, w_away_mascot = split_team_name(wager.away_team)
-            w_home_city, w_home_mascot = split_team_name(wager.home_team)
-            w_away_color = team_color(wager.away_team, 0)
-            w_home_color = team_color(wager.home_team, 0)
-          %>
-          <div class="game-card">
-            <div class="game-matchup-panel">
-              <div class="split-away" style="background: <%= w_away_color %>;"></div>
-              <div class="split-home" style="background: <%= w_home_color %>;"></div>
-              <%= image_tag 'at_large.png', class: 'split-at-image' rescue nil %>
-              <div class="team-block team-block-away">
-                <% if w_away_city.present? %><div class="team-city"><%= w_away_city %></div><% end %>
-                <div class="team-mascot"><%= w_away_mascot %></div>
-              </div>
-              <div class="team-block team-block-home">
-                <% if w_home_city.present? %><div class="team-city"><%= w_home_city %></div><% end %>
-                <div class="team-mascot"><%= w_home_mascot %></div>
-              </div>
+      </div>
+
+      <%# GAMES LIST %>
+      <% current_date = nil %>
+      <% @games.each_with_index do |game, idx| %>
+        <%
+          odds         = game[:odds] || {}
+          ml           = odds[:moneyline] || {}
+          sp           = odds[:spread] || {}
+          tot          = odds[:total] || {}
+          start_time   = game[:start_date] ? (Time.parse(game[:start_date]) rescue nil) : nil
+          date_label   = start_time ? start_time.strftime('%A, %b %-d').upcase : 'UPCOMING'
+          time_label   = start_time ? start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%-I:%M') : '—'
+          ampm_label   = start_time ? start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%p') : ''
+          away_color   = team_color(game[:away_team], 0)
+          home_color   = team_color(game[:home_team], 0)
+          away_city, away_mascot = split_team_name(game[:away_team])
+          home_city, home_mascot = split_team_name(game[:home_team])
+          gid          = "g#{idx}"
+          fix          = game[:fixture_id].to_s
+          gam          = game[:game_id].to_s
+          at           = j(game[:away_team])
+          ht           = j(game[:home_team])
+          ts           = start_time ? start_time.iso8601 : ''
+          sp_str       = game[:league].to_s
+        %>
+
+        <% if date_label != current_date %>
+          <% current_date = date_label %>
+          <div class="dk-date-divider"><%= date_label %></div>
+        <% end %>
+
+        <div class="dk-game-row" id="<%= gid %>">
+          <div class="dk-game-info">
+            <div class="dk-time">
+              <% if game[:is_live] %>
+                <span class="dk-live-dot"></span>
+                <span class="dk-live-text">LIVE</span>
+              <% else %>
+                <div><%= time_label %></div>
+                <div style="font-size:10px;"><%= ampm_label %></div>
+              <% end %>
             </div>
-            <div class="bet-info-bar">
-              <div class="bet-type-info">
-                <span class="bet-selection-name"><%= wager.selection %></span>
-                <span class="bet-type-label"><%= wager.bet_type_display %></span>
+            <div class="dk-teams">
+              <div class="dk-team-row">
+                <div class="dk-team-color" style="background:<%= away_color %>;"></div>
+                <span class="dk-team-name"><%= away_mascot %></span>
               </div>
-              <span class="bet-odds-badge"><%= wager.odds_display %></span>
-            </div>
-            <div class="bet-bottom-bar">
-              <span>Wager: <span class="bet-wager-amount"><%= wager.amount %> $BEEP</span></span>
-              <span>Payout: <span class="bet-payout-amount"><%= wager.potential_payout %></span></span>
+              <div class="dk-team-row">
+                <div class="dk-team-color" style="background:<%= home_color %>;"></div>
+                <span class="dk-team-name"><%= home_mascot %></span>
+              </div>
             </div>
           </div>
-        <% end %>
-      <% end %>
 
-      <div class="games-header" style="margin-top: <%= @open_wagers.present? ? '18px' : '4px' %>;">
-        <span class="games-title"><%= @sport.upcase %> LINES</span>
-        <span class="games-count"><%= @games.size %> games</span>
-      </div>
-
-      <% if @games.any? %>
-        <% card_counter = 0 %>
-        <% grouped = @games.group_by { |g| g[:start_date] ? Time.parse(g[:start_date]).strftime('%A, %b %-d') : 'TBD' } rescue { 'Today' => @games } %>
-        <% grouped.each do |date_label, games| %>
-          <div class="sb-date-label"><%= date_label %></div>
-
-          <% games.each do |game| %>
-            <% odds = game[:odds] || {} %>
-            <% ml = odds[:moneyline] || {} %>
-            <% sp = odds[:spread] || {} %>
-            <% tot = odds[:total] || {} %>
-            <% start_time = game[:start_date] ? Time.parse(game[:start_date]) : nil rescue nil %>
-            <% start_time_str = start_time ? start_time.iso8601 : '' %>
-            <% card_id = "sbg#{card_counter}" %>
-            <% card_counter += 1 %>
-            <%
-              away_city, away_mascot = split_team_name(game[:away_team])
-              home_city, home_mascot = split_team_name(game[:home_team])
-              away_color = team_color(game[:away_team], 0)
-              home_color = team_color(game[:home_team], 0)
-            %>
-
-            <div class="game-card sb-game-card" id="<%= card_id %>">
-              <div class="game-date-bar">
-                <span></span>
-                <span>
-                  <% if game[:is_live] %>
-                    <span class="live-badge"><i class="fa fa-circle"></i> LIVE</span>
-                  <% elsif start_time %>
-                    <span class="game-time"><%= start_time.strftime('%-I:%M %p') %></span>
-                  <% end %>
-                </span>
-              </div>
-
-              <div class="game-matchup-panel">
-                <div class="split-away" style="background: <%= away_color %>;"></div>
-                <div class="split-home" style="background: <%= home_color %>;"></div>
-                <%= image_tag 'at_large.png', class: 'split-at-image' rescue nil %>
-                <div class="team-block team-block-away">
-                  <% if away_city.present? %><div class="team-city"><%= away_city %></div><% end %>
-                  <div class="team-mascot"><%= away_mascot %></div>
-                </div>
-                <div class="team-block team-block-home">
-                  <% if home_city.present? %><div class="team-city"><%= home_city %></div><% end %>
-                  <div class="team-mascot"><%= home_mascot %></div>
-                </div>
-              </div>
-
-              <div class="sb-odds-grid">
-                <div class="sb-odds-grid-header">
-                  <span class="sb-og-team-col"></span>
-                  <span class="sb-og-col">SPREAD</span>
-                  <span class="sb-og-col">TOTAL</span>
-                  <span class="sb-og-col">ML</span>
-                </div>
-                <div class="sb-odds-grid-row">
-                  <span class="sb-og-team"><span class="sb-og-color" style="background: <%= away_color %>;"></span> <%= away_mascot %></span>
-                  <% if sp[:away_points] && sp[:away] %>
-                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','spread','<%= j game[:away_team] %>','<%= sp[:away_points] %>','<%= sp[:away] %>','<%= @sport %>','<%= game[:league] %>',this)">
-                      <span class="sb-btn-line"><%= sp[:away_points].to_f > 0 ? "+#{sp[:away_points]}" : sp[:away_points] %></span>
-                      <span class="sb-btn-price"><%= sp[:away].to_i > 0 ? "+#{sp[:away].to_i}" : sp[:away].to_i %></span>
-                    </button>
-                  <% else %>
-                    <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
-                  <% end %>
-                  <% if tot[:over] && tot[:points] %>
-                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','total','Over','<%= tot[:points] %>','<%= tot[:over] %>','<%= @sport %>','<%= game[:league] %>',this)">
-                      <span class="sb-btn-line">O <%= tot[:points] %></span>
-                      <span class="sb-btn-price"><%= tot[:over].to_i > 0 ? "+#{tot[:over].to_i}" : tot[:over].to_i %></span>
-                    </button>
-                  <% else %>
-                    <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
-                  <% end %>
-                  <% if ml[:away] %>
-                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','moneyline','<%= j game[:away_team] %>','','<%= ml[:away] %>','<%= @sport %>','<%= game[:league] %>',this)">
-                      <span class="sb-btn-price"><%= ml[:away].to_i > 0 ? "+#{ml[:away].to_i}" : ml[:away].to_i %></span>
-                    </button>
-                  <% else %>
-                    <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
-                  <% end %>
-                </div>
-                <div class="sb-odds-grid-row">
-                  <span class="sb-og-team"><span class="sb-og-color" style="background: <%= home_color %>;"></span> <%= home_mascot %></span>
-                  <% if sp[:home_points] && sp[:home] %>
-                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','spread','<%= j game[:home_team] %>','<%= sp[:home_points] %>','<%= sp[:home] %>','<%= @sport %>','<%= game[:league] %>',this)">
-                      <span class="sb-btn-line"><%= sp[:home_points].to_f > 0 ? "+#{sp[:home_points]}" : sp[:home_points] %></span>
-                      <span class="sb-btn-price"><%= sp[:home].to_i > 0 ? "+#{sp[:home].to_i}" : sp[:home].to_i %></span>
-                    </button>
-                  <% else %>
-                    <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
-                  <% end %>
-                  <% if tot[:under] && tot[:points] %>
-                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','total','Under','<%= tot[:points] %>','<%= tot[:under] %>','<%= @sport %>','<%= game[:league] %>',this)">
-                      <span class="sb-btn-line">U <%= tot[:points] %></span>
-                      <span class="sb-btn-price"><%= tot[:under].to_i > 0 ? "+#{tot[:under].to_i}" : tot[:under].to_i %></span>
-                    </button>
-                  <% else %>
-                    <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
-                  <% end %>
-                  <% if ml[:home] %>
-                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','moneyline','<%= j game[:home_team] %>','','<%= ml[:home] %>','<%= @sport %>','<%= game[:league] %>',this)">
-                      <span class="sb-btn-price"><%= ml[:home].to_i > 0 ? "+#{ml[:home].to_i}" : ml[:home].to_i %></span>
-                    </button>
-                  <% else %>
-                    <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
-                  <% end %>
-                </div>
-              </div>
-
-              <div class="sb-bet-area" id="<%= card_id %>-bet" style="display:none;">
-                <div class="sb-bet-pick-row">
-                  <span class="sb-bet-pick-label" id="<%= card_id %>-pick-name"></span>
-                  <span class="sb-bet-pick-odds" id="<%= card_id %>-pick-odds"></span>
-                  <button type="button" class="sb-bet-remove" onclick="sbRemovePick('<%= card_id %>')"><i class="fa fa-times"></i></button>
-                </div>
-                <div class="sb-bet-input-row">
-                  <label class="sb-bet-label">WAGER AMOUNT</label>
-                  <div class="sb-bet-field">
-                    <span class="sb-bet-currency">$BEEP</span>
-                    <input type="number" class="sb-bet-input" id="<%= card_id %>-amount" min="1" step="1" placeholder="Enter amount" oninput="sbUpdateCardPayout('<%= card_id %>')">
-                  </div>
-                  <div class="sb-bet-quicks">
-                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 100)">$1</button>
-                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 500)">$5</button>
-                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 2500)">$25</button>
-                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 5000)">$50</button>
-                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 10000)">$100</button>
-                  </div>
-                </div>
-                <div class="sb-bet-footer">
-                  <span class="sb-bet-payout">To Win: <strong id="<%= card_id %>-payout">$0.00</strong></span>
-                  <div class="sb-bet-actions">
-                    <button type="button" class="sb-btn-parlay" onclick="sbAddToParlay('<%= card_id %>')"><i class="fa fa-plus"></i> Parlay</button>
-                    <button type="button" class="sb-btn-place" onclick="sbPlaceSingleBet('<%= card_id %>')">Place Bet</button>
-                  </div>
-                </div>
-              </div>
-
+          <div class="dk-odds-cells">
+            <%# SPREAD COLUMN %>
+            <div class="dk-odds-col">
+              <% if sp[:away_points] && sp[:away] %>
+                <button class="dk-odds-btn" onclick="sbOpenBetslip('<%= gid %>','<%= fix %>','<%= gam %>','<%= at %>','<%= ht %>','<%= ts %>','spread','<%= at %>','<%= sp[:away_points] %>','<%= sp[:away] %>','<%= @sport %>','<%= sp_str %>',this)">
+                  <span class="dk-line"><%= sp[:away_points].to_f > 0 ? "+#{sp[:away_points]}" : sp[:away_points] %></span>
+                  <span class="dk-price"><%= sp[:away].to_i > 0 ? "+#{sp[:away].to_i}" : sp[:away].to_i %></span>
+                </button>
+              <% else %><div class="dk-odds-empty"></div><% end %>
+              <% if sp[:home_points] && sp[:home] %>
+                <button class="dk-odds-btn" onclick="sbOpenBetslip('<%= gid %>','<%= fix %>','<%= gam %>','<%= at %>','<%= ht %>','<%= ts %>','spread','<%= ht %>','<%= sp[:home_points] %>','<%= sp[:home] %>','<%= @sport %>','<%= sp_str %>',this)">
+                  <span class="dk-line"><%= sp[:home_points].to_f > 0 ? "+#{sp[:home_points]}" : sp[:home_points] %></span>
+                  <span class="dk-price"><%= sp[:home].to_i > 0 ? "+#{sp[:home].to_i}" : sp[:home].to_i %></span>
+                </button>
+              <% else %><div class="dk-odds-empty"></div><% end %>
             </div>
-          <% end %>
-        <% end %>
 
-      <% else %>
-        <div class="no-games">
-          <% no_game_icons = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png', 'nba' => 'ic_basketball.png', 'nhl' => 'ic_hockey.png' } %>
-          <%= (image_tag no_game_icons[@sport] || 'ic_baseball.png', style: 'width: 64px; height: 64px; opacity: 0.25; margin-bottom: 16px;') rescue nil %>
-          <p>No <%= @sport.upcase %> lines available right now.</p>
-          <p class="sub">Check back soon or browse another sport.</p>
-          <%= link_to 'Go to Fantasy →', fantasy_path, class: 'go-sportsbook-link' %>
+            <%# TOTAL COLUMN %>
+            <div class="dk-odds-col">
+              <% if tot[:over] && tot[:points] %>
+                <button class="dk-odds-btn" onclick="sbOpenBetslip('<%= gid %>','<%= fix %>','<%= gam %>','<%= at %>','<%= ht %>','<%= ts %>','total','Over','<%= tot[:points] %>','<%= tot[:over] %>','<%= @sport %>','<%= sp_str %>',this)">
+                  <span class="dk-line">O&nbsp;<%= tot[:points] %></span>
+                  <span class="dk-price"><%= tot[:over].to_i > 0 ? "+#{tot[:over].to_i}" : tot[:over].to_i %></span>
+                </button>
+              <% else %><div class="dk-odds-empty"></div><% end %>
+              <% if tot[:under] && tot[:points] %>
+                <button class="dk-odds-btn" onclick="sbOpenBetslip('<%= gid %>','<%= fix %>','<%= gam %>','<%= at %>','<%= ht %>','<%= ts %>','total','Under','<%= tot[:points] %>','<%= tot[:under] %>','<%= @sport %>','<%= sp_str %>',this)">
+                  <span class="dk-line">U&nbsp;<%= tot[:points] %></span>
+                  <span class="dk-price"><%= tot[:under].to_i > 0 ? "+#{tot[:under].to_i}" : tot[:under].to_i %></span>
+                </button>
+              <% else %><div class="dk-odds-empty"></div><% end %>
+            </div>
+
+            <%# MONEYLINE COLUMN %>
+            <div class="dk-odds-col">
+              <% if ml[:away] %>
+                <button class="dk-odds-btn dk-odds-ml" onclick="sbOpenBetslip('<%= gid %>','<%= fix %>','<%= gam %>','<%= at %>','<%= ht %>','<%= ts %>','moneyline','<%= at %>','','<%= ml[:away] %>','<%= @sport %>','<%= sp_str %>',this)">
+                  <span class="dk-price"><%= ml[:away].to_i > 0 ? "+#{ml[:away].to_i}" : ml[:away].to_i %></span>
+                </button>
+              <% else %><div class="dk-odds-empty"></div><% end %>
+              <% if ml[:home] %>
+                <button class="dk-odds-btn dk-odds-ml" onclick="sbOpenBetslip('<%= gid %>','<%= fix %>','<%= gam %>','<%= at %>','<%= ht %>','<%= ts %>','moneyline','<%= ht %>','','<%= ml[:home] %>','<%= @sport %>','<%= sp_str %>',this)">
+                  <span class="dk-price"><%= ml[:home].to_i > 0 ? "+#{ml[:home].to_i}" : ml[:home].to_i %></span>
+                </button>
+              <% else %><div class="dk-odds-empty"></div><% end %>
+            </div>
+          </div>
         </div>
+
       <% end %>
 
-    </div>
+    <% else %>
+      <div class="dk-empty-state">
+        <%= (image_tag({ 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png', 'nba' => 'ic_basketball.png', 'nhl' => 'ic_hockey.png' }[@sport] || 'ic_baseball.png', class: 'dk-empty-icon') rescue nil) %>
+        <h3>No <%= @sport.upcase %> Lines Available</h3>
+        <p>Check back soon or browse another sport.</p>
+      </div>
+    <% end %>
+
   </div>
 </div>
 
-<div id="parlay-tray" class="sb-parlay-tray">
-  <div class="sb-parlay-bar" onclick="sbToggleParlayTray()">
-    <span><i class="fa fa-layer-group" style="color:#00c853;margin-right:6px;"></i>PARLAY BUILDER</span>
-    <span class="sb-parlay-cnt" id="parlay-count">0 Legs</span>
-    <i class="fa fa-chevron-up sb-parlay-arrow" id="parlay-chevron"></i>
-  </div>
-  <div class="sb-parlay-body" id="parlay-body">
-    <div class="sb-parlay-legs" id="parlay-legs">
-      <div class="sb-parlay-empty-msg" id="parlay-empty-msg">Tap <strong>+ Parlay</strong> on any pick to start building</div>
+<%# ===== BET SLIP OVERLAY ===== %>
+<div class="dk-betslip-overlay" id="betslip-overlay" onclick="sbHandleOverlayClick(event)">
+  <div class="dk-betslip-panel">
+    <div class="dk-bs-header">
+      <span class="dk-bs-title">Place Bet</span>
+      <button class="dk-bs-close" onclick="sbCloseBetslip()" type="button"><i class="fa fa-times"></i></button>
     </div>
-    <div class="sb-parlay-summary" id="parlay-summary" style="display:none;">
-      <div class="sb-parlay-combo-row">
-        <span>Combined Odds</span>
-        <span class="sb-parlay-combo-val" id="parlay-combined-odds" data-decimal="1">+100</span>
-      </div>
-      <div class="sb-bet-input-row" style="margin-bottom:10px;">
-        <label class="sb-bet-label">PARLAY WAGER</label>
-        <div class="sb-bet-field">
-          <span class="sb-bet-currency">$BEEP</span>
-          <input type="number" class="sb-bet-input" id="parlay-amount" min="1" step="1" placeholder="Enter amount" oninput="sbUpdateParlayPayout()">
-        </div>
-        <div class="sb-bet-quicks">
-          <button type="button" onclick="sbSetParlayAmount(100)">$1</button>
-          <button type="button" onclick="sbSetParlayAmount(500)">$5</button>
-          <button type="button" onclick="sbSetParlayAmount(2500)">$25</button>
-          <button type="button" onclick="sbSetParlayAmount(10000)">$100</button>
-        </div>
-      </div>
-      <div class="sb-parlay-win-row">To Win: <strong id="parlay-payout">$0.00</strong></div>
-      <button type="button" class="sb-btn-place" style="width:100%;padding:12px;font-size:15px;" onclick="sbSubmitParlay()">Place Parlay Bet</button>
+
+    <div class="dk-bs-pick">
+      <div class="dk-bs-pick-sel" id="bs-pick-name"></div>
+      <div class="dk-bs-pick-detail" id="bs-pick-detail"></div>
+      <div class="dk-bs-pick-matchup" id="bs-pick-matchup"></div>
     </div>
+
+    <div class="dk-bs-odds-row">
+      <span class="dk-bs-odds-label">ODDS</span>
+      <span class="dk-bs-odds-value" id="bs-odds"></span>
+    </div>
+
+    <div class="dk-bs-amount-section">
+      <label class="dk-bs-amount-label">WAGER AMOUNT</label>
+      <div class="dk-bs-input-wrap">
+        <span class="dk-bs-dollar">$</span>
+        <input type="number" class="dk-bs-input" id="bs-amount" min="1" step="1" placeholder="0" oninput="sbUpdatePayout()">
+      </div>
+      <div class="dk-bs-quick">
+        <button type="button" onclick="sbSetAmount(100)">1</button>
+        <button type="button" onclick="sbSetAmount(500)">5</button>
+        <button type="button" onclick="sbSetAmount(2500)">25</button>
+        <button type="button" onclick="sbSetAmount(5000)">50</button>
+        <button type="button" onclick="sbSetAmount(10000)">100</button>
+      </div>
+    </div>
+
+    <div class="dk-bs-payout">
+      <div class="dk-bs-payout-row">
+        <span>Wager</span>
+        <span id="bs-wager-disp">— $BEEP</span>
+      </div>
+      <div class="dk-bs-payout-row dk-bs-payout-total">
+        <span>To Win</span>
+        <span id="bs-win-disp">— $BEEP</span>
+      </div>
+    </div>
+
+    <button class="dk-bs-submit" type="button" onclick="sbPlaceBet()">PLACE BET</button>
   </div>
 </div>
 
-<%= form_tag place_wager_path, method: :post, id: 'hidden-bet-form', style: 'display:none;' do %>
-  <input type="hidden" name="wager[fixture_id]" id="wager_fixture_id">
-  <input type="hidden" name="wager[game_id]" id="wager_game_id">
-  <input type="hidden" name="wager[away_team]" id="wager_away_team">
-  <input type="hidden" name="wager[home_team]" id="wager_home_team">
-  <input type="hidden" name="wager[game_start_time]" id="wager_game_start_time">
-  <input type="hidden" name="wager[bet_type]" id="wager_bet_type">
-  <input type="hidden" name="wager[selection]" id="wager_selection">
-  <input type="hidden" name="wager[selection_detail]" id="wager_selection_detail">
-  <input type="hidden" name="wager[odds]" id="wager_odds">
-  <input type="hidden" name="wager[points]" id="wager_points">
-  <input type="hidden" name="wager[sport]" id="wager_sport">
-  <input type="hidden" name="wager[league]" id="wager_league">
-  <input type="hidden" name="wager[amount_cents]" id="wager_amount_cents">
-  <input type="hidden" name="wager[sportsbook]" value="SportsBeep">
-  <input type="hidden" name="wager[is_parlay]" id="wager_is_parlay" value="false">
-  <input type="hidden" name="wager[parlay_legs]" id="wager_parlay_legs" value="">
-<% end %>
+<script>
+var sbCurrentPick = null;
+var sbCurrentBtn  = null;
+
+window.sbOpenBetslip = function(gid, fixId, gameId, away, home, start, type, selection, points, odds, sport, league, btnEl) {
+  // Deselect previous button
+  if (sbCurrentBtn) sbCurrentBtn.classList.remove('selected');
+  btnEl.classList.add('selected');
+  sbCurrentBtn = btnEl;
+
+  var oddsNum = parseInt(odds);
+  var oddsText = oddsNum > 0 ? '+' + oddsNum : oddsNum.toString();
+
+  var pickLabel = '', detail = '', matchup = away.replace(/\\u0027/g,"'") + ' @ ' + home.replace(/\\u0027/g,"'");
+  if (type === 'moneyline') {
+    pickLabel = selection + ' ML';
+    detail    = 'Moneyline · ' + oddsText;
+  } else if (type === 'spread') {
+    var pts = parseFloat(points);
+    pickLabel = selection + ' ' + (pts > 0 ? '+' + pts : pts);
+    detail    = 'Spread · ' + (pts > 0 ? '+' + pts : pts) + ' · ' + oddsText;
+  } else if (type === 'total') {
+    pickLabel = selection + ' ' + points;
+    detail    = selection + ' ' + points + ' · ' + oddsText;
+  }
+
+  sbCurrentPick = { gid: gid, fixId: fixId, gameId: gameId, away: away, home: home, start: start, type: type, selection: selection, points: points, odds: odds, oddsNum: oddsNum, sport: sport, league: league, pickLabel: pickLabel };
+
+  document.getElementById('bs-pick-name').textContent    = pickLabel;
+  document.getElementById('bs-pick-detail').textContent  = detail;
+  document.getElementById('bs-pick-matchup').textContent = matchup;
+  document.getElementById('bs-odds').textContent         = oddsText;
+  document.getElementById('bs-amount').value             = '';
+  document.getElementById('bs-wager-disp').textContent   = '— $BEEP';
+  document.getElementById('bs-win-disp').textContent     = '— $BEEP';
+
+  document.getElementById('betslip-overlay').classList.add('open');
+  setTimeout(function() { document.getElementById('bs-amount').focus(); }, 300);
+};
+
+window.sbCloseBetslip = function() {
+  document.getElementById('betslip-overlay').classList.remove('open');
+  if (sbCurrentBtn) { sbCurrentBtn.classList.remove('selected'); sbCurrentBtn = null; }
+  sbCurrentPick = null;
+};
+
+window.sbHandleOverlayClick = function(e) {
+  if (e.target === document.getElementById('betslip-overlay')) sbCloseBetslip();
+};
+
+window.sbSetAmount = function(cents) {
+  document.getElementById('bs-amount').value = cents;
+  sbUpdatePayout();
+};
+
+window.sbUpdatePayout = function() {
+  var amountCents = parseInt(document.getElementById('bs-amount').value) || 0;
+  var p = sbCurrentPick;
+  if (!p) return;
+  var profit = 0;
+  if (p.oddsNum > 0) profit = amountCents / 100.0 * p.oddsNum / 100;
+  else if (p.oddsNum < 0) profit = amountCents / 100.0 * 100 / Math.abs(p.oddsNum);
+  document.getElementById('bs-wager-disp').textContent = (amountCents / 100.0).toFixed(2) + ' $BEEP';
+  document.getElementById('bs-win-disp').textContent   = profit.toFixed(2) + ' $BEEP';
+};
+
+window.sbPlaceBet = function() {
+  var p = sbCurrentPick;
+  if (!p) { alert('No pick selected'); return; }
+  var amountCents = parseInt(document.getElementById('bs-amount').value) || 0;
+  if (amountCents < 1) { alert('Enter a wager amount (minimum 1 $BEEP)'); return; }
+
+  document.getElementById('wager_fixture_id').value      = p.fixId;
+  document.getElementById('wager_game_id').value         = p.gameId;
+  document.getElementById('wager_away_team').value       = p.away;
+  document.getElementById('wager_home_team').value       = p.home;
+  document.getElementById('wager_game_start_time').value = p.start;
+  document.getElementById('wager_bet_type').value        = p.type;
+  document.getElementById('wager_selection').value       = p.selection;
+  document.getElementById('wager_selection_detail').value = p.points || '';
+  document.getElementById('wager_odds').value            = p.odds;
+  document.getElementById('wager_points').value          = p.points || '';
+  document.getElementById('wager_sport').value           = p.sport;
+  document.getElementById('wager_league').value          = p.league;
+  document.getElementById('wager_amount_cents').value    = amountCents;
+  document.getElementById('wager_is_parlay').value       = 'false';
+  document.getElementById('wager_parlay_legs').value     = '';
+  document.getElementById('hidden-bet-form').submit();
+};
+
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') sbCloseBetslip();
+});
+</script>
