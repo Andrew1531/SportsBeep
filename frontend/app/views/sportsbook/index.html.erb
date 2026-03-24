@@ -1,3 +1,34 @@
+<%# Expose real balance to JavaScript for client-side guard %>
+<script>
+  var SB_BALANCE_CENTS = <%= @account&.balance_cents.to_i %>;
+  var SB_LOGGED_IN     = <%= user_signed_in? ? 'true' : 'false' %>;
+</script>
+
+<%# Buy BEEP modal — shown when wager exceeds balance %>
+<div id="buy-beep-modal" class="bb-modal-backdrop" onclick="if(event.target===this)bbCloseModal()" style="display:none;">
+  <div class="bb-modal">
+    <button class="bb-modal-close" onclick="bbCloseModal()">&#x2715;</button>
+    <div class="bb-modal-icon">⚡</div>
+    <h2 class="bb-modal-title">Insufficient $BEEP</h2>
+    <p class="bb-modal-body" id="bb-modal-msg">
+      You don't have enough $BEEP tokens to place this wager.
+    </p>
+    <div class="bb-modal-balance-row">
+      <span class="bb-modal-bal-label">Your Balance</span>
+      <span class="bb-modal-bal-value" id="bb-modal-bal"></span>
+    </div>
+    <div class="bb-modal-actions">
+      <% if user_signed_in? %>
+        <%= link_to 'Go to Wallet →', dashboard_path, class: 'bb-btn-primary' %>
+      <% else %>
+        <%= link_to 'Sign Up Free', new_user_registration_path, class: 'bb-btn-primary' %>
+      <% end %>
+      <button class="bb-btn-secondary" onclick="bbCloseModal()">Cancel</button>
+    </div>
+    <p class="bb-modal-hint">Sync your Cardano wallet to top up your $BEEP balance.</p>
+  </div>
+</div>
+
 <%# Hidden form that submits wagers to the backend %>
 <%= form_tag place_wager_path, method: :post, id: 'hidden-bet-form', style: 'display:none' do %>
   <input type="hidden" id="wager_fixture_id"      name="wager[fixture_id]">
@@ -121,8 +152,24 @@
         <% end %>
 
         <div class="dk-game-row" id="<%= gid %>">
-          <%# Mini split-color matchup artwork — diagonal team colors %>
-          <div class="dk-matchup-mini" style="background:linear-gradient(160deg,<%= away_color %> 50%,<%= home_color %> 50%);"></div>
+          <%# Team logo panel %>
+          <% away_logo = team_logo_url(game[:away_team]); home_logo = team_logo_url(game[:home_team]) %>
+          <div class="dk-logo-panel">
+            <div class="dk-logo-slot" style="border-bottom:1px solid rgba(0,0,0,0.3);">
+              <% if away_logo %>
+                <img src="<%= away_logo %>" alt="<%= away_mascot %>" class="dk-team-logo-img">
+              <% else %>
+                <div class="dk-logo-fallback" style="background:<%= away_color %>;"></div>
+              <% end %>
+            </div>
+            <div class="dk-logo-slot">
+              <% if home_logo %>
+                <img src="<%= home_logo %>" alt="<%= home_mascot %>" class="dk-team-logo-img">
+              <% else %>
+                <div class="dk-logo-fallback" style="background:<%= home_color %>;"></div>
+              <% end %>
+            </div>
+          </div>
 
           <div class="dk-game-info">
             <div class="dk-time">
@@ -321,6 +368,35 @@ window.sbUpdatePayout = function() {
   else if (p.oddsNum < 0) profit = amountCents / 100.0 * 100 / Math.abs(p.oddsNum);
   document.getElementById('bs-wager-disp').textContent = (amountCents / 100.0).toFixed(2) + ' $BEEP';
   document.getElementById('bs-win-disp').textContent   = profit.toFixed(2) + ' $BEEP';
+
+  // Show/hide inline insufficient-balance warning
+  var warn = document.getElementById('bs-balance-warn');
+  if (amountCents > 0 && amountCents > SB_BALANCE_CENTS) {
+    if (!warn) {
+      warn = document.createElement('div');
+      warn.id = 'bs-balance-warn';
+      warn.className = 'bs-balance-warn';
+      document.getElementById('bs-wager-disp').parentNode.parentNode.after(warn);
+    }
+    warn.textContent = '⚠ Exceeds your balance of ' + (SB_BALANCE_CENTS / 100.0).toFixed(2) + ' $BEEP';
+    document.querySelector('.dk-bs-submit').classList.add('dk-bs-submit--danger');
+  } else {
+    if (warn) warn.remove();
+    document.querySelector('.dk-bs-submit').classList.remove('dk-bs-submit--danger');
+  }
+};
+
+window.bbCloseModal = function() {
+  document.getElementById('buy-beep-modal').style.display = 'none';
+};
+
+window.bbShowModal = function(amountCents) {
+  var have = (SB_BALANCE_CENTS / 100.0).toFixed(2);
+  var need = (amountCents / 100.0).toFixed(2);
+  document.getElementById('bb-modal-msg').textContent =
+    'You need ' + need + ' $BEEP but your balance is only ' + have + ' $BEEP.';
+  document.getElementById('bb-modal-bal').textContent = have + ' $BEEP';
+  document.getElementById('buy-beep-modal').style.display = 'flex';
 };
 
 window.sbPlaceBet = function() {
@@ -328,6 +404,16 @@ window.sbPlaceBet = function() {
   if (!p) { alert('No pick selected'); return; }
   var amountCents = parseInt(document.getElementById('bs-amount').value) || 0;
   if (amountCents < 1) { alert('Enter a wager amount (minimum 1 $BEEP)'); return; }
+
+  // Balance guard — intercept before submit
+  if (!SB_LOGGED_IN) {
+    window.location.href = '<%= new_user_session_path %>';
+    return;
+  }
+  if (amountCents > SB_BALANCE_CENTS) {
+    bbShowModal(amountCents);
+    return;
+  }
 
   document.getElementById('wager_fixture_id').value      = p.fixId;
   document.getElementById('wager_game_id').value         = p.gameId;
