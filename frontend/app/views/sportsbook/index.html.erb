@@ -1,3 +1,172 @@
+<script>
+  var sbActivePicks = {};
+  var sbParlayLegs = [];
+
+  window.sbSelectPick = function(cardId, fixtureId, gameId, away, home, start, type, selection, points, odds, sport, league, btnEl) {
+    var card = document.getElementById(cardId);
+    if (!card) return;
+    card.querySelectorAll('.sb-odds-btn').forEach(function(b) { b.classList.remove('sb-selected'); });
+    btnEl.classList.add('sb-selected');
+    var oddsNum = parseInt(odds);
+    var oddsText = oddsNum > 0 ? '+' + oddsNum : oddsNum.toString();
+    var pickLabel = '', detailText = '';
+    if (type === 'moneyline') { pickLabel = selection + ' ML'; }
+    else if (type === 'spread') { var pts = parseFloat(points); pickLabel = selection + ' ' + (pts > 0 ? '+' + pts : pts); detailText = pts > 0 ? '+' + pts : pts.toString(); }
+    else if (type === 'total') { pickLabel = selection + ' ' + points; detailText = selection; }
+    document.getElementById(cardId + '-pick-name').textContent = pickLabel;
+    document.getElementById(cardId + '-pick-odds').textContent = oddsText;
+    var betArea = document.getElementById(cardId + '-bet');
+    if (betArea) { betArea.style.display = 'block'; }
+    sbActivePicks[cardId] = { fixtureId: fixtureId, gameId: gameId, away: away, home: home, start: start, type: type, selection: selection, detail: detailText, points: points, odds: odds, oddsNum: oddsNum, sport: sport, league: league, pickLabel: pickLabel };
+    sbUpdateCardPayout(cardId);
+  };
+
+  window.sbRemovePick = function(cardId) {
+    var betArea = document.getElementById(cardId + '-bet');
+    if (betArea) betArea.style.display = 'none';
+    var card = document.getElementById(cardId);
+    if (card) card.querySelectorAll('.sb-odds-btn').forEach(function(b) { b.classList.remove('sb-selected'); });
+    delete sbActivePicks[cardId];
+    sbRemoveFromParlay(cardId);
+  };
+
+  window.sbSetCardAmount = function(cardId, cents) {
+    var el = document.getElementById(cardId + '-amount');
+    if (el) { el.value = cents; sbUpdateCardPayout(cardId); }
+  };
+
+  window.sbUpdateCardPayout = function(cardId) {
+    var el = document.getElementById(cardId + '-amount');
+    var amountCents = el ? (parseInt(el.value) || 0) : 0;
+    var pick = sbActivePicks[cardId]; if (!pick) return;
+    var payout = document.getElementById(cardId + '-payout');
+    if (payout) payout.textContent = '$' + sbCalcProfit(amountCents / 100.0, pick.oddsNum).toFixed(2);
+  };
+
+  window.sbCalcProfit = function(amount, odds) {
+    if (odds > 0) return amount * odds / 100;
+    if (odds < 0) return amount * 100 / Math.abs(odds);
+    return 0;
+  };
+
+  window.sbPlaceSingleBet = function(cardId) {
+    var pick = sbActivePicks[cardId]; if (!pick) { alert('Select a pick first'); return; }
+    var el = document.getElementById(cardId + '-amount');
+    var amountCents = el ? (parseInt(el.value) || 0) : 0;
+    if (amountCents < 1) { alert('Enter a wager amount'); return; }
+    document.getElementById('wager_fixture_id').value = pick.fixtureId;
+    document.getElementById('wager_game_id').value = pick.gameId;
+    document.getElementById('wager_away_team').value = pick.away;
+    document.getElementById('wager_home_team').value = pick.home;
+    document.getElementById('wager_game_start_time').value = pick.start;
+    document.getElementById('wager_bet_type').value = pick.type;
+    document.getElementById('wager_selection').value = pick.selection;
+    document.getElementById('wager_selection_detail').value = pick.detail;
+    document.getElementById('wager_odds').value = pick.odds;
+    document.getElementById('wager_points').value = pick.points || '';
+    document.getElementById('wager_sport').value = pick.sport;
+    document.getElementById('wager_league').value = pick.league;
+    document.getElementById('wager_amount_cents').value = amountCents;
+    document.getElementById('wager_is_parlay').value = 'false';
+    document.getElementById('wager_parlay_legs').value = '';
+    document.getElementById('hidden-bet-form').submit();
+  };
+
+  window.sbAddToParlay = function(cardId) {
+    var pick = sbActivePicks[cardId]; if (!pick) return;
+    sbParlayLegs = sbParlayLegs.filter(function(l) { return l.cardId !== cardId; });
+    sbParlayLegs.push({ cardId: cardId, pick: pick });
+    sbRenderParlay(); sbShowParlayTray();
+  };
+
+  window.sbRemoveFromParlay = function(cardId) {
+    sbParlayLegs = sbParlayLegs.filter(function(l) { return l.cardId !== cardId; });
+    sbRenderParlay();
+  };
+
+  window.sbRenderParlay = function() {
+    var legsDiv = document.getElementById('parlay-legs');
+    var emptyMsg = document.getElementById('parlay-empty-msg');
+    var summary = document.getElementById('parlay-summary');
+    var countEl = document.getElementById('parlay-count');
+    if (!legsDiv) return;
+    legsDiv.querySelectorAll('.sb-parlay-leg').forEach(function(el) { el.remove(); });
+    if (sbParlayLegs.length === 0) {
+      if (emptyMsg) emptyMsg.style.display = 'block';
+      if (summary) summary.style.display = 'none';
+      if (countEl) countEl.textContent = '0 Legs';
+      return;
+    }
+    if (emptyMsg) emptyMsg.style.display = 'none';
+    if (summary) summary.style.display = 'block';
+    if (countEl) countEl.textContent = sbParlayLegs.length + (sbParlayLegs.length === 1 ? ' Leg' : ' Legs');
+    sbParlayLegs.forEach(function(leg) {
+      var div = document.createElement('div'); div.className = 'sb-parlay-leg';
+      var ot = leg.pick.oddsNum > 0 ? '+' + leg.pick.oddsNum : leg.pick.oddsNum;
+      div.innerHTML = '<span class="sb-pl-name">' + leg.pick.pickLabel + '</span><span class="sb-pl-matchup">' + leg.pick.away + ' @ ' + leg.pick.home + '</span><span class="sb-pl-odds">' + ot + '</span><button type="button" class="sb-pl-remove" onclick="sbRemoveFromParlay(\'' + leg.cardId + '\')"><i class="fa fa-times"></i></button>';
+      legsDiv.appendChild(div);
+    });
+    var combinedDecimal = 1;
+    sbParlayLegs.forEach(function(leg) {
+      var d = leg.pick.oddsNum >= 0 ? (leg.pick.oddsNum / 100 + 1) : (100 / Math.abs(leg.pick.oddsNum) + 1);
+      combinedDecimal *= d;
+    });
+    var ca = combinedDecimal >= 2 ? '+' + Math.round((combinedDecimal - 1) * 100) : '-' + Math.round(100 / (combinedDecimal - 1));
+    var comboEl = document.getElementById('parlay-combined-odds');
+    if (comboEl) { comboEl.textContent = ca; comboEl.dataset.decimal = combinedDecimal; }
+    sbUpdateParlayPayout();
+  };
+
+  window.sbSetParlayAmount = function(cents) {
+    var el = document.getElementById('parlay-amount');
+    if (el) { el.value = cents; sbUpdateParlayPayout(); }
+  };
+
+  window.sbUpdateParlayPayout = function() {
+    var a = parseInt((document.getElementById('parlay-amount') || {}).value) || 0;
+    var comboEl = document.getElementById('parlay-combined-odds');
+    var d = comboEl ? (parseFloat(comboEl.dataset.decimal) || 1) : 1;
+    var p = document.getElementById('parlay-payout');
+    if (p) p.textContent = '$' + (a / 100.0 * d).toFixed(2);
+  };
+
+  window.sbToggleParlayTray = function() {
+    var t = document.getElementById('parlay-tray');
+    if (t) t.classList.toggle('open');
+  };
+
+  window.sbShowParlayTray = function() {
+    var t = document.getElementById('parlay-tray');
+    if (t) t.classList.add('open');
+  };
+
+  window.sbSubmitParlay = function() {
+    if (sbParlayLegs.length < 2) { alert('Add at least 2 legs to your parlay'); return; }
+    var amountCents = parseInt((document.getElementById('parlay-amount') || {}).value) || 0;
+    if (amountCents < 1) { alert('Enter a wager amount'); return; }
+    var fl = sbParlayLegs[0].pick;
+    document.getElementById('wager_fixture_id').value = fl.fixtureId;
+    document.getElementById('wager_game_id').value = fl.gameId;
+    document.getElementById('wager_away_team').value = fl.away;
+    document.getElementById('wager_home_team').value = fl.home;
+    document.getElementById('wager_game_start_time').value = fl.start;
+    document.getElementById('wager_bet_type').value = 'parlay';
+    document.getElementById('wager_selection').value = sbParlayLegs.length + '-Leg Parlay';
+    document.getElementById('wager_selection_detail').value = sbParlayLegs.map(function(l) { return l.pick.pickLabel; }).join(' | ');
+    var comboEl = document.getElementById('parlay-combined-odds');
+    var dec = comboEl ? (parseFloat(comboEl.dataset.decimal) || 1) : 1;
+    document.getElementById('wager_odds').value = dec >= 2 ? Math.round((dec - 1) * 100) : -Math.round(100 / (dec - 1));
+    document.getElementById('wager_sport').value = fl.sport;
+    document.getElementById('wager_league').value = fl.league;
+    document.getElementById('wager_amount_cents').value = amountCents;
+    document.getElementById('wager_is_parlay').value = 'true';
+    document.getElementById('wager_parlay_legs').value = JSON.stringify(sbParlayLegs.map(function(l) {
+      return { fixture_id: l.pick.fixtureId, game_id: l.pick.gameId, bet_type: l.pick.type, selection: l.pick.selection, odds: l.pick.odds, points: l.pick.points };
+    }));
+    document.getElementById('hidden-bet-form').submit();
+  };
+</script>
+
 <div class="fantasy-page sb-page">
 
   <div class="fantasy-header">
@@ -105,18 +274,20 @@
       </div>
 
       <% if @games.any? %>
+        <% card_counter = 0 %>
         <% grouped = @games.group_by { |g| g[:start_date] ? Time.parse(g[:start_date]).strftime('%A, %b %-d') : 'TBD' } rescue { 'Today' => @games } %>
         <% grouped.each do |date_label, games| %>
           <div class="sb-date-label"><%= date_label %></div>
 
-          <% games.each_with_index do |game, idx| %>
+          <% games.each do |game| %>
             <% odds = game[:odds] || {} %>
             <% ml = odds[:moneyline] || {} %>
             <% sp = odds[:spread] || {} %>
             <% tot = odds[:total] || {} %>
             <% start_time = game[:start_date] ? Time.parse(game[:start_date]) : nil rescue nil %>
             <% start_time_str = start_time ? start_time.iso8601 : '' %>
-            <% card_id = "g#{idx}" %>
+            <% card_id = "sbg#{card_counter}" %>
+            <% card_counter += 1 %>
             <%
               away_city, away_mascot = split_team_name(game[:away_team])
               home_city, home_mascot = split_team_name(game[:home_team])
@@ -160,7 +331,7 @@
                 <div class="sb-odds-grid-row">
                   <span class="sb-og-team"><span class="sb-og-color" style="background: <%= away_color %>;"></span> <%= away_mascot %></span>
                   <% if sp[:away_points] && sp[:away] %>
-                    <button type="button" class="sb-odds-btn js-pick-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="spread" data-selection="<%= game[:away_team] %>" data-points="<%= sp[:away_points] %>" data-odds="<%= sp[:away] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>" data-card="<%= card_id %>">
+                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','spread','<%= j game[:away_team] %>','<%= sp[:away_points] %>','<%= sp[:away] %>','<%= @sport %>','<%= game[:league] %>',this)">
                       <span class="sb-btn-line"><%= sp[:away_points].to_f > 0 ? "+#{sp[:away_points]}" : sp[:away_points] %></span>
                       <span class="sb-btn-price"><%= sp[:away].to_i > 0 ? "+#{sp[:away].to_i}" : sp[:away].to_i %></span>
                     </button>
@@ -168,7 +339,7 @@
                     <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
                   <% end %>
                   <% if tot[:over] && tot[:points] %>
-                    <button type="button" class="sb-odds-btn js-pick-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="total" data-selection="Over" data-points="<%= tot[:points] %>" data-odds="<%= tot[:over] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>" data-card="<%= card_id %>">
+                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','total','Over','<%= tot[:points] %>','<%= tot[:over] %>','<%= @sport %>','<%= game[:league] %>',this)">
                       <span class="sb-btn-line">O <%= tot[:points] %></span>
                       <span class="sb-btn-price"><%= tot[:over].to_i > 0 ? "+#{tot[:over].to_i}" : tot[:over].to_i %></span>
                     </button>
@@ -176,7 +347,7 @@
                     <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
                   <% end %>
                   <% if ml[:away] %>
-                    <button type="button" class="sb-odds-btn js-pick-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="moneyline" data-selection="<%= game[:away_team] %>" data-points="" data-odds="<%= ml[:away] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>" data-card="<%= card_id %>">
+                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','moneyline','<%= j game[:away_team] %>','','<%= ml[:away] %>','<%= @sport %>','<%= game[:league] %>',this)">
                       <span class="sb-btn-price"><%= ml[:away].to_i > 0 ? "+#{ml[:away].to_i}" : ml[:away].to_i %></span>
                     </button>
                   <% else %>
@@ -186,7 +357,7 @@
                 <div class="sb-odds-grid-row">
                   <span class="sb-og-team"><span class="sb-og-color" style="background: <%= home_color %>;"></span> <%= home_mascot %></span>
                   <% if sp[:home_points] && sp[:home] %>
-                    <button type="button" class="sb-odds-btn js-pick-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="spread" data-selection="<%= game[:home_team] %>" data-points="<%= sp[:home_points] %>" data-odds="<%= sp[:home] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>" data-card="<%= card_id %>">
+                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','spread','<%= j game[:home_team] %>','<%= sp[:home_points] %>','<%= sp[:home] %>','<%= @sport %>','<%= game[:league] %>',this)">
                       <span class="sb-btn-line"><%= sp[:home_points].to_f > 0 ? "+#{sp[:home_points]}" : sp[:home_points] %></span>
                       <span class="sb-btn-price"><%= sp[:home].to_i > 0 ? "+#{sp[:home].to_i}" : sp[:home].to_i %></span>
                     </button>
@@ -194,7 +365,7 @@
                     <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
                   <% end %>
                   <% if tot[:under] && tot[:points] %>
-                    <button type="button" class="sb-odds-btn js-pick-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="total" data-selection="Under" data-points="<%= tot[:points] %>" data-odds="<%= tot[:under] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>" data-card="<%= card_id %>">
+                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','total','Under','<%= tot[:points] %>','<%= tot[:under] %>','<%= @sport %>','<%= game[:league] %>',this)">
                       <span class="sb-btn-line">U <%= tot[:points] %></span>
                       <span class="sb-btn-price"><%= tot[:under].to_i > 0 ? "+#{tot[:under].to_i}" : tot[:under].to_i %></span>
                     </button>
@@ -202,7 +373,7 @@
                     <div class="sb-odds-btn sb-btn-empty">&mdash;</div>
                   <% end %>
                   <% if ml[:home] %>
-                    <button type="button" class="sb-odds-btn js-pick-btn" data-fixture="<%= game[:fixture_id] %>" data-game="<%= game[:game_id] %>" data-away="<%= game[:away_team] %>" data-home="<%= game[:home_team] %>" data-start="<%= start_time_str %>" data-type="moneyline" data-selection="<%= game[:home_team] %>" data-points="" data-odds="<%= ml[:home] %>" data-sport="<%= @sport %>" data-league="<%= game[:league] %>" data-card="<%= card_id %>">
+                    <button type="button" class="sb-odds-btn" onclick="sbSelectPick('<%= card_id %>','<%= game[:fixture_id] %>','<%= game[:game_id] %>','<%= j game[:away_team] %>','<%= j game[:home_team] %>','<%= start_time_str %>','moneyline','<%= j game[:home_team] %>','','<%= ml[:home] %>','<%= @sport %>','<%= game[:league] %>',this)">
                       <span class="sb-btn-price"><%= ml[:home].to_i > 0 ? "+#{ml[:home].to_i}" : ml[:home].to_i %></span>
                     </button>
                   <% else %>
@@ -215,27 +386,27 @@
                 <div class="sb-bet-pick-row">
                   <span class="sb-bet-pick-label" id="<%= card_id %>-pick-name"></span>
                   <span class="sb-bet-pick-odds" id="<%= card_id %>-pick-odds"></span>
-                  <button type="button" class="sb-bet-remove" onclick="removePick('<%= card_id %>')"><i class="fa fa-times"></i></button>
+                  <button type="button" class="sb-bet-remove" onclick="sbRemovePick('<%= card_id %>')"><i class="fa fa-times"></i></button>
                 </div>
                 <div class="sb-bet-input-row">
                   <label class="sb-bet-label">WAGER AMOUNT</label>
                   <div class="sb-bet-field">
                     <span class="sb-bet-currency">$BEEP</span>
-                    <input type="number" class="sb-bet-input" id="<%= card_id %>-amount" min="1" step="1" placeholder="Enter amount" oninput="updateCardPayout('<%= card_id %>')">
+                    <input type="number" class="sb-bet-input" id="<%= card_id %>-amount" min="1" step="1" placeholder="Enter amount" oninput="sbUpdateCardPayout('<%= card_id %>')">
                   </div>
                   <div class="sb-bet-quicks">
-                    <button type="button" onclick="setCardAmount('<%= card_id %>', 100)">$1</button>
-                    <button type="button" onclick="setCardAmount('<%= card_id %>', 500)">$5</button>
-                    <button type="button" onclick="setCardAmount('<%= card_id %>', 2500)">$25</button>
-                    <button type="button" onclick="setCardAmount('<%= card_id %>', 5000)">$50</button>
-                    <button type="button" onclick="setCardAmount('<%= card_id %>', 10000)">$100</button>
+                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 100)">$1</button>
+                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 500)">$5</button>
+                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 2500)">$25</button>
+                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 5000)">$50</button>
+                    <button type="button" onclick="sbSetCardAmount('<%= card_id %>', 10000)">$100</button>
                   </div>
                 </div>
                 <div class="sb-bet-footer">
                   <span class="sb-bet-payout">To Win: <strong id="<%= card_id %>-payout">$0.00</strong></span>
                   <div class="sb-bet-actions">
-                    <button type="button" class="sb-btn-parlay" onclick="addToParlay('<%= card_id %>')"><i class="fa fa-plus"></i> Parlay</button>
-                    <button type="button" class="sb-btn-place" onclick="placeSingleBet('<%= card_id %>')">Place Bet</button>
+                    <button type="button" class="sb-btn-parlay" onclick="sbAddToParlay('<%= card_id %>')"><i class="fa fa-plus"></i> Parlay</button>
+                    <button type="button" class="sb-btn-place" onclick="sbPlaceSingleBet('<%= card_id %>')">Place Bet</button>
                   </div>
                 </div>
               </div>
@@ -259,7 +430,7 @@
 </div>
 
 <div id="parlay-tray" class="sb-parlay-tray">
-  <div class="sb-parlay-bar" onclick="toggleParlayTray()">
+  <div class="sb-parlay-bar" onclick="sbToggleParlayTray()">
     <span><i class="fa fa-layer-group" style="color:#00c853;margin-right:6px;"></i>PARLAY BUILDER</span>
     <span class="sb-parlay-cnt" id="parlay-count">0 Legs</span>
     <i class="fa fa-chevron-up sb-parlay-arrow" id="parlay-chevron"></i>
@@ -271,23 +442,23 @@
     <div class="sb-parlay-summary" id="parlay-summary" style="display:none;">
       <div class="sb-parlay-combo-row">
         <span>Combined Odds</span>
-        <span class="sb-parlay-combo-val" id="parlay-combined-odds">+100</span>
+        <span class="sb-parlay-combo-val" id="parlay-combined-odds" data-decimal="1">+100</span>
       </div>
       <div class="sb-bet-input-row" style="margin-bottom:10px;">
         <label class="sb-bet-label">PARLAY WAGER</label>
         <div class="sb-bet-field">
           <span class="sb-bet-currency">$BEEP</span>
-          <input type="number" class="sb-bet-input" id="parlay-amount" min="1" step="1" placeholder="Enter amount" oninput="updateParlayPayout()">
+          <input type="number" class="sb-bet-input" id="parlay-amount" min="1" step="1" placeholder="Enter amount" oninput="sbUpdateParlayPayout()">
         </div>
         <div class="sb-bet-quicks">
-          <button type="button" onclick="setParlayAmount(100)">$1</button>
-          <button type="button" onclick="setParlayAmount(500)">$5</button>
-          <button type="button" onclick="setParlayAmount(2500)">$25</button>
-          <button type="button" onclick="setParlayAmount(10000)">$100</button>
+          <button type="button" onclick="sbSetParlayAmount(100)">$1</button>
+          <button type="button" onclick="sbSetParlayAmount(500)">$5</button>
+          <button type="button" onclick="sbSetParlayAmount(2500)">$25</button>
+          <button type="button" onclick="sbSetParlayAmount(10000)">$100</button>
         </div>
       </div>
       <div class="sb-parlay-win-row">To Win: <strong id="parlay-payout">$0.00</strong></div>
-      <button type="button" class="sb-btn-place" style="width:100%;padding:12px;font-size:15px;" onclick="submitParlay()">Place Parlay Bet</button>
+      <button type="button" class="sb-btn-place" style="width:100%;padding:12px;font-size:15px;" onclick="sbSubmitParlay()">Place Parlay Bet</button>
     </div>
   </div>
 </div>
@@ -310,143 +481,3 @@
   <input type="hidden" name="wager[is_parlay]" id="wager_is_parlay" value="false">
   <input type="hidden" name="wager[parlay_legs]" id="wager_parlay_legs" value="">
 <% end %>
-
-<script>
-  var activePicks = {};
-  var parlayLegs = [];
-
-  document.querySelectorAll('.js-pick-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var d = this.dataset;
-      selectPick(d.card, d.fixture, d.game, d.away, d.home, d.start, d.type, d.selection, d.points, d.odds, d.sport, d.league, this);
-    });
-  });
-
-  function selectPick(cardId, fixtureId, gameId, away, home, start, type, selection, points, odds, sport, league, btnEl) {
-    var card = document.getElementById(cardId);
-    card.querySelectorAll('.sb-odds-btn.sb-selected').forEach(function(b) { b.classList.remove('sb-selected'); });
-    btnEl.classList.add('sb-selected');
-    var oddsNum = parseInt(odds);
-    var oddsText = oddsNum > 0 ? '+' + oddsNum : oddsNum.toString();
-    var pickLabel = '', detailText = '';
-    if (type === 'moneyline') { pickLabel = selection + ' ML'; }
-    else if (type === 'spread') { var pts = parseFloat(points); pickLabel = selection + ' ' + (pts > 0 ? '+' + pts : pts); detailText = pts > 0 ? '+' + pts : pts.toString(); }
-    else if (type === 'total') { pickLabel = selection + ' ' + points; detailText = selection; }
-    document.getElementById(cardId + '-pick-name').textContent = pickLabel;
-    document.getElementById(cardId + '-pick-odds').textContent = oddsText;
-    document.getElementById(cardId + '-bet').style.display = 'block';
-    activePicks[cardId] = { fixtureId: fixtureId, gameId: gameId, away: away, home: home, start: start, type: type, selection: selection, detail: detailText, points: points, odds: odds, oddsNum: oddsNum, sport: sport, league: league, pickLabel: pickLabel };
-    updateCardPayout(cardId);
-  }
-
-  function removePick(cardId) {
-    document.getElementById(cardId + '-bet').style.display = 'none';
-    document.getElementById(cardId).querySelectorAll('.sb-odds-btn.sb-selected').forEach(function(b) { b.classList.remove('sb-selected'); });
-    delete activePicks[cardId]; removeFromParlay(cardId);
-  }
-
-  function setCardAmount(cardId, cents) { document.getElementById(cardId + '-amount').value = cents; updateCardPayout(cardId); }
-
-  function updateCardPayout(cardId) {
-    var amountCents = parseInt(document.getElementById(cardId + '-amount').value) || 0;
-    var pick = activePicks[cardId]; if (!pick) return;
-    var amount = amountCents / 100.0;
-    document.getElementById(cardId + '-payout').textContent = '$' + calcProfit(amount, pick.oddsNum).toFixed(2);
-  }
-
-  function calcProfit(amount, odds) {
-    if (odds > 0) return amount * odds / 100;
-    if (odds < 0) return amount * 100 / Math.abs(odds);
-    return 0;
-  }
-
-  function placeSingleBet(cardId) {
-    var pick = activePicks[cardId]; if (!pick) return;
-    var amountCents = parseInt(document.getElementById(cardId + '-amount').value) || 0;
-    if (amountCents < 1) { alert('Enter a wager amount'); return; }
-    document.getElementById('wager_fixture_id').value = pick.fixtureId;
-    document.getElementById('wager_game_id').value = pick.gameId;
-    document.getElementById('wager_away_team').value = pick.away;
-    document.getElementById('wager_home_team').value = pick.home;
-    document.getElementById('wager_game_start_time').value = pick.start;
-    document.getElementById('wager_bet_type').value = pick.type;
-    document.getElementById('wager_selection').value = pick.selection;
-    document.getElementById('wager_selection_detail').value = pick.detail;
-    document.getElementById('wager_odds').value = pick.odds;
-    document.getElementById('wager_points').value = pick.points || '';
-    document.getElementById('wager_sport').value = pick.sport;
-    document.getElementById('wager_league').value = pick.league;
-    document.getElementById('wager_amount_cents').value = amountCents;
-    document.getElementById('wager_is_parlay').value = 'false';
-    document.getElementById('wager_parlay_legs').value = '';
-    document.getElementById('hidden-bet-form').submit();
-  }
-
-  function addToParlay(cardId) {
-    var pick = activePicks[cardId]; if (!pick) return;
-    parlayLegs = parlayLegs.filter(function(l) { return l.cardId !== cardId; });
-    parlayLegs.push({ cardId: cardId, pick: pick });
-    renderParlay(); showParlayTray();
-  }
-
-  function removeFromParlay(cardId) {
-    parlayLegs = parlayLegs.filter(function(l) { return l.cardId !== cardId; });
-    renderParlay();
-  }
-
-  function renderParlay() {
-    var legsDiv = document.getElementById('parlay-legs');
-    var emptyMsg = document.getElementById('parlay-empty-msg');
-    var summary = document.getElementById('parlay-summary');
-    var countEl = document.getElementById('parlay-count');
-    legsDiv.querySelectorAll('.sb-parlay-leg').forEach(function(el) { el.remove(); });
-    if (parlayLegs.length === 0) { emptyMsg.style.display = 'block'; summary.style.display = 'none'; countEl.textContent = '0 Legs'; return; }
-    emptyMsg.style.display = 'none'; summary.style.display = 'block';
-    countEl.textContent = parlayLegs.length + (parlayLegs.length === 1 ? ' Leg' : ' Legs');
-    parlayLegs.forEach(function(leg) {
-      var div = document.createElement('div'); div.className = 'sb-parlay-leg';
-      var ot = leg.pick.oddsNum > 0 ? '+' + leg.pick.oddsNum : leg.pick.oddsNum;
-      div.innerHTML = '<span class="sb-pl-name">' + leg.pick.pickLabel + '</span><span class="sb-pl-matchup">' + leg.pick.away + ' @ ' + leg.pick.home + '</span><span class="sb-pl-odds">' + ot + '</span><button type="button" class="sb-pl-remove" onclick="removeFromParlay(\'' + leg.cardId + '\')"><i class="fa fa-times"></i></button>';
-      legsDiv.appendChild(div);
-    });
-    var combinedDecimal = 1;
-    parlayLegs.forEach(function(leg) { var d = leg.pick.oddsNum >= 0 ? (leg.pick.oddsNum / 100 + 1) : (100 / Math.abs(leg.pick.oddsNum) + 1); combinedDecimal *= d; });
-    var ca = combinedDecimal >= 2 ? '+' + Math.round((combinedDecimal - 1) * 100) : '-' + Math.round(100 / (combinedDecimal - 1));
-    document.getElementById('parlay-combined-odds').textContent = ca;
-    document.getElementById('parlay-combined-odds').dataset.decimal = combinedDecimal;
-    updateParlayPayout();
-  }
-
-  function setParlayAmount(cents) { document.getElementById('parlay-amount').value = cents; updateParlayPayout(); }
-  function updateParlayPayout() {
-    var a = parseInt(document.getElementById('parlay-amount').value) || 0;
-    var d = parseFloat(document.getElementById('parlay-combined-odds').dataset.decimal) || 1;
-    document.getElementById('parlay-payout').textContent = '$' + (a / 100.0 * d).toFixed(2);
-  }
-  function toggleParlayTray() { document.getElementById('parlay-tray').classList.toggle('open'); }
-  function showParlayTray() { document.getElementById('parlay-tray').classList.add('open'); }
-
-  function submitParlay() {
-    if (parlayLegs.length < 2) { alert('Add at least 2 legs to your parlay'); return; }
-    var amountCents = parseInt(document.getElementById('parlay-amount').value) || 0;
-    if (amountCents < 1) { alert('Enter a wager amount'); return; }
-    var fl = parlayLegs[0].pick;
-    document.getElementById('wager_fixture_id').value = fl.fixtureId;
-    document.getElementById('wager_game_id').value = fl.gameId;
-    document.getElementById('wager_away_team').value = fl.away;
-    document.getElementById('wager_home_team').value = fl.home;
-    document.getElementById('wager_game_start_time').value = fl.start;
-    document.getElementById('wager_bet_type').value = 'parlay';
-    document.getElementById('wager_selection').value = parlayLegs.length + '-Leg Parlay';
-    document.getElementById('wager_selection_detail').value = parlayLegs.map(function(l) { return l.pick.pickLabel; }).join(' | ');
-    var dec = parseFloat(document.getElementById('parlay-combined-odds').dataset.decimal) || 1;
-    document.getElementById('wager_odds').value = dec >= 2 ? Math.round((dec - 1) * 100) : -Math.round(100 / (dec - 1));
-    document.getElementById('wager_points').value = '';
-    document.getElementById('wager_sport').value = fl.sport;
-    document.getElementById('wager_league').value = fl.league;
-    document.getElementById('wager_amount_cents').value = amountCents;
-    document.getElementById('wager_is_parlay').value = 'true';
-    document.getElementById('wager_parlay_legs').value = JSON.stringify(parlayLegs.map(function(l) { return { selection: l.pick.pickLabel, odds: l.pick.oddsNum, matchup: l.pick.away + ' @ ' + l.pick.home, type: l.pick.type }; }));
-    document.getElementById('hidden-bet-form').submit();
-  }
-</script>

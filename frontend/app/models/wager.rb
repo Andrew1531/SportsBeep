@@ -5,7 +5,7 @@ class Wager < ActiveRecord::Base
   monetize :potential_payout_cents
 
   validates :sport, presence: true
-  validates :bet_type, presence: true, inclusion: { in: %w[moneyline spread total] }
+  validates :bet_type, presence: true, inclusion: { in: %w[moneyline spread total parlay] }
   validates :selection, presence: true
   validates :odds, presence: true
   validates :amount_cents, numericality: { greater_than: 0 }
