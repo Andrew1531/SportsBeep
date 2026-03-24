@@ -121,6 +121,15 @@
         <% end %>
 
         <div class="dk-game-row" id="<%= gid %>">
+          <%# Mini split-color matchup artwork %>
+          <div class="dk-matchup-mini">
+            <div class="dk-mini-away" style="background:<%= away_color %>;"></div>
+            <div class="dk-mini-home" style="background:<%= home_color %>;"></div>
+            <%= (image_tag 'at_large.png', class: 'dk-mini-at') rescue nil %>
+            <div class="dk-mini-abbr-away"><%= away_mascot.to_s.split(' ').map { |w| w[0] }.join('').first(3) %></div>
+            <div class="dk-mini-abbr-home"><%= home_mascot.to_s.split(' ').map { |w| w[0] }.join('').first(3) %></div>
+          </div>
+
           <div class="dk-game-info">
             <div class="dk-time">
               <% if game[:is_live] %>
