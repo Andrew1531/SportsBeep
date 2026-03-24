@@ -24,8 +24,9 @@ SportsbeepWeb::Application.routes.draw do
   post 'sportsbook/place_wager', to: 'sportsbook#place_wager', as: :place_wager
   get 'my-bets', to: 'sportsbook#my_bets', as: :my_bets
   get 'fantasy', to: 'fantasy#index', as: :fantasy
-  get 'fantasy/game/:id', to: 'fantasy#show', as: :fantasy_game
-  get 'fantasy/my-entries', to: 'fantasy#my_entries', as: :my_entries
+  get  'fantasy/game/:id', to: 'fantasy#show', as: :fantasy_game
+  post 'fantasy/enter', to: 'fantasy#enter_contest', as: :fantasy_enter_contest
+  get  'fantasy/my-entries', to: 'fantasy#my_entries', as: :my_entries
   get 'wallet', to: 'dashboard#wallet', as: :wallet
   get 'vending', to: redirect('/wallet')
   post 'wallet/connect_cardano', to: 'dashboard#connect_cardano', as: :connect_cardano

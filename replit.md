@@ -88,18 +88,29 @@ The application automatically starts with the configured workflow:
 - **Admin User Management**: Built comprehensive user list with search, detailed user profiles with account/activity stats, N+1 query optimization with preloading
 - **Sportsbook UI Redesign**: Complete rebuild to DraftKings/FanDuel style — dark background (#0b0e14), table-grid odds layout with SPREAD/TOTAL/MONEYLINE columns, team color indicator bars, compact game rows, slide-up bet slip panel, green accent (#00c853) for odds/CTA buttons
 
-## Daily Fantasy Sports (DFS)
+## Daily Fantasy Sports (DFS) — Best/Bust Format
 - **URL**: `/fantasy` (requires user authentication)
 - **My Entries**: `/fantasy/my-entries`
 - **Game Detail**: `/fantasy/game/:id?sport=mlb|nfl`
-- **Status**: ✅ Pages functional, awaiting game data import
+- **Enter Contest**: `POST /fantasy/enter` (contest_id, best_player_ids[], bust_player_ids[])
+- **Status**: ✅ Fully playable — 45 contests live across 15 MLB games
+- **Best/Bust Game Format**:
+  - Pick **3 BEST** players you think will perform the best today
+  - Pick **3 BUST** players you think will underperform today
+  - Winners determined by actual stat performance
 - **Features**:
-  - Browse upcoming MLB/NFL games with team-colored cards
-  - View available contests per game (entry fees, prize pools, player counts)
-  - Player roster listing with team filter (All / Away / Home)
-  - My Entries page showing all fantasy contest entries with scores and standings
-  - Same Android-style design as Sportsbook (team colors, BebasNeue, split backgrounds)
-- **Note**: DFS contests require admin-created games, pools, and contest templates before users can enter
+  - Browse upcoming MLB games with team-colored cards
+  - Game detail page with tabbed UI: "Pick Players" + "Contests"
+  - Player cards showing projected stats (AVG/HR/RBI for batters, ERA/K/IP for pitchers)
+  - Click player → BEST 🔥 or BUST 💀 pick buttons appear
+  - Floating picks panel (bottom): 6 slots (3 green BEST + 3 red BUST)
+  - Team filter: All / Away team / Home team
+  - Contest selection: 3 tiers per game (Free 200 $BEEP / Starter 500 $BEEP / Pro 2500 $BEEP)
+  - Entry deducts BEEP from account balance (free contest available)
+  - Submit button enables only when contest selected + all 6 picks made
+- **Data Model**: Ticket → TicketPlayer (position: 'best'|'bust')
+- **Seed Data**: `rake fantasy:setup` — creates pools, templates (skip_question_validation), contests
+- **Pool#name**: Virtual method — "Free — 200 $BEEP Prize Pool" or "10.0 $BEEP Entry — 500 $BEEP Prize Pool"
 
 ## Known Issues
 
