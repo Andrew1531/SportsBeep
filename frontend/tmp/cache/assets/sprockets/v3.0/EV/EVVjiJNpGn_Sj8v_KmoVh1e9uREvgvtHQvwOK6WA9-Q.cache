@@ -1,7 +1,0 @@
-I"¸(function() {
-  angular.module('sportsbeep.controllers').controller('GameIndexCtrl', function($scope, GameService) {
-    return $scope.games = GameService.all();
-  });
-
-}).call(this);
-:ET
