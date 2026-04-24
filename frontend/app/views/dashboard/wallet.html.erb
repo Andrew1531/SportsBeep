@@ -1,4 +1,35 @@
-<div style="min-height: calc(100vh - 200px); background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 30px 15px 60px;">
+<style>
+  .wallet-page-shell { min-height: calc(100vh - 200px); background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 30px 15px 60px; }
+  .wallet-page-shell .wallet-hero { margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .wallet-page-shell .wallet-hero-copy { min-width: 0; }
+  .wallet-page-shell .wallet-hero-title { color: white; font-weight: 700; margin: 0 0 4px 0; font-size: 28px; font-family: 'BebasNeue', sans-serif; letter-spacing: 1px; }
+  .wallet-page-shell .wallet-hero-subtitle { color: #8892b0; margin: 0; font-size: 14px; }
+  .wallet-page-shell .wallet-back-btn { display: inline-block; padding: 10px 22px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 5px; }
+  .wallet-page-shell .wallet-stats-row { margin-bottom: 24px; }
+  .wallet-page-shell .wallet-stat-card { background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 18px 14px; text-align: center; min-height: 146px; position: relative; }
+  .wallet-page-shell .wallet-stat-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+  .wallet-page-shell .wallet-stat-kicker { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px; color: #8892b0; }
+  .wallet-page-shell .wallet-stat-sub { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px; color: #555e73; }
+  .wallet-page-shell .wallet-stat-value { font-weight: 700; margin: 0 0 2px; font-size: 22px; }
+  .wallet-page-shell .wallet-stat-unit { font-size: 10px; margin: 0; color: #555e73; }
+  .wallet-page-shell .wallet-stack-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 22px; }
+  @media (max-width: 767px) {
+    .wallet-page-shell { padding: 20px 12px 44px; }
+    .wallet-page-shell .wallet-hero { margin-bottom: 20px; }
+    .wallet-page-shell .wallet-hero-title { font-size: 24px; }
+    .wallet-page-shell .wallet-hero-subtitle { font-size: 13px; line-height: 1.5; }
+    .wallet-page-shell .wallet-back-btn { width: 100%; text-align: center; margin-top: 0; }
+    .wallet-page-shell .wallet-stats-row .col-xs-6 { width: 100%; }
+    .wallet-page-shell .wallet-stat-card { padding: 16px 14px; min-height: 132px; border-radius: 14px; }
+    .wallet-page-shell .wallet-stat-value { font-size: 20px; }
+    .wallet-page-shell .wallet-stack-card { padding: 16px; border-radius: 14px; }
+    .wallet-page-shell .wallet-stack-card .wallet-stack-head { align-items: flex-start !important; }
+    .wallet-page-shell .wallet-stack-card .wallet-stack-head > div:first-child { margin-right: 0 !important; }
+    .wallet-page-shell .wallet-stack-card .wallet-stack-head { gap: 12px; }
+  }
+</style>
+
+<div class="wallet-page-shell">
   <div class="container">
 
     <% if flash[:notice] %>
@@ -12,38 +43,38 @@
       </div>
     <% end %>
 
-    <div style="margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-      <div>
-        <h2 style="color: white; font-weight: 700; margin: 0 0 4px 0; font-size: 28px; font-family: 'BebasNeue', sans-serif; letter-spacing: 1px;">
+    <div class="wallet-hero">
+      <div class="wallet-hero-copy">
+        <h2 class="wallet-hero-title">
           <i class="fa fa-wallet" style="color: #a29bfe; margin-right: 10px;"></i>MY WALLET
         </h2>
-        <p style="color: #8892b0; margin: 0; font-size: 14px;">Balances, wallets, swaps & transactions — all in one place</p>
+        <p class="wallet-hero-subtitle">Balances, wallets, swaps & transactions — all in one place</p>
       </div>
-      <%= link_to user_dashboard_path, style: 'display: inline-block; padding: 10px 22px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 5px;' do %>
+      <%= link_to user_dashboard_path, class: 'wallet-back-btn' do %>
         <i class="fa fa-arrow-left" style="margin-right: 6px;"></i> Dashboard
       <% end %>
     </div>
 
-    <div class="row" style="margin-bottom: 24px;">
+    <div class="row wallet-stats-row">
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 16px; text-align: center;">
-          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+        <div class="wallet-stat-card">
+          <div class="wallet-stat-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
             <i class="fa fa-coins" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">$BEEP</p>
-          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">Connected Wallet</p>
-          <h3 style="color: white; font-weight: 700; margin: 0 0 2px; font-size: 22px;"><%= @on_chain_beep.to_i rescue 0 %></h3>
-          <p style="color: #555e73; font-size: 10px; margin: 0;">$BEEP on-chain</p>
+          <p class="wallet-stat-kicker">$BEEP</p>
+          <p class="wallet-stat-sub">Connected Wallet</p>
+          <h3 class="wallet-stat-value" style="color: white;"><%= @on_chain_beep.to_i rescue 0 %></h3>
+          <p class="wallet-stat-unit">$BEEP on-chain</p>
         </div>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 16px; text-align: center;">
-          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+        <div class="wallet-stat-card">
+          <div class="wallet-stat-icon" style="background: linear-gradient(135deg, #6c5ce7, #a29bfe);">
             <i class="fa fa-users" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Referrals</p>
-          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">Signups</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @referral_count rescue 0 %></h3>
+          <p class="wallet-stat-kicker">Referrals</p>
+          <p class="wallet-stat-sub">Signups</p>
+          <h3 class="wallet-stat-value" style="color: white; margin: 0;"><%= @referral_count rescue 0 %></h3>
         </div>
       </div>
       <% in_play_beep = (@active_wager_total.to_f rescue 0) %>
@@ -52,30 +83,30 @@
       <% ip_bdr   = in_play_over ? 'rgba(255,193,7,0.45)' : 'rgba(255,255,255,0.1)' %>
       <% ip_icon  = in_play_over ? 'linear-gradient(135deg,#f39c12,#e67e22)' : 'linear-gradient(135deg,#00b894,#00cec9)' %>
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: <%= ip_bg %>; backdrop-filter: blur(10px); border: 1px solid <%= ip_bdr %>; border-radius: 14px; padding: 20px 16px; text-align: center; position: relative;">
+        <div class="wallet-stat-card" style="background: <%= ip_bg %>; border-color: <%= ip_bdr %>; position: relative;">
           <% if in_play_over %>
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,193,7,0.2); border: 1px solid rgba(255,193,7,0.5); border-radius: 20px; padding: 2px 8px; font-size: 10px; font-weight: 700; color: #ffc107; letter-spacing: 0.5px;">!</span>
           <% end %>
-          <div style="width: 42px; height: 42px; background: <%= ip_icon %>; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+          <div class="wallet-stat-icon" style="background: <%= ip_icon %>;">
             <i class="fa fa-sack-dollar" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Total</p>
-          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">In Play</p>
-          <h3 style="color: <%= in_play_over ? '#ffc107' : 'white' %>; font-weight: 700; margin: 0 0 2px; font-size: 22px;"><%= in_play_beep.to_i %></h3>
-          <p style="color: #555e73; font-size: 10px; margin: 0;">$BEEP</p>
+          <p class="wallet-stat-kicker">Total</p>
+          <p class="wallet-stat-sub">In Play</p>
+          <h3 class="wallet-stat-value" style="color: <%= in_play_over ? '#ffc107' : 'white' %>;"><%= in_play_beep.to_i %></h3>
+          <p class="wallet-stat-unit">$BEEP</p>
           <% if in_play_over %>
             <p style="color: #f39c12; font-size: 10px; margin: 6px 0 0; line-height: 1.4;">Exceeds on-chain balance<br>— sync more $BEEP to top up</p>
           <% end %>
         </div>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 16px; text-align: center;">
-          <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #00b4d8, #0077b6); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+        <div class="wallet-stat-card">
+          <div class="wallet-stat-icon" style="background: linear-gradient(135deg, #00b4d8, #0077b6);">
             <i class="fa fa-clock-rotate-left" style="color: white; font-size: 18px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Wagers</p>
-          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">All-Time</p>
-          <h3 style="color: white; font-weight: 700; margin: 0; font-size: 22px;"><%= @total_wager_count rescue 0 %></h3>
+          <p class="wallet-stat-kicker">Wagers</p>
+          <p class="wallet-stat-sub">All-Time</p>
+          <h3 class="wallet-stat-value" style="color: white; margin: 0;"><%= @total_wager_count rescue 0 %></h3>
         </div>
       </div>
     </div>
@@ -94,10 +125,10 @@
 
     <div id="panel-wallets">
       <div class="row" style="margin-bottom: 20px;">
-        <div class="col-xs-12 col-md-8 col-md-offset-2" style="margin-bottom: 20px;">
-          <div style="background: linear-gradient(135deg, rgba(0,136,204,0.12), rgba(0,180,216,0.08)); border: 1px solid rgba(0,180,216,0.3); border-radius: 14px; padding: 24px 28px; height: 100%;">
-            <div style="display: flex; align-items: center; margin-bottom: 20px;">
-              <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #0088cc, #00b4d8); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 14px;">
+      <div class="col-xs-12 col-md-8 col-md-offset-2" style="margin-bottom: 20px;">
+          <div class="wallet-stack-card" style="background: linear-gradient(135deg, rgba(0,136,204,0.12), rgba(0,180,216,0.08)); border-color: rgba(0,180,216,0.3);">
+            <div class="wallet-stack-head" style="display: flex; align-items: center; margin-bottom: 20px;">
+              <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #0088cc, #00b4d8); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 14px; flex-shrink: 0;">
                 <i class="fa fa-wallet" style="color: white; font-size: 22px;"></i>
               </div>
               <div style="flex: 1;">
@@ -217,7 +248,7 @@
                 </div>
               <% end %>
 
-              <%= link_to disconnect_cardano_path(redirect_to: wallet_path), method: :delete, data: { confirm: 'Disconnect your Cardano wallet?' }, style: 'display: inline-block; padding: 9px 20px; background: rgba(245,101,101,0.15); color: #fc8181; border: 1px solid rgba(245,101,101,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
+            <%= link_to disconnect_cardano_path(redirect_to: wallet_path), method: :delete, data: { confirm: 'Disconnect your Cardano wallet?' }, style: 'display: inline-block; padding: 9px 20px; background: rgba(245,101,101,0.15); color: #fc8181; border: 1px solid rgba(245,101,101,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; width: 100%; text-align: center;' do %>
                 <i class="fa fa-unlink" style="margin-right: 5px;"></i> Disconnect
               <% end %>
             <% else %>
@@ -244,7 +275,7 @@
         </div>
       </div>
 
-      <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 22px;">
+      <div class="wallet-stack-card">
         <h5 style="color: #8892b0; font-weight: 600; margin: 0 0 14px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">
           <i class="fa fa-circle-question" style="margin-right: 6px;"></i>Supported Cardano Wallets
         </h5>
