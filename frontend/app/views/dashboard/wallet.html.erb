@@ -31,9 +31,9 @@
             <i class="fa fa-coins" style="color: white; font-size: 18px;"></i>
           </div>
           <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">$BEEP</p>
-          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">On-Chain</p>
+          <p style="color: #555e73; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px;">Connected Wallet</p>
           <h3 style="color: white; font-weight: 700; margin: 0 0 2px; font-size: 22px;"><%= @on_chain_beep.to_i rescue 0 %></h3>
-          <p style="color: #555e73; font-size: 10px; margin: 0;">$BEEP</p>
+          <p style="color: #555e73; font-size: 10px; margin: 0;">$BEEP on-chain</p>
         </div>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
@@ -157,9 +157,9 @@
                     <span style="color: #8892b0; font-size: 12px; margin-left: 4px;">ADA</span>
                   </div>
                   <div style="flex: 1; background: rgba(231,76,60,0.12); border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; padding: 12px 16px;">
-                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">$BEEP On-Chain</p>
+                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Connected Wallet $BEEP</p>
                     <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @on_chain_beep.to_i %></span>
-                    <span style="color: #8892b0; font-size: 12px; margin-left: 4px;">$BEEP</span>
+                    <span style="color: #8892b0; font-size: 12px; margin-left: 4px;">on-chain</span>
                   </div>
                 </div>
 
@@ -173,8 +173,8 @@
                       <span style="color: #00c853; font-weight: 700; font-size: 20px;"><%= platform_beep %> <span style="font-size: 12px; color: #8892b0;">$BEEP</span></span>
                     </div>
                     <div style="text-align: right;">
-                      <p style="color: #8892b0; font-size: 11px; margin: 0 0 2px;">On-Chain</p>
-                      <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @on_chain_beep.to_i %> <span style="font-size: 12px; color: #8892b0;">$BEEP</span></span>
+                      <p style="color: #8892b0; font-size: 11px; margin: 0 0 2px;">Connected Wallet</p>
+                      <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @on_chain_beep.to_i %> <span style="font-size: 12px; color: #8892b0;">$BEEP on-chain</span></span>
                     </div>
                   </div>
 
@@ -187,16 +187,16 @@
                     <% end %>
                     <p style="color: #8892b0; font-size: 12px; text-align: center; margin: 8px 0 0;">
                       <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
-                      Credits your on-chain $BEEP to your SportsBeep account.
+                      Credits your connected wallet $BEEP into your SportsBeep game balance.
                     </p>
                   <% else %>
                     <div style="background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3); border-radius: 8px; padding: 10px 14px; text-align: center;">
                       <i class="fa fa-check-circle" style="color: #00c853; margin-right: 6px;"></i>
                       <span style="color: #68d391; font-size: 13px; font-weight: 600;">
                         <% if @on_chain_beep.to_i == 0 %>
-                          No $BEEP tokens detected at this address.
+                          No $BEEP tokens detected in your connected wallet.
                         <% else %>
-                          Platform balance is up to date.
+                          Game balance is up to date for this connected wallet.
                         <% end %>
                       </span>
                     </div>

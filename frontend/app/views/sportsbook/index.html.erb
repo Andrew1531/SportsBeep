@@ -11,7 +11,7 @@
     <div class="bb-modal-icon">⚡</div>
     <h2 class="bb-modal-title">Insufficient $BEEP</h2>
     <p class="bb-modal-body" id="bb-modal-msg">
-      You don't have enough $BEEP tokens to place this wager.
+      You can only wager the $BEEP already synced into your SportsBeep game balance. Your connected Cardano wallet is synced separately.
     </p>
     <div class="bb-modal-balance-row">
       <span class="bb-modal-bal-label">Your Balance</span>
@@ -25,7 +25,7 @@
       <% end %>
       <button class="bb-btn-secondary" onclick="bbCloseModal()">Cancel</button>
     </div>
-    <p class="bb-modal-hint">Sync your Cardano wallet to top up your $BEEP balance.</p>
+    <p class="bb-modal-hint">Only synced game balance can be wagered. Connected wallet $BEEP is copied into SportsBeep first.</p>
   </div>
 </div>
 
@@ -57,9 +57,10 @@
         <span class="dk-title">SPORTSBOOK</span>
       </div>
       <div class="dk-balance">
-        <span class="dk-bal-label">Balance</span>
+        <span class="dk-bal-label">Game Balance</span>
         <span class="dk-bal-value"><%= number_with_precision(@account.balance, precision: 2) rescue '0.00' %></span>
         <span class="dk-bal-currency">$BEEP</span>
+        <div style="color:#8892b0;font-size:11px;margin-top:4px;">This is the only $BEEP you can wager right now.</div>
       </div>
     </div>
   </div>
@@ -84,7 +85,7 @@
       <div class="dk-alert dk-alert-error" style="margin-top:12px;"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div>
     <% end %>
     <% unless @has_beep %>
-      <div class="dk-alert dk-alert-warning" style="margin-top:12px;"><i class="fa fa-exclamation-triangle"></i> You need <strong>$BEEP tokens</strong> to place wagers. <%= link_to 'Go to Wallet →', wallet_path %></div>
+      <div class="dk-alert dk-alert-warning" style="margin-top:12px;"><i class="fa fa-exclamation-triangle"></i> You need <strong>synced game $BEEP</strong> to place wagers. Your connected Cardano wallet is synced into this balance first. <%= link_to 'Go to Wallet →', wallet_path %></div>
     <% end %>
 
     <%# ACTIVE WAGERS (compact list) %>
@@ -393,8 +394,8 @@ window.bbCloseModal = function() {
 window.bbShowModal = function(amountCents) {
   var have = (SB_BALANCE_CENTS / 100.0).toFixed(2);
   var need = (amountCents / 100.0).toFixed(2);
-  document.getElementById('bb-modal-msg').textContent =
-    'You need ' + need + ' $BEEP but your balance is only ' + have + ' $BEEP.';
+      document.getElementById('bb-modal-msg').textContent =
+    'You can only wager the ' + have + ' $BEEP already synced into your SportsBeep game balance. This wager needs ' + need + ' $BEEP.';
   document.getElementById('bb-modal-bal').textContent = have + ' $BEEP';
   document.getElementById('buy-beep-modal').style.display = 'flex';
 };
