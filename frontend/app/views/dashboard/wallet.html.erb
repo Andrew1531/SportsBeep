@@ -95,7 +95,7 @@
           <h3 class="wallet-stat-value" style="color: <%= in_play_over ? '#ffc107' : 'white' %>;"><%= in_play_beep.to_i %></h3>
           <p class="wallet-stat-unit">$BEEP</p>
           <% if in_play_over %>
-            <p style="color: #f39c12; font-size: 10px; margin: 6px 0 0; line-height: 1.4;">Exceeds on-chain balance<br>— sync more $BEEP to top up</p>
+            <p style="color: #f39c12; font-size: 10px; margin: 6px 0 0; line-height: 1.4;">Above your wallet $BEEP<br>— acquire more to unlock credit</p>
           <% end %>
         </div>
       </div>
@@ -210,9 +210,16 @@
                     </div>
                   </div>
 
+                  <div style="background: rgba(0,200,83,0.08); border: 1px solid rgba(0,200,83,0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">
+                    <p style="color: #9fd9b4; font-size: 12px; margin: 0; line-height: 1.5;">
+                      <i class="fa fa-shield-halved" style="margin-right: 6px; color: #00c853;"></i>
+                      Your real $BEEP always stays in your own wallet. Holding $BEEP simply unlocks play credit to wager with — loading and removing never moves any tokens on-chain.
+                    </p>
+                  </div>
+
                   <!-- LOAD to game -->
                   <%= form_tag(load_beep_path, method: :post, style: 'margin-bottom: 12px;') do %>
-                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Load from wallet to game</p>
+                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Unlock play credit</p>
                     <div style="display: flex; gap: 8px;">
                       <input type="number" name="amount" min="1" step="1" max="<%= available_to_load %>"
                              placeholder="Amount" inputmode="numeric"
@@ -234,14 +241,14 @@
                       </p>
                     <% else %>
                       <p style="color: #8892b0; font-size: 12px; margin: 6px 0 0;">
-                        You choose how much of your <%= available_to_load %> $BEEP to bring into the game.
+                        You hold <%= available_to_load %> $BEEP — choose how much play credit to unlock. Your tokens stay in your wallet.
                       </p>
                     <% end %>
                   <% end %>
 
-                  <!-- WITHDRAW back to wallet -->
+                  <!-- REMOVE play credit -->
                   <%= form_tag(withdraw_beep_path, method: :post) do %>
-                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Withdraw from game to wallet</p>
+                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Remove play credit</p>
                     <div style="display: flex; gap: 8px;">
                       <input type="number" name="amount" min="1" step="1" max="<%= withdrawable %>"
                              placeholder="Amount" inputmode="numeric"
@@ -249,14 +256,14 @@
                              style="flex: 1; min-width: 0; padding: 12px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 15px; font-weight: 600;">
                       <button type="submit" <%= 'disabled' if withdrawable <= 0 %>
                               style="white-space: nowrap; padding: 12px 18px; background: rgba(231,76,60,0.15); color: #fc8181; border: 1px solid rgba(231,76,60,0.35); border-radius: 10px; font-size: 14px; font-weight: 700; cursor: <%= withdrawable <= 0 ? 'not-allowed' : 'pointer' %>; opacity: <%= withdrawable <= 0 ? '0.5' : '1' %>;">
-                        <i class="fa fa-upload" style="margin-right: 6px;"></i> Withdraw
+                        <i class="fa fa-upload" style="margin-right: 6px;"></i> Remove
                       </button>
                     </div>
                     <p style="color: #8892b0; font-size: 12px; margin: 6px 0 0;">
                       <% if withdrawable <= 0 %>
-                        No wallet-loaded $BEEP available to withdraw.
+                        No wallet-backed play credit available to remove.
                       <% else %>
-                        Up to <%= withdrawable %> $BEEP (your wallet-loaded balance) can be returned.
+                        Up to <%= withdrawable %> $BEEP of play credit can be removed (nothing is sent on-chain).
                       <% end %>
                     </p>
                   <% end %>

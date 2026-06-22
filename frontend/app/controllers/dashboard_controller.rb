@@ -144,7 +144,7 @@ class DashboardController < ApplicationController
           account:      @account,
           amount_cents: load_cents,
           type:         'AdjustmentTransaction',
-          description:  "Loaded #{amount_beep} $BEEP from Cardano wallet (#{@user.cardano_wallet_address.first(20)}...) to game balance",
+          description:  "Unlocked #{amount_beep} $BEEP play credit (gated by Cardano wallet holdings). Tokens stay in wallet.",
           status:       'completed'
         )
       end
@@ -152,7 +152,7 @@ class DashboardController < ApplicationController
       if error
         flash[:alert] = error
       else
-        flash[:notice] = "#{amount_beep} $BEEP loaded to your game balance!"
+        flash[:notice] = "Unlocked #{amount_beep} $BEEP of play credit. Your real tokens stay safe in your wallet."
       end
     rescue => e
       Rails.logger.error "BEEP load error for user #{@user.id}: #{e.message}"
@@ -182,12 +182,12 @@ class DashboardController < ApplicationController
         withdrawable_beep = [@account.balance_cents.to_i, @account.beep_loaded_cents_safe].min / 100
 
         if withdrawable_beep <= 0
-          error = "There is no wallet-loaded $BEEP available to withdraw."
+          error = "There is no wallet-backed play credit available to remove."
           next
         end
 
         if amount_beep > withdrawable_beep
-          error = "You can withdraw at most #{withdrawable_beep} $BEEP back to your wallet."
+          error = "You can remove at most #{withdrawable_beep} $BEEP of play credit."
           next
         end
 
@@ -200,7 +200,7 @@ class DashboardController < ApplicationController
           account:      @account,
           amount_cents: -withdraw_cents,
           type:         'AdjustmentTransaction',
-          description:  "Withdrew #{amount_beep} $BEEP from game balance back to Cardano wallet",
+          description:  "Removed #{amount_beep} $BEEP of play credit from game balance (no on-chain transfer).",
           status:       'completed'
         )
       end
@@ -208,7 +208,7 @@ class DashboardController < ApplicationController
       if error
         flash[:alert] = error
       else
-        flash[:notice] = "#{amount_beep} $BEEP withdrawn from your game balance."
+        flash[:notice] = "Removed #{amount_beep} $BEEP of play credit. Your real tokens were never moved — they're still in your wallet."
       end
     rescue => e
       Rails.logger.error "BEEP withdraw error for user #{@user.id}: #{e.message}"

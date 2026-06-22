@@ -85,7 +85,19 @@ class FantasyController < ApplicationController
 
       if entry_fee > 0
         fee_cents = (entry_fee * 100).round
-        @account.update_columns(balance_cents: @account.balance_cents - fee_cents)
+        pool_name = (@contest.template.pool.name rescue nil) || 'Fantasy contest'
+        # Lock + re-check inside the lock, debit, and record a ledger entry so
+        # every balance change has an auditable Transaction (no silent moves).
+        @account.with_lock do
+          raise "Insufficient balance" if @account.balance_cents < fee_cents
+          @account.update!(balance_cents: @account.balance_cents - fee_cents)
+          ContestEntryFeeTransaction.create!(
+            account:      @account,
+            amount_cents: -fee_cents,
+            description:  "Contest entry fee — #{pool_name}",
+            status:       'completed'
+          )
+        end
       end
 
       @ticket = ticket

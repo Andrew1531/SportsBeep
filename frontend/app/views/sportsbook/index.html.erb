@@ -11,7 +11,7 @@
     <div class="bb-modal-icon">⚡</div>
     <h2 class="bb-modal-title">Insufficient $BEEP</h2>
     <p class="bb-modal-body" id="bb-modal-msg">
-      You can only wager the $BEEP already synced into your SportsBeep game balance. Your connected Cardano wallet is synced separately.
+      You can only wager play credit you've unlocked in your SportsBeep game balance. Holding $BEEP in your connected wallet unlocks credit — your real tokens stay in your wallet.
     </p>
     <div class="bb-modal-balance-row">
       <span class="bb-modal-bal-label">Your Balance</span>
@@ -25,7 +25,7 @@
       <% end %>
       <button class="bb-btn-secondary" onclick="bbCloseModal()">Cancel</button>
     </div>
-    <p class="bb-modal-hint">Only synced game balance can be wagered. Connected wallet $BEEP is copied into SportsBeep first.</p>
+    <p class="bb-modal-hint">Only unlocked play credit can be wagered. Unlock credit from your wallet holdings first — no tokens are moved on-chain.</p>
   </div>
 </div>
 
@@ -93,7 +93,7 @@
       <div class="dk-alert dk-alert-error" style="margin-top:12px;"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div>
     <% end %>
     <% unless @has_beep %>
-      <div class="dk-alert dk-alert-warning" style="margin-top:12px;"><i class="fa fa-exclamation-triangle"></i> You need <strong>synced game $BEEP</strong> to place wagers. Your connected Cardano wallet is synced into this balance first. <%= link_to 'Go to Wallet →', wallet_path %></div>
+      <div class="dk-alert dk-alert-warning" style="margin-top:12px;"><i class="fa fa-exclamation-triangle"></i> You need <strong>unlocked play credit</strong> to place wagers. Unlock it from your connected wallet holdings — your tokens stay in your wallet. <%= link_to 'Go to Wallet →', wallet_path %></div>
     <% end %>
 
     <%# ACTIVE WAGERS (compact list) %>
@@ -403,7 +403,7 @@ window.bbShowModal = function(amountCents) {
   var have = (SB_BALANCE_CENTS / 100.0).toFixed(2);
   var need = (amountCents / 100.0).toFixed(2);
       document.getElementById('bb-modal-msg').textContent =
-    'You can only wager the ' + have + ' $BEEP already synced into your SportsBeep game balance. This wager needs ' + need + ' $BEEP.';
+    'You can only wager the ' + have + ' $BEEP of play credit you have unlocked. This wager needs ' + need + ' $BEEP.';
   document.getElementById('bb-modal-bal').textContent = have + ' $BEEP';
   document.getElementById('buy-beep-modal').style.display = 'flex';
 };
