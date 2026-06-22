@@ -60,7 +60,15 @@
         <span class="dk-bal-label">Game Balance</span>
         <span class="dk-bal-value"><%= number_with_precision(@account.balance, precision: 2) rescue '0.00' %></span>
         <span class="dk-bal-currency">$BEEP</span>
-        <div style="color:#8892b0;font-size:11px;margin-top:4px;">This is the only $BEEP you can wager right now.</div>
+        <% wallet_connected = (current_user&.cardano_wallet_address.present? rescue false) %>
+        <% if wallet_connected %>
+          <div style="color:#8892b0;font-size:11px;margin-top:4px;">This is the only $BEEP you can wager right now.</div>
+        <% else %>
+          <div style="color:#f6ad55;font-size:11px;margin-top:4px;">
+            <i class="fa fa-exclamation-circle" style="margin-right:4px;"></i>No wallet connected —
+            <%= link_to 'connect & load $BEEP', wallet_path, style: 'color:#00c853;text-decoration:underline;' %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

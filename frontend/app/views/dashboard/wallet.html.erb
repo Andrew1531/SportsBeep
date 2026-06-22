@@ -195,42 +195,70 @@
                 </div>
 
                 <% platform_beep = (@account.balance_cents.to_i / 100) rescue 0 %>
-                <% can_sync = @on_chain_beep.to_i > platform_beep %>
+                <% available_to_load = (@available_to_load_beep.to_i rescue 0) %>
+                <% withdrawable = (@withdrawable_beep.to_i rescue 0) %>
 
                 <div style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                     <div>
-                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Platform Balance</p>
+                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Game Balance</p>
                       <span style="color: #00c853; font-weight: 700; font-size: 20px;"><%= platform_beep %> <span style="font-size: 12px; color: #8892b0;">$BEEP</span></span>
                     </div>
                     <div style="text-align: right;">
-                      <p style="color: #8892b0; font-size: 11px; margin: 0 0 2px;">Connected Wallet</p>
-                      <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @on_chain_beep.to_i %> <span style="font-size: 12px; color: #8892b0;">$BEEP on-chain</span></span>
+                      <p style="color: #8892b0; font-size: 11px; margin: 0 0 2px;">Available in Wallet</p>
+                      <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= available_to_load %> <span style="font-size: 12px; color: #8892b0;">$BEEP</span></span>
                     </div>
                   </div>
 
-                  <% if can_sync %>
-                    <% new_beep = @on_chain_beep.to_i - platform_beep %>
-                    <%= form_tag(sync_beep_path, method: :post) do %>
-                      <button type="submit" style="width: 100%; padding: 13px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(231,76,60,0.35);">
-                        <i class="fa fa-download" style="margin-right: 8px;"></i> Load <%= new_beep %> $BEEP to Platform
+                  <!-- LOAD to game -->
+                  <%= form_tag(load_beep_path, method: :post, style: 'margin-bottom: 12px;') do %>
+                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Load from wallet to game</p>
+                    <div style="display: flex; gap: 8px;">
+                      <input type="number" name="amount" min="1" step="1" max="<%= available_to_load %>"
+                             placeholder="Amount" inputmode="numeric"
+                             <%= 'disabled' if available_to_load <= 0 %>
+                             style="flex: 1; min-width: 0; padding: 12px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 15px; font-weight: 600;">
+                      <button type="submit" <%= 'disabled' if available_to_load <= 0 %>
+                              style="white-space: nowrap; padding: 12px 18px; background: linear-gradient(135deg, #00c853, #00a844); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: <%= available_to_load <= 0 ? 'not-allowed' : 'pointer' %>; opacity: <%= available_to_load <= 0 ? '0.5' : '1' %>; box-shadow: 0 4px 15px rgba(0,200,83,0.3);">
+                        <i class="fa fa-download" style="margin-right: 6px;"></i> Load
                       </button>
-                    <% end %>
-                    <p style="color: #8892b0; font-size: 12px; text-align: center; margin: 8px 0 0;">
-                      <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
-                      Credits your connected wallet $BEEP into your SportsBeep game balance.
-                    </p>
-                  <% else %>
-                    <div style="background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3); border-radius: 8px; padding: 10px 14px; text-align: center;">
-                      <i class="fa fa-check-circle" style="color: #00c853; margin-right: 6px;"></i>
-                      <span style="color: #68d391; font-size: 13px; font-weight: 600;">
-                        <% if @on_chain_beep.to_i == 0 %>
-                          No $BEEP tokens detected in your connected wallet.
-                        <% else %>
-                          Game balance is up to date for this connected wallet.
-                        <% end %>
-                      </span>
                     </div>
+                    <% if available_to_load <= 0 %>
+                      <p style="color: #8892b0; font-size: 12px; margin: 6px 0 0;">
+                        <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
+                        <% if @on_chain_beep.to_i == 0 %>
+                          No $BEEP detected in your connected wallet.
+                        <% else %>
+                          All of your on-chain $BEEP is already loaded into the game.
+                        <% end %>
+                      </p>
+                    <% else %>
+                      <p style="color: #8892b0; font-size: 12px; margin: 6px 0 0;">
+                        You choose how much of your <%= available_to_load %> $BEEP to bring into the game.
+                      </p>
+                    <% end %>
+                  <% end %>
+
+                  <!-- WITHDRAW back to wallet -->
+                  <%= form_tag(withdraw_beep_path, method: :post) do %>
+                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Withdraw from game to wallet</p>
+                    <div style="display: flex; gap: 8px;">
+                      <input type="number" name="amount" min="1" step="1" max="<%= withdrawable %>"
+                             placeholder="Amount" inputmode="numeric"
+                             <%= 'disabled' if withdrawable <= 0 %>
+                             style="flex: 1; min-width: 0; padding: 12px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 15px; font-weight: 600;">
+                      <button type="submit" <%= 'disabled' if withdrawable <= 0 %>
+                              style="white-space: nowrap; padding: 12px 18px; background: rgba(231,76,60,0.15); color: #fc8181; border: 1px solid rgba(231,76,60,0.35); border-radius: 10px; font-size: 14px; font-weight: 700; cursor: <%= withdrawable <= 0 ? 'not-allowed' : 'pointer' %>; opacity: <%= withdrawable <= 0 ? '0.5' : '1' %>;">
+                        <i class="fa fa-upload" style="margin-right: 6px;"></i> Withdraw
+                      </button>
+                    </div>
+                    <p style="color: #8892b0; font-size: 12px; margin: 6px 0 0;">
+                      <% if withdrawable <= 0 %>
+                        No wallet-loaded $BEEP available to withdraw.
+                      <% else %>
+                        Up to <%= withdrawable %> $BEEP (your wallet-loaded balance) can be returned.
+                      <% end %>
+                    </p>
                   <% end %>
                 </div>
 

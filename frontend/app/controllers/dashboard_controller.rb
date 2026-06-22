@@ -90,7 +90,7 @@ class DashboardController < ApplicationController
     redirect_to safe_redirect_path
   end
 
-  def sync_beep
+  def load_beep
     @user = current_user
     @account = @user.account
 
@@ -104,43 +104,115 @@ class DashboardController < ApplicationController
       return redirect_to wallet_path
     end
 
+    amount_beep = params[:amount].to_s.strip.to_i
+    if amount_beep <= 0
+      flash[:alert] = "Enter a whole number of $BEEP greater than 0 to load."
+      return redirect_to wallet_path
+    end
+
     begin
       service = BlockfrostService.new
-      on_chain_beep = service.get_beep_balance(@user.cardano_wallet_address)
+      on_chain_beep = service.get_beep_balance(@user.cardano_wallet_address).to_i
 
       if on_chain_beep <= 0
-        flash[:alert] = "No $BEEP tokens detected in your connected wallet. Make sure you have $BEEP tokens at the connected address."
+        flash[:alert] = "No $BEEP tokens detected in your connected wallet."
         return redirect_to wallet_path
       end
 
-      on_chain_cents = on_chain_beep * 100
-      current_cents  = @account.balance_cents.to_i
-      beep_synced    = (current_cents / 100).to_i
+      error = nil
+      # Lock the account row and re-check limits inside the lock so two
+      # concurrent loads can't both pass the check against stale balances.
+      @account.with_lock do
+        available_beep = @account.available_to_load_cents(on_chain_beep * 100) / 100
 
-      if on_chain_beep <= beep_synced && current_cents > 0
-        flash[:notice] = "Your platform balance already reflects your on-chain $BEEP holdings (#{on_chain_beep} $BEEP)."
-        return redirect_to wallet_path
-      end
+        if available_beep <= 0
+          error = "You've already loaded all of your on-chain $BEEP into the game."
+          next
+        end
 
-      credit_cents = [on_chain_cents - current_cents, 0].max
+        if amount_beep > available_beep
+          error = "You can load at most #{available_beep} $BEEP from your connected wallet."
+          next
+        end
 
-      if credit_cents > 0
-        @account.update!(balance_cents: current_cents + credit_cents)
-        Transaction.create!(
-          account:     @account,
-          amount_cents: credit_cents,
-          type:        'AdjustmentTransaction',
-          description: "Synced #{on_chain_beep} $BEEP from Cardano wallet (#{@user.cardano_wallet_address.first(20)}...)",
-          status:      'completed'
+        load_cents = amount_beep * 100
+        @account.update!(
+          balance_cents:     @account.balance_cents.to_i + load_cents,
+          beep_loaded_cents: @account.beep_loaded_cents_safe + load_cents
         )
-        credited_beep = credit_cents / 100
-        flash[:notice] = "#{credited_beep} $BEEP loaded to your platform account!"
+        Transaction.create!(
+          account:      @account,
+          amount_cents: load_cents,
+          type:         'AdjustmentTransaction',
+          description:  "Loaded #{amount_beep} $BEEP from Cardano wallet (#{@user.cardano_wallet_address.first(20)}...) to game balance",
+          status:       'completed'
+        )
+      end
+
+      if error
+        flash[:alert] = error
       else
-        flash[:notice] = "Balance already up to date (#{on_chain_beep} $BEEP on-chain)."
+        flash[:notice] = "#{amount_beep} $BEEP loaded to your game balance!"
       end
     rescue => e
-      Rails.logger.error "BEEP sync error for user #{@user.id}: #{e.message}"
-      flash[:alert] = "Could not read wallet balance. Please try again shortly."
+      Rails.logger.error "BEEP load error for user #{@user.id}: #{e.message}"
+      flash[:alert] = "Could not load $BEEP right now. Please try again shortly."
+    end
+
+    redirect_to wallet_path
+  end
+
+  def withdraw_beep
+    @user = current_user
+    @account = @user.account
+
+    amount_beep = params[:amount].to_s.strip.to_i
+    if amount_beep <= 0
+      flash[:alert] = "Enter a whole number of $BEEP greater than 0 to withdraw."
+      return redirect_to wallet_path
+    end
+
+    begin
+      error = nil
+      # Lock the account and re-check inside so concurrent withdrawals can't
+      # both pass the bound check against a stale balance.
+      @account.with_lock do
+        # You can only pull back $BEEP that is actually sitting in your game
+        # balance AND was loaded from your wallet (not winnings/promo credit).
+        withdrawable_beep = [@account.balance_cents.to_i, @account.beep_loaded_cents_safe].min / 100
+
+        if withdrawable_beep <= 0
+          error = "There is no wallet-loaded $BEEP available to withdraw."
+          next
+        end
+
+        if amount_beep > withdrawable_beep
+          error = "You can withdraw at most #{withdrawable_beep} $BEEP back to your wallet."
+          next
+        end
+
+        withdraw_cents = amount_beep * 100
+        @account.update!(
+          balance_cents:     @account.balance_cents.to_i - withdraw_cents,
+          beep_loaded_cents: [@account.beep_loaded_cents_safe - withdraw_cents, 0].max
+        )
+        Transaction.create!(
+          account:      @account,
+          amount_cents: -withdraw_cents,
+          type:         'AdjustmentTransaction',
+          description:  "Withdrew #{amount_beep} $BEEP from game balance back to Cardano wallet",
+          status:       'completed'
+        )
+      end
+
+      if error
+        flash[:alert] = error
+      else
+        flash[:notice] = "#{amount_beep} $BEEP withdrawn from your game balance."
+      end
+    rescue => e
+      Rails.logger.error "BEEP withdraw error for user #{@user.id}: #{e.message}"
+      flash[:alert] = "Could not withdraw $BEEP right now. Please try again shortly."
     end
 
     redirect_to wallet_path
@@ -177,6 +249,14 @@ class DashboardController < ApplicationController
     else
       @wallet_info = nil
       @on_chain_beep = 0
+    end
+
+    if @account
+      @available_to_load_beep = @account.available_to_load_cents(@on_chain_beep.to_i * 100) / 100
+      @withdrawable_beep = [@account.balance_cents.to_i, @account.beep_loaded_cents_safe].min / 100
+    else
+      @available_to_load_beep = 0
+      @withdrawable_beep = 0
     end
   end
 

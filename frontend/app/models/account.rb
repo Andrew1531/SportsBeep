@@ -12,6 +12,19 @@ class Account < ActiveRecord::Base
     self.clearing_expense_cents ||= 0
     self.promo_earnings_cents ||= 0
     self.referral_winnings_cents ||= 0
+    self.beep_loaded_cents ||= 0 if has_attribute?(:beep_loaded_cents)
+  end
+
+  # How much on-chain $BEEP (in cents) the user has already moved into their
+  # game balance. Used to cap further loads at their actual wallet holdings.
+  def beep_loaded_cents_safe
+    has_attribute?(:beep_loaded_cents) ? (beep_loaded_cents || 0) : 0
+  end
+
+  # Cents still available to load from the connected wallet, given the current
+  # on-chain holdings (in cents). Never negative.
+  def available_to_load_cents(on_chain_cents)
+    [on_chain_cents.to_i - beep_loaded_cents_safe, 0].max
   end
 
   def subtract_from_clearing_expense!(amount)

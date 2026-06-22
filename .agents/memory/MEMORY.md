@@ -1,0 +1,1 @@
+- [$BEEP game balance model](beep-game-balance-model.md) — only game balance is wagerable; load/withdraw move on-chain $BEEP in/out; lock + re-check bounds on every money mutation.

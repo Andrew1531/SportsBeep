@@ -68,6 +68,29 @@ class OpticOddsService
     []
   end
 
+  # Returns final scores for a completed fixture as
+  # { home_score:, away_score: }, or nil if the game is not final / no data.
+  def fixture_results(fixture_id)
+    response = make_request('/fixtures/results', { fixture_id: fixture_id })
+    return nil unless response && response['data']
+
+    data = response['data'].is_a?(Array) ? response['data'].first : response['data']
+    return nil unless data
+
+    scores = data['scores'] || data['result'] || data
+    home = scores.dig('home', 'total') || scores['home_score'] || data['home_score']
+    away = scores.dig('away', 'total') || scores['away_score'] || data['away_score']
+    status = (data['status'] || scores['status']).to_s.downcase
+
+    return nil unless home && away
+    return nil unless status.empty? || status.include?('final') || status.include?('complete') || status.include?('closed')
+
+    { home_score: home.to_i, away_score: away.to_i }
+  rescue StandardError => e
+    Rails.logger.error "OpticOdds fixture_results error: #{e.message}"
+    nil
+  end
+
   def available_sports
     response = make_request('/sports/active')
     return [] unless response && response['data']
@@ -178,7 +201,7 @@ class OpticOddsService
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
     http.open_timeout = 15
     http.read_timeout = 15
 

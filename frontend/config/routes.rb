@@ -31,7 +31,8 @@ SportsbeepWeb::Application.routes.draw do
   get 'vending', to: redirect('/wallet')
   post 'wallet/connect_cardano', to: 'dashboard#connect_cardano', as: :connect_cardano
   delete 'wallet/disconnect_cardano', to: 'dashboard#disconnect_cardano', as: :disconnect_cardano
-  post 'wallet/sync_beep', to: 'dashboard#sync_beep', as: :sync_beep
+  post 'wallet/load_beep', to: 'dashboard#load_beep', as: :load_beep
+  post 'wallet/withdraw_beep', to: 'dashboard#withdraw_beep', as: :withdraw_beep
   get 'transactions', to: 'dashboard#transactions', as: :user_transactions
   get 'redeem', to: 'dashboard#redeem_promo', as: :redeem_promo
   post 'redeem', to: 'dashboard#apply_promo', as: :apply_promo

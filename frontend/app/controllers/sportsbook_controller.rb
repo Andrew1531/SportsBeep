@@ -5,7 +5,7 @@ class SportsbookController < ApplicationController
   def index
     @sport = params[:sport] || 'mlb'
     @games = fetch_games_with_odds(@sport)
-    @open_wagers = @user ? @user.wagers.open.recent.limit(5) : []
+    @open_wagers = @user ? @user.wagers.open.game_pending.recent.limit(5) : []
   end
 
   def place_wager
@@ -33,14 +33,14 @@ class SportsbookController < ApplicationController
     else
       @sport = @wager.sport || 'mlb'
       @games = fetch_games_with_odds(@sport)
-      @open_wagers = @user ? @user.wagers.open.recent.limit(5) : []
+      @open_wagers = @user ? @user.wagers.open.game_pending.recent.limit(5) : []
       flash.now[:alert] = @wager.errors.full_messages.join(', ')
       render :index
     end
   end
 
   def my_bets
-    @open_wagers = @user.wagers.open.recent
+    @open_wagers = @user.wagers.open.game_pending.recent
     @settled_wagers = @user.wagers.settled.recent.limit(20)
     @total_wagered = @user.wagers.sum(:amount_cents)
     @total_won = @user.wagers.where(status: 'won').sum(:potential_payout_cents)

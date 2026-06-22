@@ -108,8 +108,14 @@
           <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
             <i class="fa fa-coins" style="color: white; font-size: 24px;"></i>
           </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 8px;">$BEEP Balance</p>
-          <h3 style="color: white; font-weight: 700; margin: 0 0 16px; font-size: 32px;"><%= @account.balance rescue '0.00' %></h3>
+          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 8px;">Game Balance ($BEEP)</p>
+          <h3 style="color: white; font-weight: 700; margin: 0 0 8px; font-size: 32px;"><%= @account.balance rescue '0.00' %></h3>
+          <% dash_wallet_connected = (@user&.cardano_wallet_address.present? rescue false) %>
+          <% if dash_wallet_connected %>
+            <p style="color: #00c853; font-size: 12px; margin: 0 0 14px;"><i class="fa fa-link" style="margin-right: 5px;"></i>Wallet connected</p>
+          <% else %>
+            <p style="color: #f6ad55; font-size: 12px; margin: 0 0 14px;"><i class="fa fa-unlink" style="margin-right: 5px;"></i>No wallet connected</p>
+          <% end %>
           <%= link_to 'View Wallet', wallet_path, style: 'display: inline-block; padding: 9px 24px; background: rgba(231,76,60,0.2); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' %>
         </div>
       </div>

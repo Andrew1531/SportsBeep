@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_03_22_000001) do
+ActiveRecord::Schema.define(version: 2026_06_22_000001) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "user_id"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2026_03_22_000001) do
     t.integer "promo_balance_cents", default: 0
     t.integer "promo_earnings_cents", default: 0
     t.integer "referral_winnings_cents", default: 0
+    t.integer "beep_loaded_cents", default: 0
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
