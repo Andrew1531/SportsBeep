@@ -10,7 +10,7 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 - **Asset Pipeline**: ✅ Sass/CSS compiling successfully (Rails 6 compatible)
 - **Cardano Blockchain**: ✅ Integrated with Blockfrost API for crypto wallet support
 - **Sportsbook**: ✅ DraftKings-style with team logos, balance guard, bet slip
-- **OpticOdds API**: ⚠️ Returns 403 (key permissions issue) — falls back to DB games with random odds
+- **OpticOdds API**: ❌ Returns 401 "Invalid or inactive API key" (key expired/revoked — needs a valid key). NOTE: even with a valid key, Ruby Net::HTTP can't complete the TLS handshake in this env ("unable to get certificate CRL") though curl can — the in-app request path needs a TLS fix. Falls back to DB games with random odds.
 - **Balance Guard**: ✅ Inline warning + "Insufficient $BEEP" modal blocks overspending
 - **Team Logos**: ✅ ESPN CDN logos displayed in sportsbook rows (MLB/NFL/NBA/NHL)
 - **Fantasy Player Cards**: ✅ Smooth accordion expand — overflow:hidden bug fixed
