@@ -17,8 +17,9 @@ SportsbeepWeb::Application.routes.draw do
   # Old Devise password URLs land on the new request page.
   get  'users/password/new',  to: redirect('/reset-password')
   get  'users/password/edit', to: redirect('/reset-password')
-  post 'users/password',      to: redirect('/reset-password')
-  put  'users/password',      to: redirect('/reset-password')
+  post  'users/password',     to: redirect('/reset-password')
+  put   'users/password',     to: redirect('/reset-password')
+  patch 'users/password',     to: redirect('/reset-password')
 
   devise_for :administrators, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { sessions: 'admin/sessions' }
 

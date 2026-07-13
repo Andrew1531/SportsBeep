@@ -34,6 +34,10 @@
 
         <%= form_with url: reset_request_path, method: :post, local: true, html: { style: 'margin: 0;' } do %>
 
+          <div style="position: absolute; left: -9999px;" aria-hidden="true">
+            <input type="text" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
           <div style="margin-bottom: 20px;">
             <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 6px;">Account Email <span style="color: #e74c3c;">*</span></label>
             <input type="email" name="email" required autofocus value="<%= params[:email] %>" class="form-control" style="border-radius: 8px; padding: 12px 14px; border: 1.5px solid #d1d5db; font-size: 15px;" placeholder="you@example.com">
