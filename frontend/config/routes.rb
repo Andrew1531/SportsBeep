@@ -2,12 +2,23 @@ SportsbeepWeb::Application.routes.draw do
   # mount RailsAdmin::Engine => '/cpanel', as: 'rails_admin'
   # mount Avocado::Engine, at: '/api-docs', constraints: -> (_) { Rails.env.staging? }
 
-  devise_for :users, path_names: {
+  devise_for :users, skip: [:passwords], path_names: {
     sign_in: 'login', sign_out: 'logout', sign_up: 'register',
   }, controllers: {
     registrations: 'registrations',
     sessions: 'sessions'
   }
+
+  # Beta: self-serve reset emails are disabled. Users submit a reset request
+  # that is delivered to the support inbox; admins reset via the admin panel.
+  get  'reset-password', to: 'pages#reset_request', as: :reset_request
+  post 'reset-password', to: 'pages#submit_reset_request'
+
+  # Old Devise password URLs land on the new request page.
+  get  'users/password/new',  to: redirect('/reset-password')
+  get  'users/password/edit', to: redirect('/reset-password')
+  post 'users/password',      to: redirect('/reset-password')
+  put  'users/password',      to: redirect('/reset-password')
 
   devise_for :administrators, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { sessions: 'admin/sessions' }
 

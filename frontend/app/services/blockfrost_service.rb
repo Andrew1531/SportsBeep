@@ -151,11 +151,7 @@ class BlockfrostService
 
   def make_request(endpoint)
     uri = URI("#{BASE_URL}#{endpoint}")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    http.open_timeout = 10
-    http.read_timeout = 15
+    http = SecureHttp.client(uri)
 
     request = Net::HTTP::Get.new(uri)
     request['project_id'] = @project_id

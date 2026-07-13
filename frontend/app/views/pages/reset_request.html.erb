@@ -1,0 +1,68 @@
+<div style="min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 40px 15px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+  <div style="width: 100%; max-width: 420px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <%= image_tag 'logo.png', height: '60px', width: '60px', style: 'margin-bottom: 10px;' %>
+      <h2 style="color: white; font-weight: 700; margin: 0 0 5px 0; font-size: 28px;">Reset Your Password</h2>
+      <p style="color: #8892b0; margin: 0; font-size: 15px;">Our support team will reset it for you</p>
+    </div>
+
+    <div style="background: white; border-radius: 12px; padding: 35px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+
+      <% if params[:sent].present? %>
+        <div style="text-align: center;">
+          <div style="font-size: 44px; margin-bottom: 12px;">&#9993;</div>
+          <h3 style="color: #276749; font-weight: 700; margin: 0 0 10px 0;">Request Sent</h3>
+          <p style="color: #4b5563; font-size: 14px; margin: 0 0 18px 0;">
+            Our team will reset your password and contact you shortly at the email you provided.
+          </p>
+          <p style="color: #6b7280; font-size: 13px; margin: 0 0 22px 0;">
+            Need help sooner? Email us at <strong>support@sportsbeep.com</strong>.
+          </p>
+          <%= link_to 'Back to Sign In', new_user_session_path, style: 'display: inline-block; padding: 12px 28px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border-radius: 8px; font-size: 15px; font-weight: 700; text-decoration: none;' %>
+        </div>
+      <% else %>
+
+        <% if flash[:alert] %>
+          <div style="background: #fff5f5; border: 1px solid #fc8181; border-radius: 8px; padding: 12px 15px; margin-bottom: 20px;">
+            <p style="color: #c53030; margin: 0; font-size: 14px;"><%= flash[:alert] %></p>
+          </div>
+        <% end %>
+
+        <p style="color: #4b5563; font-size: 14px; margin: 0 0 20px 0;">
+          Tell us the email on your account and our support team (<strong>support@sportsbeep.com</strong>) will reset your password and get back to you.
+        </p>
+
+        <%= form_with url: reset_request_path, method: :post, local: true, html: { style: 'margin: 0;' } do %>
+
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 6px;">Account Email <span style="color: #e74c3c;">*</span></label>
+            <input type="email" name="email" required autofocus value="<%= params[:email] %>" class="form-control" style="border-radius: 8px; padding: 12px 14px; border: 1.5px solid #d1d5db; font-size: 15px;" placeholder="you@example.com">
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 6px;">Username <span style="color: #9ca3af; font-weight: 400;">(optional)</span></label>
+            <input type="text" name="username" value="<%= params[:username] %>" class="form-control" style="border-radius: 8px; padding: 12px 14px; border: 1.5px solid #d1d5db; font-size: 15px;" placeholder="Your SportsBeep username">
+          </div>
+
+          <div style="margin-bottom: 22px;">
+            <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 6px;">Anything else? <span style="color: #9ca3af; font-weight: 400;">(optional)</span></label>
+            <textarea name="message" rows="3" class="form-control" style="border-radius: 8px; padding: 12px 14px; border: 1.5px solid #d1d5db; font-size: 15px; resize: vertical;" placeholder="Any details that help us verify it's you"><%= params[:message] %></textarea>
+          </div>
+
+          <button type="submit" style="width: 100%; padding: 13px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);">
+            Send Reset Request
+          </button>
+
+        <% end %>
+
+        <div style="text-align: center; margin-top: 22px; padding-top: 18px; border-top: 1px solid #e5e7eb;">
+          <p style="color: #6b7280; font-size: 14px; margin: 0;">
+            Remembered it?
+            <%= link_to 'Back to Sign In', new_user_session_path, style: 'color: #e74c3c; font-weight: 600; text-decoration: none;' %>
+          </p>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -33,9 +33,7 @@
         </div>
 
         <div style="text-align: right; margin-bottom: 22px;">
-          <% if devise_mapping.recoverable? %>
-            <%= link_to 'Forgot your password?', new_password_path(resource_name), style: 'color: #e74c3c; font-size: 13px; text-decoration: none; font-weight: 500;' %>
-          <% end %>
+          <%= link_to 'Forgot your password?', reset_request_path, style: 'color: #e74c3c; font-size: 13px; text-decoration: none; font-weight: 500;' %>
         </div>
 
         <button type="submit" style="width: 100%; padding: 13px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);">

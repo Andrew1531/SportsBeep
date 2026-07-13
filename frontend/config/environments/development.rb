@@ -32,16 +32,9 @@ SportsbeepWeb::Application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost:5000' }
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: "smtp.mandrillapp.com",
-    port: 587,
-    enable_starttls_auto: true,
-    user_name: ENV['SMTP_USERNAME'],
-    password: ENV['SMTP_PASSWORD'],
-    authentication: 'login',
-    domain: 'localhost:5000',
-  }
+  # Beta: no outbound email — see production.rb. :test is a safe no-op.
+  config.action_mailer.delivery_method = :test
+  config.action_mailer.perform_deliveries = false
 
   # Allow all hosts for Replit proxy support
   config.hosts.clear

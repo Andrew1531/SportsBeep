@@ -74,16 +74,12 @@ SportsbeepWeb::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
+  # Beta: no outbound email. Password resets are handled via the support
+  # request flow (/reset-password) + the admin panel. The :test delivery
+  # method is a safe no-op, so any residual mailer call cannot crash a request.
   config.action_mailer.default_url_options = { host: "sportsbeep.com" }
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: "smtp.mandrillapp.com",
-    port: 587, # ports 587 and 2525 are also supported with STARTTLS
-    enable_starttls_auto: true, # detects and uses STARTTLS
-    user_name: "admin@sportsbeep.com",
-    password: "y-KvtsoHhC6ayMPuBVu0yg", # SMTP password is any valid API key
-    authentication: 'login', # Mandrill supports 'plain' or 'login'
-    domain: 'sportsbeep.com', # your domain to identify your server when connecting
-  }
+  config.action_mailer.delivery_method = :test
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.perform_deliveries = false
 
 end
