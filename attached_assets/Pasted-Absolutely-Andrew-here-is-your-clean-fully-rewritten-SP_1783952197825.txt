@@ -1,0 +1,141 @@
+Absolutely, Andrew — here is your **clean, fully rewritten SPORTSBEEP Terms of Service** formatted as a **copy‑paste‑ready document** you can drop directly into VS Code.  
+No special characters, no markdown, no styling — just a clean legal document.
+
+-----------------------------------------
+-----------------------------------------
+
+**SPORTSBEEP — TERMS OF SERVICE**
+
+**Last Updated: [Insert Date]**
+
+---
+
+**1. Acceptance of Terms**
+
+By accessing or using SPORTSBEEP (“the Platform”), you agree to be bound by these Terms of Service (“Terms”). These Terms govern your use of all SPORTSBEEP products, including decentralized sports engagement modules, on‑chain interactions, smart‑contract features, and the $BEEP token ecosystem. If you do not agree to these Terms, you must discontinue use of the Platform immediately.
+
+---
+
+**2. Nature of the Platform (Fully DeFi)**
+
+SPORTSBEEP operates entirely on decentralized blockchain infrastructure. All transactions occur on the Cardano blockchain. SPORTSBEEP does not custody user funds, does not maintain centralized balances, and does not offer fiat payment processing. Users interact exclusively through non‑custodial wallets, and all actions are executed via smart contracts. All confirmed blockchain transactions are final, immutable, and irreversible.
+
+---
+
+**3. Eligibility**
+
+To use SPORTSBEEP, you must:
+
+- Be of legal age in your jurisdiction.
+- Have full authority to engage with blockchain‑based applications.
+- Not be located in a region where decentralized crypto platforms are restricted.
+- Use your own non‑custodial wallet and maintain control of your private keys.
+
+SPORTSBEEP is not responsible for lost private keys, compromised wallets, or unauthorized access.
+
+---
+
+**4. Wallet Requirements**
+
+SPORTSBEEP does not create or maintain user accounts. Your Cardano wallet address serves as your identity on the Platform. You are solely responsible for securing your wallet, managing your seed phrase, ensuring compatibility with Cardano‑native assets, and maintaining access to your wallet. SPORTSBEEP cannot restore access to lost wallets.
+
+---
+
+**5. $BEEP Token Usage**
+
+The $BEEP token is a Cardano‑native fungible asset used for rewards, engagement, platform utility, access to certain features, and participation in decentralized governance where applicable. $BEEP does not represent equity, ownership, or financial rights in SPORTSBEEP. Token value may fluctuate based on market conditions.
+
+---
+
+**6. On‑Chain Transactions**
+
+All transactions on SPORTSBEEP are executed via smart contracts. This includes staking, rewards distribution, platform interactions, token transfers, and feature unlocks. Once submitted to the blockchain, transactions cannot be reversed. SPORTSBEEP is not liable for failed transactions, incorrect wallet addresses, gas fees, network congestion, or smart‑contract execution errors caused by user input.
+
+---
+
+**7. Jurisdiction and Compliance**
+
+SPORTSBEEP does not use geolocation restrictions due to its decentralized nature. Users are responsible for complying with local laws regarding cryptocurrency usage, blockchain participation, digital asset taxation, and any regulations related to sports engagement. SPORTSBEEP does not provide legal advice.
+
+---
+
+**8. Responsible Use**
+
+Users agree not to:
+
+- Exploit smart contracts.
+- Manipulate platform mechanics.
+- Engage in fraudulent or malicious activity.
+- Use bots or automated scripts to gain unfair advantage.
+- Attack the network or platform infrastructure.
+
+Violations may result in smart‑contract‑level restrictions or governance‑driven actions.
+
+---
+
+**9. Platform Modifications**
+
+SPORTSBEEP may update, modify, or upgrade smart contracts, platform features, or token mechanics through decentralized governance or development processes. Changes may occur without prior notice.
+
+---
+
+**10. Disclaimers**
+
+SPORTSBEEP is provided “as‑is” without warranties of any kind. SPORTSBEEP does not guarantee continuous uptime, error‑free smart‑contract execution, token value stability, compatibility with all wallets or devices, or future availability of features. Users assume all risks associated with blockchain usage.
+
+---
+
+**11. Limitation of Liability**
+
+To the fullest extent permitted by law, SPORTSBEEP is not liable for:
+
+- Losses related to token volatility.
+- Wallet compromise or unauthorized access.
+- Smart‑contract interactions or execution failures.
+- User mistakes such as incorrect addresses or transaction amounts.
+- Failures of third‑party wallets, tools, or blockchain infrastructure.
+
+Your use of the Platform is entirely at your own risk.
+
+---
+
+**12. Dispute Resolution**
+
+Due to the decentralized nature of SPORTSBEEP, disputes are handled through community governance, on‑chain voting where applicable, or decentralized mediation processes. Traditional arbitration may not apply.
+
+---
+
+**13. Termination**
+
+SPORTSBEEP may restrict access to platform features through smart‑contract‑level controls, governance votes, or security measures. Users may terminate their participation at any time by discontinuing use and transferring their tokens.
+
+---
+
+**14. Privacy**
+
+SPORTSBEEP does not collect personal data. All interactions occur through public blockchain addresses and on‑chain transactions. Users understand that blockchain activity is publicly visible and permanently recorded.
+
+---
+
+**15. Governing Law**
+
+SPORTSBEEP operates globally on decentralized infrastructure. Users must comply with their local laws regarding blockchain usage and digital assets.
+
+---
+
+**16. Contact**
+
+For inquiries related to these Terms, please contact the SPORTSBEEP development team through official community channels.
+
+-----------------------------------------
+-----------------------------------------
+
+If you want, I can also generate:
+
+- Privacy Policy  
+- Smart Contract Risk Disclosure  
+- $BEEP Token Terms  
+- Community Governance Charter  
+- A combined “Legal Pack” formatted for deployment  
+
+Just tell me what you want next and I’ll build it.
