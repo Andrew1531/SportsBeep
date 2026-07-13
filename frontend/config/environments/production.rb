@@ -74,12 +74,11 @@ SportsbeepWeb::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  # Beta: no outbound email. Password resets are handled via the support
-  # request flow (/reset-password) + the admin panel. The :test delivery
-  # method is a safe no-op, so any residual mailer call cannot crash a request.
-  config.action_mailer.default_url_options = { host: "sportsbeep.com" }
-  config.action_mailer.delivery_method = :test
-  config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.perform_deliveries = false
+  # Outbound email via the Replit Resend connector (see config/initializers/resend_delivery.rb).
+  # Failures raise (and are logged by ResendService) — no silent drops.
+  config.action_mailer.default_url_options = { host: "sportsbeep.com", protocol: 'https' }
+  config.action_mailer.delivery_method = :resend
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
 
 end

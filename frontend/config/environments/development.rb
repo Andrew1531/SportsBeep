@@ -30,11 +30,16 @@ SportsbeepWeb::Application.configure do
   # number of complex assets.
   config.assets.debug = false
 
-  config.action_mailer.default_url_options = { host: 'localhost:5000' }
+  if ENV['REPLIT_DEV_DOMAIN'].present?
+    config.action_mailer.default_url_options = { host: ENV['REPLIT_DEV_DOMAIN'], protocol: 'https' }
+  else
+    config.action_mailer.default_url_options = { host: 'localhost:5000' }
+  end
 
-  # Beta: no outbound email — see production.rb. :test is a safe no-op.
-  config.action_mailer.delivery_method = :test
-  config.action_mailer.perform_deliveries = false
+  # Outbound email via the Replit Resend connector (see config/initializers/resend_delivery.rb)
+  config.action_mailer.delivery_method = :resend
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
 
   # Allow all hosts for Replit proxy support
   config.hosts.clear
