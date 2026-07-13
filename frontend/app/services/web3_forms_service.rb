@@ -24,7 +24,12 @@ class Web3FormsService
       message: message
     }.to_json
 
-    response = http.request(request)
+    begin
+      response = http.request(request)
+    rescue StandardError => e
+      Rails.logger.error "Web3Forms network error: #{e.class}: #{e.message}"
+      raise Error, 'Could not reach the messaging service.'
+    end
     body = begin
       JSON.parse(response.body)
     rescue JSON::ParserError
