@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "sSKN4EKs-qK7F5Yt1rtOW"
+uri = "file://docs/sportsbeep-tech-stack.md"
+type = "text"
+title = "SportsBeep Tech Stack & Cardano Ecosystem"
