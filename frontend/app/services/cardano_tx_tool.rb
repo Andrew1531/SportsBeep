@@ -43,7 +43,12 @@ class CardanoTxTool
     cmd = ['node', 'beep-tool.mjs', *args].shelljoin
     stdout, stderr, status = Open3.capture3(cmd, chdir: TOOL_DIR)
     line = stdout.lines.reverse.find { |l| l.strip.start_with?('{') }
-    parsed = line ? JSON.parse(line) rescue nil : nil
+    parsed =
+      begin
+        line && JSON.parse(line)
+      rescue JSON::ParserError
+        nil
+      end
     if parsed.nil?
       Rails.logger.error "CardanoTxTool #{args.first} failed: #{stderr.presence || stdout}"
       raise Error, 'Blockchain tool error'
