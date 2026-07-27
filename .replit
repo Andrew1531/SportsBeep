@@ -43,6 +43,7 @@ build = ["bash", "-c", "bundle install --jobs 4 --retry 3 && cd frontend && RAIL
 
 [userenv.shared]
 BEEP_POLICY_ID = "a221e11c9d474ac3709911161bcfd02969d268e927089d3c55a4c3c2"
+TREASURY_ADDRESS = "addr1qyzgfd725zhy8h6q2q5wf2fakheqpa6j5s3q8xzfaqqsknqaxqeph7nzj9s3nds3ssurnr2d5u7gh4sa2fsny3jrushqqdvm0j"
 
 [postMerge]
 path = "scripts/post-merge.sh"
