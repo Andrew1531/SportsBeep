@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_06_22_000001) do
+ActiveRecord::Schema.define(version: 2026_07_27_174137) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "user_id"
@@ -49,6 +49,21 @@ ActiveRecord::Schema.define(version: 2026_06_22_000001) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["email"], name: "index_administrators_on_email", unique: true
+  end
+
+  create_table "beep_chain_transfers", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "direction", null: false
+    t.integer "amount_beep", null: false
+    t.string "tx_hash"
+    t.string "status", default: "pending", null: false
+    t.string "error_message"
+    t.datetime "confirmed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tx_hash"], name: "index_beep_chain_transfers_on_tx_hash", unique: true
+    t.index ["user_id", "status"], name: "index_beep_chain_transfers_on_user_id_and_status"
+    t.index ["user_id"], name: "index_beep_chain_transfers_on_user_id"
   end
 
   create_table "contest_template_questions", force: :cascade do |t|
@@ -456,6 +471,9 @@ ActiveRecord::Schema.define(version: 2026_06_22_000001) do
     t.string "avatar_uuid"
     t.string "cardano_wallet_address"
     t.string "ethereum_wallet_address"
+    t.string "cardano_stake_address"
+    t.string "cardano_wallet_name"
+    t.datetime "cardano_wallet_verified_at"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

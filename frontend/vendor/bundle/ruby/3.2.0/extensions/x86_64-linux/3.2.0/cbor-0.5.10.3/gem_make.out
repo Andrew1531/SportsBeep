@@ -1,0 +1,39 @@
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/cbor-0.5.10.3/ext/cbor
+/nix/store/2bpi29al123830q6p1z86rrf5j25pxdw-ruby-3.2.2/bin/ruby extconf.rb
+checking for ruby/st.h... yes
+checking for st.h... no
+checking for rb_str_replace() in ruby.h... yes
+checking for rb_big_new() in ruby.h... yes
+checking for rb_intern_str() in ruby.h... yes
+checking for rb_sym2str() in ruby.h... yes
+checking for rb_str_intern() in ruby.h... yes
+checking for rb_integer_unpack() in ruby.h... yes
+checking for whether -I.. is accepted as CFLAGS... yes
+checking for whether -Wall is accepted as CFLAGS... yes
+checking for whether -O3 is accepted as CFLAGS... yes
+checking for whether -g is accepted as CFLAGS... yes
+checking for whether -std=c99 is accepted as CFLAGS... yes
+creating Makefile
+
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/cbor-0.5.10.3/ext/cbor
+make DESTDIR\= sitearchdir\=./.gem.20260727-632-p7g3nb sitelibdir\=./.gem.20260727-632-p7g3nb clean
+
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/cbor-0.5.10.3/ext/cbor
+make DESTDIR\= sitearchdir\=./.gem.20260727-632-p7g3nb sitelibdir\=./.gem.20260727-632-p7g3nb
+compiling buffer.c
+compiling buffer_class.c
+compiling core_ext.c
+compiling packer.c
+compiling packer_class.c
+compiling rbinit.c
+compiling rmem.c
+compiling unpacker.c
+compiling unpacker_class.c
+linking shared-object cbor/cbor.so
+
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/cbor-0.5.10.3/ext/cbor
+make DESTDIR\= sitearchdir\=./.gem.20260727-632-p7g3nb sitelibdir\=./.gem.20260727-632-p7g3nb install
+install -c -p -m 755 cbor.so ./.gem.20260727-632-p7g3nb/cbor
+
+current directory: /home/runner/workspace/frontend/vendor/bundle/ruby/3.2.0/gems/cbor-0.5.10.3/ext/cbor
+make DESTDIR\= sitearchdir\=./.gem.20260727-632-p7g3nb sitelibdir\=./.gem.20260727-632-p7g3nb clean

@@ -31,6 +31,12 @@ end
 
 # Application specific gems - minimal set
 gem 'devise'
+
+# Cardano CIP-30 / CIP-8 wallet signature verification
+gem 'cbor'      # COSE_Sign1 / COSE_Key decoding
+gem 'ed25519'   # EdDSA signature verification
+gem 'bech32'    # addr1/stake1 bech32 encoding
+gem 'blake2b'   # blake2b-224 key hashing (Cardano key hashes)
 gem 'simple_form'  # Form builder for sign up and login pages
 gem 'jquery-rails'
 gem 'coffee-rails'

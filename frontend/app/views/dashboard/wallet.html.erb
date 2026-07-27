@@ -158,25 +158,16 @@
                     <div>
                       <p style="color: #f6ad55; font-weight: 700; font-size: 14px; margin: 0 0 6px;">Address has no on-chain activity</p>
                       <p style="color: #a0aec0; font-size: 13px; margin: 0 0 8px; line-height: 1.5;">
-                        Your connected address hasn't been used on Cardano yet, or your tokens are held across multiple wallet addresses. Try connecting your <strong style="color: #f6ad55;">stake address</strong> instead — it covers all addresses in your wallet.
-                      </p>
-                      <p style="color: #a0aec0; font-size: 12px; margin: 0;">
-                        In <strong>Eternl</strong>: Settings → Account → copy the <code style="background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 3px;">stake1...</code> address<br>
-                        In <strong>Nami</strong>: click your address → copy the Stake Key
+                        Your connected address hasn't been used on Cardano yet, or your tokens are held across multiple wallet addresses. Reconnect with your wallet extension to link the right account.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div style="margin-bottom: 14px;">
-                  <p style="color: #8892b0; font-size: 12px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px;">Update address</p>
-                  <%= form_tag(connect_cardano_path, method: :post) do %>
-                    <input type="hidden" name="redirect_to" value="<%= wallet_path %>">
-                    <input type="text" name="cardano_address" placeholder="stake1... or addr1..." style="width: 100%; padding: 11px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,165,0,0.4); border-radius: 8px; color: white; font-size: 13px; outline: none; box-sizing: border-box; margin-bottom: 8px;">
-                    <button type="submit" style="width: 100%; padding: 11px; background: rgba(255,165,0,0.2); color: #f6ad55; border: 1px solid rgba(255,165,0,0.4); border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">
-                      <i class="fa fa-rotate" style="margin-right: 6px;"></i> Update Address
-                    </button>
-                  <% end %>
+                  <button onclick="openWalletModal()" style="width: 100%; padding: 11px; background: rgba(255,165,0,0.2); color: #f6ad55; border: 1px solid rgba(255,165,0,0.4); border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">
+                    <i class="fa fa-rotate" style="margin-right: 6px;"></i> Reconnect Wallet
+                  </button>
                 </div>
 
               <% elsif @wallet_info && wallet_status == 'active' %>
@@ -209,6 +200,76 @@
                     </div>
                   </div>
 
+                  <% if on_chain_mode? %>
+                    <div style="background: rgba(0,136,204,0.08); border: 1px solid rgba(0,180,216,0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">
+                      <p style="color: #7fc9e8; font-size: 12px; margin: 0; line-height: 1.5;">
+                        <i class="fa fa-link" style="margin-right: 6px; color: #00b4d8;"></i>
+                        Loading and withdrawing are <strong>real on-chain transfers</strong>. Loading sends $BEEP from your wallet to the SportsBeep treasury (you sign in your wallet); withdrawing sends $BEEP back to your wallet. Every transfer gets a transaction hash you can verify on a Cardano explorer.
+                      </p>
+                    </div>
+
+                    <!-- ON-CHAIN DEPOSIT -->
+                    <div style="margin-bottom: 12px;">
+                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Load $BEEP (on-chain deposit)</p>
+                      <div style="display: flex; gap: 8px;">
+                        <input type="number" id="onchain-deposit-amount" min="1" step="1" placeholder="Amount" inputmode="numeric"
+                               style="flex: 1; min-width: 0; padding: 12px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 15px; font-weight: 600;">
+                        <button onclick="startOnchainDeposit()" id="onchain-deposit-btn"
+                                style="white-space: nowrap; padding: 12px 18px; background: linear-gradient(135deg, #00c853, #00a844); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,200,83,0.3);">
+                          <i class="fa fa-download" style="margin-right: 6px;"></i> Load
+                        </button>
+                      </div>
+                      <div id="onchain-deposit-status" style="display:none; margin-top: 8px;"></div>
+                    </div>
+
+                    <!-- ON-CHAIN WITHDRAW -->
+                    <%= form_tag(withdraw_beep_path, method: :post, data: { confirm: 'This sends real $BEEP tokens from the treasury to your wallet on the Cardano blockchain. Continue?' }) do %>
+                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Withdraw $BEEP (on-chain payout)</p>
+                      <% max_onchain_withdraw = (@account.balance_cents.to_i / 100) rescue 0 %>
+                      <div style="display: flex; gap: 8px;">
+                        <input type="number" name="amount" min="1" step="1" max="<%= max_onchain_withdraw %>"
+                               placeholder="Amount" inputmode="numeric"
+                               <%= 'disabled' if max_onchain_withdraw <= 0 %>
+                               style="flex: 1; min-width: 0; padding: 12px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 15px; font-weight: 600;">
+                        <button type="submit" <%= 'disabled' if max_onchain_withdraw <= 0 %>
+                                style="white-space: nowrap; padding: 12px 18px; background: rgba(231,76,60,0.15); color: #fc8181; border: 1px solid rgba(231,76,60,0.35); border-radius: 10px; font-size: 14px; font-weight: 700; cursor: <%= max_onchain_withdraw <= 0 ? 'not-allowed' : 'pointer' %>; opacity: <%= max_onchain_withdraw <= 0 ? '0.5' : '1' %>;">
+                          <i class="fa fa-upload" style="margin-right: 6px;"></i> Withdraw
+                        </button>
+                      </div>
+                      <p style="color: #8892b0; font-size: 12px; margin: 6px 0 0;">
+                        <% if max_onchain_withdraw <= 0 %>
+                          No game balance available to withdraw.
+                        <% else %>
+                          Up to <%= max_onchain_withdraw %> $BEEP can be sent to your verified wallet on-chain.
+                        <% end %>
+                      </p>
+                    <% end %>
+
+                    <% recent_transfers = @user.beep_chain_transfers.order(created_at: :desc).limit(5) %>
+                    <% if recent_transfers.any? %>
+                      <div style="margin-top: 14px; background: rgba(0,0,0,0.15); border-radius: 8px; padding: 10px 12px;">
+                        <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;">Recent on-chain transfers</p>
+                        <% recent_transfers.each do |t| %>
+                          <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px;">
+                            <span style="color: <%= t.direction == 'deposit' ? '#68d391' : '#fc8181' %>;">
+                              <i class="fa fa-<%= t.direction == 'deposit' ? 'download' : 'upload' %>" style="margin-right: 4px;"></i>
+                              <%= t.direction.capitalize %> <%= t.amount_beep %> $BEEP
+                            </span>
+                            <span>
+                              <% status_color = { 'pending' => '#f6ad55', 'confirmed' => '#63b3ed', 'credited' => '#68d391', 'failed' => '#fc8181', 'unknown' => '#f6ad55' }[t.status] || '#8892b0' %>
+                              <span style="color: <%= status_color %>; margin-right: 8px;"><%= t.status %></span>
+                              <% if t.explorer_url %>
+                                <a href="<%= t.explorer_url %>" target="_blank" rel="noopener" style="color: #00b4d8; text-decoration: none;"><i class="fa fa-arrow-up-right-from-square"></i></a>
+                              <% end %>
+                            </span>
+                          </div>
+                        <% end %>
+                        <% if recent_transfers.any? { |t| t.direction == 'deposit' && t.status == 'pending' } %>
+                          <script>document.addEventListener('DOMContentLoaded', function() { pollDepositStatus(); });</script>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  <% else %>
                   <div style="background: rgba(0,200,83,0.08); border: 1px solid rgba(0,200,83,0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">
                     <p style="color: #9fd9b4; font-size: 12px; margin: 0; line-height: 1.5;">
                       <i class="fa fa-shield-halved" style="margin-right: 6px; color: #00c853;"></i>
@@ -266,6 +327,7 @@
                       <% end %>
                     </p>
                   <% end %>
+                  <% end %>
                 </div>
 
                 <% if (begin; @wallet_info[:stake_address].present?; rescue; false; end) %>
@@ -288,20 +350,14 @@
             <% else %>
               <div style="text-align: center; padding: 10px 0 16px;">
                 <p style="color: #8892b0; margin: 0 0 18px; font-size: 14px; line-height: 1.6;">
-                  Enter your Cardano wallet address to receive $BEEP token rewards.
+                  Connect your Cardano wallet extension to link your $BEEP holdings. You'll sign a free one-time message to prove ownership.
                 </p>
-                <%= form_tag(connect_cardano_path, method: :post, id: 'cardano-form') do %>
-                  <input type="hidden" name="redirect_to" value="<%= wallet_path %>">
-                  <div style="position: relative; margin-bottom: 12px;">
-                    <input type="text" name="cardano_address" id="cardano-address-input" placeholder="addr1q... or stake1..." style="width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: white; font-size: 14px; outline: none; box-sizing: border-box;" oninput="validateCardanoAddress()">
-                  </div>
-                  <button type="submit" id="cardano-connect-btn" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,136,204,0.35); transition: opacity 0.2s; opacity: 0.5;" disabled onmouseover="if(!this.disabled)this.style.opacity='0.9'" onmouseout="this.style.opacity=this.disabled?'0.5':'1'">
-                    <i class="fa fa-wallet" style="margin-right: 8px;"></i> Connect Cardano
-                  </button>
-                <% end %>
+                <button onclick="openWalletModal()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,136,204,0.35);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                  <i class="fa fa-wallet" style="margin-right: 8px;"></i> Connect Cardano Wallet
+                </button>
                 <p style="color: #8892b0; margin: 10px 0 0; font-size: 12px;">
                   <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
-                  Nami, Eternl & more supported
+                  Eternl, Nami, Lace, Flint & other CIP-30 wallets supported
                 </p>
               </div>
             <% end %>
@@ -493,13 +549,87 @@
     }, 2000);
   }
 
-  function validateCardanoAddress() {
-    var input = document.getElementById('cardano-address-input');
-    var btn = document.getElementById('cardano-connect-btn');
-    if (!input || !btn) return;
-    var val = input.value.trim();
-    var valid = val.length > 50 && (val.startsWith('addr1') || val.startsWith('addr_test1') || val.startsWith('stake1') || val.startsWith('stake_test1'));
-    btn.disabled = !valid;
-    btn.style.opacity = valid ? '1' : '0.5';
+  // ----- On-chain $BEEP deposit flow (CIP-30 sign + submit) -----
+  function depositStatus(html, color) {
+    var el = document.getElementById('onchain-deposit-status');
+    if (!el) return;
+    el.style.display = 'block';
+    el.innerHTML = '<div style="padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.25); color: ' + (color || '#a0aec0') + '; font-size: 13px;">' + html + '</div>';
+  }
+
+  async function startOnchainDeposit() {
+    var amount = parseInt(document.getElementById('onchain-deposit-amount').value, 10);
+    if (!amount || amount <= 0) {
+      depositStatus('<i class="fa fa-exclamation-circle" style="margin-right:6px;"></i>Enter a whole number of $BEEP to load.', '#fc8181');
+      return;
+    }
+    var btn = document.getElementById('onchain-deposit-btn');
+    btn.disabled = true;
+    try {
+      var wallets = (typeof detectCardanoWallets === 'function') ? detectCardanoWallets() : [];
+      if (!window.cardano || wallets.length === 0) {
+        throw new Error('No Cardano wallet extension detected. Install Eternl, Nami, or Lace and reload.');
+      }
+      depositStatus('<i class="fa fa-circle-notch fa-spin" style="margin-right:6px;"></i>Waiting for wallet approval…', '#00b4d8');
+      var api = await window.cardano[wallets[0].key].enable();
+      var used = await api.getUsedAddresses();
+      var addressHex = (used && used.length > 0) ? used[0] : await api.getChangeAddress();
+
+      depositStatus('<i class="fa fa-circle-notch fa-spin" style="margin-right:6px;"></i>Building the deposit transaction…', '#00b4d8');
+      var buildResp = await fetch('<%= build_deposit_path %>', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken(), 'Accept': 'application/json' },
+        body: JSON.stringify({ amount: amount, address_hex: addressHex })
+      });
+      var build = await buildResp.json();
+      if (!buildResp.ok || !build.ok) throw new Error(build.error || 'Could not build the transaction.');
+
+      depositStatus('<i class="fa fa-signature" style="margin-right:6px;"></i>Please review and sign the transaction in your wallet…', '#00b4d8');
+      var signedTx = await api.signTx(build.unsigned_tx, false);
+      depositStatus('<i class="fa fa-circle-notch fa-spin" style="margin-right:6px;"></i>Submitting to the Cardano network…', '#00b4d8');
+      var txHash = await api.submitTx(signedTx);
+      await recordDeposit(txHash, amount);
+    } catch (e) {
+      var msg = (e && (e.info || e.message)) ? (e.info || e.message) : 'Deposit was cancelled or failed.';
+      depositStatus('<i class="fa fa-triangle-exclamation" style="margin-right:6px;"></i>' + String(msg), '#fc8181');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function recordDeposit(txHash, amount) {
+    await fetch('<%= record_deposit_path %>', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken(), 'Accept': 'application/json' },
+      body: JSON.stringify({ tx_hash: txHash, amount: amount })
+    });
+    depositStatus('<i class="fa fa-check" style="margin-right:6px;"></i>Deposit submitted! Waiting for blockchain confirmation — your balance will update automatically. Tx: ' + txHash.slice(0, 16) + '…', '#68d391');
+    pollDepositStatus();
+  }
+
+  var depositPollTimer = null;
+  function pollDepositStatus() {
+    if (depositPollTimer) return;
+    var attempts = 0;
+    depositPollTimer = setInterval(async function() {
+      attempts++;
+      if (attempts > 40) { clearInterval(depositPollTimer); depositPollTimer = null; return; }
+      try {
+        var resp = await fetch('<%= check_deposits_path %>', {
+          method: 'POST',
+          headers: { 'X-CSRF-Token': csrfToken(), 'Accept': 'application/json' }
+        });
+        var data = await resp.json();
+        if (data.ok && data.results && data.results.some(function(r) { return r.status === 'credited'; })) {
+          clearInterval(depositPollTimer);
+          depositPollTimer = null;
+          window.location.reload();
+        }
+        if (data.ok && data.results && data.results.length === 0) {
+          clearInterval(depositPollTimer);
+          depositPollTimer = null;
+        }
+      } catch (e) { /* keep polling */ }
+    }, 15000);
   }
 </script>

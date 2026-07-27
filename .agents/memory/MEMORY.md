@@ -1,2 +1,3 @@
 - [$BEEP game balance model](beep-game-balance-model.md) — only game balance is wagerable; load/withdraw move on-chain $BEEP in/out; lock + re-check bounds on every money mutation.
 - [Ruby TLS CRL failure and fix](ruby-tls-crl-fix.md) — all Ruby HTTPS calls fail "unable to get certificate CRL" with the default store; use the fresh-store SecureHttp pattern, never VERIFY_NONE.
+- [Cardano dApp architecture](cardano-dapp-architecture.md) — CIP-30 verify flow, on-chain mode flags, strict policy-ID matching, and the never-auto-refund-on-submit-failure withdrawal rule.

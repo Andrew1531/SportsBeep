@@ -56,6 +56,39 @@ class BlockfrostService
     0
   end
 
+  # --- transaction inspection (for on-chain deposit verification) ---
+
+  def get_tx(tx_hash)
+    make_request("/txs/#{tx_hash}")
+  end
+
+  def get_tx_utxos(tx_hash)
+    make_request("/txs/#{tx_hash}/utxos")
+  end
+
+  def latest_block_height
+    block = make_request('/blocks/latest')
+    block ? block['height'].to_i : nil
+  end
+
+  # Confirmations for a transaction, or nil if not yet on-chain.
+  def tx_confirmations(tx_hash)
+    tx = get_tx(tx_hash)
+    return nil if tx.nil? || tx['block_height'].blank?
+    tip = latest_block_height
+    return nil if tip.nil?
+    tip - tx['block_height'].to_i + 1
+  end
+
+  # STRICT $BEEP asset check for on-chain money movement. Requires
+  # BEEP_POLICY_ID — never falls back to name matching, which could be
+  # spoofed by a look-alike token.
+  def beep_unit?(unit)
+    policy = ENV['BEEP_POLICY_ID'].to_s.strip
+    raise 'BEEP_POLICY_ID is required for on-chain transfer verification' if policy.blank?
+    unit.to_s.start_with?(policy)
+  end
+
   private
 
   def stake_address?(address)

@@ -96,19 +96,14 @@
           <% else %>
             <div style="text-align: center; padding: 10px 0 20px;">
               <p style="color: #8892b0; margin: 0 0 20px; font-size: 14px; line-height: 1.6;">
-                Enter your Cardano wallet address to receive $BEEP token rewards.
+                Connect your Cardano wallet extension to link your $BEEP holdings. You'll sign a free one-time message to prove ownership.
               </p>
-              <%= form_tag(connect_cardano_path, method: :post, id: 'cardano-form') do %>
-                <div style="position: relative; margin-bottom: 12px;">
-                  <input type="text" name="cardano_address" id="cardano-address-input" placeholder="addr1q..." style="width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: white; font-size: 14px; outline: none; box-sizing: border-box;" oninput="validateCardanoAddress()">
-                </div>
-                <button type="submit" id="cardano-connect-btn" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,136,204,0.35); transition: opacity 0.2s; opacity: 0.5;" disabled onmouseover="if(!this.disabled)this.style.opacity='0.9'" onmouseout="this.style.opacity=this.disabled?'0.5':'1'">
-                  <i class="fa fa-wallet" style="margin-right: 8px;"></i> Connect Cardano Wallet
-                </button>
-              <% end %>
+              <button onclick="openWalletModal()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,136,204,0.35);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                <i class="fa fa-wallet" style="margin-right: 8px;"></i> Connect Cardano Wallet
+              </button>
               <p style="color: #8892b0; margin: 10px 0 0; font-size: 12px;">
                 <i class="fa fa-info-circle" style="margin-right: 4px;"></i>
-                Supports Nami, Eternl, and other Cardano wallets
+                Eternl, Nami, Lace, Flint & other CIP-30 wallets supported
               </p>
             </div>
           <% end %>
