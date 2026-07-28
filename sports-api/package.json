@@ -1,0 +1,15 @@
+{
+  "name": "sports-api",
+  "version": "1.0.0",
+  "description": "SportsBeep ESPN scraper + Cardano chain API",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "lucid-cardano": "^0.10.7"
+  }
+}

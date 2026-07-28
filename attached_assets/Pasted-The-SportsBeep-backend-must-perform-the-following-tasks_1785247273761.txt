@@ -1,0 +1,63 @@
+The SportsBeep backend must perform the following tasks:
+
+1. DO NOT use any paid sports data APIs.
+   All sports data must come from ESPN’s public scoreboard JSON endpoints:
+   - https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard
+   - https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard
+   - https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard
+   - https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard
+
+2. The backend must scrape these endpoints every 10–30 seconds and extract:
+   - Team names
+   - Scores
+   - Game clock
+   - Game status (pre / in / post)
+   - Period / quarter / inning
+   - Betting odds (from competitions[].odds)
+
+3. The backend must normalize all scraped data into a unified JSON format:
+   {
+     sport,
+     eventId,
+     homeTeam,
+     awayTeam,
+     homeScore,
+     awayScore,
+     gameState,
+     clock,
+     period,
+     odds,
+     scrapedAt
+   }
+
+4. The backend must expose the following REST endpoints:
+   - GET /api/markets → returns all odds + game data
+   - GET /api/scores → returns simplified score feed
+   - POST /api/chain/snapshot → writes a snapshot of all markets to Cardano
+   - POST /api/chain/bet → builds an unsigned Cardano bet transaction
+
+5. Cardano blockchain requirements:
+   - Use Lucid + Blockfrost for all blockchain interactions.
+   - Write market snapshots as metadata under label 1000.
+   - Build unsigned transactions for bets using:
+       - marketId
+       - selection (home/away)
+       - stakeAmount
+       - tokenPolicyId
+       - tokenName
+   - Return unsigned transactions to the frontend for CIP-30 wallet signing.
+
+6. The backend must accept ANY Cardano native token for betting, including:
+   - The SportsBeep token (policy ID + token name provided in environment variables)
+
+7. The backend must NOT modify existing files unless explicitly instructed.
+   It must only ADD the scraping logic, the normalization logic, and the Cardano write logic.
+
+8. The backend must integrate with the existing SportsBeep platform without changing its structure.
+   Only add:
+   - ESPN scraping module
+   - Odds/score normalization
+   - REST endpoints
+   - Cardano write functions
+
+9. All code added must be compatible with Node.js + Express.
