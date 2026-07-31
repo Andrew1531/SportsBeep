@@ -11,11 +11,9 @@
 
 import { normalizeEvent } from './normalizer.mjs';
 
+// Only MLB is in season — other sports are filtered out until their seasons begin.
 const ENDPOINTS = [
-  { sport: 'NFL', url: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard' },
-  { sport: 'NBA', url: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard' },
   { sport: 'MLB', url: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard' },
-  { sport: 'NHL', url: 'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard' },
 ];
 
 const POLL_INTERVAL_MS = 20_000; // 20 seconds (well within the 10–30 s spec)
@@ -32,15 +30,14 @@ async function fetchSport({ sport, url }) {
   if (!res.ok) throw new Error(`ESPN ${sport} responded ${res.status}`);
   const data = await res.json();
 
-  let updated = 0;
+  // Return fresh events from this poll (do not write to cache here —
+  // pollAll rebuilds the entire cache so stale games never accumulate).
+  const fresh = [];
   for (const event of data.events ?? []) {
     const normalized = normalizeEvent(sport, event);
-    if (normalized) {
-      cache.set(normalized.eventId, normalized);
-      updated++;
-    }
+    if (normalized) fresh.push(normalized);
   }
-  return updated;
+  return fresh;
 }
 
 async function pollAll() {
@@ -52,9 +49,20 @@ async function pollAll() {
   } else {
     errorCount = 0;
   }
+
+  // Rebuild the cache from scratch on every poll — this ensures finished or
+  // postponed games from prior days are automatically dropped.
+  cache.clear();
+  for (const result of results) {
+    if (result.status === 'fulfilled') {
+      for (const event of result.value) {
+        cache.set(event.eventId, event);
+      }
+    }
+  }
+
   lastScrapedAt = new Date().toISOString();
-  const total = results.reduce((acc, r) => acc + (r.value ?? 0), 0);
-  console.log(`[scraper] ${lastScrapedAt} — ${total} events cached (${cache.size} total)`);
+  console.log(`[scraper] ${lastScrapedAt} — ${cache.size} MLB games cached`);
 }
 
 export function startScraper() {
