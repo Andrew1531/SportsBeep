@@ -66,62 +66,69 @@ class SportsbookController < ApplicationController
     )
   end
 
+  SPORTS_API_URL = 'http://localhost:3001/api/markets'.freeze
+
   def fetch_games_with_odds(sport_key)
-    service = OpticOddsService.new
-    games = service.fixtures_with_odds(sport_key)
-    return games if games.present?
-    db_games(sport_key)
+    espn_games(sport_key)
   rescue StandardError => e
-    Rails.logger.error "Sportsbook fetch error: #{e.message}"
-    db_games(sport_key)
-  end
-
-  def db_games(sport_key)
-    model = case sport_key
-            when 'mlb' then Mlb::Game
-            when 'nfl' then Nfl::Game
-            else nil
-            end
-
-    if model
-      games = model.includes(:home_team, :away_team).order(start_time: :asc).limit(30).to_a
-      if games.any?
-        return games.map { |g| db_game_to_hash(g, sport_key) }
-      end
-    end
-
-    generate_matchups(sport_key)
-  rescue StandardError => e
-    Rails.logger.error "DB games error: #{e.message}"
+    Rails.logger.error "ESPN Sports API fetch error: #{e.message}"
     generate_matchups(sport_key)
   end
 
-  def db_game_to_hash(game, sport_key)
-    home = "#{game.home_team.market} #{game.home_team.name}"
-    away = "#{game.away_team.market} #{game.away_team.name}"
-    league = sport_key.upcase
-    is_live = game.status == 'IP'
+  # Fetch today's games straight from the ESPN scraper service.
+  def espn_games(sport_key)
+    require 'net/http'
+    uri      = URI(SPORTS_API_URL)
+    response = Net::HTTP.get_response(uri)
+    raise "Sports API returned #{response.code}" unless response.is_a?(Net::HTTPSuccess)
 
-    home_ml, away_ml = random_moneyline
-    spread_pts = random_spread(sport_key)
-    total_pts = random_total(sport_key)
+    data    = JSON.parse(response.body)
+    markets = data['markets'] || []
+
+    # Filter to the requested sport (MLB, NFL, etc.)
+    sport_markets = markets.select { |m| m['sport']&.downcase == sport_key.downcase }
+    return generate_matchups(sport_key) if sport_markets.empty?
+
+    sport_markets.map { |m| espn_market_to_hash(m, sport_key) }
+  end
+
+  def espn_market_to_hash(m, sport_key)
+    league   = sport_key.upcase
+    odds_raw = m['odds']&.first || {}
+
+    home_ml     = odds_raw['homeOdds'].present? ? odds_raw['homeOdds'].to_i : nil
+    away_ml     = odds_raw['awayOdds'].present? ? odds_raw['awayOdds'].to_i : nil
+    home_ml   ||= random_moneyline.first
+    away_ml   ||= random_moneyline.last
+    spread_pts  = odds_raw['spread'].present? ? odds_raw['spread'].to_f : random_spread(sport_key)
+    total_pts   = odds_raw['overUnder'].present? ? odds_raw['overUnder'].to_f : random_total(sport_key)
+    sportsbook  = odds_raw['provider'] || 'ESPN'
+
+    game_state = m['gameState'] || 'pre'
+    status     = { 'pre' => 'scheduled', 'in' => 'live', 'post' => 'final' }[game_state] || 'scheduled'
+    is_live    = game_state == 'in'
 
     {
-      fixture_id: "DB-#{game.id}",
-      game_id: game.id.to_s,
-      start_date: game.start_time&.iso8601 || (Time.now + rand(1..72).hours).iso8601,
-      home_team: home,
-      away_team: away,
-      sport: sport_key,
-      league: league,
-      status: game.status || 'scheduled',
-      is_live: is_live,
+      fixture_id:  "ESPN-#{m['eventId']}",
+      game_id:     m['eventId'].to_s,
+      start_date:  m['scrapedAt'],
+      home_team:   m['homeTeam'],
+      away_team:   m['awayTeam'],
+      sport:       sport_key,
+      league:      league,
+      status:      status,
+      is_live:     is_live,
+      clock:       m['clock'],
+      period:      m['period'],
+      detail:      m['detail'],
+      home_score:  m['homeScore'],
+      away_score:  m['awayScore'],
       odds: {
         moneyline: { home: home_ml, away: away_ml },
-        spread: { home: -110, away: -110, home_points: spread_pts, away_points: -spread_pts },
-        total: { over: -110, under: -110, points: total_pts },
-        sportsbook: 'SportsBeep',
-        raw_odds_count: 6
+        spread:    { home: -110, away: -110, home_points: spread_pts, away_points: -spread_pts },
+        total:     { over: -110, under: -110, points: total_pts },
+        sportsbook: sportsbook,
+        raw_odds_count: 3
       }
     }
   end
