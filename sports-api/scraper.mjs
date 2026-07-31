@@ -29,7 +29,7 @@ function getEndpoints() {
   ];
 }
 
-const POLL_INTERVAL_MS = 20_000; // 20 seconds (well within the 10–30 s spec)
+const POLL_INTERVAL_MS = 10_000; // 10 seconds
 
 // In-memory cache: Map<eventId, normalizedEvent>
 const cache = new Map();
