@@ -208,6 +208,17 @@
                       </p>
                     </div>
 
+                    <% ada_bal = @wallet_info[:ada_balance].to_f rescue 0.0 %>
+                    <% if ada_bal < 3.0 %>
+                      <div style="background: rgba(246,173,85,0.12); border: 1px solid rgba(246,173,85,0.4); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+                        <p style="color: #f6ad55; font-size: 13px; margin: 0; line-height: 1.6;">
+                          <i class="fa fa-triangle-exclamation" style="margin-right: 6px;"></i>
+                          <strong>Not enough ADA to cover fees.</strong>
+                          You have <%= sprintf('%.2f', ada_bal) %> ADA — on-chain deposits require at least 3 ADA in your wallet to pay for the transaction fee and the minimum ADA that must travel with the tokens. Send yourself 3–5 ADA from an exchange or another wallet, then try again.
+                        </p>
+                      </div>
+                    <% end %>
+
                     <!-- ON-CHAIN DEPOSIT -->
                     <div style="margin-bottom: 12px;">
                       <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Load $BEEP (on-chain deposit)</p>
@@ -607,8 +618,17 @@
       var txHash = await api.submitTx(signedTx);
       await recordDeposit(txHash, amount);
     } catch (e) {
-      var msg = (e && (e.info || e.message)) ? (e.info || e.message) : 'Deposit was cancelled or failed.';
-      depositStatus('<i class="fa fa-triangle-exclamation" style="margin-right:6px;"></i>' + String(msg), '#fc8181');
+      var raw = (e && (e.info || e.message)) ? String(e.info || e.message) : 'Deposit was cancelled or failed.';
+      // Translate cryptic Mesh/Blockfrost errors into plain English
+      var msg = raw;
+      if (/utxo.*deplet|deplet.*utxo/i.test(raw)) {
+        msg = 'Not enough ADA to build the transaction. You need at least 3 ADA in your wallet to cover fees and the minimum ADA required alongside the tokens. Top up your ADA balance and try again.';
+      } else if (/user declined|user cancel|declined to sign/i.test(raw)) {
+        msg = 'Transaction cancelled — you declined the signing request in your wallet.';
+      } else if (/no utxo|no utxos|address.*no.*utxo/i.test(raw)) {
+        msg = 'No funds found at your wallet address. Make sure your Vespr wallet is on the correct account.';
+      }
+      depositStatus('<i class="fa fa-triangle-exclamation" style="margin-right:6px;"></i>' + msg, '#fc8181');
     } finally {
       btn.disabled = false;
     }
