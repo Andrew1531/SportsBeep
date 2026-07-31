@@ -14,13 +14,17 @@ export function normalizeEvent(sport, event) {
   const away = comp.competitors?.find(c => c.homeAway === 'away');
 
   const odds = (comp.odds ?? []).map(o => ({
-    provider:   o.provider?.name ?? 'Unknown',
-    details:    o.details ?? null,
-    overUnder:  o.overUnder ?? null,
-    spread:     o.spread ?? null,
-    homeOdds:   o.homeTeamOdds?.moneyLine ?? null,
-    awayOdds:   o.awayTeamOdds?.moneyLine ?? null,
-    drawOdds:   o.drawOdds?.moneyLine ?? null,
+    provider:    o.provider?.name ?? 'Unknown',
+    details:     o.details ?? null,
+    // Moneylines — ESPN stores them under moneyline.{home|away}.close.odds
+    homeOdds:    o.moneyline?.home?.close?.odds ?? null,
+    awayOdds:    o.moneyline?.away?.close?.odds ?? null,
+    // Spread — points from flat field; juice is standard -110 for MLB
+    spread:      o.spread ?? null,
+    // Total — points from flat overUnder; juice from nested total object
+    overUnder:   o.overUnder ?? null,
+    overOdds:    o.total?.over?.close?.odds ?? null,
+    underOdds:   o.total?.under?.close?.odds ?? null,
   }));
 
   return {

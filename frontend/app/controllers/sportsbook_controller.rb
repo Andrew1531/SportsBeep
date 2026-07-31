@@ -96,13 +96,17 @@ class SportsbookController < ApplicationController
     league   = sport_key.upcase
     odds_raw = m['odds']&.first || {}
 
-    home_ml     = odds_raw['homeOdds'].present? ? odds_raw['homeOdds'].to_i : nil
-    away_ml     = odds_raw['awayOdds'].present? ? odds_raw['awayOdds'].to_i : nil
-    home_ml   ||= random_moneyline.first
-    away_ml   ||= random_moneyline.last
-    spread_pts  = odds_raw['spread'].present? ? odds_raw['spread'].to_f : random_spread(sport_key)
+    home_ml     = odds_raw['homeOdds'].present?  ? odds_raw['homeOdds'].to_i  : nil
+    away_ml     = odds_raw['awayOdds'].present?  ? odds_raw['awayOdds'].to_i  : nil
+    over_juice  = odds_raw['overOdds'].present?  ? odds_raw['overOdds'].to_i  : -110
+    under_juice = odds_raw['underOdds'].present? ? odds_raw['underOdds'].to_i : -110
+    spread_pts  = odds_raw['spread'].present?    ? odds_raw['spread'].to_f    : random_spread(sport_key)
     total_pts   = odds_raw['overUnder'].present? ? odds_raw['overUnder'].to_f : random_total(sport_key)
-    sportsbook  = odds_raw['provider'] || 'ESPN'
+    sportsbook  = odds_raw['provider'] || 'DraftKings'
+
+    # Only fall back to random when ESPN genuinely has no moneyline data
+    home_ml ||= random_moneyline.first
+    away_ml ||= random_moneyline.last
 
     game_state = m['gameState'] || 'pre'
     status     = { 'pre' => 'scheduled', 'in' => 'live', 'post' => 'final' }[game_state] || 'scheduled'
@@ -126,7 +130,7 @@ class SportsbookController < ApplicationController
       odds: {
         moneyline: { home: home_ml, away: away_ml },
         spread:    { home: -110, away: -110, home_points: spread_pts, away_points: -spread_pts },
-        total:     { over: -110, under: -110, points: total_pts },
+        total:     { over: over_juice, under: under_juice, points: total_pts },
         sportsbook: sportsbook,
         raw_odds_count: 3
       }
