@@ -549,6 +549,11 @@
     }, 2000);
   }
 
+  // Key of the wallet extension the user verified with (e.g. "vespr", "eternl").
+  // Always use this exact extension for deposits — never grab wallets[0] blindly,
+  // which could activate a different wallet (e.g. the treasury wallet extension).
+  var VERIFIED_WALLET_KEY = <%= @user.cardano_wallet_name.to_s.downcase.to_json %>;
+
   // ----- On-chain $BEEP deposit flow (CIP-30 sign + submit) -----
   function depositStatus(html, color) {
     var el = document.getElementById('onchain-deposit-status');
@@ -570,8 +575,20 @@
       if (!window.cardano || wallets.length === 0) {
         throw new Error('No Cardano wallet extension detected. Install Eternl, Nami, or Lace and reload.');
       }
-      depositStatus('<i class="fa fa-circle-notch fa-spin" style="margin-right:6px;"></i>Waiting for wallet approval…', '#00b4d8');
-      var api = await window.cardano[wallets[0].key].enable();
+      // Find the wallet the user verified with — never use wallets[0] blindly,
+      // as that can trigger a different extension (e.g. treasury wallet).
+      var targetWallet = wallets.find(function(w) {
+        return w.key.toLowerCase() === VERIFIED_WALLET_KEY ||
+               (w.name || '').toLowerCase() === VERIFIED_WALLET_KEY;
+      }) || wallets.find(function(w) {
+        return w.key.toLowerCase().includes(VERIFIED_WALLET_KEY) ||
+               VERIFIED_WALLET_KEY.includes(w.key.toLowerCase());
+      });
+      if (!targetWallet) {
+        throw new Error('Your verified wallet (' + VERIFIED_WALLET_KEY + ') is not active in this browser. Please open that wallet extension and try again.');
+      }
+      depositStatus('<i class="fa fa-circle-notch fa-spin" style="margin-right:6px;"></i>Waiting for ' + targetWallet.name + ' approval…', '#00b4d8');
+      var api = await window.cardano[targetWallet.key].enable();
       var used = await api.getUsedAddresses();
       var addressHex = (used && used.length > 0) ? used[0] : await api.getChangeAddress();
 
