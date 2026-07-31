@@ -11,10 +11,23 @@
 
 import { normalizeEvent } from './normalizer.mjs';
 
+// Build today's date string in YYYYMMDD format (ESPN `dates` param)
+function todayParam() {
+  const d = new Date();
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${y}${m}${day}`;
+}
+
 // Only MLB is in season — other sports are filtered out until their seasons begin.
-const ENDPOINTS = [
-  { sport: 'MLB', url: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard' },
-];
+// The `dates` param pins the request to today so old/off-season games never appear.
+function getEndpoints() {
+  const date = todayParam();
+  return [
+    { sport: 'MLB', url: `https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=${date}` },
+  ];
+}
 
 const POLL_INTERVAL_MS = 20_000; // 20 seconds (well within the 10–30 s spec)
 
@@ -41,7 +54,8 @@ async function fetchSport({ sport, url }) {
 }
 
 async function pollAll() {
-  const results = await Promise.allSettled(ENDPOINTS.map(fetchSport));
+  // Rebuild endpoints each poll so the date stays current at midnight rollover.
+  const results = await Promise.allSettled(getEndpoints().map(fetchSport));
   const errors = results.filter(r => r.status === 'rejected').map(r => r.reason?.message);
   if (errors.length) {
     errorCount++;
