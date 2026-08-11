@@ -598,7 +598,7 @@
   // Key of the wallet extension the user verified with (e.g. "vespr", "eternl").
   // Always use this exact extension for deposits — never grab wallets[0] blindly,
   // which could activate a different wallet (e.g. the treasury wallet extension).
-  var VERIFIED_WALLET_KEY = <%= @user.cardano_wallet_name.to_s.downcase.to_json %>;
+  var VERIFIED_WALLET_KEY = <%= @user.cardano_wallet_name.to_s.downcase.to_json.html_safe %>;
 
   // ----- Deposit progress modal helpers -----
   function openDepositModal() {
