@@ -568,7 +568,11 @@
   // ----- On-chain $BEEP deposit flow (CIP-30 sign + submit) -----
   function depositStatus(html, color) {
     var el = document.getElementById('onchain-deposit-status');
-    if (!el) return;
+    if (!el) {
+      // fallback: surface critical errors even if the status div is missing
+      console.error('[deposit]', html);
+      return;
+    }
     el.style.display = 'block';
     el.innerHTML = '<div style="padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.25); color: ' + (color || '#a0aec0') + '; font-size: 13px;">' + html + '</div>';
   }
@@ -582,24 +586,35 @@
     var btn = document.getElementById('onchain-deposit-btn');
     btn.disabled = true;
     try {
-      var wallets = (typeof detectCardanoWallets === 'function') ? detectCardanoWallets() : [];
-      if (!window.cardano || wallets.length === 0) {
-        throw new Error('No Cardano wallet extension detected. Install Eternl, Nami, or Lace and reload.');
+      if (!window.cardano) {
+        throw new Error('No Cardano wallet extension detected. Install Vespr or Eternl and reload.');
       }
-      // Find the wallet the user verified with — never use wallets[0] blindly,
-      // as that can trigger a different extension (e.g. treasury wallet).
-      var targetWallet = wallets.find(function(w) {
-        return w.key.toLowerCase() === VERIFIED_WALLET_KEY ||
-               (w.name || '').toLowerCase() === VERIFIED_WALLET_KEY;
-      }) || wallets.find(function(w) {
-        return w.key.toLowerCase().includes(VERIFIED_WALLET_KEY) ||
-               VERIFIED_WALLET_KEY.includes(w.key.toLowerCase());
-      });
-      if (!targetWallet) {
-        throw new Error('Your verified wallet (' + VERIFIED_WALLET_KEY + ') is not active in this browser. Please open that wallet extension and try again.');
+
+      // Look up the verified wallet directly by key — faster and more reliable
+      // than iterating detectCardanoWallets (which filters on apiVersion some
+      // wallets don't expose).
+      var walletExt = window.cardano[VERIFIED_WALLET_KEY];
+
+      // Fallback: search all registered CIP-30 extensions for a name/key match
+      if (!walletExt || typeof walletExt.enable !== 'function') {
+        var allKeys = Object.keys(window.cardano);
+        var matchKey = allKeys.find(function(k) {
+          var w = window.cardano[k];
+          if (!w || typeof w.enable !== 'function') return false;
+          return k.toLowerCase() === VERIFIED_WALLET_KEY ||
+                 (w.name || '').toLowerCase() === VERIFIED_WALLET_KEY ||
+                 k.toLowerCase().includes(VERIFIED_WALLET_KEY) ||
+                 VERIFIED_WALLET_KEY.includes(k.toLowerCase());
+        });
+        if (!matchKey) {
+          throw new Error('Wallet "' + VERIFIED_WALLET_KEY + '" not found in this browser. Open Vespr and make sure it is unlocked, then try again.');
+        }
+        walletExt = window.cardano[matchKey];
       }
-      depositStatus('<i class="fa fa-circle-notch fa-spin" style="margin-right:6px;"></i>Waiting for ' + targetWallet.name + ' approval…', '#00b4d8');
-      var api = await window.cardano[targetWallet.key].enable();
+
+      var walletLabel = walletExt.name || VERIFIED_WALLET_KEY;
+      depositStatus('<i class="fa fa-circle-notch fa-spin" style="margin-right:6px;"></i>Waiting for ' + walletLabel + ' approval…', '#00b4d8');
+      var api = await walletExt.enable();
       var used = await api.getUsedAddresses();
       var addressHex = (used && used.length > 0) ? used[0] : await api.getChangeAddress();
 
