@@ -225,7 +225,7 @@
                       <div style="display: flex; gap: 8px;">
                         <input type="number" id="onchain-deposit-amount" min="1" step="1" placeholder="Amount" inputmode="numeric"
                                style="flex: 1; min-width: 0; padding: 12px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 15px; font-weight: 600;">
-                        <button onclick="startOnchainDeposit()" id="onchain-deposit-btn"
+                        <button onclick="try { startOnchainDeposit(); } catch(err) { alert('Load failed to start: ' + err.message + '. Try a hard refresh (Cmd+Shift+R).'); }" id="onchain-deposit-btn"
                                 style="white-space: nowrap; padding: 12px 18px; background: linear-gradient(135deg, #00c853, #00a844); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,200,83,0.3);">
                           <i class="fa fa-download" style="margin-right: 6px;"></i> Load
                         </button>
