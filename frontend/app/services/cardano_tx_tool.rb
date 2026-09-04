@@ -37,6 +37,7 @@ class CardanoTxTool
   end
 
   def self.find_unit(address, unit)
+    return { unit: 'lovelace', quantity: BlockfrostService.new.get_lovelace_balance(address) } if unit == 'lovelace'
     result = run('find-unit', address, unit)
     { unit: result['unit'], quantity: result['quantity'].to_i }
   end

@@ -1,0 +1,3 @@
+<h1>Swap assets</h1><p><%= link_to 'Add swap asset', new_admin_swap_asset_path %></p>
+<table><thead><tr><th>Ticker</th><th>Unit</th><th>Rate ($BEEP)</th><th>Enabled</th><th>Treasury inventory received</th><th></th></tr></thead>
+<tbody><% @swap_assets.each do |asset| %><tr><td><%= asset.ticker %></td><td><code><%= asset.asset_unit %></code></td><td><%= asset.beep_per_asset %></td><td><%= asset.enabled? %></td><td><%= asset.format_units(@inventory[asset]) %></td><td><%= link_to 'Edit', edit_admin_swap_asset_path(asset) %> <%= link_to 'Disable', admin_swap_asset_path(asset), method: :delete if asset.enabled? %></td></tr><% end %></tbody></table>

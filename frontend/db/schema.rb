@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_05_010000) do
+ActiveRecord::Schema.define(version: 2026_09_06_000000) do
 
   create_table "account_token_balances", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -123,6 +123,52 @@ ActiveRecord::Schema.define(version: 2026_09_05_010000) do
     t.index ["tx_hash"], name: "index_beep_chain_transfers_on_tx_hash", unique: true
     t.index ["user_id", "status"], name: "index_beep_chain_transfers_on_user_id_and_status"
     t.index ["user_id"], name: "index_beep_chain_transfers_on_user_id"
+  end
+
+  create_table "cardano_swaps", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "swap_asset_id", null: false
+    t.bigint "swap_quote_id", null: false
+    t.bigint "amount_units", null: false
+    t.bigint "beep_amount", null: false
+    t.string "payout_method", null: false
+    t.string "source_tx_hash", null: false
+    t.string "payout_tx_hash"
+    t.string "status", default: "pending", null: false
+    t.string "error_message"
+    t.datetime "confirmed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["payout_tx_hash"], name: "index_cardano_swaps_on_payout_tx_hash", unique: true
+    t.index ["source_tx_hash"], name: "index_cardano_swaps_on_source_tx_hash", unique: true
+    t.index ["swap_asset_id"], name: "index_cardano_swaps_on_swap_asset_id"
+    t.index ["swap_quote_id"], name: "index_cardano_swaps_on_swap_quote_id", unique: true
+    t.index ["user_id"], name: "index_cardano_swaps_on_user_id"
+  end
+
+  create_table "swap_assets", force: :cascade do |t|
+    t.string "asset_unit", null: false
+    t.string "policy_id"
+    t.string "ticker", null: false
+    t.integer "decimals", default: 0, null: false
+    t.decimal "beep_per_asset", precision: 30, scale: 12, null: false
+    t.boolean "enabled", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["asset_unit"], name: "index_swap_assets_on_asset_unit", unique: true
+  end
+
+  create_table "swap_quotes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "swap_asset_id", null: false
+    t.bigint "amount_units", null: false
+    t.bigint "beep_amount", null: false
+    t.decimal "beep_per_asset", precision: 30, scale: 12, null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["swap_asset_id"], name: "index_swap_quotes_on_swap_asset_id"
+    t.index ["user_id"], name: "index_swap_quotes_on_user_id"
   end
 
   create_table "contest_template_questions", force: :cascade do |t|
@@ -583,6 +629,11 @@ ActiveRecord::Schema.define(version: 2026_09_05_010000) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "beep_chain_transfers", "approved_tokens"
+  add_foreign_key "cardano_swaps", "swap_assets"
+  add_foreign_key "cardano_swaps", "swap_quotes"
+  add_foreign_key "cardano_swaps", "users"
+  add_foreign_key "swap_quotes", "swap_assets"
+  add_foreign_key "swap_quotes", "users"
   add_foreign_key "tickets", "approved_tokens"
   add_foreign_key "transactions", "approved_tokens"
   add_foreign_key "wagers", "approved_tokens"

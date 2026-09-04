@@ -1,0 +1,9 @@
+<%= form_with model: [:admin, @swap_asset], local: true do |f| %>
+  <% if @swap_asset.errors.any? %><div><%= @swap_asset.errors.full_messages.join(', ') %></div><% end %>
+  <p><%= f.label :asset_unit, 'Asset unit (lovelace for ADA; otherwise full policy + asset-name hex)' %><br><%= f.text_field :asset_unit, required: true, size: 80 %></p>
+  <p><%= f.label :policy_id, 'Policy ID (blank for ADA)' %><br><%= f.text_field :policy_id, size: 60 %></p>
+  <p><%= f.label :ticker %><br><%= f.text_field :ticker, required: true %></p>
+  <p><%= f.label :decimals %><br><%= f.number_field :decimals, required: true, min: 0, max: 18 %></p>
+  <p><%= f.label :beep_per_asset, '$BEEP per whole asset' %><br><%= f.number_field :beep_per_asset, required: true, step: '0.000000000001' %></p>
+  <p><%= f.check_box :enabled %> <%= f.label :enabled %></p><%= f.submit %>
+<% end %>

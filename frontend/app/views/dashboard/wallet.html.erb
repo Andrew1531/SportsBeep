@@ -446,11 +446,7 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-          <div style="flex: 1; padding: 12px; background: rgba(0,136,204,0.2); color: #00b4d8; border: 2px solid rgba(0,180,216,0.4); border-radius: 10px; font-size: 14px; font-weight: 700; text-align: center;">
-            <i class="fa fa-wallet" style="margin-right: 6px;"></i> ADA &rarr; $BEEP
-          </div>
-        </div>
+        <div style="margin-bottom:20px;"><select id="swap-asset" onchange="updateSwapOutput()" style="width:100%;padding:12px;color:#111;"><option>Loading accepted assets…</option></select></div>
 
         <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 20px; margin-bottom: 14px;">
           <div style="margin-bottom: 16px;">
@@ -458,9 +454,9 @@
               <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0;">You Send</p>
             </div>
             <div style="display: flex; align-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px;">
-              <input type="number" id="swap-input-amount" placeholder="0.00" min="0" step="0.01" style="flex: 1; background: transparent; border: none; color: white; font-size: 20px; font-weight: 600; outline: none; width: 100%;" oninput="updateSwapOutput()">
+               <input type="number" id="swap-input-amount" placeholder="0.00" min="0" step="any" style="flex: 1; background: transparent; border: none; color: white; font-size: 20px; font-weight: 600; outline: none; width: 100%;" oninput="updateSwapOutput()">
               <div id="swap-input-label" style="display: flex; align-items: center; background: rgba(0,136,204,0.2); padding: 6px 14px; border-radius: 8px; margin-left: 10px;">
-                <span style="color: #00b4d8; font-weight: 700; font-size: 14px;">ADA</span>
+                 <span id="swap-input-ticker" style="color: #00b4d8; font-weight: 700; font-size: 14px;">—</span>
               </div>
             </div>
           </div>
@@ -474,7 +470,7 @@
           <div>
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
               <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0;">You Receive</p>
-              <p style="color: #8892b0; font-size: 12px; margin: 0;" id="swap-rate-label">Rate: <span style="color: #a29bfe;">1 ADA = 5.48 $BEEP</span></p>
+               <p style="color: #8892b0; font-size: 12px; margin: 0;" id="swap-rate-label">Request a live quote</p>
             </div>
             <div style="display: flex; align-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 16px;">
               <input type="text" id="swap-output-amount" placeholder="0.00" readonly style="flex: 1; background: transparent; border: none; color: white; font-size: 20px; font-weight: 600; outline: none; width: 100%;">
@@ -488,7 +484,7 @@
         <div style="background: rgba(0,0,0,0.15); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
             <span style="color: #8892b0; font-size: 13px;">Exchange Rate</span>
-            <span style="color: white; font-size: 13px; font-weight: 600;" id="swap-rate-detail">1 ADA = 5.48 $BEEP</span>
+             <span style="color: white; font-size: 13px; font-weight: 600;" id="swap-rate-detail">—</span>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
             <span style="color: #8892b0; font-size: 13px;">Network Fee</span>
@@ -500,7 +496,8 @@
           </div>
         </div>
 
-        <button onclick="initiateSwap()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(108,92,231,0.35); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+         <div style="margin:0 0 12px;color:#fff"><label><input type="radio" name="swap-payout" value="wallet" checked> Send BEEP to wallet</label> <label style="margin-left:12px"><input type="radio" name="swap-payout" value="game_balance"> Credit game balance</label></div>
+         <button onclick="initiateSwap()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(108,92,231,0.35); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
           Swap for $BEEP
         </button>
         <p style="text-align: center; color: #8892b0; margin: 10px 0 0; font-size: 12px;">
@@ -508,6 +505,17 @@
           Powered by blockchain smart contracts
         </p>
         <div id="swap-status" style="display: none; margin-top: 14px;"></div>
+        <% if @swaps.any? %>
+          <div style="margin-top:16px;color:#fff"><strong>Recent swaps</strong>
+            <% @swaps.each do |swap| %>
+              <div style="padding:7px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:12px">
+                <%= swap.swap_asset.format_units(swap.amount_units) %> <%= swap.swap_asset.ticker %> → <%= swap.beep_amount %> BEEP · <%= swap.status %>
+                <a href="<%= swap.source_explorer_url %>" target="_blank" rel="noopener">input</a>
+                <% if swap.payout_explorer_url %> · <a href="<%= swap.payout_explorer_url %>" target="_blank" rel="noopener">payout</a><% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -615,34 +623,33 @@
     });
   }
 
-  var ADA_RATE = 5.48;
-
-  function updateSwapOutput() {
-    var input = document.getElementById('swap-input-amount');
-    var output = document.getElementById('swap-output-amount');
-    var val = parseFloat(input.value) || 0;
-    output.value = val > 0 ? (val * ADA_RATE).toFixed(2) : '';
+  var swapQuote = null;
+  function swapStatus(text) { var e=document.getElementById('swap-status'); e.style.display='block'; e.textContent=text; }
+  async function updateSwapOutput() {
+    var asset=document.getElementById('swap-asset'), amount=document.getElementById('swap-input-amount').value;
+    document.getElementById('swap-input-ticker').textContent=asset.options[asset.selectedIndex] ? asset.options[asset.selectedIndex].text : '—';
+    if (!amount || !asset.value) return;
+    var r=await fetch('<%= swap_quote_path %>',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrfToken()},body:JSON.stringify({swap_asset_id:asset.value,amount:amount})}), q=await r.json();
+    if(!q.ok){ swapQuote=null; swapStatus(q.error); return; }
+    swapQuote=q; document.getElementById('swap-output-amount').value=q.beep_amount;
+    document.getElementById('swap-rate-label').textContent='Rate: 1 '+q.ticker+' = '+q.rate+' BEEP';
+    document.getElementById('swap-rate-detail').textContent='1 '+q.ticker+' = '+q.rate+' BEEP';
   }
-
-  function initiateSwap() {
-    var amount = parseFloat(document.getElementById('swap-input-amount').value);
-    var statusDiv = document.getElementById('swap-status');
-
-    if (!amount || amount <= 0) {
-      statusDiv.style.display = 'block';
-      statusDiv.innerHTML = '<div style="background: rgba(245,101,101,0.15); border: 1px solid rgba(245,101,101,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #fc8181; margin: 0; font-size: 14px;"><i class="fa fa-exclamation-circle" style="margin-right: 6px;"></i>Please enter a valid amount to swap.</p></div>';
-      return;
-    }
-
-    var beepAmount = (amount * ADA_RATE).toFixed(2);
-
-    statusDiv.style.display = 'block';
-    statusDiv.innerHTML = '<div style="background: rgba(72,187,120,0.15); border: 1px solid rgba(72,187,120,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-spinner fa-spin" style="margin-right: 6px;"></i>Processing swap of ' + amount + ' ADA for ' + beepAmount + ' $BEEP...</p></div>';
-
-    setTimeout(function() {
-      statusDiv.innerHTML = '<div style="background: rgba(72,187,120,0.15); border: 1px solid rgba(72,187,120,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-check-circle" style="margin-right: 6px;"></i>Swap request submitted! Your ' + beepAmount + ' $BEEP will be credited to your account shortly. $BEEP is live on Cardano mainnet.</p></div>';
-    }, 2000);
+  async function initiateSwap() {
+    if(!swapQuote) return swapStatus('Request a valid live quote first.');
+    try {
+      swapStatus('Preparing transaction for your wallet…');
+      var ext=window.cardano && window.cardano[VERIFIED_WALLET_KEY]; if(!ext) throw new Error('Your verified Cardano wallet is unavailable.');
+      var api=await ext.enable(), used=await api.getUsedAddresses(), addressHex=(used&&used[0])||await api.getChangeAddress();
+      var b=await (await fetch('<%= build_swap_path %>',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrfToken()},body:JSON.stringify({quote_id:swapQuote.quote_id,address_hex:addressHex})})).json(); if(!b.ok) throw new Error(b.error);
+      swapStatus('Approve and submit the transfer in your wallet…'); var signed=await api.signTx(b.unsigned_tx,false), hash=await api.submitTx(signed);
+      var payout=document.querySelector('input[name="swap-payout"]:checked').value;
+      var s=await (await fetch('<%= record_swap_path %>',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrfToken()},body:JSON.stringify({quote_id:swapQuote.quote_id,tx_hash:hash,payout_method:payout})})).json(); if(!s.ok) throw new Error(s.error);
+      swapStatus('Submitted. Awaiting 2 Cardano confirmations. Input: '+s.source_explorer_url); pollSwaps();
+    } catch(e) { swapStatus(e.message || 'Swap submission failed. Do not resubmit if your wallet showed a transaction hash.'); }
   }
+  async function pollSwaps(){ setInterval(async function(){var r=await fetch('<%= check_swaps_path %>',{method:'POST',headers:{'X-CSRF-Token':csrfToken()}}),d=await r.json();if(d.swaps&&d.swaps.length){var s=d.swaps[0];swapStatus('Swap '+s.status+(s.payout_explorer_url?' — payout: '+s.payout_explorer_url:'')+(s.error?' — '+s.error:''));}},15000); }
+  document.addEventListener('DOMContentLoaded',async function(){var r=await fetch('<%= swap_assets_path %>'),d=await r.json(),el=document.getElementById('swap-asset');if(d.ok){el.innerHTML=d.assets.map(function(a){return '<option value="'+a.id+'">'+a.ticker+'</option>';}).join('');updateSwapOutput();}});
 
   // Key of the wallet extension the user verified with (e.g. "vespr", "eternl").
   // Always use this exact extension for deposits — never grab wallets[0] blindly,

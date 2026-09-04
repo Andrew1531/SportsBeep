@@ -34,6 +34,9 @@ function treasuryWallet() {
 function isExactUnit(unit) {
   return /^[0-9a-f]{56}[0-9a-f]*$/i.test(unit || "");
 }
+function isTransferUnit(unit) {
+  return unit === "lovelace" || isExactUnit(unit);
+}
 
 async function findUnit(address, expectedUnit) {
   if (!isExactUnit(expectedUnit)) throw new Error("A full policy ID plus asset name unit is required");
@@ -71,7 +74,7 @@ try {
   } else if (cmd === "build-deposit") {
     const [userAddr, treasuryAddr, unit, amount] = args;
     if (!userAddr || !treasuryAddr || !unit || !amount) throw new Error("usage: build-deposit <userAddr> <treasuryAddr> <unit> <amount>");
-    if (!isExactUnit(unit)) throw new Error("Refusing deposit: a complete asset unit is required");
+    if (!isTransferUnit(unit)) throw new Error("Refusing deposit: ADA or a complete asset unit is required");
     const utxos = await provider.fetchAddressUTxOs(userAddr);
     if (!utxos.length) throw new Error("No UTxOs found at the user's address");
     const txBuilder = new MeshTxBuilder({ fetcher: provider });

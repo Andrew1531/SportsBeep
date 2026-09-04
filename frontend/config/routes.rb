@@ -17,6 +17,7 @@ SportsbeepWeb::Application.routes.draw do
   devise_for :administrators, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { sessions: 'admin/sessions' }
   namespace :admin do
     resources :approved_tokens, except: :show
+    resources :swap_assets, except: :show
   end
 
   # require 'sidekiq/web'
@@ -44,6 +45,11 @@ SportsbeepWeb::Application.routes.draw do
   post 'wallet/build_deposit', to: 'dashboard#build_deposit', as: :build_deposit
   post 'wallet/record_deposit', to: 'dashboard#record_deposit', as: :record_deposit
   post 'wallet/check_deposits', to: 'dashboard#check_deposits', as: :check_deposits
+  get 'wallet/swap_assets', to: 'dashboard#swap_assets', as: :swap_assets
+  post 'wallet/swap_quote', to: 'dashboard#swap_quote', as: :swap_quote
+  post 'wallet/build_swap', to: 'dashboard#build_swap', as: :build_swap
+  post 'wallet/record_swap', to: 'dashboard#record_swap', as: :record_swap
+  post 'wallet/check_swaps', to: 'dashboard#check_swaps', as: :check_swaps
   post 'wallet/withdraw_beep', to: 'dashboard#withdraw_beep', as: :withdraw_beep
   get 'transactions', to: 'dashboard#transactions', as: :user_transactions
   get 'redeem', to: 'dashboard#redeem_promo', as: :redeem_promo

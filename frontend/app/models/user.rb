@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :swap_quotes, dependent: :destroy
+  has_many :cardano_swaps, dependent: :destroy
   belongs_to :promo_code, counter_cache: true
 
   has_one :account

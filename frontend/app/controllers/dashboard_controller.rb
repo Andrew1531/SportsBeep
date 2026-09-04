@@ -26,6 +26,7 @@ class DashboardController < ApplicationController
       scope = @user.beep_chain_transfers.order(created_at: :desc)
       @selected_token ? scope.where(approved_token: @selected_token).limit(5) : scope.none
     end
+    @swaps = safe_collection { @user.cardano_swaps.includes(:swap_asset).order(created_at: :desc).limit(10) }
     load_wallet_info
     load_referral_info
     sportsbook_in_play = safe_collection { @user.wagers.open.where(approved_token: @selected_token) }.sum(&:amount_units)
@@ -332,6 +333,65 @@ class DashboardController < ApplicationController
     render json: { ok: true, results: results }
   end
 
+  # Public data for the wallet widget. Rates are never trusted from the client.
+  def swap_assets
+    render json: { ok: true, assets: SwapAsset.enabled.order(:ticker).map { |a| { id: a.id, ticker: a.ticker, decimals: a.decimals, asset_unit: a.asset_unit, rate: a.beep_per_asset.to_s } } }
+  end
+
+  def swap_quote
+    return swap_error('On-chain swaps are not enabled yet.', :service_unavailable) unless on_chain_mode?
+    return swap_error('Verify wallet ownership first.', :forbidden) unless current_user.cardano_wallet_verified_at.present?
+    asset = SwapAsset.enabled.find_by(id: params[:swap_asset_id])
+    return swap_error('Choose an enabled swap asset.') unless asset
+    amount = asset.parse_amount!(params[:amount])
+    beep = ((BigDecimal(amount.to_s) * asset.beep_per_asset) / (10 ** asset.decimals)).floor
+    return swap_error('This amount quotes to less than one whole BEEP.') if beep < 1
+    preflight_swap!(beep)
+    quote = current_user.swap_quotes.create!(swap_asset: asset, amount_units: amount, beep_amount: beep, beep_per_asset: asset.beep_per_asset, expires_at: 5.minutes.from_now)
+    render json: { ok: true, quote_id: quote.id, amount_units: amount, beep_amount: beep, ticker: asset.ticker, rate: asset.beep_per_asset.to_s, expires_at: quote.expires_at.iso8601 }
+  rescue TokenAmount::InvalidAmount => e
+    swap_error(e.message)
+  rescue CardanoTxTool::Error => e
+    swap_error(e.message, :unprocessable_entity)
+  end
+
+  def build_swap
+    return swap_error('Verify wallet ownership first.', :forbidden) unless current_user.cardano_wallet_verified_at.present?
+    quote = usable_swap_quote
+    return swap_error('This quote expired. Request a new quote.') unless quote
+    address = swap_wallet_address
+    return swap_error('The connected wallet does not match your verified wallet.', :forbidden) unless address
+    preflight_swap!(quote.beep_amount)
+    unit = quote.swap_asset.asset_unit
+    held = quote.swap_asset.ada? ? BlockfrostService.new.get_lovelace_balance(address) : CardanoTxTool.find_unit(address, unit)[:quantity]
+    return swap_error("Your wallet does not hold enough #{quote.swap_asset.ticker}.") if held < quote.amount_units
+    unsigned = CardanoTxTool.build_deposit(user_address: address, treasury_address: ENV['TREASURY_ADDRESS'], unit: unit, amount: quote.amount_units)
+    render json: { ok: true, unsigned_tx: unsigned, quote_id: quote.id }
+  rescue CardanoTxTool::Error => e
+    swap_error(e.message, :unprocessable_entity)
+  end
+
+  def record_swap
+    quote = usable_swap_quote
+    return swap_error('This quote expired. Request a new quote.') unless quote
+    hash = params[:tx_hash].to_s.downcase.strip
+    return swap_error('Invalid transaction hash.') unless hash.match?(/\A[0-9a-f]{64}\z/)
+    method = params[:payout_method].to_s
+    return swap_error('Choose wallet or game balance payout.') unless CardanoSwap::PAYOUT_METHODS.include?(method)
+    swap = current_user.cardano_swaps.create!(swap_quote: quote, swap_asset: quote.swap_asset, amount_units: quote.amount_units, beep_amount: quote.beep_amount, source_tx_hash: hash, payout_method: method)
+    CardanoSwapConfirmationJob.perform_later(swap.id)
+    render json: swap_json(swap)
+  rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
+    swap = CardanoSwap.find_by(source_tx_hash: hash)
+    return swap_error('This transaction is already associated with another swap.') unless swap&.user_id == current_user.id && swap&.swap_quote_id == quote&.id
+    render json: swap_json(swap).merge(already_recorded: true)
+  end
+
+  def check_swaps
+    swaps = current_user.cardano_swaps.pollable.limit(10).map { |swap| CardanoSwapConfirmationService.new.call(swap); swap.reload }
+    render json: { ok: true, swaps: swaps.map { |swap| swap_json(swap) } }
+  end
+
   def withdraw_beep
     return onchain_withdraw if on_chain_mode?
 
@@ -391,6 +451,32 @@ class DashboardController < ApplicationController
   end
 
   private
+
+  def swap_error(message, status = :unprocessable_entity)
+    render json: { ok: false, error: message }, status: status
+  end
+
+  def usable_swap_quote
+    quote = current_user.swap_quotes.includes(:swap_asset).find_by(id: params[:quote_id])
+    quote if quote&.active? && quote.swap_asset.enabled?
+  end
+
+  def swap_wallet_address
+    hex = params[:address_hex].to_s.strip
+    address = hex.match?(/\A[0-9a-f]+\z/i) ? CardanoAddress.hex_to_bech32(hex) : current_user.cardano_wallet_address
+    address if address.to_s.start_with?('addr1') && CardanoAddress.same_wallet?(address, current_user.cardano_wallet_address)
+  end
+
+  def preflight_swap!(beep_amount)
+    service = BlockfrostService.new
+    treasury = ENV['TREASURY_ADDRESS']
+    raise CardanoTxTool::Error, 'Treasury BEEP reserve is insufficient.' if service.get_token_balance(treasury, ENV['BEEP_ASSET_UNIT'].to_s.downcase) < beep_amount
+    raise CardanoTxTool::Error, 'Treasury ADA reserve is insufficient for payouts.' if service.get_lovelace_balance(treasury) < CardanoTxTool::MIN_PAYOUT_LOVELACE
+  end
+
+  def swap_json(swap)
+    { ok: true, id: swap.id, status: swap.status, source_tx_hash: swap.source_tx_hash, source_explorer_url: swap.source_explorer_url, payout_tx_hash: swap.payout_tx_hash, payout_explorer_url: swap.payout_explorer_url, beep_amount: swap.beep_amount, error: swap.error_message }
+  end
 
   def on_chain_mode?
     # The full unit is required: policy-only matching can accept a different
