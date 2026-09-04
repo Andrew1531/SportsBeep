@@ -13,6 +13,8 @@ class DashboardController < ApplicationController
   def wallet
     @user = current_user
     @account = @user.account
+    settle_pending_deposits
+    settle_pending_withdrawals
     @transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(20) }
     load_wallet_info
     load_referral_info
@@ -278,6 +280,7 @@ class DashboardController < ApplicationController
   def record_deposit
     @user = current_user
     return render json: { ok: false, error: 'On-chain transfers are not enabled yet.' }, status: :service_unavailable unless on_chain_mode?
+    return render json: { ok: false, error: 'Verify wallet ownership first.' }, status: :forbidden unless @user.cardano_wallet_verified_at.present?
 
     tx_hash = params[:tx_hash].to_s.strip.downcase
     amount = params[:amount].to_s.strip.to_i
@@ -286,9 +289,15 @@ class DashboardController < ApplicationController
     end
 
     transfer = BeepChainTransfer.create!(user: @user, direction: 'deposit', amount_beep: amount, tx_hash: tx_hash, status: 'pending')
-    render json: { ok: true, transfer_id: transfer.id }
-  rescue ActiveRecord::RecordInvalid
-    render json: { ok: false, error: 'This transaction was already recorded.' }, status: :unprocessable_entity
+    BeepDepositConfirmationJob.perform_later(transfer.id)
+    render json: { ok: true, transfer_id: transfer.id, explorer_url: transfer.explorer_url }
+  rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
+    existing = BeepChainTransfer.find_by(tx_hash: tx_hash)
+    if existing&.user_id == @user.id && existing.direction == 'deposit' && existing.amount_beep == amount
+      render json: { ok: true, transfer_id: existing.id, explorer_url: existing.explorer_url, already_recorded: true }
+    else
+      render json: { ok: false, error: 'This transaction was already recorded with different details.' }, status: :unprocessable_entity
+    end
   end
 
   # Check the user's pending deposits on-chain and credit confirmed ones.
@@ -363,67 +372,36 @@ class DashboardController < ApplicationController
   private
 
   def on_chain_mode?
-    # Both are required: without a strict policy ID, deposit verification
-    # could be spoofed by look-alike tokens.
-    ENV['TREASURY_ADDRESS'].present? && ENV['BEEP_POLICY_ID'].present?
+    # The full unit is required: policy-only matching can accept a different
+    # asset minted by the same policy.
+    ENV['TREASURY_ADDRESS'].present? && ENV['BEEP_ASSET_UNIT'].present?
   end
   helper_method :on_chain_mode?
 
   # Verify a pending deposit on-chain and credit it exactly once.
   # Returns the transfer's (possibly updated) status string.
   def settle_deposit(transfer)
-    service = BlockfrostService.new
-    confirmations = service.tx_confirmations(transfer.tx_hash)
-    return 'pending' if confirmations.nil? # not on-chain yet
-
-    if confirmations < 2
-      return 'pending' # wait for a safer confirmation depth
-    end
-
-    utxos = service.get_tx_utxos(transfer.tx_hash)
-    return 'pending' if utxos.nil?
-
-    treasury = ENV['TREASURY_ADDRESS']
-    received = 0
-    (utxos['outputs'] || []).each do |output|
-      next unless output['address'] == treasury
-      (output['amount'] || []).each do |asset|
-        received += asset['quantity'].to_i if service.beep_unit?(asset['unit'])
-      end
-    end
-
-    from_user = (utxos['inputs'] || []).any? do |input|
-      CardanoAddress.same_wallet?(input['address'].to_s, transfer.user.cardano_wallet_address.to_s)
-    end
-
-    if received < transfer.amount_beep || !from_user
-      transfer.update!(status: 'failed', error_message: from_user ? "Only #{received} $BEEP reached the treasury (expected #{transfer.amount_beep})." : 'Transaction was not sent from your verified wallet.')
-      return 'failed'
-    end
-
-    account = transfer.user.account
-    account.with_lock do
-      transfer.reload
-      next unless transfer.status == 'pending' # idempotency under concurrency
-
-      account.update!(balance_cents: account.balance_cents.to_i + transfer.amount_beep * 100)
-      Transaction.create!(
-        account:      account,
-        amount_cents: transfer.amount_beep * 100,
-        type:         'AdjustmentTransaction',
-        description:  "On-chain deposit of #{transfer.amount_beep} $BEEP confirmed (tx #{transfer.tx_hash[0, 16]}…).",
-        status:       'completed'
-      )
-      transfer.update!(status: 'credited', confirmed_at: Time.current)
-    end
-    transfer.reload.status
-  rescue StandardError => e
-    Rails.logger.error "settle_deposit error for transfer #{transfer.id}: #{e.class}: #{e.message}"
-    'pending'
+    BeepDepositConfirmationService.new.call(transfer)
   end
 
-  # Real on-chain withdrawal: debit the game balance, then pay out $BEEP from
-  # the treasury to the user's verified address. Refund on failure.
+  def settle_pending_deposits
+    return unless on_chain_mode?
+
+    @user.beep_chain_transfers.deposits.pending.limit(10).each { |transfer| settle_deposit(transfer) }
+  end
+
+  def settle_pending_withdrawals
+    return unless on_chain_mode?
+
+    @user.beep_chain_transfers
+         .withdrawals
+         .where(status: BeepWithdrawalConfirmationService::POLLABLE_STATUSES)
+         .limit(10)
+         .each { |transfer| BeepWithdrawalConfirmationService.new.call(transfer) }
+  end
+
+  # Real on-chain withdrawal: build/sign first, then atomically persist the
+  # hash and debit immediately before submitting the treasury payout.
   def onchain_withdraw
     @user = current_user
     @account = @user.account
@@ -439,24 +417,43 @@ class DashboardController < ApplicationController
       return redirect_to wallet_path
     end
 
+    request_key = params[:request_key].to_s.strip.downcase
+    unless request_key.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/)
+      flash[:alert] = 'This withdrawal request expired. Refresh the wallet page and try again.'
+      return redirect_to wallet_path
+    end
+
+    existing = @user.beep_chain_transfers.withdrawals.find_by(request_key: request_key)
+    if existing
+      flash[:notice] = withdrawal_replay_message(existing)
+      return redirect_to wallet_path
+    end
+
     transfer = nil
     error = nil
     @account.with_lock do
+      existing = @user.beep_chain_transfers.withdrawals.find_by(request_key: request_key)
+      next if existing
+
       max_beep = @account.balance_cents.to_i / 100
       if amount_beep > max_beep
         error = "You can withdraw at most #{max_beep} $BEEP."
         next
       end
 
-      @account.update!(balance_cents: @account.balance_cents.to_i - amount_beep * 100)
-      transfer = BeepChainTransfer.create!(user: @user, direction: 'withdrawal', amount_beep: amount_beep, status: 'pending')
-      Transaction.create!(
-        account:      @account,
-        amount_cents: -(amount_beep * 100),
-        type:         'AdjustmentTransaction',
-        description:  "On-chain withdrawal of #{amount_beep} $BEEP to your Cardano wallet (processing).",
-        status:       'completed'
+      transfer = BeepChainTransfer.create!(
+        user: @user,
+        direction: 'withdrawal',
+        amount_beep: amount_beep,
+        status: 'pending',
+        request_key: request_key,
+        destination_address: @user.cardano_wallet_address
       )
+    end
+
+    if existing
+      flash[:notice] = withdrawal_replay_message(existing)
+      return redirect_to wallet_path
     end
 
     if error
@@ -465,37 +462,83 @@ class DashboardController < ApplicationController
     end
 
     begin
-      treasury_beep = CardanoTxTool.find_beep_unit(ENV['TREASURY_ADDRESS'])
-      raise CardanoTxTool::Error, 'Treasury has insufficient $BEEP right now. Please try again later.' if treasury_beep[:quantity] < amount_beep
+      CardanoTxTool.with_payout_lock do
+        treasury_beep = CardanoTxTool.find_beep_unit(ENV['TREASURY_ADDRESS'])
+        if treasury_beep[:quantity] < amount_beep
+          raise CardanoTxTool::Error, 'Treasury has insufficient $BEEP right now. Please try again later.'
+        end
 
-      tx_hash = CardanoTxTool.payout(to_address: @user.cardano_wallet_address, unit: treasury_beep[:unit], amount: amount_beep)
-      transfer.update!(tx_hash: tx_hash, status: 'confirmed', confirmed_at: Time.current)
-      flash[:notice] = "Withdrawal submitted! #{amount_beep} $BEEP is on its way to your wallet. Tx: #{tx_hash[0, 16]}…"
-    rescue StandardError => e
-      Rails.logger.error "onchain_withdraw payout error for user #{@user.id}: #{e.class}: #{e.message}"
-      if e.is_a?(CardanoTxTool::Error) && e.ambiguous_submission?
-        # The submit step errored — the transaction MAY still have reached the
-        # network. Never auto-refund here, or a landed payout would double-pay.
-        transfer&.update!(status: 'unknown', error_message: "Ambiguous submission: #{e.message.to_s.first(180)}")
-        flash[:alert] = 'Your withdrawal was submitted but confirmation is uncertain. Your balance stays debited while we verify it on-chain — contact support if it does not resolve shortly.'
-      else
-        # Failure before submission — the payout never made it on-chain, safe to refund.
+        built = CardanoTxTool.build_payout(
+          to_address: transfer.destination_address,
+          unit: treasury_beep[:unit],
+          amount: amount_beep
+        )
+
+        # Building and signing do not touch the game balance. Persist the
+        # deterministic hash and debit under lock immediately before submit.
         @account.with_lock do
-          @account.update!(balance_cents: @account.balance_cents.to_i + amount_beep * 100)
+          max_beep = @account.balance_cents.to_i / 100
+          if amount_beep > max_beep
+            transfer.update!(status: 'failed', error_message: 'Game balance changed before the payout could be submitted.')
+            raise CardanoTxTool::Error, "Your available balance changed. You can now withdraw at most #{max_beep} $BEEP."
+          end
+
+          @account.update!(balance_cents: @account.balance_cents.to_i - amount_beep * 100)
           Transaction.create!(
-            account:      @account,
-            amount_cents: amount_beep * 100,
-            type:         'AdjustmentTransaction',
-            description:  "Refund: on-chain withdrawal of #{amount_beep} $BEEP failed (#{e.message.to_s.first(80)}).",
-            status:       'completed'
+            account: @account,
+            amount_cents: -(amount_beep * 100),
+            type: 'AdjustmentTransaction',
+            description: "On-chain withdrawal of #{amount_beep} $BEEP to your Cardano wallet (processing).",
+            status: 'completed'
+          )
+          transfer.update!(tx_hash: built[:tx_hash], status: 'submitting')
+        end
+
+        begin
+          submitted_hash = CardanoTxTool.submit_payout(built[:signed_tx])
+          raise CardanoTxTool::Error.new('Submitted transaction hash mismatch', stage: 'submit', tx_hash: built[:tx_hash]) unless submitted_hash == built[:tx_hash]
+          transfer.update!(status: 'submitted')
+        rescue CardanoTxTool::Error => e
+          transfer.update_columns(
+            tx_hash: e.tx_hash.presence || built[:tx_hash],
+            status: 'unknown',
+            error_message: "Ambiguous submission: #{e.message.to_s.first(180)}",
+            updated_at: Time.current
           )
         end
-        transfer&.update!(status: 'failed', error_message: e.message.to_s.first(200))
-        flash[:alert] = "Withdrawal failed and your balance was refunded: #{e.message.to_s.first(120)}"
+      end
+
+      BeepWithdrawalConfirmationJob.perform_later(transfer.id)
+      if transfer.reload.status == 'unknown'
+        flash[:alert] = "Your withdrawal submission is uncertain, but its transaction hash was saved and is being checked on-chain. Your balance stays debited until it resolves. Tx: #{transfer.tx_hash[0, 16]}…"
+      else
+        flash[:notice] = "Withdrawal submitted! #{amount_beep} $BEEP is on its way to your wallet and is awaiting confirmation. Tx: #{transfer.tx_hash[0, 16]}…"
+      end
+    rescue StandardError => e
+      Rails.logger.error "onchain_withdraw payout error for user #{@user.id}: #{e.class}: #{e.message}"
+      transfer.reload
+      if transfer.tx_hash.present?
+        # A hash is persisted before submission starts. From this point onward
+        # never auto-refund: the reconciler must decide from chain state.
+        transfer.update_columns(
+          status: 'unknown',
+          error_message: "Withdrawal requires reconciliation: #{e.message.to_s.first(170)}",
+          updated_at: Time.current
+        )
+        BeepWithdrawalConfirmationJob.perform_later(transfer.id)
+        flash[:alert] = "Your withdrawal is being checked on-chain. Your balance stays debited until it resolves. Tx: #{transfer.tx_hash[0, 16]}…"
+      else
+        transfer.update!(status: 'failed', error_message: e.message.to_s.first(200)) if transfer.status == 'pending'
+        flash[:alert] = "Withdrawal failed before submission. Your balance was not charged: #{e.message.to_s.first(120)}"
       end
     end
 
     redirect_to wallet_path
+  end
+
+  def withdrawal_replay_message(transfer)
+    suffix = transfer.tx_hash.present? ? " Tx: #{transfer.tx_hash[0, 16]}…" : ''
+    "This withdrawal was already received and was not charged twice. Status: #{transfer.status}.#{suffix}"
   end
 
   def safe_collection

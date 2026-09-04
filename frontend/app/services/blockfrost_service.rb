@@ -4,6 +4,7 @@ require 'json'
 class BlockfrostService
   BASE_URL = 'https://cardano-mainnet.blockfrost.io/api/v0'
   LOVELACE_PER_ADA = 1_000_000.0
+  class RequestError < StandardError; end
 
   def initialize
     @project_id = ENV['BLOCKFROST_PROJECT_ID']
@@ -30,6 +31,7 @@ class BlockfrostService
   def get_beep_balance(address)
     info = get_address_info(address)
     tokens = info[:tokens] || []
+    beep_asset_unit = ENV['BEEP_ASSET_UNIT'].to_s.strip
     beep_policy_id = ENV['BEEP_POLICY_ID'].to_s.strip
     beep_qty = 0
 
@@ -37,7 +39,9 @@ class BlockfrostService
       unit = token['unit'].to_s
       qty  = token['quantity'].to_i
 
-      if beep_policy_id.present?
+      if beep_asset_unit.present?
+        beep_qty += qty if unit == beep_asset_unit
+      elsif beep_policy_id.present?
         beep_qty += qty if unit.start_with?(beep_policy_id)
       else
         asset_name_hex = unit.length > 56 ? unit[56..] : ''
@@ -59,15 +63,15 @@ class BlockfrostService
   # --- transaction inspection (for on-chain deposit verification) ---
 
   def get_tx(tx_hash)
-    make_request("/txs/#{tx_hash}")
+    make_request("/txs/#{tx_hash}", raise_on_error: true)
   end
 
   def get_tx_utxos(tx_hash)
-    make_request("/txs/#{tx_hash}/utxos")
+    make_request("/txs/#{tx_hash}/utxos", raise_on_error: true)
   end
 
   def latest_block_height
-    block = make_request('/blocks/latest')
+    block = make_request('/blocks/latest', raise_on_error: true)
     block ? block['height'].to_i : nil
   end
 
@@ -81,12 +85,12 @@ class BlockfrostService
   end
 
   # STRICT $BEEP asset check for on-chain money movement. Requires
-  # BEEP_POLICY_ID — never falls back to name matching, which could be
-  # spoofed by a look-alike token.
+  # BEEP_ASSET_UNIT (policy ID + asset name) — never falls back to policy-only
+  # or name matching, which could accept another asset from the same policy.
   def beep_unit?(unit)
-    policy = ENV['BEEP_POLICY_ID'].to_s.strip
-    raise 'BEEP_POLICY_ID is required for on-chain transfer verification' if policy.blank?
-    unit.to_s.start_with?(policy)
+    expected = ENV['BEEP_ASSET_UNIT'].to_s.strip
+    raise 'BEEP_ASSET_UNIT is required for on-chain transfer verification' if expected.blank?
+    unit.to_s == expected
   end
 
   private
@@ -182,7 +186,7 @@ class BlockfrostService
     []
   end
 
-  def make_request(endpoint)
+  def make_request(endpoint, raise_on_error: false)
     uri = URI("#{BASE_URL}#{endpoint}")
     http = SecureHttp.client(uri)
 
@@ -197,6 +201,7 @@ class BlockfrostService
       nil
     else
       Rails.logger.error "Blockfrost API Error: #{response.code} - #{response.body}"
+      raise RequestError, "Blockfrost returned HTTP #{response.code}" if raise_on_error
       nil
     end
   end

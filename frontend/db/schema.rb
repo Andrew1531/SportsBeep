@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_04_000000) do
+ActiveRecord::Schema.define(version: 2026_09_04_140000) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "user_id"
@@ -89,6 +89,9 @@ ActiveRecord::Schema.define(version: 2026_09_04_000000) do
     t.datetime "confirmed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "request_key"
+    t.string "destination_address"
+    t.index ["request_key"], name: "index_beep_chain_transfers_on_request_key", unique: true
     t.index ["tx_hash"], name: "index_beep_chain_transfers_on_tx_hash", unique: true
     t.index ["user_id", "status"], name: "index_beep_chain_transfers_on_user_id_and_status"
     t.index ["user_id"], name: "index_beep_chain_transfers_on_user_id"

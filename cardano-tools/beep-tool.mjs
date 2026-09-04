@@ -6,9 +6,10 @@
 //   build-deposit <userAddr> <treasuryAddr> <unit> <amount>
 //                                    -> build an unsigned tx sending <amount> of <unit>
 //                                       from the user's UTxOs to the treasury
-//   payout <toAddr> <unit> <amount>  -> send <amount> of <unit> from the treasury
-//                                       wallet to <toAddr>; prints the tx hash
-import { BlockfrostProvider, MeshWallet, MeshTxBuilder } from "@meshsdk/core";
+//   build-payout <toAddr> <unit> <amount>
+//                                    -> build/sign treasury payout and print its hash
+//   submit-payout <signedTx>         -> submit a previously signed treasury payout
+import { BlockfrostProvider, MeshWallet, MeshTxBuilder, resolveTxHash } from "@meshsdk/core";
 
 const projectId = process.env.BLOCKFROST_PROJECT_ID;
 const out = (obj) => { console.log(JSON.stringify(obj)); };
@@ -31,9 +32,9 @@ function treasuryWallet() {
 // STRICT matching only: on-chain money movement must never rely on fuzzy
 // name matching, or a look-alike token could be spoofed as $BEEP.
 function isBeepUnit(unit) {
-  const policy = (process.env.BEEP_POLICY_ID || "").trim();
-  if (!policy) throw new Error("BEEP_POLICY_ID is required for on-chain transfers");
-  return unit.startsWith(policy);
+  const expected = (process.env.BEEP_ASSET_UNIT || "").trim();
+  if (!expected) throw new Error("BEEP_ASSET_UNIT is required for on-chain transfers");
+  return unit === expected;
 }
 
 async function findUnit(address) {
@@ -71,6 +72,7 @@ try {
   } else if (cmd === "build-deposit") {
     const [userAddr, treasuryAddr, unit, amount] = args;
     if (!userAddr || !treasuryAddr || !unit || !amount) throw new Error("usage: build-deposit <userAddr> <treasuryAddr> <unit> <amount>");
+    if (!isBeepUnit(unit)) throw new Error("Refusing deposit: unit does not match BEEP_ASSET_UNIT");
     const utxos = await provider.fetchAddressUTxOs(userAddr);
     if (!utxos.length) throw new Error("No UTxOs found at the user's address");
     const txBuilder = new MeshTxBuilder({ fetcher: provider });
@@ -80,15 +82,14 @@ try {
       .selectUtxosFrom(utxos)
       .complete();
     out({ ok: true, unsigned_tx: unsignedTx });
-  } else if (cmd === "payout") {
+  } else if (cmd === "build-payout") {
     const [toAddr, unit, amount] = args;
-    if (!toAddr || !unit || !amount) throw new Error("usage: payout <toAddr> <unit> <amount>");
+    if (!toAddr || !unit || !amount) throw new Error("usage: build-payout <toAddr> <unit> <amount>");
     const wallet = treasuryWallet();
     const changeAddr = await wallet.getChangeAddress();
     const utxos = await wallet.getUtxos();
     if (!utxos.length) throw new Error("Treasury wallet has no UTxOs (needs ADA for fees)");
-    if (!isBeepUnit(unit)) throw new Error("Refusing payout: unit does not match BEEP_POLICY_ID");
-    let signedTx;
+    if (!isBeepUnit(unit)) throw new Error("Refusing payout: unit does not match BEEP_ASSET_UNIT");
     try {
       const txBuilder = new MeshTxBuilder({ fetcher: provider });
       const unsignedTx = await txBuilder
@@ -96,19 +97,26 @@ try {
         .changeAddress(changeAddr)
         .selectUtxosFrom(utxos)
         .complete();
-      signedTx = await wallet.signTx(unsignedTx);
+      const signedTx = await wallet.signTx(unsignedTx);
+      const txHash = resolveTxHash(signedTx);
+      out({ ok: true, signed_tx: signedTx, tx_hash: txHash });
     } catch (e) {
       // Failure BEFORE submission — definitely not on-chain, safe to refund.
       out({ ok: false, stage: "build", error: String(e && e.message ? e.message : e) });
       process.exit(1);
     }
+  } else if (cmd === "submit-payout") {
+    const [signedTx] = args;
+    if (!signedTx) throw new Error("usage: submit-payout <signedTx>");
+    const txHash = resolveTxHash(signedTx);
     try {
-      const txHash = await wallet.submitTx(signedTx);
-      out({ ok: true, tx_hash: txHash });
+      const submittedHash = await provider.submitTx(signedTx);
+      if (submittedHash !== txHash) throw new Error("Submitted transaction hash did not match the signed transaction");
+      out({ ok: true, tx_hash: submittedHash });
     } catch (e) {
       // Failure DURING submission — the tx may or may not have reached the
       // network. Callers must NOT refund automatically.
-      out({ ok: false, stage: "submit", error: String(e && e.message ? e.message : e) });
+      out({ ok: false, stage: "submit", tx_hash: txHash, error: String(e && e.message ? e.message : e) });
       process.exit(1);
     }
   } else {

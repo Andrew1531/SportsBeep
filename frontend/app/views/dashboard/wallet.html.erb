@@ -248,6 +248,7 @@
 
                     <!-- ON-CHAIN WITHDRAW -->
                     <%= form_tag(withdraw_beep_path, method: :post, data: { confirm: 'This sends real $BEEP tokens from the treasury to your wallet on the Cardano blockchain. Continue?' }) do %>
+                      <%= hidden_field_tag :request_key, SecureRandom.uuid %>
                       <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Withdraw $BEEP (on-chain payout)</p>
                       <% max_onchain_withdraw = (@account.balance_cents.to_i / 100) rescue 0 %>
                       <div style="display: flex; gap: 8px;">
@@ -280,7 +281,7 @@
                               <%= t.direction.capitalize %> <%= t.amount_beep %> $BEEP
                             </span>
                             <span>
-                              <% status_color = { 'pending' => '#f6ad55', 'confirmed' => '#63b3ed', 'credited' => '#68d391', 'failed' => '#fc8181', 'unknown' => '#f6ad55' }[t.status] || '#8892b0' %>
+                              <% status_color = { 'pending' => '#f6ad55', 'submitting' => '#f6ad55', 'submitted' => '#63b3ed', 'confirmed' => '#68d391', 'credited' => '#68d391', 'failed' => '#fc8181', 'unknown' => '#f6ad55' }[t.status] || '#8892b0' %>
                               <span style="color: <%= status_color %>; margin-right: 8px;"><%= t.status %></span>
                               <% if t.explorer_url %>
                                 <a href="<%= t.explorer_url %>" target="_blank" rel="noopener" style="color: #00b4d8; text-decoration: none;"><i class="fa fa-arrow-up-right-from-square"></i></a>
@@ -758,12 +759,17 @@
   }
 
   async function recordDeposit(txHash, amount) {
-    await fetch('<%= record_deposit_path %>', {
+    var resp = await fetch('<%= record_deposit_path %>', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken(), 'Accept': 'application/json' },
       body: JSON.stringify({ tx_hash: txHash, amount: amount })
     });
-    depositStatus('<i class="fa fa-check" style="margin-right:6px;"></i>Deposit submitted! Waiting for blockchain confirmation — your balance will update automatically. Tx: ' + txHash.slice(0, 16) + '…', '#68d391');
+    var data = await resp.json();
+    if (!resp.ok || !data.ok) {
+      throw new Error(data.error || 'The transfer reached Cardano, but the server could not record it. Keep this transaction hash and contact support: ' + txHash);
+    }
+    var explorerUrl = data.explorer_url || ('https://cardanoscan.io/transaction/' + txHash);
+    depositStatus('<i class="fa fa-check" style="margin-right:6px;"></i>Deposit submitted! Waiting for blockchain confirmation — your balance will update automatically. <a href="' + explorerUrl + '" target="_blank" rel="noopener" style="color:#63b3ed;">View transaction ' + txHash.slice(0, 16) + '…</a>', '#68d391');
     var sub = document.getElementById('deposit-modal-subtitle');
     if (sub) sub.innerHTML = 'Your transfer is on its way. You can close this window — your balance will update on its own.';
     var close = document.getElementById('deposit-modal-close');
