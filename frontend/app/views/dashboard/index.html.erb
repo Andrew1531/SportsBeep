@@ -1,309 +1,191 @@
 <style>
-  @keyframes ticker-scroll {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .sb-ticker-wrap {
-    overflow: hidden;
-    background: #0b0e14;
-    border-bottom: 1px solid rgba(0,200,83,0.25);
-    border-top: 1px solid rgba(0,200,83,0.15);
+  @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .dashboard-terminal {
+    --dash-ink: #111521;
+    --dash-deep: #080b12;
+    --dash-panel: #191e2b;
+    --dash-panel-hi: #232b3c;
+    --dash-copy: #f1f3fb;
+    --dash-muted: #9aa4bb;
+    --dash-line: rgba(222,230,255,.14);
+    --dash-orange: #f7760d;
+    --dash-amber: #fbbf24;
+    --dash-danger: #ff6b7c;
+    min-height: calc(100dvh - 140px);
+    padding: 34px 15px 72px;
+    color: var(--dash-copy);
+    background: radial-gradient(circle at 8% 0%, rgba(251,191,36,.11), transparent 28%), radial-gradient(circle at 94% 6%, rgba(247,118,13,.09), transparent 26%), var(--dash-ink);
     position: relative;
   }
-  .sb-ticker-wrap::before {
-    content: 'LIVE';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    background: #00c853;
-    color: #000;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    z-index: 2;
+  .dashboard-terminal::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .07; background-image: radial-gradient(rgba(255,255,255,.55) .4px, transparent .65px); background-size: 5px 5px; mix-blend-mode: soft-light; }
+  .dashboard-terminal > .container { position: relative; z-index: 1; max-width: 1180px; }
+  .dashboard-terminal a { text-decoration: none; }
+  .dashboard-terminal a:focus-visible, .dashboard-terminal input:focus-visible { outline: 2px solid var(--dash-orange); outline-offset: 3px; }
+  .dash-ticker { overflow: hidden; position: relative; background: #0c1019; border-top: 1px solid rgba(247,118,13,.2); border-bottom: 1px solid rgba(247,118,13,.34); }
+  .dash-ticker::before { content: "LIVE"; position: absolute; inset: 0 auto 0 0; z-index: 2; display: flex; align-items: center; padding: 0 12px; color: var(--dash-ink); background: var(--dash-orange); font: 800 10px/1 'DM Mono', monospace; letter-spacing: .13em; }
+  .dash-ticker-track { display: flex; width: max-content; padding: 10px 0 10px 68px; animation: ticker-scroll 60s linear infinite; }
+  .dash-ticker:hover .dash-ticker-track { animation-play-state: paused; }
+  .dash-ticker-item { display: inline-flex; align-items: center; gap: 7px; padding: 0 28px; border-right: 1px solid var(--dash-line); color: var(--dash-copy); white-space: nowrap; font: 500 12px/1.2 'DM Mono', monospace; }
+  .dash-ticker-sport { padding: 2px 5px; border: 1px solid rgba(247,118,13,.45); color: var(--dash-orange); background: rgba(247,118,13,.08); font: 700 9px/1 'DM Mono', monospace; letter-spacing: .06em; }
+  .dash-ticker-fav { color: #ff8896; font-weight: 700; } .dash-ticker-dog { color: #f6c76b; font-weight: 700; } .dash-ticker-sep, .dash-ticker-time { color: var(--dash-muted); }
+  .dash-alert { margin-bottom: 18px; padding: 12px 15px; border: 1px solid var(--dash-line); border-left: 2px solid var(--dash-orange); background: rgba(25,30,43,.92); color: var(--dash-copy); font-size: 13px; }
+  .dash-alert--error { border-left-color: var(--dash-danger); color: #ffb4bd; }
+  .dash-header { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--dash-line); }
+  .dash-kicker, .dash-label { margin: 0 0 7px; color: var(--dash-muted); font: 700 10px/1.2 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; }
+  .dash-kicker { color: var(--dash-orange); }
+  .dash-title { margin: 0; color: var(--dash-copy); font: italic 800 32px/.9 'Barlow Condensed', 'Arial Narrow', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  .dash-header-status { color: var(--dash-muted); font: 700 10px/1.4 'DM Mono', monospace; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+  .dash-header-status i { color: var(--dash-orange); margin-right: 5px; }
+  .dash-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: 20px; align-items: start; }
+  .dash-main-stack, .dash-side-stack { display: grid; gap: 20px; }
+  .dash-panel { overflow: hidden; border: 1px solid var(--dash-line); border-radius: 5px; background: rgba(25,30,43,.92); box-shadow: 0 12px 35px rgba(0,0,0,.14); }
+  .dash-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 15px 18px; border-bottom: 1px solid var(--dash-line); background: rgba(8,11,18,.25); }
+  .dash-panel-title { margin: 0; color: var(--dash-copy); font: 800 20px/1 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  .dash-panel-title i { color: var(--dash-orange); margin-right: 7px; }
+  .dash-text-link { color: var(--dash-orange); font: 700 10px/1.2 'DM Mono', monospace; letter-spacing: .06em; text-transform: uppercase; }
+  .dash-text-link:hover { color: #ff9b48; }
+  .dash-balances { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border: 1px solid var(--dash-line); background: var(--dash-line); }
+  .dash-balance { min-height: 172px; padding: 18px; background: var(--dash-panel); }
+  .dash-balance--primary { border-top: 2px solid var(--dash-orange); }
+  .dash-balance-icon { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-bottom: 17px; background: rgba(247,118,13,.11); border: 1px solid rgba(247,118,13,.35); color: var(--dash-orange); }
+  .dash-balance-value { margin: 0 0 5px; color: var(--dash-copy); font: 700 24px/1 'DM Mono', monospace; }
+  .dash-balance-unit { color: var(--dash-muted); font-size: 10px; }
+  .dash-balance-status { min-height: 17px; margin: 12px 0 0; color: var(--dash-muted); font: 700 10px/1.3 'DM Mono', monospace; text-transform: uppercase; }
+  .dash-balance-status i { color: var(--dash-orange); margin-right: 4px; } .dash-balance-status--offline { color: var(--dash-amber); }
+  .dash-mini-action { display: inline-block; margin-top: 10px; padding: 6px 8px; border: 1px solid rgba(247,118,13,.55); border-radius: 2px; color: var(--dash-orange); background: rgba(247,118,13,.06); font: 700 10px/1 'DM Mono', monospace; letter-spacing: .05em; text-transform: uppercase; }
+  .dash-mini-action:hover { color: var(--dash-ink); background: var(--dash-orange); }
+  .dash-action-panel { padding: 18px; border-left: 2px solid var(--dash-orange); background: linear-gradient(90deg, rgba(247,118,13,.1), rgba(25,30,43,.92) 48%); }
+  .dash-action-panel p { margin: 0; color: var(--dash-muted); font-size: 13px; line-height: 1.5; }
+  .dash-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .dash-button { display: inline-flex; align-items: center; justify-content: center; padding: 10px 16px; border: 1px solid var(--dash-line); border-radius: 3px; color: var(--dash-copy); background: rgba(255,255,255,.04); font: 800 16px/1 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  .dash-button:hover { border-color: var(--dash-orange); color: var(--dash-orange); }
+  .dash-button--signal { border-color: var(--dash-orange); color: var(--dash-ink); background: var(--dash-orange); } .dash-button--signal:hover { color: var(--dash-ink); background: #ff8b2c; }
+  .dash-wallet-warning { margin-top: 14px !important; padding: 10px 12px; border: 1px solid rgba(251,191,36,.35); background: rgba(251,191,36,.07); color: #f6d27d !important; font-size: 12px !important; }
+  .dash-wallet-warning a { color: var(--dash-orange); font-weight: 700; text-decoration: underline; }
+  .dash-account-body { display: grid; grid-template-columns: 150px 1fr; gap: 20px; padding: 18px; }
+  .dash-photo { text-align: center; }
+  .dash-avatar, .dash-avatar img { display: block; width: 92px; height: 92px; margin: 0 auto 11px; object-fit: cover; border-radius: 50%; }
+  .dash-avatar { display: flex; align-items: center; justify-content: center; border: 2px dashed rgba(247,118,13,.55); color: var(--dash-orange); background: rgba(247,118,13,.1); font-size: 31px; }
+  .dash-avatar img { border: 2px solid var(--dash-orange); }
+  .dash-photo-button { display: inline-block; padding: 7px 9px; cursor: pointer; border: 1px solid rgba(247,118,13,.52); border-radius: 2px; color: var(--dash-orange); background: rgba(247,118,13,.07); font: 700 9px/1.2 'DM Mono', monospace; letter-spacing: .04em; text-transform: uppercase; }
+  .dash-photo-button:hover { color: var(--dash-ink); background: var(--dash-orange); }
+  .dash-file-input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .dash-photo-help { margin: 7px 0 0; color: var(--dash-muted); font-size: 9px; line-height: 1.4; }
+  .dash-account-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+  .dash-data { min-width: 0; padding: 0 0 14px; border-bottom: 1px solid rgba(222,230,255,.08); }
+  .dash-data:nth-last-child(-n+2) { padding-bottom: 0; border-bottom: 0; }
+  .dash-value { margin: 0; overflow-wrap: anywhere; color: var(--dash-copy); font-size: 13px; line-height: 1.35; }
+  .dash-transactions { overflow-x: auto; padding: 0 18px 10px; }
+  .dash-table { width: 100%; min-width: 570px; border-collapse: collapse; }
+  .dash-table th { padding: 13px 0 9px; color: var(--dash-muted); font: 700 9px/1.2 'DM Mono', monospace; letter-spacing: .1em; text-align: left; text-transform: uppercase; }
+  .dash-table th:not(:first-child), .dash-table td:not(:first-child) { text-align: right; } .dash-table th:nth-child(2), .dash-table td:nth-child(2) { text-align: center; }
+  .dash-table td { max-width: 230px; padding: 12px 0; border-top: 1px solid rgba(222,230,255,.08); color: var(--dash-copy); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dash-type { display: inline-block; padding: 3px 6px; border: 1px solid rgba(222,230,255,.12); color: var(--dash-muted); background: rgba(255,255,255,.035); font: 700 9px/1 'DM Mono', monospace; }
+  .dash-amount { font: 700 12px 'DM Mono', monospace; } .dash-date { color: var(--dash-muted) !important; font-size: 11px !important; }
+  .dash-empty { padding: 33px 12px; text-align: center; color: var(--dash-muted); } .dash-empty i { display: block; margin-bottom: 12px; color: rgba(247,118,13,.48); font-size: 28px; } .dash-empty p { margin: 0 0 14px; font-size: 13px; }
+  .dash-wallet-card { padding: 17px 18px; }
+  .dash-wallet-network { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px; border: 1px solid var(--dash-line); border-left: 2px solid var(--dash-orange); background: rgba(8,11,18,.36); }
+  .dash-wallet-network-main { display: flex; align-items: center; min-width: 0; gap: 10px; } .dash-wallet-network-main > i { color: var(--dash-orange); } .dash-wallet-network p { margin: 0; } .dash-wallet-network code { color: var(--dash-muted); font-size: 10px; }
+  .dash-wallet-name { color: var(--dash-copy); font: 800 17px/1 'Barlow Condensed', sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+  .dash-status { flex: 0 0 auto; padding: 4px 6px; border: 1px solid rgba(247,118,13,.4); color: var(--dash-orange); background: rgba(247,118,13,.08); font: 700 9px/1 'DM Mono', monospace; text-transform: uppercase; } .dash-status--inactive { border-color: var(--dash-line); color: var(--dash-muted); background: transparent; }
+  .dash-connect-wrap { margin-top: 13px; text-align: center; }
+  @media (max-width: 767px) {
+    .dashboard-terminal { padding: 24px 12px 48px; } .dash-header { align-items: flex-start; flex-direction: column; } .dash-title { font-size: 28px; } .dash-grid { display: flex; flex-direction: column; align-items: stretch; } .dash-main-stack, .dash-side-stack { display: contents; } .dash-account-panel { order: 1; } .dash-balance-panel { order: 0; } .dash-action-panel { order: 2; } .dash-transactions-panel { order: 3; } .dash-wallet-panel { order: 4; }
+    .dash-account-body { grid-template-columns: 1fr; } .dash-account-details { grid-template-columns: 1fr; } .dash-data:nth-last-child(-n+2) { padding-bottom: 14px; border-bottom: 1px solid rgba(222,230,255,.08); } .dash-data:last-child { padding-bottom: 0; border-bottom: 0; } .dash-balances { grid-template-columns: 1fr; } .dash-balance { min-height: 146px; } .dash-ticker-item { padding: 0 16px; } .dash-panel-head { padding: 14px; } .dash-wallet-card { padding: 14px; } .dash-action-panel { padding: 16px; }
   }
-  .sb-ticker-track {
-    display: flex;
-    width: max-content;
-    animation: ticker-scroll 60s linear infinite;
-    padding: 10px 0 10px 70px;
-  }
-  .sb-ticker-wrap:hover .sb-ticker-track {
-    animation-play-state: paused;
-  }
-  .sb-ticker-item {
-    display: inline-flex;
-    align-items: center;
-    padding: 0 28px;
-    border-right: 1px solid rgba(255,255,255,0.08);
-    white-space: nowrap;
-    font-size: 12px;
-    color: #cdd6f4;
-    font-family: monospace;
-    gap: 6px;
-  }
-  .sb-ticker-sport {
-    background: rgba(0,200,83,0.15);
-    color: #00c853;
-    border: 1px solid rgba(0,200,83,0.3);
-    border-radius: 4px;
-    padding: 1px 5px;
-    font-size: 10px;
-    font-weight: 700;
-  }
-  .sb-ticker-ml-fav  { color: #fc8181; font-weight: 600; }
-  .sb-ticker-ml-dog  { color: #68d391; font-weight: 600; }
-  .sb-ticker-time    { color: #8892b0; font-size: 11px; }
-  .sb-ticker-sep     { color: rgba(255,255,255,0.2); }
-  .txn-row { transition: background 0.15s; }
-  .txn-row:hover { background: rgba(255,255,255,0.03); border-radius: 6px; }
 </style>
 
-<div class="sb-ticker-wrap">
-  <div class="sb-ticker-track">
+<div class="dash-ticker">
+  <div class="dash-ticker-track">
     <% items = @ticker_items + @ticker_items %>
     <% items.each do |t| %>
-      <span class="sb-ticker-item">
-        <span class="sb-ticker-sport"><%= t[:sport] %></span>
-        <%= t[:emoji] %>
-        <strong><%= t[:away] %></strong>
-        <span class="sb-ticker-sep">@</span>
-        <strong><%= t[:home] %></strong>
-        <span class="sb-ticker-sep">|</span>
-        <span class="<%= t[:home_ml] < 0 ? 'sb-ticker-ml-fav' : 'sb-ticker-ml-dog' %>"><%= t[:home_ml] > 0 ? "+#{t[:home_ml]}" : t[:home_ml] %></span>
-        <span class="sb-ticker-sep">/</span>
-        <span class="<%= t[:away_ml] < 0 ? 'sb-ticker-ml-fav' : 'sb-ticker-ml-dog' %>"><%= t[:away_ml] > 0 ? "+#{t[:away_ml]}" : t[:away_ml] %></span>
-        <span class="sb-ticker-time">— <%= t[:status] %></span>
+      <span class="dash-ticker-item">
+        <span class="dash-ticker-sport"><%= t[:sport] %></span><%= t[:emoji] %>
+        <strong><%= t[:away] %></strong><span class="dash-ticker-sep">@</span><strong><%= t[:home] %></strong>
+        <span class="dash-ticker-sep">|</span>
+        <span class="<%= t[:home_ml] < 0 ? 'dash-ticker-fav' : 'dash-ticker-dog' %>"><%= t[:home_ml] > 0 ? "+#{t[:home_ml]}" : t[:home_ml] %></span>
+        <span class="dash-ticker-sep">/</span>
+        <span class="<%= t[:away_ml] < 0 ? 'dash-ticker-fav' : 'dash-ticker-dog' %>"><%= t[:away_ml] > 0 ? "+#{t[:away_ml]}" : t[:away_ml] %></span>
+        <span class="dash-ticker-time">— <%= t[:status] %></span>
       </span>
     <% end %>
   </div>
 </div>
 
-<div style="min-height: calc(100vh - 200px); background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 30px 15px 60px;">
+<main class="dashboard-terminal">
   <div class="container">
+    <% if flash[:notice] %><div class="dash-alert"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></div><% end %>
+    <% if flash[:alert] %><div class="dash-alert dash-alert--error"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></div><% end %>
 
-    <% if flash[:notice] %>
-      <div style="background: rgba(72, 187, 120, 0.15); border: 1px solid rgba(72, 187, 120, 0.4); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
-        <p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-check-circle"></i> <%= flash[:notice] %></p>
-      </div>
-    <% end %>
-    <% if flash[:alert] %>
-      <div style="background: rgba(245, 101, 101, 0.15); border: 1px solid rgba(245, 101, 101, 0.4); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;">
-        <p style="color: #fc8181; margin: 0; font-size: 14px;"><i class="fa fa-exclamation-circle"></i> <%= flash[:alert] %></p>
-      </div>
-    <% end %>
+    <header class="dash-header">
+      <div><p class="dash-kicker">Account terminal</p><h1 class="dash-title">Welcome, <%= @user.username %></h1></div>
+      <div class="dash-header-status"><i class="fa fa-circle" aria-hidden="true"></i> Session active</div>
+    </header>
 
-    <div style="margin-bottom: 30px;">
-      <h2 style="color: white; font-weight: 700; margin: 0 0 4px 0; font-size: 26px;">
-        Welcome back, <%= @user.username %>
-      </h2>
-      <p style="color: #8892b0; margin: 0; font-size: 15px;">Your SportsBeep Dashboard</p>
-    </div>
-
-    <%# Account Info — kept first so identity and profile controls are easy to find %>
-    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
-      <div style="padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-        <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;"><i class="fa fa-user" style="color: #f7760d; margin-right: 8px;"></i>Account Information</h4>
-      </div>
-      <div style="padding: 22px;">
-        <div class="row">
-          <div class="col-xs-12 col-sm-4" style="text-align: center; margin-bottom: 18px;">
-            <% if @user.profile_photo.attached? %>
-              <%= image_tag @user.profile_photo, alt: "#{@user.username}'s profile photo", style: 'width: 112px; height: 112px; border-radius: 50%; object-fit: cover; border: 3px solid #f7760d; margin-bottom: 12px;' %>
-            <% else %>
-              <div style="width: 112px; height: 112px; border-radius: 50%; background: rgba(247,118,13,0.12); border: 2px dashed rgba(247,118,13,0.55); color: #f7760d; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
-                <i class="fa fa-user" style="font-size: 40px;"></i>
-              </div>
-            <% end %>
-            <%= form_tag update_profile_photo_path, method: :patch, multipart: true, style: 'margin: 0;' do %>
-              <label for="profile_photo" style="display: inline-block; padding: 9px 14px; background: #f7760d; color: #111521; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;">
-                <i class="fa fa-camera" style="margin-right: 6px;"></i>Choose Photo
-              </label>
-              <%= file_field_tag :profile_photo, id: 'profile_photo', accept: 'image/jpeg,image/png,image/webp', style: 'position:absolute; width:1px; height:1px; opacity:0;', onchange: 'this.form.submit()' %>
-              <p style="color: #8892b0; font-size: 10px; margin: 8px 0 0;">JPG, PNG, or WebP. Maximum 5 MB.</p>
-            <% end %>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <div style="margin-bottom: 16px;">
-              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Username</p>
-              <p style="color: white; font-size: 15px; font-weight: 600; margin: 0;"><%= @user.username %></p>
-            </div>
-            <div style="margin-bottom: 16px;">
-              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Email</p>
-              <p style="color: white; font-size: 15px; margin: 0; overflow-wrap: anywhere;"><%= @user.email %></p>
-            </div>
-            <div style="margin-bottom: 16px;">
-              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Name</p>
-              <p style="color: white; font-size: 15px; margin: 0;"><%= [@user.first_name, @user.last_name].compact.join(' ').presence || 'Not set' %></p>
-            </div>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <div style="margin-bottom: 16px;">
-              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Member Since</p>
-              <p style="color: white; font-size: 15px; margin: 0;"><%= @member_since_at.strftime("%B %Y") %></p>
-            </div>
-            <div style="margin-bottom: 16px;">
-              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Last Login</p>
-              <p style="color: white; font-size: 15px; margin: 0;">
-                <% if @user.current_sign_in_at %>
-                  <time datetime="<%= @user.current_sign_in_at.iso8601 %>" title="<%= @user.current_sign_in_at.strftime('%B %d, %Y at %l:%M %p %Z') %>"><%= time_ago_in_words(@user.current_sign_in_at) %> ago</time>
-                <% else %>
-                  First login
-                <% end %>
-              </p>
-            </div>
-            <div style="margin-bottom: 16px;">
-              <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Promo Code</p>
-              <p style="color: white; font-size: 15px; margin: 0;"><%= @user.promo_code.try(:code) || 'None' %></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <%# Balance cards %>
-    <div class="row" style="margin-bottom: 20px;">
-      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 24px; text-align: center;">
-          <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-            <i class="fa fa-coins" style="color: white; font-size: 24px;"></i>
-          </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 8px;">Game Balance ($BEEP)</p>
-          <h3 style="color: white; font-weight: 700; margin: 0 0 8px; font-size: 32px;"><%= @account.balance rescue '0.00' %></h3>
-          <% dash_wallet_connected = (@user&.cardano_wallet_address.present? rescue false) %>
-          <% if dash_wallet_connected %>
-            <p style="color: #00c853; font-size: 12px; margin: 0 0 14px;"><i class="fa fa-link" style="margin-right: 5px;"></i>Wallet connected</p>
-          <% else %>
-            <p style="color: #f6ad55; font-size: 12px; margin: 0 0 14px;"><i class="fa fa-unlink" style="margin-right: 5px;"></i>No wallet connected</p>
-          <% end %>
-          <%= link_to 'View Wallet', wallet_path, style: 'display: inline-block; padding: 9px 24px; background: rgba(231,76,60,0.2); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' %>
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6" style="margin-bottom: 15px;">
-        <div style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 24px; text-align: center;">
-          <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-            <i class="fa fa-gift" style="color: white; font-size: 24px;"></i>
-          </div>
-          <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 8px;">Promo Balance</p>
-          <h3 style="color: white; font-weight: 700; margin: 0 0 16px; font-size: 32px;"><%= @account.promo_balance rescue '0.00' %></h3>
-          <%= link_to 'Redeem Code', redeem_promo_path, style: 'display: inline-block; padding: 9px 24px; background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' %>
-        </div>
-      </div>
-    </div>
-
-    <%# Quick actions %>
-    <div style="background: linear-gradient(135deg, rgba(231,76,60,0.15), rgba(192,57,43,0.1)); border: 1px solid rgba(231,76,60,0.25); border-radius: 14px; padding: 24px 28px; margin-bottom: 20px;">
-      <div class="row" style="display: flex; align-items: center; flex-wrap: wrap;">
-        <div class="col-xs-12 col-sm-6" style="margin-bottom: 10px;">
-          <h4 style="color: white; font-weight: 700; margin: 0 0 4px;">Quick Actions</h4>
-          <p style="color: #8892b0; margin: 0; font-size: 14px;">Jump right into the action!</p>
-        </div>
-        <div class="col-xs-12 col-sm-6 text-right" style="padding-top: 5px;">
-          <%= link_to sportsbook_path, style: 'display: inline-block; padding: 11px 28px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 15px rgba(231,76,60,0.35); margin-right: 10px;' do %>Sportsbook<% end %>
-          <%= link_to 'How to Play', how_to_play_path, style: 'display: inline-block; padding: 11px 28px; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none;' %>
-        </div>
-      </div>
-      <% if @account.balance_cents <= 0 %>
-        <div style="margin-top: 12px; background: rgba(253,203,110,0.1); border: 1px solid rgba(253,203,110,0.3); border-radius: 10px; padding: 12px 18px;">
-          <p style="color: #fdcb6e; margin: 0; font-size: 13px;">
-            <i class="fa fa-exclamation-triangle" style="margin-right: 6px;"></i>
-            You need <strong>$BEEP tokens</strong> to enter contests. <%= link_to 'Go to Wallet', wallet_path, style: 'color: #a29bfe; font-weight: 700; text-decoration: underline;' %> to swap ADA for $BEEP.
-          </p>
-        </div>
-      <% end %>
-    </div>
-
-    <%# Recent Transactions — main content area %>
-    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
-      <div style="padding: 18px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between;">
-        <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">
-          <i class="fa fa-arrow-right-arrow-left" style="color: #00c853; margin-right: 10px;"></i>Recent Transactions
-        </h4>
-        <%= link_to user_transactions_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
-          View All <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
-        <% end %>
-      </div>
-      <div style="padding: 6px 24px 18px;">
-        <% if @recent_transactions.any? %>
-          <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-              <tr>
-                <th style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; padding: 14px 0 10px; text-align: left;">Description</th>
-                <th style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; padding: 14px 0 10px; text-align: center;">Type</th>
-                <th style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; padding: 14px 0 10px; text-align: right;">Amount</th>
-                <th style="color: #8892b0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; padding: 14px 0 10px; text-align: right;">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @recent_transactions.each do |txn| %>
-                <%
-                  is_credit = txn.amount_cents.to_i >= 0 rescue true
-                  type_label = txn.type.to_s.gsub('Transaction','').gsub(/([A-Z])/,' \1').strip.presence || 'Adjustment'
-                  amt_color  = is_credit ? '#68d391' : '#fc8181'
-                  amt_prefix = is_credit ? '+' : ''
-                %>
-                <tr class="txn-row" style="border-top: 1px solid rgba(255,255,255,0.05);">
-                  <td style="color: white; padding: 12px 0; font-size: 14px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><%= txn.description %></td>
-                  <td style="padding: 12px 8px; text-align: center;">
-                    <span style="background: rgba(255,255,255,0.07); color: #8892b0; border-radius: 20px; padding: 3px 10px; font-size: 11px; white-space: nowrap;"><%= type_label %></span>
-                  </td>
-                  <td style="color: <%= amt_color %>; padding: 12px 0; font-size: 14px; text-align: right; font-weight: 700; font-family: monospace;"><%= amt_prefix %><%= txn.amount %></td>
-                  <td style="color: #8892b0; padding: 12px 0; font-size: 12px; text-align: right; white-space: nowrap;"><%= txn.created_at.strftime("%b %d, %Y") %></td>
-                </tr>
+    <div class="dash-grid">
+      <div class="dash-main-stack">
+        <section class="dash-panel dash-account-panel">
+          <div class="dash-panel-head"><h2 class="dash-panel-title"><i class="fa fa-user"></i>Account information</h2></div>
+          <div class="dash-account-body">
+            <div class="dash-photo">
+              <% if @user.profile_photo.attached? %>
+                <div class="dash-avatar"><%= image_tag @user.profile_photo, alt: "#{@user.username}'s profile photo" %></div>
+              <% else %><div class="dash-avatar"><i class="fa fa-user"></i></div><% end %>
+              <%= form_tag update_profile_photo_path, method: :patch, multipart: true do %>
+                <label for="profile_photo" class="dash-photo-button"><i class="fa fa-camera"></i> Choose photo</label>
+                <%= file_field_tag :profile_photo, id: 'profile_photo', accept: 'image/jpeg,image/png,image/webp', class: 'dash-file-input', onchange: 'this.form.submit()' %>
+                <p class="dash-photo-help">JPG, PNG, or WebP.<br>Maximum 5 MB.</p>
               <% end %>
-            </tbody>
-          </table>
-        <% else %>
-          <div style="text-align: center; padding: 40px 0;">
-            <i class="fa fa-arrow-right-arrow-left" style="font-size: 38px; color: rgba(255,255,255,0.1); margin-bottom: 14px; display: block;"></i>
-            <p style="color: #8892b0; margin: 0 0 16px; font-size: 15px;">No transactions yet</p>
-            <%= link_to sportsbook_path, style: 'display: inline-block; padding: 10px 26px; background: linear-gradient(135deg,#e74c3c,#c0392b); color: white; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;' do %>
-              Place Your First Bet
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <%# Connected Wallets %>
-    <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;">
-      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px;">
-        <h4 style="color: white; font-weight: 700; margin: 0; font-size: 17px;">
-          <i class="fa fa-link" style="color: #a29bfe; margin-right: 8px;"></i>Connected Wallets
-        </h4>
-        <%= link_to wallet_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
-          Manage <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
-        <% end %>
-      </div>
-      <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
-          <div style="background: rgba(0,136,204,0.08); border: 1px solid rgba(0,180,216,0.2); border-radius: 10px; padding: 14px 18px;">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center;">
-                <i class="fa fa-wallet" style="color: #00b4d8; font-size: 18px; margin-right: 10px;"></i>
-                <div>
-                  <p style="color: white; font-weight: 600; margin: 0; font-size: 14px;">Cardano</p>
-                  <% if @user.cardano_wallet_address.present? %>
-                    <code style="color: #8892b0; font-size: 11px;"><%= @user.cardano_wallet_address[0..8] %>...<%= @user.cardano_wallet_address[-4..] %></code>
-                  <% else %>
-                    <p style="color: #8892b0; margin: 0; font-size: 12px;">Not connected</p>
-                  <% end %>
-                </div>
-              </div>
-              <span style="padding: 4px 10px; background: <%= @user.cardano_wallet_address.present? ? 'rgba(72,187,120,0.15)' : 'rgba(255,255,255,0.06)' %>; color: <%= @user.cardano_wallet_address.present? ? '#68d391' : '#8892b0' %>; border-radius: 20px; font-size: 11px; font-weight: 600;"><%= @user.cardano_wallet_address.present? ? 'Connected' : 'Inactive' %></span>
+            </div>
+            <div class="dash-account-details">
+              <div class="dash-data"><p class="dash-label">Username</p><p class="dash-value"><%= @user.username %></p></div>
+              <div class="dash-data"><p class="dash-label">Email</p><p class="dash-value"><%= @user.email %></p></div>
+              <div class="dash-data"><p class="dash-label">Name</p><p class="dash-value"><%= [@user.first_name, @user.last_name].compact.join(' ').presence || 'Not set' %></p></div>
+              <div class="dash-data"><p class="dash-label">Member since</p><p class="dash-value"><%= @member_since_at.strftime("%B %Y") %></p></div>
+              <div class="dash-data"><p class="dash-label">Last login</p><p class="dash-value"><% if @user.current_sign_in_at %><time datetime="<%= @user.current_sign_in_at.iso8601 %>" title="<%= @user.current_sign_in_at.strftime('%B %d, %Y at %l:%M %p %Z') %>"><%= time_ago_in_words(@user.current_sign_in_at) %> ago</time><% else %>First login<% end %></p></div>
+              <div class="dash-data"><p class="dash-label">Promo code</p><p class="dash-value"><%= @user.promo_code.try(:code) || 'None' %></p></div>
             </div>
           </div>
-        </div>
-      </div>
-      <% unless @user.cardano_wallet_address.present? %>
-        <div style="margin-top: 14px; text-align: center;">
-          <%= link_to wallet_path, style: 'display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;' do %>
-            <i class="fa fa-plus" style="margin-right: 6px;"></i> Connect Cardano Wallet
-          <% end %>
-        </div>
-      <% end %>
-    </div>
+        </section>
 
+        <section class="dash-panel dash-transactions-panel">
+          <div class="dash-panel-head"><h2 class="dash-panel-title"><i class="fa fa-arrow-right-arrow-left"></i>Recent transactions</h2><%= link_to 'View all', user_transactions_path, class: 'dash-text-link' %></div>
+          <% if @recent_transactions.any? %>
+            <div class="dash-transactions"><table class="dash-table"><thead><tr><th>Description</th><th>Type</th><th>Amount</th><th>Date</th></tr></thead><tbody>
+              <% @recent_transactions.each do |txn| %>
+                <% is_credit = txn.amount_cents.to_i >= 0 rescue true; type_label = txn.type.to_s.gsub('Transaction','').gsub(/([A-Z])/,' \1').strip.presence || 'Adjustment'; amt_color = is_credit ? '#f6c76b' : '#ff8896'; amt_prefix = is_credit ? '+' : '' %>
+                <tr><td><%= txn.description %></td><td><span class="dash-type"><%= type_label %></span></td><td class="dash-amount" style="color: <%= amt_color %>;"><%= amt_prefix %><%= txn.amount %></td><td class="dash-date"><%= txn.created_at.strftime("%b %d, %Y") %></td></tr>
+              <% end %>
+            </tbody></table></div>
+          <% else %>
+            <div class="dash-empty"><i class="fa fa-arrow-right-arrow-left"></i><p>No transactions yet</p><%= link_to 'Place your first bet', sportsbook_path, class: 'dash-button dash-button--signal' %></div>
+          <% end %>
+        </section>
+      </div>
+
+      <aside class="dash-side-stack">
+        <section class="dash-balance-panel">
+          <div class="dash-balances">
+            <div class="dash-balance dash-balance--primary"><div class="dash-balance-icon"><i class="fa fa-coins"></i></div><p class="dash-label">Game balance</p><p class="dash-balance-value"><%= @account.balance rescue '0.00' %> <span class="dash-balance-unit">BEEP</span></p><% dash_wallet_connected = (@user&.cardano_wallet_address.present? rescue false) %><p class="dash-balance-status <%= 'dash-balance-status--offline' unless dash_wallet_connected %>"><i class="fa <%= dash_wallet_connected ? 'fa-link' : 'fa-unlink' %>"></i><%= dash_wallet_connected ? 'Wallet connected' : 'No wallet connected' %></p><%= link_to 'Open wallet', wallet_path, class: 'dash-mini-action' %></div>
+            <div class="dash-balance"><div class="dash-balance-icon"><i class="fa fa-gift"></i></div><p class="dash-label">Promo balance</p><p class="dash-balance-value"><%= @account.promo_balance rescue '0.00' %> <span class="dash-balance-unit">BEEP</span></p><%= link_to 'Redeem code', redeem_promo_path, class: 'dash-mini-action' %></div>
+          </div>
+        </section>
+
+        <section class="dash-panel dash-action-panel">
+          <p class="dash-kicker">Quick actions</p><h2 class="dash-panel-title">Ready for the slate?</h2><p>Enter the sportsbook or review the rules before your next contest.</p>
+          <div class="dash-actions"><%= link_to 'Sportsbook', sportsbook_path, class: 'dash-button dash-button--signal' %><%= link_to 'How to play', how_to_play_path, class: 'dash-button' %></div>
+          <% if @account.balance_cents <= 0 %><p class="dash-wallet-warning"><i class="fa fa-triangle-exclamation"></i> You need <strong>$BEEP tokens</strong> to enter contests. <%= link_to 'Go to Wallet', wallet_path %> to swap ADA for $BEEP.</p><% end %>
+        </section>
+
+        <section class="dash-panel dash-wallet-panel">
+          <div class="dash-panel-head"><h2 class="dash-panel-title"><i class="fa fa-link"></i>Connected wallet</h2><%= link_to 'Manage', wallet_path, class: 'dash-text-link' %></div>
+          <div class="dash-wallet-card">
+            <div class="dash-wallet-network"><div class="dash-wallet-network-main"><i class="fa fa-wallet"></i><div><p class="dash-wallet-name">Cardano</p><% if @user.cardano_wallet_address.present? %><code><%= @user.cardano_wallet_address[0..8] %>...<%= @user.cardano_wallet_address[-4..] %></code><% else %><code>Not connected</code><% end %></div></div><span class="dash-status <%= 'dash-status--inactive' unless @user.cardano_wallet_address.present? %>"><%= @user.cardano_wallet_address.present? ? 'Connected' : 'Inactive' %></span></div>
+            <% unless @user.cardano_wallet_address.present? %><div class="dash-connect-wrap"><%= link_to 'Connect Cardano wallet', wallet_path, class: 'dash-button dash-button--signal' %></div><% end %>
+          </div>
+        </section>
+      </aside>
+    </div>
   </div>
-</div>
+</main>
