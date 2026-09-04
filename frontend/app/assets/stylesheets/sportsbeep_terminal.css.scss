@@ -584,29 +584,16 @@ body.landing-page > .container > .row { margin: 0; }
 .landing-footer__brand-lockup {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
   margin-bottom: 13px;
   color: $sb-copy;
   text-decoration: none;
 }
-.landing-footer__mark {
-  display: grid;
-  width: 31px;
-  height: 24px;
-  place-items: center;
-  transform: skewY(-10deg);
-  border-radius: 4px;
-  background: $sb-signal;
-  color: $sb-ink;
-  font: 800 10px 'DM Mono', monospace;
-  letter-spacing: -.12em;
+.landing-footer__logo {
+  display: block;
+  width: 165px;
+  height: auto;
+  filter: drop-shadow(0 5px 12px rgba(0,0,0,.35));
 }
-.landing-footer__wordmark {
-  font: italic 800 21px 'Barlow Condensed', sans-serif;
-  letter-spacing: -.025em;
-  line-height: 1;
-}
-.landing-footer__wordmark span { color: $sb-signal; }
 .landing-footer__brand p { max-width: 215px; }
 .landing-footer__socials { display: flex; gap: 13px; margin-top: 13px; }
 .landing-footer__socials a {

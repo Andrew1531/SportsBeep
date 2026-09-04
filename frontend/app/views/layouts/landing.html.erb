@@ -21,8 +21,7 @@
   <div class="landing-footer__inner">
     <div class="landing-footer__brand">
       <%= link_to root_path, class: 'landing-footer__brand-lockup', aria: { label: 'SportsBeep home' } do %>
-        <span class="landing-footer__mark" aria-hidden="true">SB</span>
-        <span class="landing-footer__wordmark">SPORTS<span>BEEP</span></span>
+        <%= image_tag 'logo-md.png', class: 'landing-footer__logo', alt: 'SportsBeep' %>
       <% end %>
       <p>Next-generation sports engagement, built on Cardano.</p>
       <nav class="landing-footer__socials" aria-label="SportsBeep social channels">
