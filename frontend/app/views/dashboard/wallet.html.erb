@@ -29,6 +29,265 @@
   }
 </style>
 
+<style>
+  /* Wallet terminal: a compact control surface built on the whitepaper system. */
+  .wallet-page-shell {
+    --wallet-ink: #111521;
+    --wallet-deep: #080b12;
+    --wallet-panel: #191e2b;
+    --wallet-panel-hi: #232b3c;
+    --wallet-copy: #f1f3fb;
+    --wallet-muted: #9aa4bb;
+    --wallet-line: rgba(222,230,255,.14);
+    --wallet-orange: #f7760d;
+    --wallet-amber: #fbbf24;
+    min-height: calc(100dvh - 140px);
+    padding: 34px 15px 72px;
+    color: var(--wallet-copy);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(251,191,36,.11), transparent 28%),
+      radial-gradient(circle at 94% 6%, rgba(247,118,13,.09), transparent 26%),
+      var(--wallet-ink);
+    position: relative;
+  }
+  .wallet-page-shell::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: .07;
+    background-image: radial-gradient(rgba(255,255,255,.55) .4px, transparent .65px);
+    background-size: 5px 5px;
+    mix-blend-mode: soft-light;
+  }
+  .wallet-page-shell > .container { position: relative; z-index: 1; max-width: 1180px; }
+  .wallet-page-shell .wallet-hero {
+    padding: 0 0 22px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--wallet-line);
+  }
+  .wallet-page-shell .wallet-hero-title {
+    color: var(--wallet-copy);
+    font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    font-size: 32px;
+    font-style: italic;
+    font-weight: 800;
+    letter-spacing: .08em;
+  }
+  .wallet-page-shell .wallet-hero-title i { color: var(--wallet-orange) !important; }
+  .wallet-page-shell .wallet-hero-subtitle { color: var(--wallet-muted); font-size: 13px; }
+  .wallet-page-shell .wallet-back-btn {
+    border-radius: 3px;
+    border-color: rgba(247,118,13,.42);
+    background: rgba(247,118,13,.06);
+    color: var(--wallet-orange);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .04em;
+  }
+  .wallet-page-shell .wallet-back-btn:hover { background: var(--wallet-orange); color: var(--wallet-ink); }
+  .wallet-swap-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 22px;
+    padding: 12px 19px;
+    border: 1px solid var(--wallet-orange);
+    border-radius: 3px;
+    background: var(--wallet-orange);
+    color: var(--wallet-ink);
+    font: 800 16px/1 'Barlow Condensed', sans-serif;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease;
+  }
+  .wallet-swap-cta:hover { background: #ff8b2c; transform: translateY(-2px); }
+  .wallet-swap-cta:focus-visible,
+  .wallet-page-shell button:focus-visible,
+  .wallet-page-shell select:focus-visible,
+  .wallet-page-shell input:focus-visible { outline: 2px solid var(--wallet-orange) !important; outline-offset: 3px; }
+  .wallet-token-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    border: 1px solid var(--wallet-line);
+    border-left: 2px solid var(--wallet-orange);
+    background: linear-gradient(90deg, rgba(247,118,13,.1), rgba(25,30,43,.72) 40%);
+  }
+  .wallet-token-bar label, .wallet-token-bar .wallet-token-meta {
+    color: var(--wallet-muted);
+    font: 700 10px/1.4 'DM Mono', monospace;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .wallet-token-bar label strong, .wallet-token-bar .wallet-token-meta strong { color: var(--wallet-copy); }
+  .wallet-token-bar select {
+    min-width: 170px;
+    padding: 8px 30px 8px 10px !important;
+    border: 1px solid rgba(247,118,13,.5) !important;
+    border-radius: 3px !important;
+    background: var(--wallet-deep) !important;
+    color: var(--wallet-copy) !important;
+    font: 700 12px 'DM Mono', monospace;
+  }
+  .wallet-overview {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    margin-bottom: 24px;
+    border: 1px solid var(--wallet-line);
+    background: var(--wallet-line);
+  }
+  .wallet-overview__item { min-height: 88px; padding: 14px 15px; background: var(--wallet-panel); }
+  .wallet-overview__label {
+    margin: 0 0 8px;
+    color: var(--wallet-muted);
+    font: 700 9px/1.2 'DM Mono', monospace;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .wallet-overview__value { margin: 0; color: var(--wallet-copy); font: 700 21px/1 'DM Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wallet-overview__unit { color: var(--wallet-muted); font-size: 10px; }
+  .wallet-overview__status { color: #68d391; }
+  .wallet-overview__action {
+    display: inline-block;
+    margin-top: 7px;
+    padding: 4px 8px;
+    border: 1px solid rgba(247,118,13,.55);
+    border-radius: 2px;
+    background: rgba(247,118,13,.08);
+    color: var(--wallet-orange);
+    font: 700 9px/1.2 'DM Mono', monospace;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .wallet-network-details {
+    margin: -12px 0 22px;
+    border: 1px solid var(--wallet-line);
+    border-left: 2px solid rgba(247,118,13,.55);
+    background: rgba(8,11,18,.48);
+  }
+  .wallet-network-details summary {
+    padding: 9px 12px;
+    color: var(--wallet-muted);
+    font: 700 9px/1.4 'DM Mono', monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .wallet-network-details__body {
+    padding: 0 12px 11px;
+    color: var(--wallet-muted);
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .wallet-activity-strip {
+    display: flex;
+    gap: 18px;
+    margin: -7px 0 20px;
+    color: var(--wallet-muted);
+    font: 700 10px/1.5 'DM Mono', monospace;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  .wallet-activity-strip strong { color: var(--wallet-copy); }
+  .wallet-page-shell .wallet-stat-card, .wallet-page-shell .wallet-stack-card {
+    border-radius: 5px !important;
+    background: rgba(25,30,43,.9) !important;
+    border-color: var(--wallet-line) !important;
+    box-shadow: 0 12px 35px rgba(0,0,0,.14);
+  }
+  .wallet-page-shell .wallet-stat-card { border-top: 2px solid rgba(247,118,13,.5) !important; }
+  .wallet-page-shell .wallet-stat-icon { border-radius: 3px; }
+  .wallet-page-shell .wallet-stat-kicker,
+  .wallet-page-shell .wallet-stat-sub,
+  .wallet-page-shell .wallet-stack-card p[style*="text-transform"] {
+    font-family: 'DM Mono', monospace !important;
+  }
+  .wallet-page-shell > .container > div[style*="display: flex"][style*="margin-bottom: 24px"] {
+    gap: 0 !important;
+    padding: 3px !important;
+    border: 1px solid var(--wallet-line);
+    border-radius: 4px !important;
+    background: rgba(255,255,255,.045) !important;
+  }
+  .wallet-page-shell > .container > div[style*="display: flex"][style*="margin-bottom: 24px"] button {
+    border-radius: 3px !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    letter-spacing: .1em !important;
+  }
+  .wallet-page-shell > .container > div[style*="display: flex"][style*="margin-bottom: 24px"] button[style*="linear-gradient"] {
+    background: var(--wallet-orange) !important;
+    color: var(--wallet-ink) !important;
+  }
+  .wallet-page-shell input, .wallet-page-shell textarea {
+    border-radius: 3px !important;
+    background: #0e121d !important;
+    border-color: var(--wallet-line) !important;
+  }
+  #panel-swap > div,
+  #panel-history > div {
+    background: var(--wallet-panel) !important;
+    border-color: var(--wallet-line) !important;
+    border-radius: 5px !important;
+  }
+  #panel-swap > div > div[style*="rgba(0,0,0,0.25)"],
+  #panel-swap > div > div[style*="rgba(0,0,0,0.15)"] {
+    background: var(--wallet-deep) !important;
+    border-radius: 3px !important;
+  }
+  #panel-swap select {
+    background: var(--wallet-deep) !important;
+    color: var(--wallet-copy) !important;
+    border: 1px solid var(--wallet-line) !important;
+    border-radius: 3px !important;
+  }
+  #panel-swap button[onclick="initiateSwap()"] {
+    background: var(--wallet-orange) !important;
+    color: var(--wallet-ink) !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  #panel-wallets button[onclick="openWalletModal()"],
+  #panel-wallets .wallet-stack-head > div:first-child {
+    background: var(--wallet-orange) !important;
+    color: var(--wallet-ink) !important;
+    box-shadow: none !important;
+  }
+  #panel-wallets button[onclick="openWalletModal()"] i,
+  #panel-wallets .wallet-stack-head > div:first-child i { color: var(--wallet-ink) !important; }
+  #tab-wallets[style*="linear-gradient"],
+  #tab-swap[style*="linear-gradient"],
+  #tab-history[style*="linear-gradient"] {
+    background: var(--wallet-orange) !important;
+    color: var(--wallet-ink) !important;
+  }
+  @media (max-width: 850px) {
+    .wallet-overview { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .wallet-overview__item:last-child { grid-column: span 2; }
+  }
+  @media (max-width: 600px) {
+    .wallet-page-shell { padding: 24px 12px 48px; }
+    .wallet-page-shell .wallet-hero-title { font-size: 27px; }
+    .wallet-swap-cta { width: 100%; justify-content: center; }
+    .wallet-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .wallet-overview__item { min-height: 78px; padding: 12px; }
+    .wallet-overview__value { font-size: 17px; }
+    .wallet-token-bar { align-items: stretch; flex-direction: column; gap: 10px; }
+    .wallet-token-bar select { width: 100%; }
+  }
+</style>
+
 <div class="wallet-page-shell">
   <div class="container">
 
@@ -54,8 +313,11 @@
         <i class="fa fa-arrow-left" style="margin-right: 6px;"></i> Dashboard
       <% end %>
     </div>
+    <button type="button" class="wallet-swap-cta" onclick="showWalletTab('swap')" aria-controls="panel-swap">
+      <i class="fa fa-right-left" aria-hidden="true"></i> Swap assets
+    </button>
     <% if @approved_tokens.present? %>
-      <div style="margin:0 0 18px;color:white;">
+      <div class="wallet-token-bar" style="margin:0 0 18px;color:white;">
         <label for="wallet-token-picker" style="margin-right:8px;">Game token</label>
         <select id="wallet-token-picker" onchange="window.location=this.value" style="color:#111;padding:7px;">
           <% @approved_tokens.each do |token| %>
@@ -63,85 +325,74 @@
             <option value="<%= wallet_path(token_id: token.id) %>" <%= 'selected' if token == @selected_token %>><%= token.ticker %> — <%= token.format_units(balance.balance_units) %></option>
           <% end %>
         </select>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
-        <% @approved_tokens.each do |token| %>
-          <% balance = @token_balances[token] %>
-          <div style="background:rgba(0,0,0,.2);padding:10px;border-radius:8px;color:#fff;"><strong><%= token.ticker %></strong>: <%= token.format_units(balance.balance_units) %> game balance</div>
+        <% if @selected_token %>
+          <span class="wallet-token-meta"><strong><%= @selected_token.ticker %></strong> selected · balances below</span>
         <% end %>
       </div>
       <% if @selected_token %>
         <% token_step = @selected_token.decimals.to_i.zero? ? '1' : "0.#{'0' * (@selected_token.decimals.to_i - 1)}1" %>
         <% selected_game_units = @token_balances[@selected_token].balance_units.to_i %>
         <% selected_game_balance = @selected_token.format_units(selected_game_units) %>
-        <div style="color:#b8dfff;margin-bottom:18px;">
-          <strong><%= @selected_token.ticker %></strong> on-chain: <%= @selected_token.format_units(@selected_token_on_chain.to_i) %>
-          · Treasury exact-token availability: <%= @selected_token.format_units(@treasury_token_units.to_i) %> <%= @selected_token.ticker %>
-          · Treasury ADA availability: <%= @treasury_lovelace.to_i %> lovelace.
-          <% if @treasury_token_units.to_i <= 0 %><span style="color:#fc8181;">Treasury currently cannot pay this token.</span><% end %>
-          <span> Treasury payouts also require ADA for fees/minimum UTxO; a build failure is not charged.</span>
-        </div>
       <% end %>
     <% end %>
 
-    <div class="row wallet-stats-row">
-      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div class="wallet-stat-card">
-          <div class="wallet-stat-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
-            <i class="fa fa-coins" style="color: white; font-size: 18px;"></i>
-          </div>
-          <p class="wallet-stat-kicker"><%= @selected_token&.ticker || 'Token' %></p>
-          <p class="wallet-stat-sub">Connected Wallet</p>
-          <h3 class="wallet-stat-value" style="color: white;"><%= @selected_token ? @selected_token.format_units(@selected_token_on_chain.to_i) : '0' %></h3>
-          <p class="wallet-stat-unit">selected token on-chain</p>
+    <% if @selected_token %>
+      <% overview_game_units = @token_balances[@selected_token].balance_units.to_i %>
+      <div class="wallet-overview" aria-label="Wallet overview">
+        <div class="wallet-overview__item">
+          <p class="wallet-overview__label">Selected token</p>
+          <p class="wallet-overview__value"><%= @selected_token.ticker %></p>
+          <span class="wallet-overview__unit">active asset</span>
         </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div class="wallet-stat-card">
-          <div class="wallet-stat-icon" style="background: linear-gradient(135deg, #6c5ce7, #a29bfe);">
-            <i class="fa fa-users" style="color: white; font-size: 18px;"></i>
-          </div>
-          <p class="wallet-stat-kicker">Referrals</p>
-          <p class="wallet-stat-sub">Signups</p>
-          <h3 class="wallet-stat-value" style="color: white; margin: 0;"><%= @referral_count rescue 0 %></h3>
+        <div class="wallet-overview__item">
+          <p class="wallet-overview__label">Game balance</p>
+          <p class="wallet-overview__value"><%= @selected_token.format_units(overview_game_units) %></p>
+          <span class="wallet-overview__unit">play credit</span>
         </div>
-      </div>
-      <% in_play_units = (@active_wager_total.to_i rescue 0) %>
-      <% in_play_over = in_play_units > 0 && in_play_units > selected_game_units.to_i %>
-      <% ip_bg    = in_play_over ? 'rgba(255,193,7,0.1)'  : 'rgba(255,255,255,0.06)' %>
-      <% ip_bdr   = in_play_over ? 'rgba(255,193,7,0.45)' : 'rgba(255,255,255,0.1)' %>
-      <% ip_icon  = in_play_over ? 'linear-gradient(135deg,#f39c12,#e67e22)' : 'linear-gradient(135deg,#00b894,#00cec9)' %>
-      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div class="wallet-stat-card" style="background: <%= ip_bg %>; border-color: <%= ip_bdr %>; position: relative;">
-          <% if in_play_over %>
-            <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,193,7,0.2); border: 1px solid rgba(255,193,7,0.5); border-radius: 20px; padding: 2px 8px; font-size: 10px; font-weight: 700; color: #ffc107; letter-spacing: 0.5px;">!</span>
-          <% end %>
-          <div class="wallet-stat-icon" style="background: <%= ip_icon %>;">
-            <i class="fa fa-sack-dollar" style="color: white; font-size: 18px;"></i>
-          </div>
-          <p class="wallet-stat-kicker">Total</p>
-          <p class="wallet-stat-sub">In Play</p>
-          <h3 class="wallet-stat-value" style="color: <%= in_play_over ? '#ffc107' : 'white' %>;"><%= @selected_token ? @selected_token.format_units(in_play_units) : '0' %></h3>
-          <p class="wallet-stat-unit"><%= @selected_token&.ticker || 'selected token' %></p>
-          <% if in_play_over %>
-             <p style="color: #f39c12; font-size: 10px; margin: 6px 0 0; line-height: 1.4;">Above your game balance<br>— add more to play</p>
+        <div class="wallet-overview__item">
+          <p class="wallet-overview__label">On-chain wallet</p>
+          <p class="wallet-overview__value"><%= @selected_token.format_units(@selected_token_on_chain.to_i) %></p>
+          <span class="wallet-overview__unit"><%= @selected_token.ticker %></span>
+        </div>
+        <div class="wallet-overview__item">
+          <p class="wallet-overview__label">Total in play</p>
+          <p class="wallet-overview__value"><%= @selected_token.format_units(@active_wager_total.to_i) %></p>
+          <span class="wallet-overview__unit"><%= @selected_token.ticker %> committed</span>
+        </div>
+        <div class="wallet-overview__item">
+          <p class="wallet-overview__label">Connection</p>
+          <% if @user.cardano_wallet_verified_at.present? %>
+            <p class="wallet-overview__value wallet-overview__status">Verified</p>
+            <span class="wallet-overview__unit">Cardano wallet</span>
+          <% elsif @user.cardano_wallet_address.present? %>
+            <p class="wallet-overview__value" style="color:#fbbf24;">Action needed</p>
+            <span class="wallet-overview__unit">verify ownership</span>
+          <% else %>
+            <p class="wallet-overview__value" style="color:#ff6b7c;">Offline</p>
+            <span class="wallet-overview__unit">connect wallet</span>
+            <button type="button" class="wallet-overview__action" onclick="openWalletModal()">Connect</button>
           <% end %>
         </div>
       </div>
-      <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
-        <div class="wallet-stat-card">
-          <div class="wallet-stat-icon" style="background: linear-gradient(135deg, #00b4d8, #0077b6);">
-            <i class="fa fa-clock-rotate-left" style="color: white; font-size: 18px;"></i>
-          </div>
-          <p class="wallet-stat-kicker">Wagers</p>
-          <p class="wallet-stat-sub">All-Time</p>
-          <h3 class="wallet-stat-value" style="color: white; margin: 0;"><%= @total_wager_count rescue 0 %></h3>
+      <details class="wallet-network-details">
+        <summary>Network and treasury status</summary>
+        <div class="wallet-network-details__body">
+          <strong><%= @selected_token.ticker %></strong> on-chain: <%= @selected_token.format_units(@selected_token_on_chain.to_i) %>
+          · Treasury token availability: <%= @selected_token.format_units(@treasury_token_units.to_i) %> <%= @selected_token.ticker %>
+          · Treasury ADA availability: <%= @treasury_lovelace.to_i %> lovelace.
+          <% if @treasury_token_units.to_i <= 0 %><span style="color:#fc8181;"> Treasury currently cannot pay this token.</span><% end %>
+          <span> Payouts require ADA for fees and minimum UTxO; a build failure is not charged.</span>
         </div>
-      </div>
+      </details>
+    <% end %>
+
+    <div class="wallet-activity-strip" aria-label="Account activity">
+      <span>Referrals <strong><%= @referral_count rescue 0 %></strong></span>
+      <span>All-time wagers <strong><%= @total_wager_count rescue 0 %></strong></span>
     </div>
 
     <div style="display: flex; gap: 6px; margin-bottom: 24px; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 4px;">
-      <button onclick="showWalletTab('wallets')" id="tab-wallets" style="flex: 1; padding: 11px 0; background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;">
+      <button onclick="showWalletTab('wallets')" id="tab-wallets" style="flex: 1; padding: 11px 0; background: #f7760d; color: #111521; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;">
         <i class="fa fa-link" style="margin-right: 5px;"></i> WALLETS
       </button>
       <button onclick="showWalletTab('swap')" id="tab-swap" style="flex: 1; padding: 11px 0; background: transparent; color: #8892b0; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;">
@@ -613,8 +864,8 @@
       if (panel) panel.style.display = (p === tab) ? 'block' : 'none';
       if (tabBtn) {
         if (p === tab) {
-          tabBtn.style.background = 'linear-gradient(135deg, #6c5ce7, #a29bfe)';
-          tabBtn.style.color = 'white';
+           tabBtn.style.background = '#f7760d';
+           tabBtn.style.color = '#111521';
         } else {
           tabBtn.style.background = 'transparent';
           tabBtn.style.color = '#8892b0';

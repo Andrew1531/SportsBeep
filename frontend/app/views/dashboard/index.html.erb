@@ -141,11 +141,17 @@
           <div class="col-xs-12 col-sm-4">
             <div style="margin-bottom: 16px;">
               <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Member Since</p>
-              <p style="color: white; font-size: 15px; margin: 0;"><%= @user.created_at.strftime("%B %Y") %></p>
+              <p style="color: white; font-size: 15px; margin: 0;"><%= @member_since_at.strftime("%B %Y") %></p>
             </div>
             <div style="margin-bottom: 16px;">
               <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Last Login</p>
-              <p style="color: white; font-size: 15px; margin: 0;"><%= @user.last_sign_in_at ? @user.last_sign_in_at.strftime("%b %d, %Y") : 'First login' %></p>
+              <p style="color: white; font-size: 15px; margin: 0;">
+                <% if @user.current_sign_in_at %>
+                  <time datetime="<%= @user.current_sign_in_at.iso8601 %>" title="<%= @user.current_sign_in_at.strftime('%B %d, %Y at %l:%M %p %Z') %>"><%= time_ago_in_words(@user.current_sign_in_at) %> ago</time>
+                <% else %>
+                  First login
+                <% end %>
+              </p>
             </div>
             <div style="margin-bottom: 16px;">
               <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Promo Code</p>

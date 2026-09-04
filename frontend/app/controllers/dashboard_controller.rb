@@ -4,6 +4,14 @@ class DashboardController < ApplicationController
   def index
     @user = current_user
     @account = @user.account
+    identity_dates = [@user.created_at]
+    if @user.email.present? && defined?(Administrator)
+      administrator_created_at = Administrator
+        .where('LOWER(email) = ?', @user.email.downcase)
+        .minimum(:created_at)
+      identity_dates << administrator_created_at if administrator_created_at
+    end
+    @member_since_at = identity_dates.compact.min
     @recent_transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(5) }
     load_wallet_info
     load_referral_info
