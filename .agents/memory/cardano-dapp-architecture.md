@@ -12,3 +12,11 @@ description: How CIP-30 wallet verification and on-chain $BEEP transfers work; i
 - **Withdrawal rule:** debit under lock first, then payout. If the payout fails at the *submit* stage the tx may still have landed — the transfer is marked `unknown` and NEVER auto-refunded; only pre-submit (build/sign) failures refund. Deposits credit only after ≥2 confirmations, idempotently under account lock with a unique tx_hash index, and inputs must come from the user's verified wallet (stake-credential match).
 - Rails session cookie is `secure: true` — curl testing must go through `https://$REPLIT_DEV_DOMAIN`, not localhost.
 - User wallet columns are set via `update_columns` because unrelated user validations (e.g. username presence) must not block wallet verification.
+
+## CIP-8 CBOR envelope
+
+CIP-8 `COSE_Sign1` signatures are wrapped in CBOR tag 18. The Ruby `cbor` gem decodes that envelope as `CBOR::Tagged`, not as the four-element array directly; accept only tag 18 and verify its value.
+
+**Why:** Treating the decoded object as an array rejects standards-compliant `signData` output from real Cardano wallets.
+
+**How to apply:** Any verifier or fixture for CIP-30 `signData` must encode/decode the tag-18 envelope, while rejecting untagged or differently tagged structures.

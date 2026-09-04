@@ -12,8 +12,13 @@ class CardanoSignatureService
   # address_bytes: raw bytes of the address the wallet signed with
   # expected_payload: the exact nonce string the server asked the wallet to sign
   def self.verify(signature_hex:, key_hex:, address_bytes:, expected_payload:)
-    cose_sign1 = CBOR.decode([signature_hex].pack('H*'))
+    tagged_sign1 = CBOR.decode([signature_hex].pack('H*'))
     cose_key   = CBOR.decode([key_hex].pack('H*'))
+
+    unless tagged_sign1.is_a?(CBOR::Tagged) && tagged_sign1.tag == 18
+      return Result.new(valid: false, error: 'Malformed signature tag')
+    end
+    cose_sign1 = tagged_sign1.value
 
     unless cose_sign1.is_a?(Array) && cose_sign1.length == 4
       return Result.new(valid: false, error: 'Malformed signature structure')

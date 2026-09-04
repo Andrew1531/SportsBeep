@@ -45,7 +45,7 @@
             <i class="fa fa-wallet" style="color: white; font-size: 18px;"></i>
           </div>
           <p style="color: #8892b0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Cardano</p>
-          <h3 style="color: <%= @user.cardano_wallet_address.present? ? '#68d391' : '#fc8181' %>; font-weight: 700; margin: 0; font-size: 16px;"><%= @user.cardano_wallet_address.present? ? 'Connected' : 'Not Connected' %></h3>
+          <h3 style="color: <%= @user.cardano_wallet_verified_at.present? ? '#68d391' : (@user.cardano_wallet_address.present? ? '#f6ad55' : '#fc8181') %>; font-weight: 700; margin: 0; font-size: 16px;"><%= @user.cardano_wallet_verified_at.present? ? 'Verified' : (@user.cardano_wallet_address.present? ? 'Verification Required' : 'Not Connected') %></h3>
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4" style="margin-bottom: 15px;">
@@ -86,9 +86,15 @@
               </div>
             <% end %>
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-              <span style="display: inline-flex; align-items: center; padding: 6px 14px; background: rgba(72,187,120,0.15); color: #68d391; border: 1px solid rgba(72,187,120,0.3); border-radius: 20px; font-size: 12px; font-weight: 600;">
-                <i class="fa fa-circle" style="font-size: 8px; margin-right: 6px;"></i> Connected
-              </span>
+              <% if @user.cardano_wallet_verified_at.present? %>
+                <span style="display: inline-flex; align-items: center; padding: 6px 14px; background: rgba(72,187,120,0.15); color: #68d391; border: 1px solid rgba(72,187,120,0.3); border-radius: 20px; font-size: 12px; font-weight: 600;">
+                  <i class="fa fa-check" style="font-size: 9px; margin-right: 6px;"></i> Verified
+                </span>
+              <% else %>
+                <button onclick="openWalletModal()" style="padding: 8px 18px; background: rgba(246,173,85,0.15); color: #f6ad55; border: 1px solid rgba(246,173,85,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                  <i class="fa fa-signature" style="margin-right: 4px;"></i> Verify Wallet
+                </button>
+              <% end %>
               <%= link_to disconnect_cardano_path, method: :delete, data: { confirm: 'Disconnect your Cardano wallet?' }, style: 'display: inline-block; padding: 8px 18px; background: rgba(245,101,101,0.15); color: #fc8181; border: 1px solid rgba(245,101,101,0.3); border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; margin-top: 5px;' do %>
                 <i class="fa fa-unlink" style="margin-right: 4px;"></i> Disconnect
               <% end %>
@@ -231,15 +237,5 @@
     setTimeout(function() {
       statusDiv.innerHTML = '<div style="background: rgba(72,187,120,0.15); border: 1px solid rgba(72,187,120,0.3); border-radius: 10px; padding: 12px 16px;"><p style="color: #68d391; margin: 0; font-size: 14px;"><i class="fa fa-check-circle" style="margin-right: 6px;"></i>Swap request submitted! Your ' + beepAmount + ' $BEEP will be credited to your account shortly. $BEEP is live on Cardano mainnet.</p></div>';
     }, 2000);
-  }
-
-  function validateCardanoAddress() {
-    var input = document.getElementById('cardano-address-input');
-    var btn = document.getElementById('cardano-connect-btn');
-    if (!input || !btn) return;
-    var val = input.value.trim();
-    var valid = val.length > 50 && (val.startsWith('addr1') || val.startsWith('addr_test1'));
-    btn.disabled = !valid;
-    btn.style.opacity = valid ? '1' : '0.5';
   }
 </script>
