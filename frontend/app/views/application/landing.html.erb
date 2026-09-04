@@ -1,13 +1,72 @@
-<div class="splash-1">
-  <%= image_tag 'logo-md.png' %>
-  <ul>
-    <li><%= link_to 'About Us', '#about-us' %></li>
-    <li><%= link_to 'Why Sportsbeep', '#why-sportsbeep' %></li>
-    <li><%= link_to 'Sign Up', new_user_registration_path %></li>
-    <li><%= link_to (current_user ? 'Play' : 'Login & Play'), play_path %></li>
-    <li><%= link_to 'Contact', '#contact-us' %></li>
-  </ul>
-</div>
+<section class="splash-1" aria-labelledby="landing-hero-title">
+  <div class="splash-1-shade" aria-hidden="true"></div>
+  <header class="landing-hero-nav">
+    <%= link_to root_path, class: 'landing-hero-brand', aria: { label: 'SportsBeep home' } do %>
+      <%= image_tag 'logo-md.png', alt: 'SportsBeep' %>
+    <% end %>
+    <nav aria-label="Primary navigation">
+      <ul>
+        <li><%= link_to 'About Us', '#about-us' %></li>
+        <li><%= link_to 'Why Sportsbeep', '#why-sportsbeep' %></li>
+        <li><%= link_to 'Contact', '#contact-us' %></li>
+        <li><%= link_to 'Sign Up', new_user_registration_path, class: 'landing-hero-nav-join' %></li>
+        <li><%= link_to (current_user ? 'Play' : 'Login & Play'), play_path, class: 'landing-hero-nav-play' %></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="landing-hero-content">
+    <h1 id="landing-hero-title">
+      <span>BET. EARN.</span>
+      <strong>WIN WITH <i>$BEEP</i></strong>
+    </h1>
+    <p class="landing-hero-deck">
+      The first sports betting protocol on <b>Cardano.</b> Secure your <b>$BEEP</b> at founder pricing before the public launch.
+    </p>
+
+    <div class="landing-countdown" data-countdown-target="" aria-live="polite" aria-label="Phase 1 countdown. Date to be announced.">
+      <p class="landing-countdown-label"><span></span> PHASE 1 CLOSES IN <span></span></p>
+      <div class="landing-countdown-cards">
+        <div class="landing-countdown-card"><output data-countdown-days>00</output><span>DAYS</span></div>
+        <div class="landing-countdown-card"><output data-countdown-hours>00</output><span>HOURS</span></div>
+        <div class="landing-countdown-card"><output data-countdown-minutes>00</output><span>MIN</span></div>
+        <div class="landing-countdown-card"><output data-countdown-seconds>00</output><span>SEC</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  (function () {
+    function startCountdown() {
+      var countdown = document.querySelector('.landing-countdown');
+      if (!countdown) { return; }
+      var target = Date.parse(countdown.getAttribute('data-countdown-target') || '');
+      if (isNaN(target)) { return; }
+      function render() {
+        var remaining = Math.max(0, target - new Date().getTime());
+        var seconds = Math.floor(remaining / 1000);
+        var values = [
+          Math.floor(seconds / 86400),
+          Math.floor((seconds % 86400) / 3600),
+          Math.floor((seconds % 3600) / 60),
+          seconds % 60
+        ];
+        var names = ['days', 'hours', 'minutes', 'seconds'];
+        for (var i = 0; i < names.length; i += 1) {
+          var field = countdown.querySelector('[data-countdown-' + names[i] + ']');
+          if (field) { field.textContent = ('0' + values[i]).slice(-2); }
+        }
+      }
+      render();
+      window.setInterval(render, 1000);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startCountdown);
+    } else {
+      startCountdown();
+    }
+  }());
+</script>
 <div class="about-us">
   <div class="landing-padding">
     <a name="about-us"></a>
