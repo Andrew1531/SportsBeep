@@ -1,12 +1,12 @@
-<div style="min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 40px 15px; background-image: linear-gradient(to bottom, rgba(0,0,0,0.78), rgba(0,0,0,0.94)), url('<%= asset_path('auth-basketball-bg.jpg') %>'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<div class="auth-shell" style="min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 40px 15px; background-image: linear-gradient(to bottom, rgba(0,0,0,0.78), rgba(0,0,0,0.94)), url('<%= asset_path('auth-basketball-bg.jpg') %>'); background-size: cover; background-position: center; background-repeat: no-repeat;">
   <div style="width: 100%; max-width: 420px;">
     <div style="text-align: center; margin-bottom: 30px;">
       <%= image_tag 'logo.png', height: '60px', width: '60px', style: 'margin-bottom: 10px;' %>
-      <h2 style="color: white; font-weight: 700; margin: 0 0 5px 0; font-size: 28px;">Welcome Back</h2>
-      <p style="color: #8892b0; margin: 0; font-size: 15px;">Sign in to your SportsBeep account</p>
+      <h2 class="auth-title" style="color: white; font-weight: 700; margin: 0 0 5px 0; font-size: 28px;">Welcome Back</h2>
+      <p class="auth-subtitle" style="color: #8892b0; margin: 0; font-size: 15px;">Sign in to your SportsBeep account</p>
     </div>
 
-    <div style="background: white; border-radius: 12px; padding: 35px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+    <div class="auth-panel" style="background: white; border-radius: 12px; padding: 35px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
 
       <% if flash[:alert] %>
         <div style="background: #fff5f5; border: 1px solid #fc8181; border-radius: 8px; padding: 12px 15px; margin-bottom: 20px;">

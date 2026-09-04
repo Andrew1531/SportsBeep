@@ -8,7 +8,7 @@
 <div id="buy-beep-modal" class="bb-modal-backdrop" onclick="if(event.target===this)bbCloseModal()" style="display:none;">
   <div class="bb-modal">
     <button class="bb-modal-close" onclick="bbCloseModal()">&#x2715;</button>
-    <div class="bb-modal-icon">⚡</div>
+    <div class="bb-modal-icon"><i class="fa fa-bolt"></i></div>
     <h2 class="bb-modal-title">Insufficient $BEEP</h2>
     <p class="bb-modal-body" id="bb-modal-msg">
       You can only wager play credit you've unlocked in your SportsBeep game balance. Holding $BEEP in your connected wallet unlocks credit — your real tokens stay in your wallet.
@@ -387,7 +387,7 @@ window.sbUpdatePayout = function() {
       warn.className = 'bs-balance-warn';
       document.getElementById('bs-wager-disp').parentNode.parentNode.after(warn);
     }
-    warn.textContent = '⚠ Exceeds your balance of ' + (SB_BALANCE_CENTS / 100.0).toFixed(2) + ' $BEEP';
+     warn.textContent = 'Exceeds your balance of ' + (SB_BALANCE_CENTS / 100.0).toFixed(2) + ' $BEEP';
     document.querySelector('.dk-bs-submit').classList.add('dk-bs-submit--danger');
   } else {
     if (warn) warn.remove();

@@ -4,7 +4,7 @@ class DashboardController < ApplicationController
   def index
     @user = current_user
     @account = @user.account
-    @recent_transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(10) }
+    @recent_transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(5) }
     load_wallet_info
     load_referral_info
     @ticker_items = build_ticker_items

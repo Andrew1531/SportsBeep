@@ -45,6 +45,7 @@ SportsbeepWeb::Application.routes.draw do
   get 'transactions', to: 'dashboard#transactions', as: :user_transactions
   get 'redeem', to: 'dashboard#redeem_promo', as: :redeem_promo
   post 'redeem', to: 'dashboard#apply_promo', as: :apply_promo
+  patch 'profile/photo', to: 'users#update_profile_photo', as: :update_profile_photo
   root to: 'application#landing'
 
   get 'how-to-play', to: 'pages#how_to_play', as: :how_to_play

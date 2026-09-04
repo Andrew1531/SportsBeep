@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+
 /*
 * This is a manifest file that'll be compiled into application.css, which will include all the files
 * listed below.
@@ -34,6 +36,7 @@
 @import 'cards.css.scss';
 @import 'best_and_bust.css.scss';
 @import 'sportsbook.css.scss';
+@import 'sportsbeep_terminal.css.scss';
 
 // Global styles (after imports so they can override)
 .vertically-centered {

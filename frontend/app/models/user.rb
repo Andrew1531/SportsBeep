@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   belongs_to :promo_code, counter_cache: true
 
   has_one :account
+  has_one_attached :profile_photo
   # has_ancestry - commented out as gem not available in simplified setup
 
   # mount_uploader :avatar, AvatarUploader - commented out as carrierwave not available
