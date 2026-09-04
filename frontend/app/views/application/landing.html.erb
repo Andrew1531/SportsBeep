@@ -43,29 +43,40 @@
 </div>
 <div class="splash-2">
   <a name="why-sportsbeep"></a>
-  <div class="ad">
-    <p>
-      PLAY, WIN, EARN &amp; SHARE
-      <br>
-      with the next generation of fantasy sports on blockchain
-    </p>
-    <p>
-      Free &amp; paid games available.
-    </p>
-    <p>
-      No long-term commitment. Jump in anytime—play when you want!
-    </p>
-    <%= link_to 'Play Now!', play_path, class: 'play-btn' %>
-    <p>
-      Our mobile app is coming soon. We're actively building for iOS and Android, and while it's not yet available in the App Store or Google Play, you can already experience SPORTSBEEP directly through our web platform. Stay tuned for launch updates!
-    </p>
-    <p style="margin-top: 30px;">
-      <strong>Learn more about our technology:</strong>
-    </p>
-    <%= link_to 'Read Our White Paper', '/whitepaper.html', target: '_blank', class: 'play-btn', style: 'margin-top: 10px; display: inline-block;' %>
-  </div>
-  <div class="phones">
-    <%= image_tag 'landing-phones.png' %>
+  <div class="splash-2-inner">
+    <div class="ad splash-2-copy">
+      <div class="splash-2-kicker" aria-hidden="true"><span></span> LIVE FROM THE FAN ZONE</div>
+      <p class="splash-2-headline">
+        PLAY, WIN, EARN &amp; SHARE
+        <br>
+        <span>with the next generation of fantasy sports on blockchain</span>
+      </p>
+      <div class="splash-2-offer">
+        <p>
+          Free &amp; paid games available.
+        </p>
+        <p>
+          No long-term commitment. Jump in anytime—play when you want!
+        </p>
+      </div>
+      <%= link_to 'Play Now!', play_path, class: 'play-btn splash-2-primary-cta' %>
+      <div class="splash-2-mobile-note">
+        <p>
+          Our mobile app is coming soon. We're actively building for iOS and Android, and while it's not yet available in the App Store or Google Play, you can already experience SPORTSBEEP directly through our web platform. Stay tuned for launch updates!
+        </p>
+        <p class="splash-2-tech-label">
+          <strong>Learn more about our technology:</strong>
+        </p>
+        <%= link_to 'Read Our White Paper', '/whitepaper.html', target: '_blank', class: 'play-btn splash-2-paper-cta' %>
+      </div>
+    </div>
+    <div class="phones splash-2-devices">
+      <div class="splash-2-device-stage">
+        <div class="splash-2-stage-mark splash-2-stage-mark-a" aria-hidden="true">01</div>
+        <div class="splash-2-stage-mark splash-2-stage-mark-b" aria-hidden="true">BEEP</div>
+        <%= image_tag 'landing-phones.png' %>
+      </div>
+    </div>
   </div>
 </div>
 <div class="clearfix"></div>

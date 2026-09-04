@@ -3,3 +3,4 @@
 - [ERB auto-escaping inside script tags](erb-script-escaping.md) — `<%= x.to_json %>` in inline JS renders `&quot;`, killing the whole script block; always append `.html_safe`.
 - [Cardano dApp architecture](cardano-dapp-architecture.md) — CIP-30 verify flow, on-chain mode flags, strict policy-ID matching, and the never-auto-refund-on-submit-failure withdrawal rule.
 - [Legacy Sass sizing syntax](legacy-sass-sizing-syntax.md) — SassC treats CSS min/max/clamp as Sass math and crashes on mixed units; use max-width and media-query fallbacks.
+- [Sprockets cache refresh](sprockets-cache-refresh.md) — assets:clobber alone can keep stale SCSS; clear tmp/cache too and verify the served digest before judging UI changes.
