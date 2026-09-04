@@ -126,9 +126,9 @@ ActiveRecord::Schema.define(version: 2026_09_06_000000) do
   end
 
   create_table "cardano_swaps", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "swap_asset_id", null: false
-    t.bigint "swap_quote_id", null: false
+    t.integer "user_id", null: false
+    t.integer "swap_asset_id", null: false
+    t.integer "swap_quote_id", null: false
     t.bigint "amount_units", null: false
     t.bigint "beep_amount", null: false
     t.string "payout_method", null: false
@@ -144,31 +144,6 @@ ActiveRecord::Schema.define(version: 2026_09_06_000000) do
     t.index ["swap_asset_id"], name: "index_cardano_swaps_on_swap_asset_id"
     t.index ["swap_quote_id"], name: "index_cardano_swaps_on_swap_quote_id", unique: true
     t.index ["user_id"], name: "index_cardano_swaps_on_user_id"
-  end
-
-  create_table "swap_assets", force: :cascade do |t|
-    t.string "asset_unit", null: false
-    t.string "policy_id"
-    t.string "ticker", null: false
-    t.integer "decimals", default: 0, null: false
-    t.decimal "beep_per_asset", precision: 30, scale: 12, null: false
-    t.boolean "enabled", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["asset_unit"], name: "index_swap_assets_on_asset_unit", unique: true
-  end
-
-  create_table "swap_quotes", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "swap_asset_id", null: false
-    t.bigint "amount_units", null: false
-    t.bigint "beep_amount", null: false
-    t.decimal "beep_per_asset", precision: 30, scale: 12, null: false
-    t.datetime "expires_at", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["swap_asset_id"], name: "index_swap_quotes_on_swap_asset_id"
-    t.index ["user_id"], name: "index_swap_quotes_on_user_id"
   end
 
   create_table "contest_template_questions", force: :cascade do |t|
@@ -425,6 +400,31 @@ ActiveRecord::Schema.define(version: 2026_09_06_000000) do
     t.index ["game_id"], name: "index_stats_on_game_id"
     t.index ["player_id"], name: "index_stats_on_player_id"
     t.index ["team_id"], name: "index_stats_on_team_id"
+  end
+
+  create_table "swap_assets", force: :cascade do |t|
+    t.string "asset_unit", null: false
+    t.string "policy_id"
+    t.string "ticker", null: false
+    t.integer "decimals", default: 0, null: false
+    t.decimal "beep_per_asset", precision: 30, scale: 12, null: false
+    t.boolean "enabled", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["asset_unit"], name: "index_swap_assets_on_asset_unit", unique: true
+  end
+
+  create_table "swap_quotes", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "swap_asset_id", null: false
+    t.bigint "amount_units", null: false
+    t.bigint "beep_amount", null: false
+    t.decimal "beep_per_asset", precision: 30, scale: 12, null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["swap_asset_id"], name: "index_swap_quotes_on_swap_asset_id"
+    t.index ["user_id"], name: "index_swap_quotes_on_user_id"
   end
 
   create_table "team_game_stats", force: :cascade do |t|
