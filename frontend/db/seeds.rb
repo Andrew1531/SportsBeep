@@ -1,6 +1,19 @@
 Fabricate :administrator, email: 'getinked53@gmail.com', password: '$sb2025$' unless Administrator.exists?(email: 'getinked53@gmail.com')
 Setting.create if Setting.count.zero?
 
+# The exact unit is required. Do not seed a policy-only token because it could
+# accept a different asset minted by the same policy.
+beep_unit = ENV['BEEP_ASSET_UNIT'].to_s.strip.downcase
+if beep_unit.match?(/\A[0-9a-f]{56}[0-9a-f]+\z/)
+  ApprovedToken.find_or_create_by!(asset_unit: beep_unit) do |token|
+    token.policy_id = beep_unit[0, 56]
+    token.display_name = 'SportsBeep'
+    token.ticker = 'BEEP'
+    token.decimals = ENV.fetch('BEEP_DECIMALS', '0').to_i
+    token.enabled = true
+  end
+end
+
 # seed some default pools (should be configurable in admin portal)
 # [0, 20, 50, 100, 250, 500, 1000, 2500, 5000]
 [0].each do |prize_pool|

@@ -6,6 +6,7 @@ class SportsbookController < ApplicationController
     @sport = params[:sport] || 'mlb'
     @games = fetch_games_with_odds(@sport)
     @open_wagers = @user ? @user.wagers.open.game_pending.recent.limit(5) : []
+    @approved_tokens = ApprovedToken.enabled.order(:ticker)
   end
 
   def place_wager
@@ -18,7 +19,18 @@ class SportsbookController < ApplicationController
       clean_params[:selection_detail] = parlay_legs_json
     end
 
-    @wager = @user.wagers.build(clean_params)
+    @wager = @user.wagers.build(clean_params.except(:amount_cents, :amount_units))
+    begin
+      token = ApprovedToken.enabled.find_by(id: clean_params[:approved_token_id])
+      return redirect_to(sportsbook_path, alert: 'Choose an enabled approved token for this wager.') unless token
+
+      @wager.approved_token = token
+      @wager.amount_units = token.parse_amount!(params.dig(:wager, :amount))
+      # Token wagers never use the legacy BEEP-credit cents balance.
+      @wager.amount_cents = 0
+    rescue TokenAmount::InvalidAmount, ArgumentError => e
+      return redirect_to(sportsbook_path, alert: e.message)
+    end
 
     success = false
     ActiveRecord::Base.transaction do
@@ -29,7 +41,8 @@ class SportsbookController < ApplicationController
     end
 
     if success
-      redirect_to sportsbook_path(sport: @wager.sport), notice: "Wager placed! #{@wager.amount} $BEEP on #{@wager.selection} (#{@wager.odds_display})"
+      ticker = @wager.approved_token.ticker
+      redirect_to sportsbook_path(sport: @wager.sport), notice: "Wager placed! #{ticker} on #{@wager.selection} (#{@wager.odds_display})"
     else
       @sport = @wager.sport || 'mlb'
       @games = fetch_games_with_odds(@sport)
@@ -61,7 +74,7 @@ class SportsbookController < ApplicationController
       :sport, :league, :fixture_id, :game_id,
       :home_team, :away_team, :game_start_time,
       :bet_type, :selection, :selection_detail,
-      :odds, :points, :amount_cents, :sportsbook,
+      :odds, :points, :amount_cents, :amount, :amount_units, :approved_token_id, :sportsbook,
       :is_parlay, :parlay_legs
     )
   end

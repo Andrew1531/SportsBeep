@@ -15,6 +15,9 @@ SportsbeepWeb::Application.routes.draw do
   post 'reset-password', to: 'pages#submit_reset_request'
 
   devise_for :administrators, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { sessions: 'admin/sessions' }
+  namespace :admin do
+    resources :approved_tokens, except: :show
+  end
 
   # require 'sidekiq/web'
   # require 'sidetiq/web'

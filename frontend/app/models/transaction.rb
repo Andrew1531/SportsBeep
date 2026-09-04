@@ -3,6 +3,7 @@ class Transaction < ActiveRecord::Base
   CREDIT_CLEARING_EXPENSE_RATE = 0.02
 
   belongs_to :account
+  belongs_to :approved_token, optional: true
   has_one :user, through: :account
 
   monetize :amount_cents

@@ -254,7 +254,7 @@
                 <div class="cc-meta">
                   <span><%= contest.tickets_count || 0 %> / <%= pool&.max_tickets_per_contest || '?' %> entered</span>
                   &nbsp;·&nbsp;
-                  <span><%= pool ? "#{pool.entry_fee.round(2)} $BEEP entry" : 'Free' %></span>
+                  <span><%= pool ? "#{pool.entry_fee.round(2)} token entry" : 'Free' %></span>
                 </div>
               </div>
               <div class="cc-prize">
@@ -271,7 +271,7 @@
         </div>
       <% end %>
       <div style="margin-top: 12px; padding: 12px 14px; background: #131a24; border-radius: 10px; font-size: 12px; color: #6b7a8f;">
-        <strong style="color: #c5d0de;">Balance:</strong> <%= @account.balance rescue 0 %> $BEEP &nbsp;·&nbsp;
+        <strong style="color: #c5d0de;">Entry currency:</strong> choose an approved token below &nbsp;·&nbsp;
         <strong style="color: #c5d0de;">Required:</strong> Select a contest above
       </div>
     </div>
@@ -286,6 +286,15 @@
 <%# ===== FLOATING PICKS PANEL ===== %>
 <%= form_tag fantasy_enter_contest_path, method: :post, id: 'pickForm' do %>
   <input type="hidden" name="contest_id" id="hidden_contest_id" value="">
+  <div style="position:fixed;bottom:178px;left:16px;right:16px;z-index:40;background:#131a24;padding:10px 14px;border-radius:10px;">
+    <label for="contest-approved-token" style="display:block;color:#c5d0de;font-size:11px;font-weight:700;margin-bottom:5px;">ENTRY TOKEN</label>
+    <select name="approved_token_id" id="contest-approved-token" style="width:100%;">
+      <% @approved_tokens.each do |token| %>
+        <% units = @account.token_balance_for(token).balance_units.to_i %>
+        <option value="<%= token.id %>"><%= token.ticker %> — balance <%= token.format_units(units) %></option>
+      <% end %>
+    </select>
+  </div>
   <div id="picksPanel" class="picks-panel">
     <div class="picks-slots" id="picksSlots">
       <div class="pick-slot pick-slot-best-empty" id="slot-best-0"><div class="pick-slot-label">🔥 Best</div><div style="font-size: 9px; color: #00c853; margin-top: 2px;">Empty</div></div>

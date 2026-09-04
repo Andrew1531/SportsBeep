@@ -3,6 +3,7 @@ class Ticket < ActiveRecord::Base
   attr_accessor :game, :pool, :roster
 
   belongs_to :user
+  belongs_to :approved_token, optional: true
   belongs_to :contest, counter_cache: true, touch: true
   belongs_to :league_pick_game, class_name: 'Game'
   belongs_to :league_pick_team, class_name: 'Team'
@@ -36,6 +37,7 @@ class Ticket < ActiveRecord::Base
   validate :must_not_join_the_same_game_and_pool_more_than_5_times, on: :create
   validate :must_be_saved_before_game_time
   validate :must_have_beep_balance, on: :create
+  validate :must_use_enabled_token, on: :create
 
   after_create { GenerateTimerStates.new.call(self) }
 
@@ -132,9 +134,13 @@ class Ticket < ActiveRecord::Base
 
     def must_have_beep_balance
       account = user&.account
-      if account.nil? || account.balance_cents <= 0
-        errors.add :base, 'You need $BEEP tokens to enter a contest. Visit your Wallet to swap ADA for $BEEP.'
+      if account.nil? || !approved_token || account.token_balance_for(approved_token).balance_units.to_i <= 0
+        errors.add :base, "You need #{approved_token&.ticker || 'an approved token'} tokens to enter a contest."
       end
+    end
+
+    def must_use_enabled_token
+      errors.add(:approved_token, 'must be an enabled approved token') unless approved_token&.enabled?
     end
 
     def must_not_join_the_same_contest_twice_per_user

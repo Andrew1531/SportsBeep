@@ -54,6 +54,35 @@
         <i class="fa fa-arrow-left" style="margin-right: 6px;"></i> Dashboard
       <% end %>
     </div>
+    <% if @approved_tokens.present? %>
+      <div style="margin:0 0 18px;color:white;">
+        <label for="wallet-token-picker" style="margin-right:8px;">Game token</label>
+        <select id="wallet-token-picker" onchange="window.location=this.value" style="color:#111;padding:7px;">
+          <% @approved_tokens.each do |token| %>
+            <% balance = @token_balances[token] %>
+            <option value="<%= wallet_path(token_id: token.id) %>" <%= 'selected' if token == @selected_token %>><%= token.ticker %> — <%= token.format_units(balance.balance_units) %></option>
+          <% end %>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+        <% @approved_tokens.each do |token| %>
+          <% balance = @token_balances[token] %>
+          <div style="background:rgba(0,0,0,.2);padding:10px;border-radius:8px;color:#fff;"><strong><%= token.ticker %></strong>: <%= token.format_units(balance.balance_units) %> game balance</div>
+        <% end %>
+      </div>
+      <% if @selected_token %>
+        <% token_step = @selected_token.decimals.to_i.zero? ? '1' : "0.#{'0' * (@selected_token.decimals.to_i - 1)}1" %>
+        <% selected_game_units = @token_balances[@selected_token].balance_units.to_i %>
+        <% selected_game_balance = @selected_token.format_units(selected_game_units) %>
+        <div style="color:#b8dfff;margin-bottom:18px;">
+          <strong><%= @selected_token.ticker %></strong> on-chain: <%= @selected_token.format_units(@selected_token_on_chain.to_i) %>
+          · Treasury exact-token availability: <%= @selected_token.format_units(@treasury_token_units.to_i) %> <%= @selected_token.ticker %>
+          · Treasury ADA availability: <%= @treasury_lovelace.to_i %> lovelace.
+          <% if @treasury_token_units.to_i <= 0 %><span style="color:#fc8181;">Treasury currently cannot pay this token.</span><% end %>
+          <span> Treasury payouts also require ADA for fees/minimum UTxO; a build failure is not charged.</span>
+        </div>
+      <% end %>
+    <% end %>
 
     <div class="row wallet-stats-row">
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
@@ -61,10 +90,10 @@
           <div class="wallet-stat-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
             <i class="fa fa-coins" style="color: white; font-size: 18px;"></i>
           </div>
-          <p class="wallet-stat-kicker">$BEEP</p>
+          <p class="wallet-stat-kicker"><%= @selected_token&.ticker || 'Token' %></p>
           <p class="wallet-stat-sub">Connected Wallet</p>
-          <h3 class="wallet-stat-value" style="color: white;"><%= @on_chain_beep.to_i rescue 0 %></h3>
-          <p class="wallet-stat-unit">$BEEP on-chain</p>
+          <h3 class="wallet-stat-value" style="color: white;"><%= @selected_token ? @selected_token.format_units(@selected_token_on_chain.to_i) : '0' %></h3>
+          <p class="wallet-stat-unit">selected token on-chain</p>
         </div>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-3" style="margin-bottom: 15px;">
@@ -77,8 +106,8 @@
           <h3 class="wallet-stat-value" style="color: white; margin: 0;"><%= @referral_count rescue 0 %></h3>
         </div>
       </div>
-      <% in_play_beep = (@active_wager_total.to_f rescue 0) %>
-      <% in_play_over = in_play_beep > 0 && in_play_beep > @on_chain_beep.to_i %>
+      <% in_play_units = (@active_wager_total.to_i rescue 0) %>
+      <% in_play_over = in_play_units > 0 && in_play_units > selected_game_units.to_i %>
       <% ip_bg    = in_play_over ? 'rgba(255,193,7,0.1)'  : 'rgba(255,255,255,0.06)' %>
       <% ip_bdr   = in_play_over ? 'rgba(255,193,7,0.45)' : 'rgba(255,255,255,0.1)' %>
       <% ip_icon  = in_play_over ? 'linear-gradient(135deg,#f39c12,#e67e22)' : 'linear-gradient(135deg,#00b894,#00cec9)' %>
@@ -92,10 +121,10 @@
           </div>
           <p class="wallet-stat-kicker">Total</p>
           <p class="wallet-stat-sub">In Play</p>
-          <h3 class="wallet-stat-value" style="color: <%= in_play_over ? '#ffc107' : 'white' %>;"><%= in_play_beep.to_i %></h3>
-          <p class="wallet-stat-unit">$BEEP</p>
+          <h3 class="wallet-stat-value" style="color: <%= in_play_over ? '#ffc107' : 'white' %>;"><%= @selected_token ? @selected_token.format_units(in_play_units) : '0' %></h3>
+          <p class="wallet-stat-unit"><%= @selected_token&.ticker || 'selected token' %></p>
           <% if in_play_over %>
-            <p style="color: #f39c12; font-size: 10px; margin: 6px 0 0; line-height: 1.4;">Above your wallet $BEEP<br>— acquire more to unlock credit</p>
+             <p style="color: #f39c12; font-size: 10px; margin: 6px 0 0; line-height: 1.4;">Above your game balance<br>— add more to play</p>
           <% end %>
         </div>
       </div>
@@ -133,7 +162,7 @@
               </div>
               <div style="flex: 1;">
                 <h4 style="color: white; font-weight: 700; margin: 0; font-size: 18px;">Cardano</h4>
-                <p style="color: #8892b0; margin: 0; font-size: 13px;">ADA / $BEEP</p>
+                <p style="color: #8892b0; margin: 0; font-size: 13px;">ADA / approved native tokens</p>
               </div>
               <% if @user.cardano_wallet_verified_at.present? %>
                 <span style="padding: 5px 14px; background: rgba(72,187,120,0.15); color: #68d391; border: 1px solid rgba(72,187,120,0.3); border-radius: 20px; font-size: 12px; font-weight: 600;"><i class="fa fa-check" style="font-size: 9px; margin-right: 4px;"></i> Verified</span>
@@ -153,7 +182,7 @@
               <% unless @user.cardano_wallet_verified_at.present? %>
                 <div style="background: rgba(246,173,85,0.12); border: 1px solid rgba(246,173,85,0.4); border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;">
                   <p style="color: #f6ad55; font-size: 13px; margin: 0 0 10px; line-height: 1.5;">
-                    This address was connected before signature verification was introduced. Reconnect with the same wallet and sign the free verification message before loading $BEEP.
+                     This address was connected before signature verification was introduced. Reconnect with the same wallet and sign the free verification message before transferring approved tokens.
                   </p>
                   <button onclick="openWalletModal()" style="width: 100%; padding: 11px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">
                     <i class="fa fa-signature" style="margin-right: 6px;"></i> Verify Wallet Ownership
@@ -191,13 +220,13 @@
                     <span style="color: #8892b0; font-size: 12px; margin-left: 4px;">ADA</span>
                   </div>
                   <div style="flex: 1; background: rgba(231,76,60,0.12); border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; padding: 12px 16px;">
-                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Connected Wallet $BEEP</p>
-                    <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @on_chain_beep.to_i %></span>
+                    <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">Connected Wallet <%= @selected_token&.ticker %></p>
+                    <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @selected_token ? @selected_token.format_units(@selected_token_on_chain.to_i) : '0' %></span>
                     <span style="color: #8892b0; font-size: 12px; margin-left: 4px;">on-chain</span>
                   </div>
                 </div>
 
-                <% platform_beep = (@account.balance_cents.to_i / 100) rescue 0 %>
+                <% platform_units = selected_game_units %>
                 <% available_to_load = (@available_to_load_beep.to_i rescue 0) %>
                 <% withdrawable = (@withdrawable_beep.to_i rescue 0) %>
 
@@ -205,11 +234,11 @@
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                     <div>
                       <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 2px;">Game Balance</p>
-                      <span style="color: #00c853; font-weight: 700; font-size: 20px;"><%= platform_beep %> <span style="font-size: 12px; color: #8892b0;">$BEEP</span></span>
+                      <span style="color: #00c853; font-weight: 700; font-size: 20px;"><%= selected_game_balance %> <span style="font-size: 12px; color: #8892b0;"><%= @selected_token.ticker %></span></span>
                     </div>
                     <div style="text-align: right;">
                       <p style="color: #8892b0; font-size: 11px; margin: 0 0 2px;">Available in Wallet</p>
-                      <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= available_to_load %> <span style="font-size: 12px; color: #8892b0;">$BEEP</span></span>
+                       <span style="color: #e74c3c; font-weight: 700; font-size: 20px;"><%= @selected_token.format_units(@selected_token_on_chain.to_i) %> <span style="font-size: 12px; color: #8892b0;"><%= @selected_token.ticker %></span></span>
                     </div>
                   </div>
 
@@ -217,7 +246,7 @@
                     <div style="background: rgba(0,136,204,0.08); border: 1px solid rgba(0,180,216,0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">
                       <p style="color: #7fc9e8; font-size: 12px; margin: 0; line-height: 1.5;">
                         <i class="fa fa-link" style="margin-right: 6px; color: #00b4d8;"></i>
-                        Loading and withdrawing are <strong>real on-chain transfers</strong>. Loading sends $BEEP from your wallet to the SportsBeep treasury (you sign in your wallet); withdrawing sends $BEEP back to your wallet. Every transfer gets a transaction hash you can verify on a Cardano explorer.
+                         Loading and withdrawing are <strong>real on-chain transfers</strong>. Loading sends the selected approved token from your wallet to the SportsBeep treasury (you sign in your wallet); withdrawing sends that token back. Every transfer gets a transaction hash you can verify on a Cardano explorer.
                       </p>
                     </div>
 
@@ -234,9 +263,11 @@
 
                     <!-- ON-CHAIN DEPOSIT -->
                     <div style="margin-bottom: 12px;">
-                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Load $BEEP (on-chain deposit)</p>
+                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Load approved token (on-chain deposit)</p>
+                       <input type="hidden" id="onchain-token-id" value="<%= @selected_token.id %>">
+                       <p style="color:#b8dfff;font-size:12px;margin:0 0 8px;">Using selected token: <strong><%= @selected_token.ticker %></strong></p>
                       <div style="display: flex; gap: 8px;">
-                        <input type="number" id="onchain-deposit-amount" min="1" step="1" placeholder="Amount" inputmode="numeric"
+                        <input type="number" id="onchain-deposit-amount" min="<%= token_step %>" step="<%= token_step %>" placeholder="Amount" inputmode="decimal"
                                style="flex: 1; min-width: 0; padding: 12px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 15px; font-weight: 600;">
                         <button onclick="try { startOnchainDeposit(); } catch(err) { alert('Load failed to start: ' + err.message + '. Try a hard refresh (Cmd+Shift+R).'); }" id="onchain-deposit-btn"
                                 style="white-space: nowrap; padding: 12px 18px; background: linear-gradient(135deg, #00c853, #00a844); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,200,83,0.3);">
@@ -247,13 +278,14 @@
                     </div>
 
                     <!-- ON-CHAIN WITHDRAW -->
-                    <%= form_tag(withdraw_beep_path, method: :post, data: { confirm: 'This sends real $BEEP tokens from the treasury to your wallet on the Cardano blockchain. Continue?' }) do %>
+                    <%= form_tag(withdraw_beep_path, method: :post, data: { confirm: 'This sends the selected approved token from the treasury to your wallet on the Cardano blockchain. Continue?' }) do %>
                       <%= hidden_field_tag :request_key, SecureRandom.uuid %>
-                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Withdraw $BEEP (on-chain payout)</p>
-                      <% max_onchain_withdraw = (@account.balance_cents.to_i / 100) rescue 0 %>
+                      <%= hidden_field_tag :approved_token_id, @selected_token&.id, id: 'withdraw-token-id' %>
+                      <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Withdraw selected token (on-chain payout)</p>
+                       <% max_onchain_withdraw = platform_units %>
                       <div style="display: flex; gap: 8px;">
-                        <input type="number" name="amount" min="1" step="1" max="<%= max_onchain_withdraw %>"
-                               placeholder="Amount" inputmode="numeric"
+                        <input type="number" name="amount" min="<%= token_step %>" step="<%= token_step %>" max="<%= @selected_token.format_units(max_onchain_withdraw) %>"
+                               placeholder="Amount" inputmode="decimal"
                                <%= 'disabled' if max_onchain_withdraw <= 0 %>
                                style="flex: 1; min-width: 0; padding: 12px 14px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: white; font-size: 15px; font-weight: 600;">
                         <button type="submit" <%= 'disabled' if max_onchain_withdraw <= 0 %>
@@ -265,12 +297,12 @@
                         <% if max_onchain_withdraw <= 0 %>
                           No game balance available to withdraw.
                         <% else %>
-                          Up to <%= max_onchain_withdraw %> $BEEP can be sent to your verified wallet on-chain.
+                           Up to <%= @selected_token.format_units(max_onchain_withdraw) %> <%= @selected_token.ticker %> can be sent to your verified wallet on-chain.
                         <% end %>
                       </p>
                     <% end %>
 
-                    <% recent_transfers = @user.beep_chain_transfers.order(created_at: :desc).limit(5) %>
+                     <% recent_transfers = @chain_transfers %>
                     <% if recent_transfers.any? %>
                       <div style="margin-top: 14px; background: rgba(0,0,0,0.15); border-radius: 8px; padding: 10px 12px;">
                         <p style="color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;">Recent on-chain transfers</p>
@@ -278,7 +310,7 @@
                           <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px;">
                             <span style="color: <%= t.direction == 'deposit' ? '#68d391' : '#fc8181' %>;">
                               <i class="fa fa-<%= t.direction == 'deposit' ? 'download' : 'upload' %>" style="margin-right: 4px;"></i>
-                              <%= t.direction.capitalize %> <%= t.amount_beep %> $BEEP
+                               <%= t.direction.capitalize %> <%= @selected_token.format_units(t.amount_in_units) %> <%= @selected_token.ticker %>
                             </span>
                             <span>
                               <% status_color = { 'pending' => '#f6ad55', 'submitting' => '#f6ad55', 'submitted' => '#63b3ed', 'confirmed' => '#68d391', 'credited' => '#68d391', 'failed' => '#fc8181', 'unknown' => '#f6ad55' }[t.status] || '#8892b0' %>
@@ -375,7 +407,7 @@
             <% else %>
               <div style="text-align: center; padding: 10px 0 16px;">
                 <p style="color: #8892b0; margin: 0 0 18px; font-size: 14px; line-height: 1.6;">
-                  Connect your Cardano wallet extension to link your $BEEP holdings. You'll sign a free one-time message to prove ownership.
+                  Connect your Cardano wallet extension to link your approved-token holdings. You'll sign a free one-time message to prove ownership.
                 </p>
                 <button onclick="openWalletModal()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0088cc, #00b4d8); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,136,204,0.35);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
                   <i class="fa fa-wallet" style="margin-right: 8px;"></i> Connect Cardano Wallet
@@ -489,27 +521,30 @@
             <h4 style="color: white; font-weight: 700; margin: 0; font-size: 16px;">Transaction History</h4>
           </div>
           <% if @transactions.any? %>
-            <%= link_to user_transactions_path, style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
+            <%= link_to user_transactions_path(token_id: @selected_token&.id), style: 'color: #a29bfe; font-size: 13px; text-decoration: none; font-weight: 600;' do %>
               View All <i class="fa fa-arrow-right" style="margin-left: 4px; font-size: 11px;"></i>
             <% end %>
           <% end %>
         </div>
 
         <% if @transactions.any? %>
-          <% @transactions.each do |txn| %>
+            <% @transactions.each do |txn| %>
+              <% amount_units = txn.amount_units.to_i %>
+              <% token_transaction = txn.approved_token_id.present? && txn.approved_token_id == @selected_token&.id %>
+              <% display_amount = token_transaction ? @selected_token.format_units(amount_units.abs) : txn.amount %>
+              <% positive_amount = token_transaction ? amount_units >= 0 : txn.amount_cents.to_i >= 0 %>
             <div style="padding: 14px 22px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between;">
               <div style="display: flex; align-items: center;">
-                <% amount_val = txn.amount_cents.to_i rescue 0 %>
-                <div style="width: 36px; height: 36px; background: <%= amount_val >= 0 ? 'rgba(0,184,148,0.15)' : 'rgba(231,76,60,0.15)' %>; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-                  <i class="fa <%= amount_val >= 0 ? 'fa-arrow-down' : 'fa-arrow-up' %>" style="color: <%= amount_val >= 0 ? '#00b894' : '#e74c3c' %>; font-size: 14px;"></i>
+                <div style="width: 36px; height: 36px; background: <%= positive_amount ? 'rgba(0,184,148,0.15)' : 'rgba(231,76,60,0.15)' %>; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                  <i class="fa <%= positive_amount ? 'fa-arrow-down' : 'fa-arrow-up' %>" style="color: <%= positive_amount ? '#00b894' : '#e74c3c' %>; font-size: 14px;"></i>
                 </div>
                 <div>
                   <p style="color: white; margin: 0; font-size: 14px; font-weight: 600;"><%= txn.description %></p>
                   <p style="color: #8892b0; margin: 0; font-size: 12px;"><%= txn.created_at.strftime("%b %d, %Y %I:%M %p") %></p>
                 </div>
               </div>
-              <span style="color: <%= amount_val >= 0 ? '#00b894' : '#e74c3c' %>; font-weight: 700; font-size: 15px;">
-                <%= amount_val >= 0 ? '+' : '' %><%= txn.amount %>
+              <span style="color: <%= positive_amount ? '#00b894' : '#e74c3c' %>; font-weight: 700; font-size: 15px;">
+                <%= positive_amount ? '+' : '−' %><%= display_amount %><%= " #{@selected_token.ticker}" if token_transaction %>
               </span>
             </div>
           <% end %>
@@ -529,7 +564,7 @@
 <!-- Deposit progress modal -->
 <div id="deposit-modal" style="display:none; position:fixed; inset:0; background:rgba(5,10,25,0.85); z-index:9999; align-items:center; justify-content:center; backdrop-filter: blur(4px);">
   <div style="background:#0f1b33; border:1px solid rgba(0,180,216,0.3); border-radius:16px; max-width:420px; width:92%; padding:28px 26px; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
-    <h3 id="deposit-modal-title" style="color:white; font-size:18px; font-weight:700; margin:0 0 4px;">Loading your $BEEP</h3>
+    <h3 id="deposit-modal-title" style="color:white; font-size:18px; font-weight:700; margin:0 0 4px;">Loading your selected token</h3>
     <p id="deposit-modal-subtitle" style="color:#8892b0; font-size:13px; margin:0 0 20px; line-height:1.5;">This is a real blockchain transfer — it takes about a minute.</p>
 
     <div id="deposit-steps">
@@ -667,7 +702,7 @@
     if (close) close.style.display = 'block';
   }
 
-  // ----- On-chain $BEEP deposit flow (CIP-30 sign + submit) -----
+  // ----- On-chain approved-token deposit flow (CIP-30 sign + submit) -----
   function depositStatus(html, color) {
     var el = document.getElementById('onchain-deposit-status');
     if (!el) {
@@ -680,9 +715,9 @@
   }
 
   async function startOnchainDeposit() {
-    var amount = parseInt(document.getElementById('onchain-deposit-amount').value, 10);
-    if (!amount || amount <= 0) {
-      depositStatus('<i class="fa fa-exclamation-circle" style="margin-right:6px;"></i>Enter a whole number of $BEEP to load.', '#fc8181');
+    var amount = document.getElementById('onchain-deposit-amount').value.trim();
+    if (!/^\d+(\.\d+)?$/.test(amount) || /^0(?:\.0*)?$/.test(amount)) {
+      depositStatus('<i class="fa fa-exclamation-circle" style="margin-right:6px;"></i>Enter a positive decimal token amount to load.', '#fc8181');
       return;
     }
     var btn = document.getElementById('onchain-deposit-btn');
@@ -724,7 +759,7 @@
       var buildResp = await fetch('<%= build_deposit_path %>', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken(), 'Accept': 'application/json' },
-        body: JSON.stringify({ amount: amount, address_hex: addressHex })
+        body: JSON.stringify({ amount: amount, approved_token_id: document.getElementById('onchain-token-id').value, address_hex: addressHex })
       });
       var build = await buildResp.json();
       if (!buildResp.ok || !build.ok) throw new Error(build.error || 'Could not build the transaction.');
@@ -739,7 +774,7 @@
 
       setDepositStep(3, 'done');
       setDepositStep(4, 'active');
-      await recordDeposit(txHash, amount);
+      await recordDeposit(txHash, amount, document.getElementById('onchain-token-id').value);
     } catch (e) {
       var raw = (e && (e.info || e.message)) ? String(e.info || e.message) : 'Deposit was cancelled or failed.';
       // Translate cryptic Mesh/Blockfrost errors into plain English
@@ -758,11 +793,11 @@
     }
   }
 
-  async function recordDeposit(txHash, amount) {
+  async function recordDeposit(txHash, amount, tokenId) {
     var resp = await fetch('<%= record_deposit_path %>', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken(), 'Accept': 'application/json' },
-      body: JSON.stringify({ tx_hash: txHash, amount: amount })
+      body: JSON.stringify({ tx_hash: txHash, amount: amount, approved_token_id: tokenId })
     });
     var data = await resp.json();
     if (!resp.ok || !data.ok) {

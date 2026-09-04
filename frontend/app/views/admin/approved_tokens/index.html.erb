@@ -1,0 +1,4 @@
+<h1>Approved Cardano tokens</h1>
+<p><%= link_to 'Add token', new_admin_approved_token_path %></p>
+<table><thead><tr><th>Ticker</th><th>Name</th><th>Asset unit</th><th>Decimals</th><th>Enabled</th><th></th></tr></thead>
+<tbody><% @approved_tokens.each do |token| %><tr><td><%= token.ticker %></td><td><%= token.display_name %></td><td><code><%= token.asset_unit %></code></td><td><%= token.decimals %></td><td><%= token.enabled? %></td><td><%= link_to 'Edit', edit_admin_approved_token_path(token) %> <%= link_to 'Disable', admin_approved_token_path(token), method: :delete, data: { confirm: 'Disable this token?' } if token.enabled? %></td></tr><% end %></tbody></table>

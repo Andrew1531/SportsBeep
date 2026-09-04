@@ -4,3 +4,4 @@
 - [Cardano dApp architecture](cardano-dapp-architecture.md) — CIP-30 verify flow, on-chain mode flags, strict policy-ID matching, and the never-auto-refund-on-submit-failure withdrawal rule.
 - [Legacy Sass sizing syntax](legacy-sass-sizing-syntax.md) — SassC treats CSS min/max/clamp as Sass math and crashes on mixed units; use max-width and media-query fallbacks.
 - [Sprockets cache refresh](sprockets-cache-refresh.md) — assets:clobber alone can keep stale SCSS; clear tmp/cache too and verify the served digest before judging UI changes.
+- [Native-token legacy migration](native-token-legacy-migration.md) — require exact BEEP identity and abort on fractional legacy units; never silently round financial balances.

@@ -7,6 +7,9 @@ require 'fileutils'
 class CardanoTxTool
   TOOL_DIR = Rails.root.join('..', 'cardano-tools').to_s
   TREASURY_PAYOUT_LOCK_ID = 7_311_927_487
+  # Covers the token output's minimum ADA plus a conservative transaction fee.
+  # This is only a friendly preflight; the builder remains authoritative.
+  MIN_PAYOUT_LOVELACE = 2_000_000
 
   class Error < StandardError
     attr_reader :stage, :tx_hash
@@ -30,6 +33,11 @@ class CardanoTxTool
 
   def self.find_beep_unit(address)
     result = run('find-unit', address)
+    { unit: result['unit'], quantity: result['quantity'].to_i }
+  end
+
+  def self.find_unit(address, unit)
+    result = run('find-unit', address, unit)
     { unit: result['unit'], quantity: result['quantity'].to_i }
   end
 

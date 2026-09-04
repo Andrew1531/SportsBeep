@@ -1,7 +1,10 @@
 <%# Expose real balance to JavaScript for client-side guard %>
 <script>
-  var SB_BALANCE_CENTS = <%= @account&.balance_cents.to_i %>;
   var SB_LOGGED_IN     = <%= user_signed_in? ? 'true' : 'false' %>;
+  var SB_TOKENS = <%= raw((@approved_tokens || []).each_with_object({}) { |token, values|
+    balance = @account ? @account.token_balance_for(token).balance_units.to_i : 0
+    values[token.id] = { ticker: token.ticker, decimals: token.decimals, balanceUnits: balance, balance: token.format_units(balance) }
+  }.to_json) %>;
 </script>
 
 <%# Buy BEEP modal — shown when wager exceeds balance %>
@@ -44,6 +47,8 @@
   <input type="hidden" id="wager_sport"           name="wager[sport]">
   <input type="hidden" id="wager_league"          name="wager[league]">
   <input type="hidden" id="wager_amount_cents"    name="wager[amount_cents]">
+  <input type="hidden" id="wager_approved_token_id" name="wager[approved_token_id]">
+  <input type="hidden" id="wager_amount_units" name="wager[amount_units]">
   <input type="hidden" id="wager_is_parlay"       name="wager[is_parlay]" value="false">
   <input type="hidden" id="wager_parlay_legs"     name="wager[parlay_legs]">
 <% end %>
@@ -284,17 +289,24 @@
     </div>
 
     <div class="dk-bs-amount-section">
+      <% if @approved_tokens.present? %>
+        <label class="dk-bs-amount-label" for="bs-token">WAGER TOKEN</label>
+        <select id="bs-token" onchange="sbTokenChanged()">
+          <% @approved_tokens.each { |token| %><option value="<%= token.id %>"><%= token.ticker %> — <%= token.format_units(@account ? @account.token_balance_for(token).balance_units : 0) %></option><% } %>
+        </select>
+        <div id="bs-token-balance" class="dk-bs-amount-label"></div>
+      <% end %>
       <label class="dk-bs-amount-label">WAGER AMOUNT</label>
       <div class="dk-bs-input-wrap">
-        <span class="dk-bs-dollar">$</span>
-        <input type="number" class="dk-bs-input" id="bs-amount" min="1" step="1" placeholder="0" oninput="sbUpdatePayout()">
+        <span class="dk-bs-dollar" id="bs-token-symbol"></span>
+        <input type="text" inputmode="decimal" class="dk-bs-input" id="bs-amount" placeholder="0" oninput="sbUpdatePayout()">
       </div>
       <div class="dk-bs-quick">
-        <button type="button" onclick="sbSetAmount(100)">1</button>
-        <button type="button" onclick="sbSetAmount(500)">5</button>
-        <button type="button" onclick="sbSetAmount(2500)">25</button>
-        <button type="button" onclick="sbSetAmount(5000)">50</button>
-        <button type="button" onclick="sbSetAmount(10000)">100</button>
+        <button type="button" onclick="sbSetAmount('1')">1</button>
+        <button type="button" onclick="sbSetAmount('5')">5</button>
+        <button type="button" onclick="sbSetAmount('25')">25</button>
+        <button type="button" onclick="sbSetAmount('50')">50</button>
+        <button type="button" onclick="sbSetAmount('100')">100</button>
       </div>
     </div>
 
@@ -368,62 +380,42 @@ window.sbSetAmount = function(cents) {
   sbUpdatePayout();
 };
 
-window.sbUpdatePayout = function() {
-  var amountCents = parseInt(document.getElementById('bs-amount').value) || 0;
-  var p = sbCurrentPick;
-  if (!p) return;
-  var profit = 0;
-  if (p.oddsNum > 0) profit = amountCents / 100.0 * p.oddsNum / 100;
-  else if (p.oddsNum < 0) profit = amountCents / 100.0 * 100 / Math.abs(p.oddsNum);
-  document.getElementById('bs-wager-disp').textContent = (amountCents / 100.0).toFixed(2) + ' $BEEP';
-  document.getElementById('bs-win-disp').textContent   = profit.toFixed(2) + ' $BEEP';
+window.sbSelectedToken = function() {
+  return SB_TOKENS[document.getElementById('bs-token').value];
+};
 
-  // Show/hide inline insufficient-balance warning
-  var warn = document.getElementById('bs-balance-warn');
-  if (amountCents > 0 && amountCents > SB_BALANCE_CENTS) {
-    if (!warn) {
-      warn = document.createElement('div');
-      warn.id = 'bs-balance-warn';
-      warn.className = 'bs-balance-warn';
-      document.getElementById('bs-wager-disp').parentNode.parentNode.after(warn);
-    }
-     warn.textContent = 'Exceeds your balance of ' + (SB_BALANCE_CENTS / 100.0).toFixed(2) + ' $BEEP';
-    document.querySelector('.dk-bs-submit').classList.add('dk-bs-submit--danger');
-  } else {
-    if (warn) warn.remove();
-    document.querySelector('.dk-bs-submit').classList.remove('dk-bs-submit--danger');
-  }
+window.sbTokenChanged = function() {
+  var token = sbSelectedToken();
+  document.getElementById('wager_approved_token_id').value = document.getElementById('bs-token').value;
+  document.getElementById('bs-token-symbol').textContent = token ? token.ticker : '';
+  document.getElementById('bs-token-balance').textContent = token ? 'Available: ' + token.balance + ' ' + token.ticker : '';
+  sbUpdatePayout();
+};
+
+window.sbUpdatePayout = function() {
+  var amount = document.getElementById('bs-amount').value.trim();
+  var token = sbSelectedToken();
+  var p = sbCurrentPick;
+  if (!p || !token) return;
+  document.getElementById('bs-wager-disp').textContent = (amount || '—') + ' ' + token.ticker;
+  document.getElementById('bs-win-disp').textContent = 'Calculated in ' + token.ticker + ' units';
 };
 
 window.bbCloseModal = function() {
   document.getElementById('buy-beep-modal').style.display = 'none';
 };
 
-window.bbShowModal = function(amountCents) {
-  var have = (SB_BALANCE_CENTS / 100.0).toFixed(2);
-  var need = (amountCents / 100.0).toFixed(2);
-      document.getElementById('bb-modal-msg').textContent =
-    'You can only wager the ' + have + ' $BEEP of play credit you have unlocked. This wager needs ' + need + ' $BEEP.';
-  document.getElementById('bb-modal-bal').textContent = have + ' $BEEP';
-  document.getElementById('buy-beep-modal').style.display = 'flex';
-};
-
 window.sbPlaceBet = function() {
   var p = sbCurrentPick;
   if (!p) { alert('No pick selected'); return; }
-  var amountCents = parseInt(document.getElementById('bs-amount').value) || 0;
-  if (amountCents < 1) { alert('Enter a wager amount (minimum 1 $BEEP)'); return; }
+  var amount = document.getElementById('bs-amount').value.trim();
+  if (!/^\d+(?:\.\d+)?$/.test(amount)) { alert('Enter a positive decimal wager amount.'); return; }
 
   // Balance guard — intercept before submit
   if (!SB_LOGGED_IN) {
     window.location.href = '<%= new_user_session_path %>';
     return;
   }
-  if (amountCents > SB_BALANCE_CENTS) {
-    bbShowModal(amountCents);
-    return;
-  }
-
   document.getElementById('wager_fixture_id').value      = p.fixId;
   document.getElementById('wager_game_id').value         = p.gameId;
   document.getElementById('wager_away_team').value       = p.away;
@@ -436,7 +428,16 @@ window.sbPlaceBet = function() {
   document.getElementById('wager_points').value          = p.points || '';
   document.getElementById('wager_sport').value           = p.sport;
   document.getElementById('wager_league').value          = p.league;
-  document.getElementById('wager_amount_cents').value    = amountCents;
+  document.getElementById('wager_amount_cents').value    = '';
+  document.getElementById('wager_amount_units').value    = '';
+  document.getElementById('wager_approved_token_id').value = document.getElementById('bs-token').value;
+  var amountField = document.getElementById('wager_amount');
+  if (!amountField) {
+    amountField = document.createElement('input');
+    amountField.type = 'hidden'; amountField.id = 'wager_amount'; amountField.name = 'wager[amount]';
+    document.getElementById('hidden-bet-form').appendChild(amountField);
+  }
+  amountField.value = amount;
   document.getElementById('wager_is_parlay').value       = 'false';
   document.getElementById('wager_parlay_legs').value     = '';
   document.getElementById('hidden-bet-form').submit();
@@ -446,4 +447,5 @@ window.sbPlaceBet = function() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') sbCloseBetslip();
 });
+sbTokenChanged();
 </script>

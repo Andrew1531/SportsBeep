@@ -1,0 +1,10 @@
+<%= form_with model: [:admin, @approved_token], local: true do |f| %>
+  <% if @approved_token.errors.any? %><div><%= @approved_token.errors.full_messages.join(', ') %></div><% end %>
+  <p><%= f.label :asset_unit, 'Full asset unit (policy ID + asset name hex)' %><br><%= f.text_field :asset_unit, required: true, size: 80 %></p>
+  <p><%= f.label :policy_id %><br><%= f.text_field :policy_id, required: true, size: 60 %></p>
+  <p><%= f.label :display_name %><br><%= f.text_field :display_name, required: true %></p>
+  <p><%= f.label :ticker %><br><%= f.text_field :ticker, required: true %></p>
+  <p><%= f.label :decimals %><br><%= f.number_field :decimals, min: 0, max: 18, required: true %></p>
+  <p><%= f.check_box :enabled %> <%= f.label :enabled %></p>
+  <%= f.submit %>
+<% end %>

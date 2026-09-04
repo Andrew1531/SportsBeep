@@ -1,6 +1,8 @@
 class Account < ActiveRecord::Base
   belongs_to :user
   has_many :transactions
+  has_many :account_token_balances, dependent: :destroy
+  has_many :approved_tokens, through: :account_token_balances
 
   monetize :balance_cents
   monetize :promo_balance_cents
@@ -25,6 +27,10 @@ class Account < ActiveRecord::Base
   # on-chain holdings (in cents). Never negative.
   def available_to_load_cents(on_chain_cents)
     [on_chain_cents.to_i - beep_loaded_cents_safe, 0].max
+  end
+
+  def token_balance_for(token)
+    account_token_balances.find_or_create_by!(approved_token: token)
   end
 
   def subtract_from_clearing_expense!(amount)

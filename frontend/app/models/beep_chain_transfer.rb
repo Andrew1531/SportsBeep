@@ -4,6 +4,7 @@
 # submitted on-chain.
 class BeepChainTransfer < ActiveRecord::Base
   belongs_to :user
+  belongs_to :approved_token, optional: true
 
   DIRECTIONS = %w[deposit withdrawal].freeze
   # 'unknown' = payout submission errored ambiguously; the funds stay debited
@@ -13,6 +14,15 @@ class BeepChainTransfer < ActiveRecord::Base
   validates :direction, inclusion: { in: DIRECTIONS }
   validates :status, inclusion: { in: STATUSES }
   validates :amount_beep, numericality: { greater_than: 0, only_integer: true }
+  validates :amount_units, numericality: { greater_than: 0, only_integer: true }, allow_nil: true
+
+  def token
+    approved_token
+  end
+
+  def amount_in_units
+    amount_units.presence || amount_beep
+  end
   validates :tx_hash, uniqueness: true, allow_nil: true
   validates :request_key, uniqueness: true, allow_nil: true
   validates :request_key, :destination_address, presence: true, if: :withdrawal?, on: :create

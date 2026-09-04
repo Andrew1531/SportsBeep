@@ -6,6 +6,7 @@ class FantasyController < ApplicationController
     @user = current_user
     @account = @user.account
     @has_beep = @account.balance_cents > 0
+    @approved_tokens = ApprovedToken.enabled.order(:ticker)
 
     if @sport == 'nfl'
       @games    = safe_query { Nfl::Game.includes(:home_team, :away_team).where('start_time > ?', Time.now).order(start_time: :asc).limit(20).to_a } || []
@@ -22,6 +23,7 @@ class FantasyController < ApplicationController
     @sport = params[:sport] || 'mlb'
     @user  = current_user
     @account = @user.account
+    @approved_tokens = ApprovedToken.enabled.order(:ticker)
 
     if @sport == 'nfl'
       @game     = safe_query { Nfl::Game.includes(:home_team, :away_team).find(params[:id]) }
@@ -43,6 +45,11 @@ class FantasyController < ApplicationController
     @contest = Mlb::Contest.includes(template: [:game, :pool]).find(params[:contest_id])
     @user    = current_user
     @account = @user.account
+    token = ApprovedToken.enabled.find_by(id: params[:approved_token_id])
+    unless token
+      redirect_to fantasy_path(sport: 'mlb'), alert: 'Choose an approved token to enter this contest.'
+      return
+    end
 
     best_ids = Array(params[:best_player_ids]).map(&:to_i).uniq.first(3)
     bust_ids = Array(params[:bust_player_ids]).map(&:to_i).uniq.first(3)
@@ -60,10 +67,11 @@ class FantasyController < ApplicationController
     end
 
     pool      = @contest.template.pool
-    entry_fee = pool&.entry_fee.to_f
-    balance   = @account.balance_cents.to_f / 100.0
+    entry_fee = pool&.entry_fee
+    fee_units = token.parse_amount!(entry_fee.to_s)
+    balance = @account.token_balance_for(token).balance_units.to_i
 
-    if entry_fee > 0 && balance < entry_fee
+    if fee_units.positive? && balance < fee_units
       redirect_to fantasy_game_path(@contest.template.game.id, sport: 'mlb'),
                   alert: "Insufficient balance. Entry fee is #{entry_fee.round(2)} $BEEP."
       return
@@ -73,7 +81,7 @@ class FantasyController < ApplicationController
     players = Mlb::Player.where(id: all_player_ids)
 
     ActiveRecord::Base.transaction do
-      ticket = Mlb::Ticket.new(contest: @contest, user: @user)
+      ticket = Mlb::Ticket.new(contest: @contest, user: @user, approved_token: token, entry_fee_units: fee_units)
       ticket.save(validate: false)
 
       best_ids.each do |pid|
@@ -83,17 +91,19 @@ class FantasyController < ApplicationController
         TicketPlayer.create!(ticket: ticket, player_id: pid, position: 'bust')
       end
 
-      if entry_fee > 0
-        fee_cents = (entry_fee * 100).round
+      if fee_units.positive?
         pool_name = (@contest.template.pool.name rescue nil) || 'Fantasy contest'
         # Lock + re-check inside the lock, debit, and record a ledger entry so
         # every balance change has an auditable Transaction (no silent moves).
         @account.with_lock do
-          raise "Insufficient balance" if @account.balance_cents < fee_cents
-          @account.update!(balance_cents: @account.balance_cents - fee_cents)
+          token_balance = @account.token_balance_for(token)
+          raise "Insufficient #{token.ticker} balance" if token_balance.balance_units.to_i < fee_units
+          token_balance.update!(balance_units: token_balance.balance_units.to_i - fee_units)
           ContestEntryFeeTransaction.create!(
             account:      @account,
-            amount_cents: -fee_cents,
+            approved_token: token,
+            amount_units: -fee_units,
+            amount_cents: 0,
             description:  "Contest entry fee — #{pool_name}",
             status:       'completed'
           )
@@ -104,6 +114,8 @@ class FantasyController < ApplicationController
     end
 
     redirect_to my_entries_path, notice: 'Contest entered! Good luck with your Best/Bust picks!'
+  rescue TokenAmount::InvalidAmount => e
+    redirect_to fantasy_path(sport: 'mlb'), alert: e.message
   rescue => e
     Rails.logger.error "enter_contest error: #{e.message}\n#{e.backtrace.first(5).join("\n")}"
     redirect_to fantasy_path(sport: 'mlb'), alert: 'Unable to enter contest. Please try again.'

@@ -17,6 +17,8 @@ class User < ActiveRecord::Base
   has_many :tickets
   has_many :wagers
   has_many :beep_chain_transfers
+  has_many :account_token_balances, through: :account
+  has_many :approved_tokens, through: :account_token_balances
   has_many :mlb_tickets, class_name: 'Mlb::Ticket'
   has_many :nfl_tickets, class_name: 'Nfl::Ticket'
 

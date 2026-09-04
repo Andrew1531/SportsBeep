@@ -3,7 +3,7 @@ require 'json'
 
 class BlockfrostService
   BASE_URL = 'https://cardano-mainnet.blockfrost.io/api/v0'
-  LOVELACE_PER_ADA = 1_000_000.0
+  LOVELACE_PER_ADA = 1_000_000
   class RequestError < StandardError; end
 
   def initialize
@@ -21,6 +21,10 @@ class BlockfrostService
   def get_balance(address)
     info = get_address_info(address)
     info[:ada_balance]
+  end
+
+  def get_lovelace_balance(address)
+    (get_address_info(address)[:lovelace_balance] || 0).to_i
   end
 
   def validate_address(address)
@@ -60,6 +64,19 @@ class BlockfrostService
     0
   end
 
+  # Exact asset-unit lookup. A policy prefix is not sufficient: a policy may
+  # mint more than one asset, and accepting one of those would mis-credit a
+  # deposit.
+  def get_token_balance(address, token)
+    unit = token.respond_to?(:asset_unit) ? token.asset_unit : token.to_s
+    (get_address_info(address)[:tokens] || []).sum do |asset|
+      asset['unit'].to_s == unit ? asset['quantity'].to_i : 0
+    end
+  rescue StandardError => e
+    Rails.logger.error "Blockfrost get_token_balance error: #{e.message}"
+    0
+  end
+
   # --- transaction inspection (for on-chain deposit verification) ---
 
   def get_tx(tx_hash)
@@ -91,6 +108,10 @@ class BlockfrostService
     expected = ENV['BEEP_ASSET_UNIT'].to_s.strip
     raise 'BEEP_ASSET_UNIT is required for on-chain transfer verification' if expected.blank?
     unit.to_s == expected
+  end
+
+  def approved_unit?(unit, token)
+    token.enabled? && unit.to_s == token.asset_unit
   end
 
   private
@@ -138,6 +159,7 @@ class BlockfrostService
 
     {
       ada_balance: ada_balance,
+      lovelace_balance: (response['amount'] || []).find { |asset| asset['unit'] == 'lovelace' }.to_h.fetch('quantity', 0).to_i,
       tokens: tokens,
       stake_address: stake_addr,
       type: response['type'],
@@ -160,6 +182,7 @@ class BlockfrostService
 
     {
       ada_balance: ada_balance,
+      lovelace_balance: stake_info['controlled_amount'].to_i,
       tokens: tokens,
       stake_address: stake_address,
       type: 'stake',

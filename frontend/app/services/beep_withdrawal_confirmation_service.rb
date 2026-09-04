@@ -25,12 +25,12 @@ class BeepWithdrawalConfirmationService
       next 0 unless output['address'] == transfer.destination_address
 
       (output['amount'] || []).sum do |asset|
-        @blockfrost.beep_unit?(asset['unit']) ? asset['quantity'].to_i : 0
+        exact_token_unit?(asset['unit'], transfer) ? asset['quantity'].to_i : 0
       end
     end
 
-    if received < transfer.amount_beep
-      refund!(transfer, "Payout transaction did not send the expected $BEEP to the verified wallet.")
+    if received < transfer.amount_in_units
+      refund!(transfer, "Payout transaction did not send the expected #{token_label(transfer)} to the verified wallet.")
       return transfer.reload.status
     end
 
@@ -74,15 +74,30 @@ class BeepWithdrawalConfirmationService
       transfer.reload
       next unless RECONCILABLE_STATUSES.include?(transfer.status)
 
-      account.update!(balance_cents: account.balance_cents.to_i + transfer.amount_beep * 100)
+      if transfer.approved_token
+        balance = account.token_balance_for(transfer.approved_token)
+        balance.update!(balance_units: balance.balance_units.to_i + transfer.amount_in_units)
+      else
+        account.update!(balance_cents: account.balance_cents.to_i + transfer.amount_beep * 100)
+      end
       Transaction.create!(
         account: account,
-        amount_cents: transfer.amount_beep * 100,
+        approved_token: transfer.approved_token,
+        amount_units: transfer.amount_in_units,
+        amount_cents: transfer.approved_token ? 0 : transfer.amount_beep * 100,
         type: 'AdjustmentTransaction',
-        description: "Refund: on-chain withdrawal of #{transfer.amount_beep} $BEEP did not confirm.",
+        description: "Refund: on-chain withdrawal of #{transfer.amount_in_units} #{token_label(transfer)} did not confirm.",
         status: 'completed'
       )
       transfer.update!(status: 'failed', error_message: reason)
     end
+  end
+
+  def exact_token_unit?(unit, transfer)
+    transfer.approved_token ? @blockfrost.approved_unit?(unit, transfer.approved_token) : @blockfrost.beep_unit?(unit)
+  end
+
+  def token_label(transfer)
+    transfer.approved_token&.ticker || '$BEEP'
   end
 end

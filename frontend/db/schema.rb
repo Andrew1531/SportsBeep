@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_04_140000) do
+ActiveRecord::Schema.define(version: 2026_09_05_010000) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "account_token_balances", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "approved_token_id", null: false
+    t.bigint "balance_units", default: 0, null: false
+    t.bigint "loaded_units", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id", "approved_token_id"], name: "index_token_balances_on_account_and_token", unique: true
+    t.index ["account_id"], name: "index_account_token_balances_on_account_id"
+    t.index ["approved_token_id"], name: "index_account_token_balances_on_approved_token_id"
+  end
 
   create_table "accounts", force: :cascade do |t|
     t.integer "user_id"
@@ -28,8 +43,8 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.integer "record_id", null: false
-    t.integer "blob_id", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
@@ -48,7 +63,7 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -79,10 +94,23 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.index ["email"], name: "index_administrators_on_email", unique: true
   end
 
+  create_table "approved_tokens", force: :cascade do |t|
+    t.string "asset_unit", null: false
+    t.string "policy_id", null: false
+    t.string "display_name", null: false
+    t.string "ticker", null: false
+    t.integer "decimals", default: 0, null: false
+    t.boolean "enabled", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["asset_unit"], name: "index_approved_tokens_on_asset_unit", unique: true
+    t.index ["ticker"], name: "index_approved_tokens_on_ticker", unique: true
+  end
+
   create_table "beep_chain_transfers", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "direction", null: false
-    t.integer "amount_beep", null: false
+    t.bigint "amount_beep", null: false
     t.string "tx_hash"
     t.string "status", default: "pending", null: false
     t.string "error_message"
@@ -91,6 +119,9 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "request_key"
     t.string "destination_address"
+    t.bigint "approved_token_id"
+    t.bigint "amount_units"
+    t.index ["approved_token_id"], name: "index_beep_chain_transfers_on_approved_token_id"
     t.index ["request_key"], name: "index_beep_chain_transfers_on_request_key", unique: true
     t.index ["tx_hash"], name: "index_beep_chain_transfers_on_tx_hash", unique: true
     t.index ["user_id", "status"], name: "index_beep_chain_transfers_on_user_id_and_status"
@@ -201,6 +232,132 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.index ["player_id"], name: "index_lineup_positions_on_player_id"
   end
 
+  create_table "mlb_contest_template_questions", id: :serial, force: :cascade do |t|
+    t.integer "contest_template_id"
+    t.integer "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["contest_template_id"], name: "index_mlb_contest_template_questions_on_contest_template_id"
+    t.index ["question_id"], name: "index_mlb_contest_template_questions_on_question_id"
+  end
+
+  create_table "mlb_contest_templates", id: :serial, force: :cascade do |t|
+    t.integer "game_id"
+    t.integer "pool_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["game_id"], name: "index_mlb_contest_templates_on_game_id"
+    t.index ["pool_id"], name: "index_mlb_contest_templates_on_pool_id"
+  end
+
+  create_table "mlb_contests", id: :serial, force: :cascade do |t|
+    t.integer "template_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "tickets_count", default: 0
+    t.index ["template_id"], name: "index_mlb_contests_on_template_id"
+  end
+
+  create_table "mlb_game_league_picks", id: :serial, force: :cascade do |t|
+    t.integer "game_id"
+    t.integer "league_pick_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["game_id"], name: "index_mlb_game_league_picks_on_game_id"
+    t.index ["league_pick_id"], name: "index_mlb_game_league_picks_on_league_pick_id"
+  end
+
+  create_table "mlb_game_players", id: :serial, force: :cascade do |t|
+    t.integer "game_id"
+    t.integer "player_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["game_id"], name: "index_mlb_game_players_on_game_id"
+    t.index ["player_id"], name: "index_mlb_game_players_on_player_id"
+  end
+
+  create_table "mlb_game_pools", id: :serial, force: :cascade do |t|
+    t.integer "game_id"
+    t.integer "pool_id"
+    t.integer "max_contests"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["game_id"], name: "index_mlb_game_pools_on_game_id"
+    t.index ["pool_id"], name: "index_mlb_game_pools_on_pool_id"
+  end
+
+  create_table "mlb_games", id: :serial, force: :cascade do |t|
+    t.string "external_id"
+    t.boolean "bettable", default: false
+    t.datetime "start_time"
+    t.string "status"
+    t.integer "home_team_id"
+    t.integer "away_team_id"
+    t.integer "season_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["away_team_id"], name: "index_mlb_games_on_away_team_id"
+    t.index ["home_team_id"], name: "index_mlb_games_on_home_team_id"
+    t.index ["season_id"], name: "index_mlb_games_on_season_id"
+  end
+
+  create_table "mlb_players", id: :serial, force: :cascade do |t|
+    t.integer "team_id"
+    t.string "external_id"
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "number"
+    t.string "bats"
+    t.string "throws"
+    t.string "status"
+    t.string "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["team_id"], name: "index_mlb_players_on_team_id"
+  end
+
+  create_table "mlb_pools", id: :serial, force: :cascade do |t|
+    t.integer "prize_pool"
+    t.integer "max_tickets_per_contest"
+    t.float "entry_fee_multiplier"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean "default", default: false
+    t.integer "max_contests"
+  end
+
+  create_table "mlb_question_answers", id: :serial, force: :cascade do |t|
+    t.integer "question_id"
+    t.integer "answer_id"
+    t.integer "ticket_id"
+    t.float "time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["answer_id"], name: "index_mlb_question_answers_on_answer_id"
+    t.index ["question_id"], name: "index_mlb_question_answers_on_question_id"
+    t.index ["ticket_id"], name: "index_mlb_question_answers_on_ticket_id"
+  end
+
+  create_table "mlb_questions", id: :serial, force: :cascade do |t|
+    t.string "type"
+    t.string "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "topic_id"
+    t.index ["topic_id"], name: "index_mlb_questions_on_topic_id"
+  end
+
+  create_table "mlb_seasonal_stats", id: :serial, force: :cascade do |t|
+    t.integer "player_id"
+    t.integer "season"
+    t.string "name"
+    t.decimal "amount"
+    t.float "points"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["player_id"], name: "index_mlb_seasonal_stats_on_player_id"
+  end
+
   create_table "mlb_seasons", force: :cascade do |t|
     t.string "external_id"
     t.integer "year"
@@ -208,6 +365,91 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.boolean "current"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "mlb_stat_averages", id: :serial, force: :cascade do |t|
+    t.integer "player_id"
+    t.string "name"
+    t.decimal "amount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["player_id"], name: "index_mlb_stat_averages_on_player_id"
+  end
+
+  create_table "mlb_stat_topics", id: :serial, force: :cascade do |t|
+    t.string "stat"
+    t.string "comparison"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mlb_stats", id: :serial, force: :cascade do |t|
+    t.integer "player_id"
+    t.integer "game_id"
+    t.string "name"
+    t.decimal "amount"
+    t.float "points"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "team_id"
+    t.index ["game_id"], name: "index_mlb_stats_on_game_id"
+    t.index ["player_id"], name: "index_mlb_stats_on_player_id"
+    t.index ["team_id"], name: "index_mlb_stats_on_team_id"
+  end
+
+  create_table "mlb_team_stats", id: :serial, force: :cascade do |t|
+    t.integer "team_id"
+    t.integer "season"
+    t.string "name"
+    t.float "amount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["team_id"], name: "index_mlb_team_stats_on_team_id"
+  end
+
+  create_table "mlb_teams", id: :serial, force: :cascade do |t|
+    t.string "external_id"
+    t.string "abbr"
+    t.string "name"
+    t.string "market"
+    t.string "league"
+    t.string "division"
+    t.string "primary_color"
+    t.string "secondary_color"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mlb_ticket_players", id: :serial, force: :cascade do |t|
+    t.integer "ticket_id"
+    t.integer "player_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["player_id"], name: "index_mlb_ticket_players_on_player_id"
+    t.index ["ticket_id"], name: "index_mlb_ticket_players_on_ticket_id"
+  end
+
+  create_table "mlb_tickets", id: :serial, force: :cascade do |t|
+    t.integer "contest_id"
+    t.integer "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "league_pick_game_id"
+    t.integer "league_pick_team_id"
+    t.integer "placing"
+    t.index ["contest_id"], name: "index_mlb_tickets_on_contest_id"
+    t.index ["league_pick_game_id"], name: "index_mlb_tickets_on_league_pick_game_id"
+    t.index ["league_pick_team_id"], name: "index_mlb_tickets_on_league_pick_team_id"
+    t.index ["user_id"], name: "index_mlb_tickets_on_user_id"
+  end
+
+  create_table "mlb_timer_states", id: :serial, force: :cascade do |t|
+    t.integer "ticket_id"
+    t.string "encrypted_text"
+    t.float "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["ticket_id"], name: "index_mlb_timer_states_on_ticket_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -424,6 +666,9 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.float "cached_score", default: 0.0
     t.integer "cached_placing"
     t.float "cached_best_or_bust_score", default: 0.0
+    t.bigint "approved_token_id"
+    t.bigint "entry_fee_units"
+    t.index ["approved_token_id"], name: "index_tickets_on_approved_token_id"
     t.index ["contest_id"], name: "index_tickets_on_contest_id"
     t.index ["league_pick_game_id"], name: "index_tickets_on_league_pick_game_id"
     t.index ["league_pick_team_id"], name: "index_tickets_on_league_pick_team_id"
@@ -447,7 +692,10 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "account_id"
+    t.bigint "approved_token_id"
+    t.bigint "amount_units"
     t.index ["account_id"], name: "index_transactions_on_account_id"
+    t.index ["approved_token_id"], name: "index_transactions_on_approved_token_id"
   end
 
   create_table "twitter_auths", force: :cascade do |t|
@@ -501,7 +749,6 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.boolean "avatar_processing", default: false, null: false
     t.string "avatar_uuid"
     t.string "cardano_wallet_address"
-    t.string "ethereum_wallet_address"
     t.string "cardano_stake_address"
     t.string "cardano_wallet_name"
     t.datetime "cardano_wallet_verified_at"
@@ -513,7 +760,7 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.index ["user_id"], name: "index_users_on_user_id"
   end
 
-  create_table "wagers", force: :cascade do |t|
+  create_table "wagers", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "sport", null: false
     t.string "league"
@@ -534,12 +781,22 @@ ActiveRecord::Schema.define(version: 2026_09_04_140000) do
     t.string "sportsbook"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "approved_token_id"
+    t.bigint "amount_units"
+    t.bigint "potential_payout_units"
+    t.index ["approved_token_id"], name: "index_wagers_on_approved_token_id"
     t.index ["sport"], name: "index_wagers_on_sport"
     t.index ["status"], name: "index_wagers_on_status"
     t.index ["user_id", "status"], name: "index_wagers_on_user_id_and_status"
     t.index ["user_id"], name: "index_wagers_on_user_id"
   end
 
+  add_foreign_key "account_token_balances", "accounts"
+  add_foreign_key "account_token_balances", "approved_tokens"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "beep_chain_transfers", "approved_tokens"
+  add_foreign_key "tickets", "approved_tokens"
+  add_foreign_key "transactions", "approved_tokens"
+  add_foreign_key "wagers", "approved_tokens"
 end

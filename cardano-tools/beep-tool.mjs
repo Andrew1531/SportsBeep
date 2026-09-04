@@ -2,7 +2,7 @@
 // Cardano transaction tool for SportsBeep on-chain $BEEP transfers.
 // Commands (all print a single JSON object to stdout):
 //   address                          -> derive treasury address from TREASURY_MNEMONIC
-//   find-unit <bech32Address>        -> find the $BEEP asset unit held by an address
+//   find-unit <bech32Address> <unit> -> find an exact native asset unit held by an address
 //   build-deposit <userAddr> <treasuryAddr> <unit> <amount>
 //                                    -> build an unsigned tx sending <amount> of <unit>
 //                                       from the user's UTxOs to the treasury
@@ -29,15 +29,14 @@ function treasuryWallet() {
   });
 }
 
-// STRICT matching only: on-chain money movement must never rely on fuzzy
-// name matching, or a look-alike token could be spoofed as $BEEP.
-function isBeepUnit(unit) {
-  const expected = (process.env.BEEP_ASSET_UNIT || "").trim();
-  if (!expected) throw new Error("BEEP_ASSET_UNIT is required for on-chain transfers");
-  return unit === expected;
+// Rails obtains the unit from the approved-token registry. The tool still
+// insists on a syntactically valid complete unit and compares it exactly.
+function isExactUnit(unit) {
+  return /^[0-9a-f]{56}[0-9a-f]*$/i.test(unit || "");
 }
 
-async function findUnit(address) {
+async function findUnit(address, expectedUnit) {
+  if (!isExactUnit(expectedUnit)) throw new Error("A full policy ID plus asset name unit is required");
   const utxos = await provider.fetchAddressUTxOs(address);
   const totals = new Map();
   for (const u of utxos) {
@@ -47,7 +46,7 @@ async function findUnit(address) {
     }
   }
   for (const [unit, qty] of totals) {
-    if (isBeepUnit(unit)) return { unit, quantity: qty.toString() };
+    if (unit === expectedUnit) return { unit, quantity: qty.toString() };
   }
   return null;
 }
@@ -60,19 +59,19 @@ try {
     const addr = await wallet.getChangeAddress();
     out({ ok: true, address: addr });
   } else if (cmd === "find-unit") {
-    const [address] = args;
-    if (!address) throw new Error("usage: find-unit <address>");
-    const found = await findUnit(address);
+    const [address, unit] = args;
+    if (!address || !unit) throw new Error("usage: find-unit <address> <unit>");
+    const found = await findUnit(address, unit);
     if (found) {
       out({ ok: true, ...found });
     } else {
-      out({ ok: false, error: "No $BEEP tokens found at this address" });
+      out({ ok: false, error: "No exact matching token found at this address" });
       process.exit(1);
     }
   } else if (cmd === "build-deposit") {
     const [userAddr, treasuryAddr, unit, amount] = args;
     if (!userAddr || !treasuryAddr || !unit || !amount) throw new Error("usage: build-deposit <userAddr> <treasuryAddr> <unit> <amount>");
-    if (!isBeepUnit(unit)) throw new Error("Refusing deposit: unit does not match BEEP_ASSET_UNIT");
+    if (!isExactUnit(unit)) throw new Error("Refusing deposit: a complete asset unit is required");
     const utxos = await provider.fetchAddressUTxOs(userAddr);
     if (!utxos.length) throw new Error("No UTxOs found at the user's address");
     const txBuilder = new MeshTxBuilder({ fetcher: provider });
@@ -89,7 +88,7 @@ try {
     const changeAddr = await wallet.getChangeAddress();
     const utxos = await wallet.getUtxos();
     if (!utxos.length) throw new Error("Treasury wallet has no UTxOs (needs ADA for fees)");
-    if (!isBeepUnit(unit)) throw new Error("Refusing payout: unit does not match BEEP_ASSET_UNIT");
+    if (!isExactUnit(unit)) throw new Error("Refusing payout: a complete asset unit is required");
     try {
       const txBuilder = new MeshTxBuilder({ fetcher: provider });
       const unsignedTx = await txBuilder

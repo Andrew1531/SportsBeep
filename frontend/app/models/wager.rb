@@ -1,5 +1,6 @@
 class Wager < ActiveRecord::Base
   belongs_to :user
+  belongs_to :approved_token, optional: true
 
   monetize :amount_cents
   monetize :potential_payout_cents
@@ -8,11 +9,13 @@ class Wager < ActiveRecord::Base
   validates :bet_type, presence: true, inclusion: { in: %w[moneyline spread total parlay] }
   validates :selection, presence: true
   validates :odds, presence: true
-  validates :amount_cents, numericality: { greater_than: 0 }
+  validates :amount_cents, numericality: { greater_than: 0 }, unless: :token_balance?
+  validates :amount_units, numericality: { only_integer: true, greater_than: 0 }, if: :token_balance?
   validates :status, inclusion: { in: %w[pending active won lost push cancelled] }
 
   validate :must_have_beep_balance, on: :create
   validate :must_have_sufficient_balance, on: :create
+  validate :must_use_enabled_token, on: :create
 
   GAME_DURATION = 4.hours
 
@@ -67,14 +70,21 @@ class Wager < ActiveRecord::Base
   def debit_user_account!
     account = user.account
     account.with_lock do
-      if account.balance_cents < amount_cents
+      if token_balance?
+        balance = account.token_balance_for(approved_token)
+        raise ActiveRecord::Rollback, 'Insufficient token balance' if balance.balance_units.to_i < wager_units
+        balance.update!(balance_units: balance.balance_units.to_i - wager_units)
+      elsif account.balance_cents < amount_cents
         raise ActiveRecord::Rollback, 'Insufficient balance'
+      else
+        account.update!(balance_cents: account.balance_cents - amount_cents)
       end
-      account.update!(balance_cents: account.balance_cents - amount_cents)
       AdjustmentTransaction.create!(
         account: account,
+        approved_token: approved_token,
+        amount_units: token_balance? ? -wager_units : nil,
         description: "Wager: #{bet_type_display} - #{matchup}",
-        amount_cents: -amount_cents
+        amount_cents: token_balance? ? 0 : -amount_cents
       )
     end
   end
@@ -123,9 +133,9 @@ class Wager < ActiveRecord::Base
       update!(status: outcome, result: "#{away_team} #{away_score.to_i} @ #{home_team} #{home_score.to_i}")
       case outcome
       when 'won'
-        credit_account!(potential_payout_cents, "Wager won: #{bet_type_display} - #{matchup}")
+        credit_winnings!("Wager won: #{bet_type_display} - #{matchup}")
       when 'push'
-        credit_account!(amount_cents, "Wager push (refund): #{bet_type_display} - #{matchup}")
+        refund_stake!("Wager push (refund): #{bet_type_display} - #{matchup}")
       end
       settled = true
     end
@@ -136,9 +146,17 @@ class Wager < ActiveRecord::Base
     return if cents.to_i <= 0
     account = user.account
     account.with_lock do
-      account.update!(balance_cents: account.balance_cents + cents.to_i)
+      if token_balance?
+        balance = account.token_balance_for(approved_token)
+        units = cents == potential_payout_cents ? potential_payout_units.to_i : wager_units
+        balance.update!(balance_units: balance.balance_units.to_i + units)
+      else
+        account.update!(balance_cents: account.balance_cents + cents.to_i)
+      end
       AdjustmentTransaction.create!(
         account: account,
+        approved_token: approved_token,
+        amount_units: token_balance? ? (cents == potential_payout_cents ? potential_payout_units.to_i : wager_units) : nil,
         description: description,
         amount_cents: cents.to_i
       )
@@ -171,26 +189,73 @@ class Wager < ActiveRecord::Base
   end
 
   def calculate_potential_payout
-    return unless odds && amount_cents && amount_cents > 0
-    if odds > 0
-      self.potential_payout_cents = amount_cents + (amount_cents * odds / 100.0).round
-    else
-      self.potential_payout_cents = amount_cents + (amount_cents * 100.0 / odds.abs).round
-    end
+    return unless odds
+    odds_value = odds.to_i
+    return if odds_value.zero?
+
+    self.potential_payout_cents = payout_for(amount_cents.to_i, odds_value) unless token_balance?
+    self.potential_payout_units = payout_for(wager_units, odds_value) if token_balance? && wager_units.positive?
   end
 
   def must_have_beep_balance
     account = user&.account
-    if account.nil? || account.balance_cents <= 0
-      errors.add :base, 'You need $BEEP tokens to place wagers. Visit your Wallet to swap ADA for $BEEP.'
+    if account.nil? || (token_balance? ? account.token_balance_for(approved_token).balance_units.to_i <= 0 : account.balance_cents <= 0)
+      errors.add :base, "You need #{approved_token&.ticker || '$BEEP'} tokens to place wagers."
     end
   end
 
   def must_have_sufficient_balance
     account = user&.account
     return unless account && amount_cents
-    if account.balance_cents < amount_cents
+    if token_balance?
+      errors.add :base, "Insufficient #{approved_token.ticker} balance." if account.token_balance_for(approved_token).balance_units.to_i < wager_units
+    elsif account.balance_cents < amount_cents
       errors.add :base, "Insufficient $BEEP balance. You have #{account.balance} but need #{Money.new(amount_cents).format}."
+    end
+  end
+
+  def must_use_enabled_token
+    errors.add(:approved_token, 'must be an enabled approved token') unless approved_token&.enabled?
+  end
+
+  def token_balance?
+    approved_token.present?
+  end
+
+  def wager_units
+    amount_units.presence || amount_cents.to_i
+  end
+
+  def payout_for(stake, odds_value)
+    return 0 unless stake.positive?
+
+    profit = if odds_value.positive?
+               stake * odds_value / 100
+             else
+               stake * 100 / odds_value.abs
+             end
+    stake + profit
+  end
+
+  def credit_winnings!(description)
+    token_balance? ? credit_token_units!(potential_payout_units, description) : credit_account!(potential_payout_cents, description)
+  end
+
+  def refund_stake!(description)
+    token_balance? ? credit_token_units!(wager_units, description) : credit_account!(amount_cents, description)
+  end
+
+  def credit_token_units!(units, description)
+    return if units.to_i <= 0
+
+    account = user.account
+    account.with_lock do
+      balance = account.token_balance_for(approved_token)
+      balance.update!(balance_units: balance.balance_units.to_i + units.to_i)
+      AdjustmentTransaction.create!(
+        account: account, approved_token: approved_token, amount_units: units.to_i,
+        amount_cents: 0, description: description
+      )
     end
   end
 

@@ -13,19 +13,29 @@ class DashboardController < ApplicationController
   def wallet
     @user = current_user
     @account = @user.account
+    @approved_tokens = ApprovedToken.enabled.order(:ticker)
+    @selected_token = approved_token_from_params || @approved_tokens.first
+    @token_balances = @approved_tokens.index_with { |token| @account.token_balance_for(token) }
     settle_pending_deposits
     settle_pending_withdrawals
-    @transactions = safe_collection { @account.transactions.order(created_at: :desc).limit(20) }
+    @transactions = safe_collection do
+      scope = @account.transactions.order(created_at: :desc)
+      @selected_token ? scope.where(approved_token: @selected_token).limit(20) : scope.limit(20)
+    end
+    @chain_transfers = safe_collection do
+      scope = @user.beep_chain_transfers.order(created_at: :desc)
+      @selected_token ? scope.where(approved_token: @selected_token).limit(5) : scope.none
+    end
     load_wallet_info
     load_referral_info
-    sportsbook_in_play = safe_collection { @user.wagers.open }.sum(&:amount_cents) / 100.0
+    sportsbook_in_play = safe_collection { @user.wagers.open.where(approved_token: @selected_token) }.sum(&:amount_units)
     active_tickets = safe_collection do
       @user.tickets
            .joins(contest: { template: :pool })
            .where.not(contests: { status: 'finalized' })
            .includes(contest: { template: :pool })
     end
-    fantasy_in_play = active_tickets.sum { |t| t.contest.pool.entry_fee }
+    fantasy_in_play = active_tickets.select { |t| t.approved_token_id == @selected_token&.id }.sum(&:entry_fee_units)
     @active_wager_total = sportsbook_in_play + fantasy_in_play
     @total_wager_count = safe_collection { @user.wagers }.size
   end
@@ -33,7 +43,11 @@ class DashboardController < ApplicationController
   def transactions
     @user = current_user
     @account = @user.account
-    @transactions = safe_collection { @account.transactions.order(created_at: :desc) }
+    token = approved_token_from_params
+    @transactions = safe_collection do
+      scope = @account.transactions.order(created_at: :desc)
+      token ? scope.where(approved_token: token) : scope
+    end
   end
 
   def redeem_promo
@@ -235,7 +249,7 @@ class DashboardController < ApplicationController
     redirect_to wallet_path
   end
 
-  # --- On-chain $BEEP transfers (real token movement via the treasury) ---
+  # --- On-chain approved-token transfers (real token movement via treasury) ---
 
   # Build an unsigned deposit transaction (user wallet -> treasury) that the
   # wallet extension will sign and submit.
@@ -244,8 +258,9 @@ class DashboardController < ApplicationController
     return render json: { ok: false, error: 'On-chain transfers are not enabled yet.' }, status: :service_unavailable unless on_chain_mode?
     return render json: { ok: false, error: 'Verify wallet ownership first.' }, status: :forbidden unless @user.cardano_wallet_verified_at.present?
 
-    amount = params[:amount].to_s.strip.to_i
-    return render json: { ok: false, error: 'Enter a whole number of $BEEP greater than 0.' }, status: :unprocessable_entity if amount <= 0
+    token = approved_token_from_params
+    return render json: { ok: false, error: 'Choose an approved token.' }, status: :unprocessable_entity unless token
+    amount = token.parse_amount!(params[:amount])
 
     user_addr =
       if params[:address_hex].to_s.match?(/\A[0-9a-fA-F]+\z/) && params[:address_hex].present?
@@ -257,18 +272,20 @@ class DashboardController < ApplicationController
       return render json: { ok: false, error: 'The connected wallet does not match your verified wallet.' }, status: :forbidden
     end
 
-    beep = CardanoTxTool.find_beep_unit(user_addr)
-    if beep[:quantity] < amount
-      return render json: { ok: false, error: "Your wallet holds #{beep[:quantity]} $BEEP at this address — not enough to send #{amount}." }, status: :unprocessable_entity
+    asset = CardanoTxTool.find_unit(user_addr, token.asset_unit)
+    if asset[:quantity] < amount
+      return render json: { ok: false, error: "Your wallet holds #{token.format_units(asset[:quantity])} #{token.ticker} at this address — not enough to send #{token.format_units(amount)}." }, status: :unprocessable_entity
     end
 
     unsigned_tx = CardanoTxTool.build_deposit(
       user_address: user_addr,
       treasury_address: ENV['TREASURY_ADDRESS'],
-      unit: beep[:unit],
+      unit: asset[:unit],
       amount: amount
     )
     render json: { ok: true, unsigned_tx: unsigned_tx }
+  rescue TokenAmount::InvalidAmount => e
+    render json: { ok: false, error: e.message }, status: :unprocessable_entity
   rescue CardanoTxTool::Error => e
     render json: { ok: false, error: e.message }, status: :unprocessable_entity
   rescue StandardError => e
@@ -283,17 +300,21 @@ class DashboardController < ApplicationController
     return render json: { ok: false, error: 'Verify wallet ownership first.' }, status: :forbidden unless @user.cardano_wallet_verified_at.present?
 
     tx_hash = params[:tx_hash].to_s.strip.downcase
-    amount = params[:amount].to_s.strip.to_i
+    token = approved_token_from_params
+    return render json: { ok: false, error: 'Choose an approved token.' }, status: :unprocessable_entity unless token
+    amount = token.parse_amount!(params[:amount])
     unless tx_hash.match?(/\A[0-9a-f]{64}\z/) && amount.positive?
       return render json: { ok: false, error: 'Invalid transaction details.' }, status: :unprocessable_entity
     end
 
-    transfer = BeepChainTransfer.create!(user: @user, direction: 'deposit', amount_beep: amount, tx_hash: tx_hash, status: 'pending')
+    transfer = BeepChainTransfer.create!(user: @user, approved_token: token, direction: 'deposit', amount_beep: amount, amount_units: amount, tx_hash: tx_hash, status: 'pending')
     BeepDepositConfirmationJob.perform_later(transfer.id)
     render json: { ok: true, transfer_id: transfer.id, explorer_url: transfer.explorer_url }
+  rescue TokenAmount::InvalidAmount => e
+    render json: { ok: false, error: e.message }, status: :unprocessable_entity
   rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
     existing = BeepChainTransfer.find_by(tx_hash: tx_hash)
-    if existing&.user_id == @user.id && existing.direction == 'deposit' && existing.amount_beep == amount
+    if existing&.user_id == @user.id && existing.direction == 'deposit' && existing.amount_in_units == amount && existing.approved_token_id == token&.id
       render json: { ok: true, transfer_id: existing.id, explorer_url: existing.explorer_url, already_recorded: true }
     else
       render json: { ok: false, error: 'This transaction was already recorded with different details.' }, status: :unprocessable_entity
@@ -374,7 +395,7 @@ class DashboardController < ApplicationController
   def on_chain_mode?
     # The full unit is required: policy-only matching can accept a different
     # asset minted by the same policy.
-    ENV['TREASURY_ADDRESS'].present? && ENV['BEEP_ASSET_UNIT'].present?
+    ENV['TREASURY_ADDRESS'].present?
   end
   helper_method :on_chain_mode?
 
@@ -411,9 +432,15 @@ class DashboardController < ApplicationController
       return redirect_to wallet_path
     end
 
-    amount_beep = params[:amount].to_s.strip.to_i
-    if amount_beep <= 0
-      flash[:alert] = 'Enter a whole number of $BEEP greater than 0 to withdraw.'
+    token = approved_token_from_params
+    unless token
+      flash[:alert] = 'Choose an approved token to withdraw.'
+      return redirect_to wallet_path
+    end
+    begin
+      amount_units = token.parse_amount!(params[:amount])
+    rescue TokenAmount::InvalidAmount => e
+      flash[:alert] = e.message
       return redirect_to wallet_path
     end
 
@@ -435,16 +462,18 @@ class DashboardController < ApplicationController
       existing = @user.beep_chain_transfers.withdrawals.find_by(request_key: request_key)
       next if existing
 
-      max_beep = @account.balance_cents.to_i / 100
-      if amount_beep > max_beep
-        error = "You can withdraw at most #{max_beep} $BEEP."
+      max_units = @account.token_balance_for(token).balance_units.to_i
+      if amount_units > max_units
+        error = "You can withdraw at most #{token.format_units(max_units)} #{token.ticker}."
         next
       end
 
       transfer = BeepChainTransfer.create!(
         user: @user,
+        approved_token: token,
         direction: 'withdrawal',
-        amount_beep: amount_beep,
+        amount_beep: amount_units,
+        amount_units: amount_units,
         status: 'pending',
         request_key: request_key,
         destination_address: @user.cardano_wallet_address
@@ -463,32 +492,48 @@ class DashboardController < ApplicationController
 
     begin
       CardanoTxTool.with_payout_lock do
-        treasury_beep = CardanoTxTool.find_beep_unit(ENV['TREASURY_ADDRESS'])
-        if treasury_beep[:quantity] < amount_beep
-          raise CardanoTxTool::Error, 'Treasury has insufficient $BEEP right now. Please try again later.'
+        treasury_service = BlockfrostService.new
+        available_treasury_units = treasury_service.get_token_balance(ENV['TREASURY_ADDRESS'], token)
+        if available_treasury_units < amount_units
+          raise CardanoTxTool::Error,
+                "Treasury has insufficient #{token.ticker} right now. Please try again later."
+        end
+        treasury_lovelace = treasury_service.get_lovelace_balance(ENV['TREASURY_ADDRESS'])
+        if treasury_lovelace < CardanoTxTool::MIN_PAYOUT_LOVELACE
+          raise CardanoTxTool::Error,
+                'Treasury has insufficient ADA for the payout fee and minimum output. Please try again later.'
+        end
+
+        treasury_token = CardanoTxTool.find_unit(ENV['TREASURY_ADDRESS'], token.asset_unit)
+        if treasury_token[:quantity] < amount_units
+          raise CardanoTxTool::Error, "Treasury has insufficient #{token.ticker} right now. Please try again later."
         end
 
         built = CardanoTxTool.build_payout(
           to_address: transfer.destination_address,
-          unit: treasury_beep[:unit],
-          amount: amount_beep
+          unit: treasury_token[:unit],
+          amount: amount_units
         )
 
         # Building and signing do not touch the game balance. Persist the
         # deterministic hash and debit under lock immediately before submit.
         @account.with_lock do
-          max_beep = @account.balance_cents.to_i / 100
-          if amount_beep > max_beep
+          balance = @account.token_balance_for(token)
+          max_units = balance.balance_units.to_i
+          if amount_units > max_units
             transfer.update!(status: 'failed', error_message: 'Game balance changed before the payout could be submitted.')
-            raise CardanoTxTool::Error, "Your available balance changed. You can now withdraw at most #{max_beep} $BEEP."
+            raise CardanoTxTool::Error,
+                  "Your available balance changed. You can now withdraw at most #{token.format_units(max_units)} #{token.ticker}."
           end
 
-          @account.update!(balance_cents: @account.balance_cents.to_i - amount_beep * 100)
+          balance.update!(balance_units: balance.balance_units.to_i - amount_units)
           Transaction.create!(
             account: @account,
-            amount_cents: -(amount_beep * 100),
+            approved_token: token,
+            amount_units: -amount_units,
+            amount_cents: 0,
             type: 'AdjustmentTransaction',
-            description: "On-chain withdrawal of #{amount_beep} $BEEP to your Cardano wallet (processing).",
+            description: "On-chain withdrawal of #{token.format_units(amount_units)} #{token.ticker} to your Cardano wallet (processing).",
             status: 'completed'
           )
           transfer.update!(tx_hash: built[:tx_hash], status: 'submitting')
@@ -512,25 +557,28 @@ class DashboardController < ApplicationController
       if transfer.reload.status == 'unknown'
         flash[:alert] = "Your withdrawal submission is uncertain, but its transaction hash was saved and is being checked on-chain. Your balance stays debited until it resolves. Tx: #{transfer.tx_hash[0, 16]}…"
       else
-        flash[:notice] = "Withdrawal submitted! #{amount_beep} $BEEP is on its way to your wallet and is awaiting confirmation. Tx: #{transfer.tx_hash[0, 16]}…"
+        flash[:notice] = "Withdrawal submitted! #{token.format_units(amount_units)} #{token.ticker} is on its way to your wallet and is awaiting confirmation. Tx: #{transfer.tx_hash[0, 16]}…"
       end
-    rescue StandardError => e
-      Rails.logger.error "onchain_withdraw payout error for user #{@user.id}: #{e.class}: #{e.message}"
-      transfer.reload
-      if transfer.tx_hash.present?
-        # A hash is persisted before submission starts. From this point onward
-        # never auto-refund: the reconciler must decide from chain state.
-        transfer.update_columns(
-          status: 'unknown',
-          error_message: "Withdrawal requires reconciliation: #{e.message.to_s.first(170)}",
-          updated_at: Time.current
-        )
-        BeepWithdrawalConfirmationJob.perform_later(transfer.id)
-        flash[:alert] = "Your withdrawal is being checked on-chain. Your balance stays debited until it resolves. Tx: #{transfer.tx_hash[0, 16]}…"
-      else
-        transfer.update!(status: 'failed', error_message: e.message.to_s.first(200)) if transfer.status == 'pending'
-        flash[:alert] = "Withdrawal failed before submission. Your balance was not charged: #{e.message.to_s.first(120)}"
-      end
+  rescue TokenAmount::InvalidAmount => e
+    flash[:alert] = e.message
+    redirect_to wallet_path
+  rescue StandardError => e
+    Rails.logger.error "onchain_withdraw payout error for user #{@user.id}: #{e.class}: #{e.message}"
+    transfer&.reload
+    if transfer&.tx_hash.present?
+      # A hash is persisted before submission starts. From this point onward
+      # never auto-refund: the reconciler must decide from chain state.
+      transfer.update_columns(
+        status: 'unknown',
+        error_message: "Withdrawal requires reconciliation: #{e.message.to_s.first(170)}",
+        updated_at: Time.current
+      )
+      BeepWithdrawalConfirmationJob.perform_later(transfer.id)
+      flash[:alert] = "Your withdrawal is being checked on-chain. Your balance stays debited until it resolves. Tx: #{transfer.tx_hash[0, 16]}…"
+    else
+      transfer&.update!(status: 'failed', error_message: e.message.to_s.first(200)) if transfer&.status == 'pending'
+      flash[:alert] = "Withdrawal failed before submission. Your balance was not charged: #{e.message.to_s.first(120)}"
+    end
     end
 
     redirect_to wallet_path
@@ -539,6 +587,13 @@ class DashboardController < ApplicationController
   def withdrawal_replay_message(transfer)
     suffix = transfer.tx_hash.present? ? " Tx: #{transfer.tx_hash[0, 16]}…" : ''
     "This withdrawal was already received and was not charged twice. Status: #{transfer.status}.#{suffix}"
+  end
+
+  def approved_token_from_params
+    value = params[:approved_token_id].presence || params[:token_id].presence || params[:asset_unit].presence
+    return nil if value.blank?
+    relation = ApprovedToken.enabled
+    value.match?(/\A\d+\z/) ? relation.find_by(id: value) : relation.find_by(asset_unit: value.to_s.downcase)
   end
 
   def safe_collection
@@ -561,15 +616,38 @@ class DashboardController < ApplicationController
       begin
         service = BlockfrostService.new
         @wallet_info = service.get_address_info(@user.cardano_wallet_address)
-        @on_chain_beep = service.get_beep_balance(@user.cardano_wallet_address)
+        @on_chain_beep = on_chain_mode? ? 0 : service.get_beep_balance(@user.cardano_wallet_address)
+        @selected_token_on_chain = @selected_token ? service.get_token_balance(@user.cardano_wallet_address, @selected_token) : 0
+        if ENV['TREASURY_ADDRESS'].present?
+          @treasury_token_units = @selected_token ? service.get_token_balance(ENV['TREASURY_ADDRESS'], @selected_token) : 0
+          @treasury_lovelace = service.get_lovelace_balance(ENV['TREASURY_ADDRESS'])
+        end
       rescue => e
         Rails.logger.error "Wallet info error: #{e.message}"
         @wallet_info = { ada_balance: 0.0, tokens: [], status: 'error' }
         @on_chain_beep = 0
+        @selected_token_on_chain = 0
+        @treasury_token_units = 0
+        @treasury_lovelace = 0
       end
     else
       @wallet_info = nil
       @on_chain_beep = 0
+      @selected_token_on_chain = 0
+      @treasury_token_units = 0
+      @treasury_lovelace = 0
+    end
+
+    # Treasury liquidity is relevant before a wallet is connected as well.
+    # Keep this exact-unit/raw-lovelace read independent of the user's address.
+    if @wallet_info.nil? && ENV['TREASURY_ADDRESS'].present? && ENV['BLOCKFROST_PROJECT_ID'].present?
+      begin
+        service = BlockfrostService.new
+        @treasury_token_units = @selected_token ? service.get_token_balance(ENV['TREASURY_ADDRESS'], @selected_token) : 0
+        @treasury_lovelace = service.get_lovelace_balance(ENV['TREASURY_ADDRESS'])
+      rescue StandardError => e
+        Rails.logger.error "Treasury wallet info error: #{e.message}"
+      end
     end
 
     if @account
