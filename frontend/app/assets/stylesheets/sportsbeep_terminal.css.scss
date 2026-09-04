@@ -228,7 +228,7 @@ body.landing-page > .container > .row { margin: 0; }
   position: relative;
   z-index: 2;
 }
-.landing-page .landing-hero-brand { display: block; width: 150px; }
+.landing-page .landing-hero-brand { display: block; width: 150px; flex: 0 0 150px; }
 .landing-page .landing-hero-brand img {
   display: block;
   width: 100%;
@@ -244,7 +244,13 @@ body.landing-page > .container > .row { margin: 0; }
   margin: 0;
   list-style: none;
 }
-.landing-page .landing-hero-nav li { margin: 0; padding: 0; float: none; }
+.landing-page .landing-hero-nav li {
+  width: auto !important;
+  margin: 0;
+  padding: 0;
+  float: none;
+  flex: 0 0 auto;
+}
 .landing-page .landing-hero-nav li a {
   color: rgba(255,255,255,.78);
   font-family: 'Barlow Condensed', sans-serif;
@@ -253,9 +259,20 @@ body.landing-page > .container > .row { margin: 0; }
   letter-spacing: .13em;
   text-transform: uppercase;
   text-decoration: none;
+  white-space: nowrap;
 }
 .landing-page .landing-hero-nav li a:hover { color: $sb-signal; }
-.landing-page .landing-hero-nav li .landing-hero-nav-play { color: $sb-signal; }
+.landing-page .landing-hero-nav li .landing-hero-nav-play {
+  padding: 9px 15px;
+  border: 1px solid rgba(247,118,13,.7);
+  background: rgba(247,118,13,.08);
+  color: $sb-signal;
+}
+.landing-page .landing-hero-nav li .landing-hero-nav-play:hover,
+.landing-page .landing-hero-nav li .landing-hero-nav-play:focus {
+  background: $sb-signal;
+  color: $sb-ink;
+}
 .landing-page .landing-hero-content {
   width: 100%;
   max-width: 1240px;
@@ -735,6 +752,12 @@ body.landing-page > .container > .row { margin: 0; }
   .landing-footer__credits { align-items: baseline; }
 }
 @media (min-width: 768px) and (max-width: 1050px) {
+  .landing-page .landing-hero-nav { padding: 18px 14px; }
+  .landing-page .landing-hero-brand { width: 128px; flex-basis: 128px; }
+  .landing-page .landing-hero-nav nav { margin-left: auto; }
+  .landing-page .landing-hero-nav ul { gap: 13px; flex-wrap: nowrap; }
+  .landing-page .landing-hero-nav li a { font-size: 12px; letter-spacing: .075em; }
+  .landing-page .landing-hero-nav li .landing-hero-nav-play { padding: 8px 12px; }
   .landing-page .landing-hero-content { padding-top: 128px; }
   .landing-page .landing-hero-content h1 span { font-size: 104px; }
   .landing-page .landing-hero-content h1 strong { font-size: 96px; }
