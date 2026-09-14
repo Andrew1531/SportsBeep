@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SportsBeep — Real-Time Data Beta Checklist</title>
+<style>
+@page { size: Letter; margin: 0.65in; }
+* { box-sizing: border-box; }
+body { margin: 0; color: #172032; font: 10.5pt/1.32 Arial, sans-serif; }
+.page { break-after: page; }
+.page:last-child { break-after: auto; }
+.brand { color: #a64700; font-size: 10pt; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; border-bottom: 3px solid #f7760d; padding-bottom: 10px; }
+h1 { font-size: 27pt; line-height: 1.1; margin: 20px 0 12px; }
+h2 { font-size: 15pt; margin: 16px 0 7px; }
+h3 { font-size: 11pt; margin: 12px 0 6px; }
+p { margin: 8px 0; }
+.intro { background: #f1f3f7; border-left: 4px solid #f7760d; padding: 10px 13px; }
+.tag { color: #a64700; font-size: 9pt; text-transform: uppercase; }
+ul { list-style: none; padding: 0; margin: 8px 0; }
+li { position: relative; padding-left: 19px; margin: 5px 0; }
+li::before { content: ""; position: absolute; left: 0; top: 4px; width: 9px; height: 9px; border: 1px solid #697587; }
+.done { font-size: 10pt; color: #465266; }
+table { width: 100%; border-collapse: collapse; margin: 9px 0; font-size: 10pt; }
+td, th { text-align: left; padding: 7px 9px; border: 1px solid #ccd2dc; }
+th { background: #edf0f5; }
+.footer { margin-top: 18px; padding-top: 8px; border-top: 1px solid #ccd2dc; font-size: 9pt; color: #657083; }
+</style>
+</head>
+<body>
+<section class="page">
+<div class="brand">SportsBeep / Beta readiness</div>
+<h1>Real-time data<br>beta checklist</h1>
+<div class="intro"><strong>Recommended scope: MLB, pregame single bets only.</strong> Keep live betting, parlays, and unsupported sports disabled until their data and settlement paths are verified.</div>
+<p>ESPN can provide frequently refreshed data, but instant updates cannot be promised. Show when data was last verified and stop accepting bets when the data cannot be trusted.</p>
+<p class="done">Planning checklist—not a certification that these safeguards are implemented. This document does not authorize publishing or deployment.</p>
+<h2>1. Remove all fabricated data <span class="tag">/ Beta blocker</span></h2>
+<ul>
+<li>Delete generated matchups, random start times, random odds, and default betting lines.</li>
+<li>Display “No games available” or “Odds unavailable” when ESPN has no usable data.</li>
+<li>Hide unsupported sports rather than filling them with sample games.</li>
+</ul>
+<p class="done"><strong>Done when:</strong> Every displayed game and enabled selection is traceable to a real source record.</p>
+<h2>2. Make schedules and time zones accurate <span class="tag">/ Beta blocker</span></h2>
+<ul>
+<li>Use ESPN’s scheduled start timestamp—not the scraper’s fetch time.</li>
+<li>Store timestamps in UTC; display dates and times with a clearly labeled time zone.</li>
+<li>Fetch yesterday, today, and upcoming games so midnight boundaries do not lose fixtures.</li>
+<li>Match updates using ESPN event IDs, including doubleheaders.</li>
+<li>Update rescheduled starts and explicitly handle delayed, postponed, suspended, canceled, and final games.</li>
+<li>Never assume a game is finished merely because several hours have elapsed.</li>
+</ul>
+<p class="done"><strong>Done when:</strong> Schedule checks match ESPN across midnight, daylight-saving changes, doubleheaders, and rescheduled games.</p>
+<div class="footer">SportsBeep • Development and beta preparation • 1 / 3</div>
+</section>
+<section class="page">
+<div class="brand">SportsBeep / Feed and odds reliability</div>
+<h2>3. Add controlled refreshes and freshness tracking <span class="tag">/ Beta blocker</span></h2>
+<p>Initial targets are subject to ESPN’s permitted usage and observed rate limits. They are not guarantees of source updates.</p>
+<table>
+<thead><tr><th>Data</th><th>Initial refresh target</th></tr></thead>
+<tbody>
+<tr><td>Upcoming schedule</td><td>Every 5 minutes</td></tr>
+<tr><td>Pregame status and available odds</td><td>Every 30–60 seconds</td></tr>
+<tr><td>Games approaching start</td><td>Every 15–30 seconds, if supported</td></tr>
+<tr><td>Final scores awaiting confirmation</td><td>Every 30–60 seconds</td></tr>
+</tbody></table>
+<ul>
+<li>Track last attempted fetch and last successful fetch separately.</li>
+<li>Record source update time when ESPN provides it; a fresh fetch is not necessarily a fresh bookmaker price.</li>
+<li>Preserve the last good response during outages, visibly marked stale.</li>
+<li>Add timeouts, retry backoff, rate-limit handling, and overlapping-request prevention.</li>
+<li>Suspend wagering on data that exceeds an agreed freshness limit.</li>
+</ul>
+<p class="done"><strong>Done when:</strong> An outage cannot silently produce “fresh” games or leave stale markets open.</p>
+<h2>4. Make odds honest and complete <span class="tag">/ Beta blocker</span></h2>
+<ul>
+<li>Show the bookmaker/provider when supplied and the last verification time.</li>
+<li>Verify home/away mapping, spread signs, totals, and American-odds conversions.</li>
+<li>Leave individual unavailable markets disabled.</li>
+<li>Confirm ESPN supplies enough odds coverage and update frequency for beta.</li>
+<li>If coverage is insufficient, restrict beta or evaluate a dedicated odds feed—never invent prices.</li>
+</ul>
+<p class="done"><strong>Done when:</strong> Each enabled line has a known source, valid mapping, and acceptable freshness.</p>
+<h2>5. Protect bet acceptance on the server <span class="tag">/ Beta blocker</span></h2>
+<ul>
+<li>Look up fixtures and markets server-side instead of trusting submitted teams, starts, points, or odds.</li>
+<li>Reject stale, missing, started, suspended, canceled, or closed markets.</li>
+<li>Require the player to accept a new price if the price changes.</li>
+<li>Save accepted price, line, source, event ID, and verification timestamp with each wager.</li>
+<li>Provide an administrator switch to pause all betting immediately.</li>
+</ul>
+<p class="done"><strong>Done when:</strong> Editing a browser request or leaving a page open cannot place a bet at an invalid price.</p>
+<div class="footer">SportsBeep • Development and beta preparation • 2 / 3</div>
+</section>
+<section class="page">
+<div class="brand">SportsBeep / Settlement and acceptance</div>
+<h2>6. Finish results and settlement</h2>
+<p class="tag">Already covered by existing project tasks</p>
+<ul>
+<li>Connect real final scores using the correct source event IDs.</li>
+<li>Run settlement automatically and prevent duplicate payouts.</li>
+<li>Define treatment for postponed, canceled, suspended, and unresolved games.</li>
+<li>Keep parlays disabled until their grading is complete.</li>
+</ul>
+<p class="done">This overlaps the existing final scores, scheduled settlement, and parlays/no-result tasks. Do not create duplicate tasks.</p>
+<h2>7. Run a monitored rehearsal</h2>
+<p>Complete this before accepting real beta wagers.</p>
+<ul>
+<li>Run through several complete MLB game days without real stakes.</li>
+<li>Compare schedules, statuses, and sampled odds against their source.</li>
+<li>Simulate outages, stale responses, missing markets, changed odds, and rescheduled games.</li>
+<li>Verify rejected bets never debit balances.</li>
+<li>Verify completed wagers settle once, with an auditable result.</li>
+<li>Add an admin health view showing feed age, errors, suspended markets, and unsettled games.</li>
+</ul>
+<h2>Beta acceptance gate</h2>
+<div class="intro">
+<strong>Do not accept real beta wagers until:</strong>
+<ul>
+<li>No fabricated fixtures or odds remain.</li>
+<li>Dates, times, and statuses are verified.</li>
+<li>Stale markets automatically stop accepting bets.</li>
+<li>Prices are validated server-side.</li>
+<li>Results and payouts work end to end.</li>
+<li>An administrator can pause betting immediately.</li>
+</ul>
+</div>
+<h2>Priority order</h2>
+<p>Remove fabricated data → Fix schedules → Enforce freshness → Validate odds and bets → Complete settlement → Monitored rehearsal.</p>
+<div class="footer">SportsBeep • Development and beta preparation • 3 / 3</div>
+</section>
+</body>
+</html>
