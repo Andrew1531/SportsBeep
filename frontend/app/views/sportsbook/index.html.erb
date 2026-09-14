@@ -296,10 +296,9 @@
         </select>
         <div id="bs-token-balance" class="dk-bs-amount-label"></div>
       <% end %>
-      <label class="dk-bs-amount-label">WAGER AMOUNT</label>
+      <label class="dk-bs-amount-label" for="bs-amount">WAGER AMOUNT</label>
       <div class="dk-bs-input-wrap">
-        <span class="dk-bs-dollar" id="bs-token-symbol"></span>
-        <input type="text" inputmode="decimal" class="dk-bs-input" id="bs-amount" placeholder="0" oninput="sbUpdatePayout()">
+        <input type="text" inputmode="decimal" class="dk-bs-input" id="bs-amount" placeholder="0" style="padding-left: 12px;" oninput="sbUpdatePayout()">
       </div>
       <div class="dk-bs-quick">
         <button type="button" onclick="sbSetAmount('1')">1</button>
@@ -316,8 +315,8 @@
         <span id="bs-wager-disp">— $BEEP</span>
       </div>
       <div class="dk-bs-payout-row dk-bs-payout-total">
-        <span>To Win</span>
-        <span id="bs-win-disp">— $BEEP</span>
+        <span title="Profit, excluding your original wager">To Win</span>
+        <span id="bs-win-disp" aria-live="polite">— $BEEP</span>
       </div>
     </div>
 
@@ -360,6 +359,7 @@ window.sbOpenBetslip = function(gid, fixId, gameId, away, home, start, type, sel
   document.getElementById('bs-amount').value             = '';
   document.getElementById('bs-wager-disp').textContent   = '— $BEEP';
   document.getElementById('bs-win-disp').textContent     = '— $BEEP';
+  sbUpdatePayout();
 
   document.getElementById('betslip-overlay').classList.add('open');
   setTimeout(function() { document.getElementById('bs-amount').focus(); }, 300);
@@ -381,14 +381,16 @@ window.sbSetAmount = function(cents) {
 };
 
 window.sbSelectedToken = function() {
-  return SB_TOKENS[document.getElementById('bs-token').value];
+  var picker = document.getElementById('bs-token');
+  return picker ? SB_TOKENS[picker.value] : null;
 };
 
 window.sbTokenChanged = function() {
   var token = sbSelectedToken();
-  document.getElementById('wager_approved_token_id').value = document.getElementById('bs-token').value;
-  document.getElementById('bs-token-symbol').textContent = token ? token.ticker : '';
-  document.getElementById('bs-token-balance').textContent = token ? 'Available: ' + token.balance + ' ' + token.ticker : '';
+  var picker = document.getElementById('bs-token');
+  if (picker) document.getElementById('wager_approved_token_id').value = picker.value;
+  var balanceLabel = document.getElementById('bs-token-balance');
+  if (balanceLabel) balanceLabel.textContent = token ? 'Available: ' + token.balance + ' ' + token.ticker : '';
   sbUpdatePayout();
 };
 
@@ -396,9 +398,26 @@ window.sbUpdatePayout = function() {
   var amount = document.getElementById('bs-amount').value.trim();
   var token = sbSelectedToken();
   var p = sbCurrentPick;
-  if (!p || !token) return;
+  var winnings = document.getElementById('bs-win-disp');
+  winnings.textContent = '—' + (token ? ' ' + token.ticker : '');
+  if (!token) return;
   document.getElementById('bs-wager-disp').textContent = (amount || '—') + ' ' + token.ticker;
-  document.getElementById('bs-win-disp').textContent = 'Calculated in ' + token.ticker + ' units';
+  if (!p || !/^\d+(?:\.\d*)?$/.test(amount)) return;
+  var decimals = Number(token.decimals);
+  if (!Number.isInteger(decimals) || decimals < 0 || decimals > 30) return;
+  var parts = amount.split('.');
+  var fraction = parts[1] || '';
+  if (fraction.length > decimals && /[1-9]/.test(fraction.slice(decimals))) return;
+  var stake = BigInt(parts[0]) * (10n ** BigInt(decimals)) +
+    BigInt((fraction.slice(0, decimals).padEnd(decimals, '0')) || '0');
+  var odds = Number(p.oddsNum);
+  if (stake <= 0n || !Number.isSafeInteger(odds) || odds === 0) return;
+  // Match Wager#payout_for: profit is rounded down to the token's smallest unit.
+  var profit = odds > 0 ? stake * BigInt(odds) / 100n : stake * 100n / BigInt(-odds);
+  var digits = profit.toString().padStart(decimals + 1, '0');
+  var formatted = decimals ? digits.slice(0, -decimals) + '.' + digits.slice(-decimals) : digits;
+  if (decimals) formatted = formatted.replace(/\.?0+$/, '');
+  winnings.textContent = formatted + ' ' + token.ticker;
 };
 
 window.bbCloseModal = function() {
