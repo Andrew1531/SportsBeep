@@ -13,4 +13,4 @@ For financial reports, verify registry decimals independently of the app's appro
 
 **Why:** A live treasury audit found a disagreement between the registry's decimal convention and the app's display configuration. An apparently large balance can represent a much smaller token-denominated balance; changing presentation settings can also change how future user-entered amounts are interpreted.
 
-**How to apply:** If the two conventions disagree, report both explicitly, reconcile the intended denomination with the owner, and audit transfers and ledgers before any migration.
+**How to apply:** If the two conventions disagree, report both explicitly, reconcile the intended denomination with the owner, and audit transfers and ledgers before any migration. A request to match wallet presentation authorizes registry-based treasury display, not changes to stored units, swap rates, or wager denominations.

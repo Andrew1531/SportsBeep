@@ -19,15 +19,16 @@
     <div class="panel-body">
       <% if @treasury_snapshot[:error].present? %><div class="alert alert-danger"><strong>Snapshot unavailable<%= ' (showing stale last success)' if @treasury_snapshot[:checked_at] %>:</strong> <%= @treasury_snapshot[:error] %></div><% end %>
       <p><strong>Checked at:</strong> <%= @treasury_snapshot[:checked_at] ? l(@treasury_snapshot[:checked_at]) : 'never' %><% if @treasury_snapshot[:stale] %> <span class="label label-warning">stale</span><% end %></p>
-      <% unless @treasury_snapshot[:lovelace_units].nil? %><p><strong>ADA:</strong> <code><%= number_with_delimiter(@treasury_snapshot[:lovelace_units]) %> lovelace</code> (<%= TokenAmount.format(@treasury_snapshot[:lovelace_units], decimals: 6) %> ADA)</p><% end %>
+      <% unless @treasury_snapshot[:lovelace_units].nil? %><p><%= render 'wallet_amount', units: @treasury_snapshot[:lovelace_units], decimals: 6, ticker: 'ADA' %></p><% end %>
       <% @financial_report[:tokens].each do |row| %>
         <% token = row[:token]; asset = @treasury_snapshot[:assets][token.asset_unit] %>
         <% next unless asset %>
         <p>
-          <strong><%= token.ticker %>:</strong> <code><%= number_with_delimiter(asset[:raw_units]) %> raw units</code>
-          <% if asset[:decimals_mismatch] %><span class="label label-danger">WARNING decimals mismatch</span><% elsif asset[:registry_decimals].nil? %><span class="label label-warning">WARNING registry decimals unknown</span><% end %>
+          <%= render 'wallet_amount', units: asset[:raw_units], decimals: asset[:registry_decimals], ticker: token.ticker %>
+          <% if asset[:decimals_mismatch] %><br><small class="text-danger">App decimals differ. Wallet amount uses token registry metadata; see details below.</small><% elsif asset[:registry_decimals].nil? %><br><small><%= token.ticker %> — <%= number_with_delimiter(asset[:raw_units]) %> raw units</small><% end %>
         </p>
       <% end %>
+      <p class="text-muted"><small>Wallet amounts use 6 decimals for ADA and token registry decimals for native assets. This display does not change the application ledger.</small></p>
     </div>
   </div>
 
@@ -126,26 +127,42 @@
     <div class="panel-heading"><h2 class="panel-title">Cardano mainnet treasury wallet detail</h2></div>
     <div class="panel-body">
       <% if @treasury_snapshot[:error].present? %><div class="alert alert-danger"><strong>Snapshot unavailable<%= ' (showing stale last success)' if @treasury_snapshot[:checked_at] %>:</strong> <%= @treasury_snapshot[:error] %></div><% end %>
-      <p><strong>Address:</strong> <code><%= @treasury_snapshot[:address] || 'not configured' %></code></p>
+      <p style="overflow-wrap:anywhere"><strong>Address:</strong> <code><%= @treasury_snapshot[:address] || 'not configured' %></code></p>
       <p><strong>Checked at:</strong> <%= @treasury_snapshot[:checked_at] ? l(@treasury_snapshot[:checked_at]) : 'never' %><% if @treasury_snapshot[:stale] %> <span class="label label-warning">stale</span><% end %></p>
-      <% unless @treasury_snapshot[:lovelace_units].nil? %><p><strong>ADA:</strong> <code><%= number_with_delimiter(@treasury_snapshot[:lovelace_units]) %> lovelace</code> (<%= TokenAmount.format(@treasury_snapshot[:lovelace_units], decimals: 6) %> ADA)</p><% end %>
+      <% unless @treasury_snapshot[:lovelace_units].nil? %>
+        <p><%= render 'wallet_amount', units: @treasury_snapshot[:lovelace_units], decimals: 6, ticker: 'ADA' %></p>
+        <details><summary>ADA raw units</summary><p><code><%= number_with_delimiter(@treasury_snapshot[:lovelace_units]) %> lovelace</code> — 1 ADA = 1,000,000 lovelace.</p></details>
+      <% end %>
+      <p class="text-muted" style="margin-top:12px">Native token balances below use token registry decimals, not the app's display configuration. No balances or payout calculations have been changed.</p>
     </div>
     <div class="table-responsive">
       <table class="table table-striped table-condensed">
-        <thead><tr><th>Exact asset</th><th class="text-right">Raw units</th><th class="text-right">Configured format</th><th class="text-right">Registry format</th><th>Decimals check</th></tr></thead>
+        <thead><tr><th>Token</th><th>Wallet balance</th><th>Technical details</th></tr></thead>
         <tbody>
           <% @financial_report[:tokens].each do |row| %>
             <% token = row[:token]; asset = @treasury_snapshot[:assets][token.asset_unit] %>
             <% next unless asset %>
-            <tr class="<%= 'warning' if asset[:decimals_mismatch] || asset[:registry_decimals].nil? %>">
-              <td><strong><%= token.ticker %></strong><br><small><code><%= token.asset_unit %></code></small></td>
-              <td class="text-right"><code><%= number_with_delimiter(asset[:raw_units]) %></code></td>
-              <td class="text-right"><%= TokenAmount.format(asset[:raw_units], decimals: asset[:configured_decimals]) %> <small>(<%= asset[:configured_decimals] %> decimals)</small></td>
-              <td class="text-right"><%= asset[:registry_decimals].nil? ? 'metadata unavailable' : TokenAmount.format(asset[:raw_units], decimals: asset[:registry_decimals]) %><% unless asset[:registry_decimals].nil? %> <small>(<%= asset[:registry_decimals] %> decimals)</small><% end %></td>
-              <td><% if asset[:decimals_mismatch] %><span class="label label-danger">WARNING mismatch</span><% elsif asset[:registry_decimals].nil? %><span class="label label-warning">WARNING unknown</span><br><small><%= asset[:registry_warning] %></small><% else %><span class="text-muted">match</span><% end %></td>
+            <tr>
+              <td><strong><%= token.ticker %></strong></td>
+              <td>
+                <%= render 'wallet_amount', units: asset[:raw_units], decimals: asset[:registry_decimals], ticker: token.ticker %>
+                <% if asset[:decimals_mismatch] %><br><small class="text-danger">App decimals differ from the registry.</small><% end %>
+              </td>
+              <td>
+                <details>
+                  <summary>Raw units and decimal settings</summary>
+                  <dl style="margin-top:10px">
+                    <dt>Exact asset</dt><dd style="overflow-wrap:anywhere"><code><%= token.asset_unit %></code></dd>
+                    <dt>Raw units</dt><dd><code><%= number_with_delimiter(asset[:raw_units]) %></code></dd>
+                    <dt>App-configured format (not wallet balance)</dt><dd><%= TokenAmount.format(asset[:raw_units], decimals: asset[:configured_decimals]) %> (<%= asset[:configured_decimals] %> decimals)</dd>
+                    <dt>Token registry decimals</dt><dd><%= asset[:registry_decimals].nil? ? 'Unavailable' : asset[:registry_decimals] %></dd>
+                    <dt>Decimals check</dt><dd><% if asset[:decimals_mismatch] %><strong class="text-danger">WARNING mismatch</strong> — application settings are unchanged.<% elsif asset[:registry_decimals].nil? %><strong class="text-warning">WARNING unknown</strong> — <%= asset[:registry_warning] %><% else %>match<% end %></dd>
+                  </dl>
+                </details>
+              </td>
             </tr>
           <% end %>
-          <% if @treasury_snapshot[:assets].empty? %><tr><td colspan="5" class="text-muted text-center">No treasury asset snapshot is available.</td></tr><% end %>
+          <% if @treasury_snapshot[:assets].empty? %><tr><td colspan="3" class="text-muted text-center">No treasury asset snapshot is available.</td></tr><% end %>
         </tbody>
       </table>
     </div>
