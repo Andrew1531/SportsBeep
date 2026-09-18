@@ -1,0 +1,64 @@
+<div class="page-header">
+  <h3>Correct Personal Information <small>User #<%= @user.id %></small></h3>
+  <%= link_to '← Back to User', admin_user_path(@user), class: 'btn btn-default' %>
+</div>
+
+<% if flash[:danger] || flash[:alert] %>
+  <div class="alert alert-danger"><%= flash[:danger] || flash[:alert] %></div>
+<% end %>
+
+<div class="panel panel-primary">
+  <div class="panel-heading"><h4 class="panel-title">Personal information correction</h4></div>
+  <div class="panel-body">
+    <p>Only identity and postal-address fields can be corrected here. Balances, tokens, administrator access, and verified-wallet state cannot be changed.</p>
+    <%= simple_form_for @user, url: update_personal_info_admin_user_path(@user), method: :patch do |f| %>
+      <%= f.input :email, required: true %>
+      <%= f.input :username, required: true %>
+      <%= f.input :first_name %>
+      <%= f.input :last_name %>
+      <%= f.simple_fields_for :address do |address| %>
+        <fieldset>
+          <legend>Postal address</legend>
+          <%= address.input :line_one, label: 'Address line 1' %>
+          <%= address.input :line_two, label: 'Address line 2' %>
+          <%= address.input :city %>
+          <%= address.input :state %>
+          <%= address.input :zip, label: 'Postal code' %>
+          <%= address.input :country, as: :string %>
+        </fieldset>
+      <% end %>
+      <div class="form-group">
+        <%= label_tag 'user_reason', 'Reason' %>
+        <%= text_area_tag 'user[reason]', nil, id: 'user_reason', class: 'form-control', required: true %>
+        <p class="help-block">Required for the audit record. Do not include personal information.</p>
+      </div>
+      <%= f.submit 'Save corrected personal information', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-danger">
+  <div class="panel-heading"><h4 class="panel-title">Destructive: anonymize personal information</h4></div>
+  <div class="panel-body">
+    <p><strong>This cannot be undone.</strong> It disables all web and API login, rotates credentials, removes profile, address, wallet-link, device, and social-login information, and replaces email and username with unique placeholders.</p>
+    <p>The user ID, account, balances, tickets, wagers, swaps, transfers, and all financial history remain. Immutable blockchain transactions and their historical source/destination addresses are not deleted.</p>
+    <p>Anonymization is blocked while any balance, open wager, or pending/uncertain deposit, withdrawal, or swap remains.</p>
+    <%= form_tag remove_personal_info_admin_user_path(@user), method: :post do %>
+      <div class="form-group">
+        <%= label_tag 'removal_admin_password', 'Your current administrator password' %>
+        <%= password_field_tag 'removal[admin_password]', nil, id: 'removal_admin_password', class: 'form-control', required: true, autocomplete: 'current-password' %>
+      </div>
+      <div class="form-group">
+        <%= label_tag 'removal_removal_confirmation', 'Type REMOVE to confirm' %>
+        <%= text_field_tag 'removal[removal_confirmation]', nil, id: 'removal_removal_confirmation', class: 'form-control', required: true, autocomplete: 'off' %>
+      </div>
+      <div class="form-group">
+        <%= label_tag 'removal_reason', 'Reason' %>
+        <%= text_area_tag 'removal[reason]', nil, id: 'removal_reason', class: 'form-control', required: true %>
+        <p class="help-block">Required for the audit record. Do not include personal information.</p>
+      </div>
+      <%= submit_tag 'Permanently anonymize personal information', class: 'btn btn-danger',
+                     data: { confirm: 'Final confirmation: permanently anonymize this user and disable login?' } %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,167 @@
+<% token = @report[:selected_token] %>
+<% legacy = @report[:legacy] %>
+<% amount = ->(units) { legacy ? "#{number_with_delimiter(units.to_i)} legacy cents" : (token ? "#{number_with_delimiter(units.to_i)} raw / #{token.format_units(units.to_i)} #{token.ticker}" : 'not available') } %>
+
+<div class="admin-activity">
+  <div class="page-header"><h1>Game activity intelligence <small>read-only</small></h1></div>
+
+  <div class="alert alert-warning">
+    Balances, stakes, and maximum recorded payouts are separate ledger facts, not net solvency, profit, or funds free to pay.
+    Fantasy entry stakes are shown separately. No live score or inferred game state is displayed.
+    <% if legacy %><strong>Legacy rows have no approved token identity. Their cents are an unknown denomination and are not BEEP or USD.</strong><% end %>
+  </div>
+
+  <%= form_tag admin_activity_path, method: :get, class: 'well well-sm' do %>
+    <div class="row">
+      <div class="form-group col-sm-3">
+        <%= label_tag :token, 'Exact asset' %>
+        <%= select_tag :token, options_for_select(@report[:tokens].map { |t| ["#{t.ticker} — #{t.asset_unit}", t.id] } + [['Legacy (unknown denomination)', 'legacy']], legacy ? 'legacy' : token&.id), class: 'form-control' %>
+      </div>
+      <div class="form-group col-sm-2"><%= label_tag :sport %><%= text_field_tag :sport, params[:sport], class: 'form-control', placeholder: 'mlb' %></div>
+      <div class="form-group col-sm-2"><%= label_tag :status, 'Wager status' %><%= select_tag :status, options_for_select([['Any', '']] + Wager.validators_on(:status).flat_map { |v| v.options[:in] || [] }.uniq.map { |s| [s.titleize, s] }, params[:status]), class: 'form-control' %></div>
+      <div class="form-group col-sm-2"><%= label_tag :game_id, 'Game / fixture ID' %><%= text_field_tag :game_id, params[:game_id], class: 'form-control' %></div>
+      <div class="form-group col-sm-3"><%= label_tag :team, 'Team contains' %><%= text_field_tag :team, params[:team], class: 'form-control' %></div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-3"><%= label_tag :user_id, 'User ID' %><%= number_field_tag :user_id, params[:user_id], class: 'form-control' %></div>
+      <div class="form-group col-sm-5"><%= label_tag :search, 'Username or email' %><%= text_field_tag :search, params[:search], class: 'form-control' %></div>
+      <div class="form-group col-sm-4" style="padding-top:25px"><%= submit_tag 'Filter', class: 'btn btn-primary' %> <%= link_to 'Reset', admin_activity_path(token: legacy ? 'legacy' : token&.id), class: 'btn btn-default' %></div>
+    </div>
+  <% end %>
+
+  <% if token.nil? && !legacy %>
+    <div class="alert alert-info">No approved tokens are configured. Choose Legacy to inspect rows without a token identity.</div>
+  <% end %>
+
+  <div class="row">
+    <% [
+      ['Available player balance', legacy ? 'Not attributable for legacy rows' : amount.call(@report[:totals][:available_units])],
+      ['Open sportsbook stake', amount.call(@report[:totals][:open_wager_stake])],
+      ['Potential max sportsbook payout', amount.call(@report[:totals][:open_potential_payout])],
+      ['Active fantasy entry stake', legacy ? 'Unknown (no legacy fee column)' : amount.call(@report[:totals][:active_entry_stake])]
+    ].each do |title, value| %>
+      <div class="col-sm-3"><div class="panel panel-info"><div class="panel-heading"><strong><%= title %></strong></div><div class="panel-body"><%= value %></div></div></div>
+    <% end %>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading"><strong>Leaders by available balance</strong></div>
+        <div class="table-responsive"><table class="table table-condensed table-striped">
+          <thead><tr><th>Player</th><th class="text-right">Available</th><th>Links</th></tr></thead>
+          <tbody>
+            <% @report[:balance_leaders].each do |row| %><tr>
+              <td><%= link_to(row[:user].username.presence || "User ##{row[:user].id}", admin_user_path(row[:user])) %><br><small><%= row[:user].email %></small></td>
+              <td class="text-right"><code><%= amount.call(row[:units]) %></code></td>
+              <td><%= link_to 'wallet', admin_wallet_path(row[:user]), class: 'btn btn-xs btn-default' %></td>
+            </tr><% end %>
+            <% if @report[:balance_leaders].empty? %><tr><td colspan="3" class="text-center text-muted">No balances for this exact asset.</td></tr><% end %>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading"><strong>Leaders by currently open stake</strong></div>
+        <div class="table-responsive"><table class="table table-condensed table-striped">
+          <thead><tr><th>Player</th><th class="text-right">Sportsbook</th><th class="text-right">Fantasy</th><th class="text-right">Total (same token only)</th></tr></thead>
+          <tbody>
+            <% @report[:stake_leaders].each do |row| %><tr>
+              <td><%= link_to(row[:user].username.presence || "User ##{row[:user].id}", admin_user_path(row[:user])) %><br><small><%= row[:user].email %></small></td>
+              <td class="text-right"><code><%= amount.call(row[:wager_units]) %></code></td>
+              <td class="text-right"><%= legacy ? 'unknown' : content_tag(:code, amount.call(row[:fantasy_units])) %></td>
+              <td class="text-right"><%= legacy ? 'not combined' : content_tag(:code, amount.call(row[:total_units])) %></td>
+            </tr><% end %>
+            <% if @report[:stake_leaders].empty? %><tr><td colspan="4" class="text-center text-muted">No currently open stake.</td></tr><% end %>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><strong>Sportsbook game grouping (recorded wager fields only)</strong></div>
+    <div class="table-responsive"><table class="table table-condensed table-striped">
+      <thead><tr><th>Sport</th><th>Game / fixture</th><th>Teams</th><th>Scheduled start</th><th>Recorded wager status</th><th class="text-right">Players</th><th class="text-right">Bets</th><th class="text-right">Stake</th><th class="text-right">Potential payout</th></tr></thead>
+      <tbody>
+        <% @report[:games].each do |row| %><tr>
+          <td><%= row[:sport].presence || 'unknown' %></td>
+          <td><code><%= row[:game_id].presence || 'unknown' %></code><br><small>fixture: <%= row[:fixture_id].presence || 'unknown' %></small></td>
+          <td><%= row[:away_team].presence || 'unknown' %> @ <%= row[:home_team].presence || 'unknown' %></td>
+          <td><%= row[:start_time] ? l(row[:start_time]) : 'unknown' %><% if row[:start_time]&.past? && %w[pending active].include?(row[:status]) %><br><span class="label label-warning">scheduled start passed; record still open</span><% end %></td>
+          <td><%= row[:status].presence || 'unknown' %></td><td class="text-right"><%= row[:participants] %></td><td class="text-right"><%= row[:bets] %></td>
+          <td class="text-right"><code><%= amount.call(row[:stake]) %></code></td><td class="text-right"><code><%= amount.call(row[:potential_payout]) %></code></td>
+        </tr><% end %>
+        <% if @report[:games].empty? %><tr><td colspan="9" class="text-center text-muted">No sportsbook games match these filters.</td></tr><% end %>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading"><strong>Individual sportsbook wagers (<%= @report[:wager_count] %>)</strong></div>
+    <div class="table-responsive"><table class="table table-condensed table-striped">
+      <thead><tr><th>ID / player</th><th>Fixture / game</th><th>Teams / start</th><th>Bet</th><th>Odds</th><th class="text-right">Stake</th><th class="text-right">Potential payout</th><th>Status / result</th><th>Placed</th></tr></thead>
+      <tbody>
+        <% @report[:wagers].each do |wager| %><tr>
+          <td><%= link_to "##{wager.id}", admin_activity_wager_path(wager) %><br><%= link_to(wager.user&.username.presence || "User ##{wager.user_id}", admin_user_path(wager.user_id)) if wager.user_id %><br><small><%= wager.user&.email || 'missing user' %></small></td>
+          <td><code><%= wager.fixture_id.presence || 'unknown' %></code><br><small>game: <%= wager.game_id.presence || 'unknown' %></small></td>
+          <td><%= wager.away_team.presence || 'unknown' %> @ <%= wager.home_team.presence || 'unknown' %><br><small><%= wager.game_start_time ? l(wager.game_start_time) : 'start unknown' %></small></td>
+          <td><%= wager.bet_type %>: <%= wager.selection %><% if wager.selection_detail.present? %><br><small><%= wager.selection_detail %></small><% end %><% if wager.points %> (<%= wager.points %>)<% end %></td>
+          <td><%= wager.odds || 'unknown' %></td><td class="text-right"><code><%= amount.call(legacy ? wager.amount_cents : wager.amount_units) %></code></td>
+          <td class="text-right"><code><%= amount.call(legacy ? wager.potential_payout_cents : wager.potential_payout_units) %></code></td>
+          <td><%= wager.status.presence || 'unknown' %><br><small><%= wager.result.presence || 'result unknown' %></small></td><td><%= l(wager.created_at) %></td>
+        </tr><% end %>
+        <% if @report[:wagers].empty? %><tr><td colspan="9" class="text-center text-muted">No wagers match these filters.</td></tr><% end %>
+      </tbody>
+    </table></div>
+    <% if @report[:wager_count] > @report[:page_size] %><div class="panel-footer">
+      <% if @report[:page] > 1 %><%= link_to '← Previous', url_for(params.permit!.to_h.merge(page: @report[:page] - 1)), class: 'btn btn-default btn-sm' %><% end %>
+      Page <%= @report[:page] %>
+      <% if @report[:page] * @report[:page_size] < @report[:wager_count] %><%= link_to 'Next →', url_for(params.permit!.to_h.merge(page: @report[:page] + 1)), class: 'btn btn-default btn-sm' %><% end %>
+    </div><% end %>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><strong>Fantasy contest grouping (stored records only)</strong></div>
+    <div class="table-responsive"><table class="table table-condensed table-striped">
+      <thead><tr><th>Contest / game</th><th>Sport</th><th>Teams</th><th>Scheduled start</th><th>Stored status</th><th class="text-right">Participants</th><th class="text-right">Entries</th><th class="text-right">Entry stake</th></tr></thead>
+      <tbody>
+        <% @report[:contests].each do |row|; contest = row[:contest]; game = row[:game] %><tr>
+          <td>Contest <%= contest&.id || 'unknown' %><br><small>Game <%= game&.id || 'unknown' %></small></td>
+          <td><%= game&.type.to_s.sub(/::Game\z/, '').presence || 'unknown' %></td>
+          <td><%= game&.away_team&.name || 'unknown' %> @ <%= game&.home_team&.name || 'unknown' %></td>
+          <td><%= game&.start_time ? l(game.start_time) : 'unknown' %><% if game&.start_time&.past? && game.status.blank? %><br><span class="label label-warning">start passed; state missing</span><% end %></td>
+          <td>contest: <%= contest&.status.presence || 'unknown' %><br><small>game: <%= game&.status.presence || 'unknown' %></small></td>
+          <td class="text-right"><%= row[:participants] %></td><td class="text-right"><%= row[:entries] %></td>
+          <td class="text-right"><%= legacy ? 'unknown legacy fee' : content_tag(:code, amount.call(row[:entry_stake])) %></td>
+        </tr><% end %>
+        <% if @report[:contests].empty? %><tr><td colspan="8" class="text-center text-muted">No fantasy contests match these filters.</td></tr><% end %>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel panel-success">
+    <div class="panel-heading"><strong>Fantasy contest entries (<%= @report[:entry_count] %>)</strong> — status is the stored contest/game state</div>
+    <div class="table-responsive"><table class="table table-condensed table-striped">
+      <thead><tr><th>Entry / player</th><th>Contest / game</th><th>Teams</th><th>Start</th><th>Status</th><th class="text-right">Entry fee</th><th class="text-right">Score / placing</th><th>Created</th></tr></thead>
+      <tbody>
+        <% @report[:entries].each do |entry|; game = entry.game %><tr>
+          <td><%= link_to "##{entry.id}", admin_activity_entry_path(entry) %><br><%= link_to(entry.user&.username.presence || "User ##{entry.user_id}", admin_user_path(entry.user_id)) if entry.user_id %><br><small><%= entry.user&.email || 'missing user' %></small></td>
+          <td>Contest <%= entry.contest_id %><br><small>Game <%= game&.id || 'unknown' %></small></td>
+          <td><%= game&.away_team&.name || 'unknown' %> @ <%= game&.home_team&.name || 'unknown' %></td>
+          <td><%= game&.start_time ? l(game.start_time) : 'unknown' %><% if game&.start_time&.past? && game.status.blank? %><br><span class="label label-warning">start passed; state missing</span><% end %></td>
+          <td>contest: <%= entry.contest&.status.presence || 'unknown' %><br><small>game: <%= game&.status.presence || 'unknown' %></small></td>
+          <td class="text-right"><%= legacy ? 'unknown legacy fee' : content_tag(:code, amount.call(entry.entry_fee_units)) %></td>
+          <td class="text-right"><%= entry.cached_score.nil? ? 'unknown' : entry.cached_score %> / <%= entry.cached_placing || entry[:placing] || 'unknown' %></td><td><%= l(entry.created_at) %></td>
+        </tr><% end %>
+        <% if @report[:entries].empty? %><tr><td colspan="8" class="text-center text-muted">No fantasy entries match these filters.</td></tr><% end %>
+      </tbody>
+    </table></div>
+    <% if @report[:entry_count] > @report[:page_size] %><div class="panel-footer">
+      <% if @report[:entry_page] > 1 %><%= link_to '← Previous', url_for(params.permit!.to_h.merge(entry_page: @report[:entry_page] - 1)), class: 'btn btn-default btn-sm' %><% end %>
+      Page <%= @report[:entry_page] %>
+      <% if @report[:entry_page] * @report[:page_size] < @report[:entry_count] %><%= link_to 'Next →', url_for(params.permit!.to_h.merge(entry_page: @report[:entry_page] + 1)), class: 'btn btn-default btn-sm' %><% end %>
+    </div><% end %>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="page-header"><h2>Swap history <small><%= number_with_delimiter(@count) %> records</small></h2><p>Tokens offered for exchange, recorded BEEP payouts, and confirmation status. This is a read-only audit view; it does not initiate or retry payouts.</p></div>
+<%= form_tag admin_swaps_path, method: :get, class: 'form-inline', style: 'margin-bottom:20px' do %>
+  <%= hidden_field_tag :user_id, params[:user_id] if params[:user_id].present? %>
+  <%= label_tag :search, 'Search swaps', class: 'sr-only' %><%= text_field_tag :search, @search, placeholder: 'User, token, asset ID or transaction', class: 'form-control', maxlength: 200 %>
+  <%= label_tag :status, 'Status', class: 'sr-only' %><%= select_tag :status, options_for_select([['All statuses', '']] + CardanoSwap::STATUSES.map { |s| [s.humanize, s] }, @status), class: 'form-control' %>
+  <%= label_tag :swap_asset_id, 'Token', class: 'sr-only' %><%= select_tag :swap_asset_id, options_for_select([['All tokens', '']] + @assets.map { |a| ["#{a.ticker} (#{a.enabled? ? 'enabled' : 'disabled'})", a.id] }, params[:swap_asset_id]), class: 'form-control' %>
+  <%= label_tag :payout_method, 'Payout method', class: 'sr-only' %><%= select_tag :payout_method, options_for_select([['All payout methods', '']] + CardanoSwap::PAYOUT_METHODS.map { |m| [m.humanize, m] }, @payout_method), class: 'form-control' %>
+  <%= submit_tag 'Filter', class: 'btn btn-primary' %> <%= link_to 'Reset', admin_swaps_path, class: 'btn btn-default' %>
+<% end %>
+<% if @totals.any? %>
+  <details style="margin-bottom:20px"><summary>Token totals for all matching records, by status</summary>
+    <p>Raw input quantities grouped by status. Pending, failed, and unknown records are not confirmed receipts; these totals are not current treasury inventory.</p>
+    <div class="table-responsive"><table class="table table-condensed">
+      <thead><tr><th>Input token</th><th>Status</th><th>Formatted amount</th><th>Raw units</th></tr></thead>
+      <tbody><% @totals.each do |(asset_id, status), units| %><% asset = @asset_by_id.fetch(asset_id) %><tr><td><%= asset.ticker %></td><td><%= status %></td><td><%= asset.format_units(units) %></td><td><code><%= units %></code></td></tr><% end %></tbody>
+    </table></div>
+  </details>
+<% end %>
+<div class="table-responsive"><table class="table table-striped">
+  <thead><tr><th>ID / date</th><th>User</th><th>Input token</th><th>Input amount / raw units</th><th>BEEP payout</th><th>Method / status</th><th>Details</th></tr></thead>
+  <tbody>
+    <% @swaps.each do |swap| %><tr>
+      <td>#<%= swap.id %><br><small><%= swap.created_at.in_time_zone.strftime('%Y-%m-%d %H:%M %Z') %></small></td>
+      <td><%= link_to swap.user.username, admin_user_path(swap.user) %><br><small><%= swap.user.email %></small></td>
+      <td><strong><%= swap.swap_asset.ticker %></strong><br><small><%= swap.swap_asset.decimals %> decimals</small></td>
+      <td><%= swap.swap_asset.format_units(swap.amount_units) %><br><code><%= swap.amount_units %> raw</code></td>
+      <td><%= @beep_token ? "#{@beep_token.format_units(swap.beep_amount)} BEEP (configured)" : 'Decimals not configured' %><br><code><%= swap.beep_amount %> raw</code></td>
+      <td><%= swap.payout_method.humanize %><br><span class="label label-<%= swap.status == 'unknown' ? 'danger' : 'default' %>"><%= swap.status %></span></td>
+      <td><%= link_to 'Details', admin_swap_path(swap), class: 'btn btn-xs btn-primary' %></td>
+    </tr><% end %>
+    <% if @swaps.empty? %><tr><td colspan="7">No swap records match these filters. Swaps will appear here when they are recorded by the application.</td></tr><% end %>
+  </tbody>
+</table></div>
+<%= paginate @swaps %>
+<p class="text-muted">Displayed amounts use current asset settings; original raw quantities and the accepted quote are available in each record. See <%= link_to 'Financials', admin_financials_path %> for treasury metadata and decimal-mismatch warnings.</p>

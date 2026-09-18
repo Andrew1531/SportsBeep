@@ -7,3 +7,4 @@
 - [Native-token legacy migration](native-token-legacy-migration.md) — require exact BEEP identity and abort on fractional legacy units; never silently round financial balances.
 - [Authenticated marketing captures](authenticated-marketing-captures.md) — use the HTTPS dev domain for automated sign-in screenshots; localhost drops this app's secure session cookie.
 - [Rails test isolation](rails-test-isolation.md) — inherited database URLs can override SQLite test settings; isolate test commands and avoid app boot during read-only financial audits.
+- [Rails test doubles](rails-test-doubles.md) — wrap callable service doubles in factory lambdas; explicitly load Minitest mocking helpers.

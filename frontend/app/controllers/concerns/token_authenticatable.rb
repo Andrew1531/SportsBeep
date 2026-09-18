@@ -17,7 +17,7 @@ module TokenAuthenticatable
 
     def authenticate_user_from_token!
       authenticate_or_request_with_http_token do |token, options|
-        if user = User.find_by(authentication_token: token)
+        if user = User.find_by(authentication_token: token, disabled: false)
           sign_in(:api_user, user, store: false)
         end
       end

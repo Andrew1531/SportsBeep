@@ -1,0 +1,31 @@
+<div class="page-header">
+  <h2>Wallet directory <small><%= number_with_delimiter(@count) %> users</small></h2>
+  <p>Registered wallet information and users with retained payout addresses. Registration is not proof of wallet ownership; only verified Cardano connections have completed a signing challenge.</p>
+</div>
+<%= form_tag admin_wallets_path, method: :get, class: 'form-inline', style: 'margin-bottom:20px' do %>
+  <%= label_tag :search, 'Search wallets', class: 'sr-only' %>
+  <%= text_field_tag :search, @search, class: 'form-control', placeholder: 'Email, username or current address', maxlength: 200 %>
+  <%= label_tag :verification, 'Verification', class: 'sr-only' %>
+  <%= select_tag :verification, options_for_select([['All records', ''], ['Cardano verified', 'verified'], ['Not verified', 'unverified']], @verification), class: 'form-control' %>
+  <%= submit_tag 'Filter', class: 'btn btn-primary' %>
+  <%= link_to 'Reset', admin_wallets_path, class: 'btn btn-default' %>
+<% end %>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead><tr><th>User</th><th>Current Cardano address</th><th>Wallet / verification</th><% if @has_ethereum %><th>Imported Ethereum address</th><% end %><th>Actions</th></tr></thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= link_to user.username, admin_user_path(user) %><br><small><%= user.email %></small></td>
+          <td style="max-width:330px;overflow-wrap:anywhere"><code><%= user.cardano_wallet_address.presence || 'Not connected' %></code></td>
+          <td><%= user.cardano_wallet_name.presence || 'Not recorded' %><br><% if user.cardano_wallet_verified_at %><span class="label label-success">Verified</span><br><small><%= user.cardano_wallet_verified_at.in_time_zone.strftime('%Y-%m-%d %H:%M %Z') %></small><% else %><span class="label label-default">Unverified</span><% end %></td>
+          <% if @has_ethereum %><td style="max-width:220px;overflow-wrap:anywhere"><code><%= user.ethereum_wallet_address.presence || '—' %></code></td><% end %>
+          <td><%= link_to 'Wallet details', admin_wallet_path(user), class: 'btn btn-xs btn-primary' %></td>
+        </tr>
+      <% end %>
+      <% if @users.empty? %><tr><td colspan="<%= @has_ethereum ? 5 : 4 %>">No wallet records match these filters.</td></tr><% end %>
+    </tbody>
+  </table>
+</div>
+<%= paginate @users %>
+<p class="text-muted">The app stores one current Cardano address per user, not a complete connection history. Previously disconnected addresses can only be shown where retained transaction records exist. No keys or recovery phrases are shown.</p>

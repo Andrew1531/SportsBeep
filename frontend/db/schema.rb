@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_06_000000) do
+ActiveRecord::Schema.define(version: 2026_09_18_180000) do
 
   create_table "account_token_balances", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -75,6 +75,20 @@ ActiveRecord::Schema.define(version: 2026_09_06_000000) do
     t.string "country", default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "admin_audit_events", force: :cascade do |t|
+    t.integer "actor_id", null: false
+    t.integer "user_id", null: false
+    t.string "action", null: false
+    t.text "changed_fields", null: false
+    t.text "reason", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["actor_id", "created_at"], name: "index_admin_audit_events_on_actor_id_and_created_at"
+    t.index ["actor_id"], name: "index_admin_audit_events_on_actor_id"
+    t.index ["user_id", "created_at"], name: "index_admin_audit_events_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_admin_audit_events_on_user_id"
   end
 
   create_table "administrators", force: :cascade do |t|
@@ -585,8 +599,11 @@ ActiveRecord::Schema.define(version: 2026_09_06_000000) do
     t.string "cardano_stake_address"
     t.string "cardano_wallet_name"
     t.datetime "cardano_wallet_verified_at"
+    t.boolean "disabled", default: false, null: false
+    t.datetime "personal_data_removed_at"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["disabled"], name: "index_users_on_disabled"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["promo_code_id"], name: "index_users_on_promo_code_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -628,6 +645,8 @@ ActiveRecord::Schema.define(version: 2026_09_06_000000) do
   add_foreign_key "account_token_balances", "approved_tokens"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "admin_audit_events", "administrators", column: "actor_id"
+  add_foreign_key "admin_audit_events", "users"
   add_foreign_key "beep_chain_transfers", "approved_tokens"
   add_foreign_key "cardano_swaps", "swap_assets"
   add_foreign_key "cardano_swaps", "swap_quotes"

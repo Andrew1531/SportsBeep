@@ -4,6 +4,7 @@
     <small><%= @user.email %></small>
   </h3>
   <%= link_to '← Back to Users', admin_users_path, class: 'btn btn-default' %>
+  <%= link_to 'Correct / remove personal information', edit_admin_user_path(@user), class: 'btn btn-primary' %>
 </div>
 
 <% if flash[:success] %>
@@ -179,9 +180,51 @@
             <%= f.input :password, label: false, placeholder: 'Enter new password (minimum 6 characters)', required: true %>
             <small class="text-muted">User will need to use this new password to log in.</small>
           </div>
+          <div class="form-group">
+            <%= f.label :reason, 'Reason' %>
+            <%= text_area_tag 'user[reason]', nil, class: 'form-control', required: true %>
+            <small class="text-muted">Required for the audit record. Do not include personal information.</small>
+          </div>
           <%= f.submit 'Update Password', class: 'btn btn-warning', data: { confirm: 'Are you sure you want to reset this user\'s password?' } %>
         <% end %>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Personal Data Audit History</h4>
+      </div>
+      <% audit_events = AdminAuditEvent.where(user_id: @user.id).includes(:actor).order(created_at: :desc).limit(25) %>
+      <% if audit_events.any? %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>Administrator</th>
+              <th>Action</th>
+              <th>Changed fields</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% audit_events.each do |event| %>
+              <tr>
+                <td><%= event.created_at.strftime('%B %d, %Y at %I:%M %p') %></td>
+                <td>Administrator #<%= event.actor_id %> (<%= event.actor.email %>)</td>
+                <td><code><%= event.action %></code></td>
+                <td><%= event.changed_fields.join(', ') %></td>
+                <td><%= event.reason %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="panel-body text-muted">No personal-data administrative changes recorded.</div>
+      <% end %>
     </div>
   </div>
 </div>
@@ -206,12 +249,13 @@
           </thead>
           <tbody>
             <% @user.tickets.order(created_at: :desc).limit(10).each do |ticket| %>
+              <% ticket_game = ticket.contest&.game %>
               <tr>
                 <td><code><%= ticket.id %></code></td>
                 <td><%= ticket.type %></td>
                 <td>
-                  <% if ticket.game %>
-                    Game #<%= ticket.game.id %>
+                  <% if ticket_game %>
+                    Game #<%= ticket_game.id %>
                   <% else %>
                     <span class="text-muted">N/A</span>
                   <% end %>

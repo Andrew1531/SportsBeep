@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true
   validates :account, presence: true
   validates :platform, inclusion: { in: %w(android ios) }, allow_nil: true
+  validates :first_name, :last_name, length: { maximum: 100 }, allow_blank: true
 
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :trackable, :validatable
@@ -60,6 +61,14 @@ class User < ActiveRecord::Base
 
   def avatar_processing?
     !!avatar_processing && !Rails.env.test?
+  end
+
+  def active_for_authentication?
+    super && !disabled?
+  end
+
+  def inactive_message
+    disabled? ? :disabled : super
   end
 
   private

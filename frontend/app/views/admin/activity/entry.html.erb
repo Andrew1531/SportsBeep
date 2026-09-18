@@ -1,0 +1,37 @@
+<% game = @entry.game %>
+<% token = @entry.approved_token %>
+<% game_admin_path = case game&.type
+                     when 'Mlb::Game' then admin_mlb_game_path(game)
+                     when 'Nfl::Game' then admin_nfl_game_path(game)
+                     end %>
+<div class="page-header"><h1>Fantasy entry #<%= @entry.id %> <small>read-only</small></h1></div>
+<p><%= link_to '← Activity report', admin_activity_path(token: token ? token.id : 'legacy'), class: 'btn btn-default' %>
+  <% if @entry.user %><%= link_to 'Player', admin_user_path(@entry.user), class: 'btn btn-default' %> <%= link_to 'Wallet', admin_wallet_path(@entry.user), class: 'btn btn-default' %><% end %>
+  <% if game_admin_path %><%= link_to 'Admin game', game_admin_path, class: 'btn btn-default' %><% end %></p>
+<% unless token %><div class="alert alert-warning">This legacy entry has no approved token identity and no legacy fee column. Its entry stake denomination and amount are unknown.</div><% end %>
+<div class="panel panel-primary"><div class="panel-heading"><strong>Entry and contest</strong></div>
+  <div class="table-responsive"><table class="table table-bordered">
+    <tr><th>Player</th><td><%= @entry.user&.username || "User ##{@entry.user_id}" %> — <%= @entry.user&.email || 'missing user' %></td><th>Entry type</th><td><%= @entry.type.presence || 'Ticket' %></td></tr>
+    <tr><th>Exact asset / fee</th><td><%= token ? "#{token.ticker} — #{token.asset_unit}; #{number_with_delimiter(@entry.entry_fee_units.to_i)} raw / #{token.format_units(@entry.entry_fee_units.to_i)} #{token.ticker}" : 'Legacy; unknown fee' %></td><th>Created / updated</th><td><%= l(@entry.created_at) %> / <%= l(@entry.updated_at) %></td></tr>
+    <tr><th>Contest</th><td>#<%= @entry.contest_id %> — <%= @entry.contest&.status.presence || 'status unknown' %></td><th>Game</th><td>#<%= game&.id || 'unknown' %> — <%= game&.status.presence || 'status unknown' %></td></tr>
+    <tr><th>Teams</th><td><%= game&.away_team&.name || 'unknown' %> @ <%= game&.home_team&.name || 'unknown' %></td><th>Scheduled start</th><td><%= game&.start_time ? l(game.start_time) : 'unknown' %></td></tr>
+    <tr><th>Stored score</th><td><%= @entry.cached_score.nil? ? 'unknown' : @entry.cached_score %> (best-or-bust: <%= @entry.cached_best_or_bust_score.nil? ? 'unknown' : @entry.cached_best_or_bust_score %>)</td><th>Stored placing</th><td><%= @entry.cached_placing || @entry[:placing] || 'unknown' %></td></tr>
+    <tr><th>League pick</th><td colspan="3"><%= @entry.league_pick_team&.name || 'none recorded' %><% if @entry.league_pick_game %> — game #<%= @entry.league_pick_game.id %><% end %></td></tr>
+  </table></div>
+</div>
+<div class="row">
+  <div class="col-md-6"><div class="panel panel-default"><div class="panel-heading"><strong>Roster picks</strong></div>
+    <div class="table-responsive"><table class="table table-condensed"><thead><tr><th>Kind</th><th>ID</th><th>Name</th></tr></thead><tbody>
+      <% @entry.players.each do |player| %><tr><td>Player</td><td><%= player.id %></td><td><%= player.respond_to?(:full_name) ? player.full_name : player.to_s %></td></tr><% end %>
+      <% @entry.squads.each do |squad| %><tr><td>Squad</td><td><%= squad.id %></td><td><%= squad.name %></td></tr><% end %>
+      <% if @entry.players.empty? && @entry.squads.empty? %><tr><td colspan="3" class="text-muted text-center">No roster picks recorded.</td></tr><% end %>
+    </tbody></table></div>
+  </div></div>
+  <div class="col-md-6"><div class="panel panel-default"><div class="panel-heading"><strong>Question answers and recorded scoring inputs</strong></div>
+    <div class="table-responsive"><table class="table table-condensed"><thead><tr><th>Question</th><th>Answer</th><th>Time</th></tr></thead><tbody>
+      <% @entry.answers.each do |answer| %><tr><td>#<%= answer.question_id %> <%= answer.question&.text || 'question missing' %></td><td>#<%= answer.answer_id %> <%= answer.answer&.name || 'answer missing' %></td><td><%= answer.time.nil? ? 'unknown' : answer.time %></td></tr><% end %>
+      <% if @entry.answers.empty? %><tr><td colspan="3" class="text-muted text-center">No answers recorded.</td></tr><% end %>
+    </tbody></table></div>
+    <div class="panel-body text-muted">Only stored answers and cached scores are shown. Correctness is not recomputed here.</div>
+  </div></div>
+</div>

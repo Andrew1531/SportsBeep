@@ -113,8 +113,19 @@ SportsbeepWeb::Application.routes.draw do
   namespace :admin do
     root to: 'dashboard#index'
     get 'dashboard', to: 'dashboard#index', as: :dashboard
+    get 'financials', to: 'financials#index', as: :financials
+    get 'activity', to: 'activity#index', as: :activity
+    get 'activity/wagers/:id', to: 'activity#wager', as: :activity_wager
+    get 'activity/entries/:id', to: 'activity#entry', as: :activity_entry
+    resources :wallets, only: [:index, :show]
+    resources :swaps, only: [:index, :show]
     resources :administrators, only: [:index, :new, :create, :destroy]
-    resources :users, only: [:index, :show, :update]
+    resources :users, only: [:index, :show, :edit, :update] do
+      member do
+        patch :update_personal_info
+        post :remove_personal_info
+      end
+    end
 
     resources :promo_codes do
       resources :users, only: [:index]

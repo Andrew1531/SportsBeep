@@ -2,12 +2,13 @@
 <html>
 <head>
   <title>Sportsbeep Administrative Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
-<body class="admin">
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<body class="admin" style="padding-top:0;background:#f5f7fa;color:#263346">
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container">
     <div class="row">
       <ul class="nav navbar-nav">
@@ -21,6 +22,10 @@
         <%= render "admin/shared/#{current_sport}/nav" %>
         <li><%= link_to 'Administrators', admin_administrators_path %></li>
         <li><%= link_to 'Users', admin_users_path %></li>
+        <li><%= link_to 'Financials', admin_financials_path %></li>
+        <li><%= link_to 'Game Activity', admin_activity_path %></li>
+        <li><%= link_to 'Wallets', admin_wallets_path %></li>
+        <li><%= link_to 'Swap History', admin_swaps_path %></li>
         <li><%= link_to 'Promo Codes', admin_promo_codes_path %></li>
         <li><%= link_to 'Swap Assets', admin_swap_assets_path %></li>
         <li><%= link_to 'Settings', admin_setting_path %></li>

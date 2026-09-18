@@ -1,0 +1,21 @@
+<% legacy = @wager.approved_token.nil? %>
+<% token = @wager.approved_token %>
+<% amount = ->(units) { legacy ? "#{number_with_delimiter(units.to_i)} legacy cents (unknown denomination)" : "#{number_with_delimiter(units.to_i)} raw units / #{token.format_units(units.to_i)} #{token.ticker}" } %>
+<div class="page-header"><h1>Sportsbook wager #<%= @wager.id %> <small>read-only</small></h1></div>
+<p><%= link_to '← Activity report', admin_activity_path(token: legacy ? 'legacy' : token.id), class: 'btn btn-default' %>
+  <% if @wager.user %><%= link_to 'Player', admin_user_path(@wager.user), class: 'btn btn-default' %> <%= link_to 'Wallet', admin_wallet_path(@wager.user), class: 'btn btn-default' %><% end %></p>
+<% if legacy %><div class="alert alert-warning">This legacy wager has no approved token identity. Cents are an unknown denomination, not BEEP or USD.</div><% end %>
+<div class="panel panel-primary"><div class="panel-heading"><strong>Recorded details</strong></div>
+  <div class="table-responsive"><table class="table table-bordered">
+    <tr><th>Player</th><td><%= @wager.user&.username || "User ##{@wager.user_id}" %> — <%= @wager.user&.email || 'missing user' %></td><th>Created / updated</th><td><%= l(@wager.created_at) %> / <%= l(@wager.updated_at) %></td></tr>
+    <tr><th>Exact asset</th><td colspan="3"><%= token ? "#{token.ticker} — #{token.asset_unit}" : 'Legacy — unknown denomination' %></td></tr>
+    <tr><th>Sport / league</th><td><%= @wager.sport.presence || 'unknown' %> / <%= @wager.league.presence || 'unknown' %></td><th>Sportsbook</th><td><%= @wager.sportsbook.presence || 'unknown' %></td></tr>
+    <tr><th>Fixture / game</th><td><code><%= @wager.fixture_id.presence || 'unknown' %></code> / <code><%= @wager.game_id.presence || 'unknown' %></code></td><th>Scheduled start</th><td><%= @wager.game_start_time ? l(@wager.game_start_time) : 'unknown' %></td></tr>
+    <tr><th>Teams</th><td colspan="3"><%= @wager.away_team.presence || 'unknown' %> @ <%= @wager.home_team.presence || 'unknown' %></td></tr>
+    <tr><th>Bet type</th><td><%= @wager.bet_type %></td><th>Selection</th><td><%= @wager.selection %> <%= @wager.selection_detail %></td></tr>
+    <tr><th>Points</th><td><%= @wager.points || 'not recorded' %></td><th>Odds</th><td><%= @wager.odds || 'unknown' %></td></tr>
+    <tr><th>Stake</th><td><code><%= amount.call(legacy ? @wager.amount_cents : @wager.amount_units) %></code></td><th>Potential payout</th><td><code><%= amount.call(legacy ? @wager.potential_payout_cents : @wager.potential_payout_units) %></code></td></tr>
+    <tr><th>Status</th><td><%= @wager.status.presence || 'unknown' %></td><th>Result</th><td><%= @wager.result.presence || 'unknown' %></td></tr>
+  </table></div>
+</div>
+<% if @wager.game_start_time&.past? && @wager.open? %><div class="alert alert-warning">The scheduled start has passed while this record remains open. This does not establish the game's live or final state.</div><% end %>

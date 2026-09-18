@@ -1,0 +1,18 @@
+<div class="page-header"><h2>Swap #<%= @swap.id %></h2></div>
+<p><%= link_to 'Swap history', admin_swaps_path, class: 'btn btn-default' %> <%= link_to 'User profile', admin_user_path(@swap.user), class: 'btn btn-default' %> <%= link_to 'Wallet records', admin_wallet_path(@swap.user), class: 'btn btn-default' %></p>
+<% if @swap.status == 'unknown' %><div class="alert alert-danger">Uncertain payout. Do not resubmit or refund based on this status alone. Reconcile the recorded transaction on-chain first.</div><% end %>
+<dl>
+  <dt>User</dt><dd><%= @swap.user.username %> — <%= @swap.user.email %></dd>
+  <dt>Input token</dt><dd><%= @swap.swap_asset.ticker %></dd>
+  <dt>Exact asset identity</dt><dd style="overflow-wrap:anywhere"><code><%= @swap.swap_asset.asset_unit %></code></dd>
+  <dt>Input amount</dt><dd><%= @swap.swap_asset.format_units(@swap.amount_units) %> (current configured decimals: <%= @swap.swap_asset.decimals %>); <code><%= @swap.amount_units %> raw units</code></dd>
+  <dt>BEEP payout</dt><dd><%= @beep_token ? @beep_token.format_units(@swap.beep_amount) : 'Formatting unavailable' %> (configured display); <code><%= @swap.beep_amount %> raw units</code></dd>
+  <dt>Accepted quote rate (not the current rate)</dt><dd><%= @swap.swap_quote.beep_per_asset.to_s('F') %> BEEP per input token</dd>
+  <dt>Payout method</dt><dd><%= @swap.payout_method.humanize %></dd>
+  <dt>Status</dt><dd><%= @swap.status %></dd>
+  <dt>Recorded at</dt><dd><%= @swap.created_at.in_time_zone.strftime('%Y-%m-%d %H:%M:%S %Z') %></dd>
+  <dt>Confirmed at</dt><dd><%= @swap.confirmed_at&.in_time_zone&.strftime('%Y-%m-%d %H:%M:%S %Z') || 'Not confirmed' %></dd>
+  <dt>Source transaction</dt><dd style="overflow-wrap:anywhere"><%= link_to @swap.source_tx_hash, @swap.source_explorer_url, target: '_blank', rel: 'noopener noreferrer' %></dd>
+  <dt>Payout transaction</dt><dd style="overflow-wrap:anywhere"><% if @swap.payout_tx_hash.present? %><%= link_to @swap.payout_tx_hash, @swap.payout_explorer_url, target: '_blank', rel: 'noopener noreferrer' %><% else %>No on-chain payout hash recorded<% end %></dd>
+</dl>
+<p class="text-muted">Financial history is retained. This page does not edit tokens, modify amounts, delete records, or trigger payments.</p>

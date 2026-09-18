@@ -1,0 +1,153 @@
+<div class="admin-financials">
+  <div class="page-header">
+    <h1>Financial overview <small>read-only</small></h1>
+  </div>
+
+  <div class="alert alert-warning">
+    <strong>Separate environments:</strong> The <%= Rails.env %> application ledger below records player balances and obligations.
+    The mainnet treasury snapshot is an external wallet holding. They overlap in uncertain ways and must not be read as
+    net solvency, profit, or funds free to pay. Fantasy liabilities are not included. No USD valuation is shown.
+  </div>
+
+  <p>
+    <%= link_to 'Wallet operations', '/admin/wallets', class: 'btn btn-default btn-sm' %>
+    <%= link_to 'Swap operations', '/admin/swaps', class: 'btn btn-default btn-sm' %>
+  </p>
+
+  <div class="panel panel-info">
+    <div class="panel-heading"><h2 class="panel-title">Mainnet treasury at a glance</h2></div>
+    <div class="panel-body">
+      <% if @treasury_snapshot[:error].present? %><div class="alert alert-danger"><strong>Snapshot unavailable<%= ' (showing stale last success)' if @treasury_snapshot[:checked_at] %>:</strong> <%= @treasury_snapshot[:error] %></div><% end %>
+      <p><strong>Checked at:</strong> <%= @treasury_snapshot[:checked_at] ? l(@treasury_snapshot[:checked_at]) : 'never' %><% if @treasury_snapshot[:stale] %> <span class="label label-warning">stale</span><% end %></p>
+      <% unless @treasury_snapshot[:lovelace_units].nil? %><p><strong>ADA:</strong> <code><%= number_with_delimiter(@treasury_snapshot[:lovelace_units]) %> lovelace</code> (<%= TokenAmount.format(@treasury_snapshot[:lovelace_units], decimals: 6) %> ADA)</p><% end %>
+      <% @financial_report[:tokens].each do |row| %>
+        <% token = row[:token]; asset = @treasury_snapshot[:assets][token.asset_unit] %>
+        <% next unless asset %>
+        <p>
+          <strong><%= token.ticker %>:</strong> <code><%= number_with_delimiter(asset[:raw_units]) %> raw units</code>
+          <% if asset[:decimals_mismatch] %><span class="label label-danger">WARNING decimals mismatch</span><% elsif asset[:registry_decimals].nil? %><span class="label label-warning">WARNING registry decimals unknown</span><% end %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading"><h2 class="panel-title"><%= Rails.env.capitalize %> environment — player token ledger</h2></div>
+    <div class="table-responsive">
+      <table class="table table-striped table-condensed">
+        <thead><tr><th>Token</th><th>State</th><th class="text-right">Available balance units</th><th class="text-right">Loaded units</th></tr></thead>
+        <tbody>
+          <% @financial_report[:tokens].each do |row| %>
+            <% token = row[:token] %>
+            <tr>
+              <td><strong><%= token.ticker %></strong><br><small><code><%= token.asset_unit %></code></small></td>
+              <td><span class="label label-<%= token.enabled? ? 'success' : 'default' %>"><%= token.enabled? ? 'enabled' : 'disabled' %></span></td>
+              <td class="text-right"><code><%= number_with_delimiter(row[:available_balance_units]) %></code><br><small><%= token.format_units(row[:available_balance_units]) %> <%= token.ticker %></small></td>
+              <td class="text-right"><code><%= number_with_delimiter(row[:loaded_units]) %></code><br><small><%= token.format_units(row[:loaded_units]) %> <%= token.ticker %></small></td>
+            </tr>
+          <% end %>
+          <% if @financial_report[:tokens].empty? %><tr><td colspan="4" class="text-muted text-center">No approved tokens are configured.</td></tr><% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h2 class="panel-title">Open wager exposure — stakes and potential payouts kept separate</h2></div>
+    <div class="table-responsive">
+      <table class="table table-striped table-condensed">
+        <thead><tr><th>Token</th><th>Status</th><th class="text-right">Count</th><th class="text-right">Stake units</th><th class="text-right">Potential payout units</th></tr></thead>
+        <tbody>
+          <% @financial_report[:tokens].each do |row| %>
+            <% row[:open_wagers].each do |status, totals| %>
+              <tr><td><%= row[:token].ticker %></td><td><%= status %></td><td class="text-right"><%= totals[:count] %></td><td class="text-right"><code><%= number_with_delimiter(totals[:stake_units]) %></code></td><td class="text-right"><code><%= number_with_delimiter(totals[:potential_payout_units]) %></code></td></tr>
+            <% end %>
+          <% end %>
+          <% if @financial_report[:tokens].empty? %><tr><td colspan="5" class="text-muted text-center">No token wager data.</td></tr><% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading"><h2 class="panel-title">Settled wager outcomes</h2></div>
+    <div class="panel-body"><p class="text-muted">Payout is the recorded potential payout for wins, returned stake for pushes, and zero for losses. No profit figure is inferred.</p></div>
+    <div class="table-responsive">
+      <table class="table table-striped table-condensed">
+        <thead><tr><th>Token</th><th>Outcome</th><th class="text-right">Count</th><th class="text-right">Stake units</th><th class="text-right">Payout units</th></tr></thead>
+        <tbody>
+          <% @financial_report[:tokens].each do |row| %>
+            <% row[:settled_wagers].each do |status, totals| %>
+              <tr><td><%= row[:token].ticker %></td><td><%= status %></td><td class="text-right"><%= totals[:count] %></td><td class="text-right"><code><%= number_with_delimiter(totals[:stake_units]) %></code></td><td class="text-right"><code><%= number_with_delimiter(totals[:payout_units]) %></code></td></tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-warning">
+        <div class="panel-heading"><h2 class="panel-title">Pending / unresolved deposits and withdrawals</h2></div>
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead><tr><th>Token</th><th>Direction</th><th>Status</th><th class="text-right">Count</th><th class="text-right">Units</th></tr></thead>
+            <tbody>
+              <% @financial_report[:transfers].each do |row| %>
+                <tr><td><%= row[:token].ticker %></td><td><%= row[:direction] %></td><td><%= row[:status] %></td><td class="text-right"><%= row[:count] %></td><td class="text-right"><code><%= number_with_delimiter(row[:units]) %></code></td></tr>
+              <% end %>
+              <% if @financial_report[:transfers].empty? %><tr><td colspan="5" class="text-muted text-center">No pending or unresolved transfers.</td></tr><% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-warning">
+        <div class="panel-heading"><h2 class="panel-title">Recorded swap BEEP payouts by state and payout method</h2></div>
+        <div class="panel-body"><p class="text-muted">Operational grouping only; uncertain transaction states can overlap with other ledger entries.</p></div>
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead><tr><th>Status</th><th>Payout method</th><th class="text-right">Count</th><th class="text-right">BEEP units</th></tr></thead>
+            <tbody>
+              <% @financial_report[:swap_obligations].each do |row| %>
+                <tr><td><%= row[:status] %></td><td><%= row[:payout_method] %></td><td class="text-right"><%= row[:count] %></td><td class="text-right"><code><%= number_with_delimiter(row[:beep_units]) %></code></td></tr>
+              <% end %>
+              <% if @financial_report[:swap_obligations].empty? %><tr><td colspan="4" class="text-muted text-center">No swap records.</td></tr><% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-info">
+    <div class="panel-heading"><h2 class="panel-title">Cardano mainnet treasury wallet detail</h2></div>
+    <div class="panel-body">
+      <% if @treasury_snapshot[:error].present? %><div class="alert alert-danger"><strong>Snapshot unavailable<%= ' (showing stale last success)' if @treasury_snapshot[:checked_at] %>:</strong> <%= @treasury_snapshot[:error] %></div><% end %>
+      <p><strong>Address:</strong> <code><%= @treasury_snapshot[:address] || 'not configured' %></code></p>
+      <p><strong>Checked at:</strong> <%= @treasury_snapshot[:checked_at] ? l(@treasury_snapshot[:checked_at]) : 'never' %><% if @treasury_snapshot[:stale] %> <span class="label label-warning">stale</span><% end %></p>
+      <% unless @treasury_snapshot[:lovelace_units].nil? %><p><strong>ADA:</strong> <code><%= number_with_delimiter(@treasury_snapshot[:lovelace_units]) %> lovelace</code> (<%= TokenAmount.format(@treasury_snapshot[:lovelace_units], decimals: 6) %> ADA)</p><% end %>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-condensed">
+        <thead><tr><th>Exact asset</th><th class="text-right">Raw units</th><th class="text-right">Configured format</th><th class="text-right">Registry format</th><th>Decimals check</th></tr></thead>
+        <tbody>
+          <% @financial_report[:tokens].each do |row| %>
+            <% token = row[:token]; asset = @treasury_snapshot[:assets][token.asset_unit] %>
+            <% next unless asset %>
+            <tr class="<%= 'warning' if asset[:decimals_mismatch] || asset[:registry_decimals].nil? %>">
+              <td><strong><%= token.ticker %></strong><br><small><code><%= token.asset_unit %></code></small></td>
+              <td class="text-right"><code><%= number_with_delimiter(asset[:raw_units]) %></code></td>
+              <td class="text-right"><%= TokenAmount.format(asset[:raw_units], decimals: asset[:configured_decimals]) %> <small>(<%= asset[:configured_decimals] %> decimals)</small></td>
+              <td class="text-right"><%= asset[:registry_decimals].nil? ? 'metadata unavailable' : TokenAmount.format(asset[:raw_units], decimals: asset[:registry_decimals]) %><% unless asset[:registry_decimals].nil? %> <small>(<%= asset[:registry_decimals] %> decimals)</small><% end %></td>
+              <td><% if asset[:decimals_mismatch] %><span class="label label-danger">WARNING mismatch</span><% elsif asset[:registry_decimals].nil? %><span class="label label-warning">WARNING unknown</span><br><small><%= asset[:registry_warning] %></small><% else %><span class="text-muted">match</span><% end %></td>
+            </tr>
+          <% end %>
+          <% if @treasury_snapshot[:assets].empty? %><tr><td colspan="5" class="text-muted text-center">No treasury asset snapshot is available.</td></tr><% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
