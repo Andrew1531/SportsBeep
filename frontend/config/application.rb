@@ -17,6 +17,7 @@ require "action_mailer/railtie"
 require "active_storage/engine"
 require "sprockets/railtie"
 require 'base64'
+require_relative '../lib/middleware/crawler_headers'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -51,6 +52,7 @@ module SportsbeepWeb
     # config.responders.flash_keys = [:success, :danger]
 
     config.middleware.use Rack::Deflater
+    config.middleware.insert_before 0, CrawlerHeaders
 
     # config.versioncake.supported_version_numbers = (1..2)
     # config.versioncake.extraction_strategy = :http_header

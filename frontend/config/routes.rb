@@ -1,4 +1,8 @@
 SportsbeepWeb::Application.routes.draw do
+  get '/robots.txt', to: 'discovery#robots', as: :robots
+  get '/sitemap.xml', to: 'discovery#sitemap', as: :sitemap
+  get '/llms.txt', to: 'discovery#llms', as: :llms
+
   # mount RailsAdmin::Engine => '/cpanel', as: 'rails_admin'
   # mount Avocado::Engine, at: '/api-docs', constraints: -> (_) { Rails.env.staging? }
 
