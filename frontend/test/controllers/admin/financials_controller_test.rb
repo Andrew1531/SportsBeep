@@ -25,33 +25,40 @@ class Admin::FinancialsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'read-only'
   end
 
-  test 'treasury leads with wallet amounts and preserves raw and configured values' do
+  test 'treasury shows whole BEEP units with separators regardless of registry decimals' do
     token = treasury_token
     render_treasury(token, raw_units: 1_000_000, registry_decimals: 6)
 
     assert_response :success
     assert_select '.treasury-wallet-amount', text: '21.15508 ADA', count: 2
-    assert_select '.treasury-wallet-amount', text: '1 BEEP', count: 2
+    assert_select '.treasury-wallet-amount', text: '1,000,000 BEEP', count: 2
+    assert_select '.treasury-wallet-amount', text: '1 BEEP', count: 0
     assert_select 'details', text: /1,000,000/
     assert_includes response.body, '1000000 (0 decimals)'
-    assert_includes response.body, 'WARNING mismatch'
+    assert_includes response.body, 'Registry decimals differ from the platform convention'
     assert_equal 0, token.reload.decimals
   end
 
-  test 'missing registry decimals never fall back to app-configured wallet amounts' do
+  test 'missing registry decimals do not prevent whole BEEP display' do
     render_treasury(treasury_token, raw_units: 1_000_000, registry_decimals: nil)
 
     assert_response :success
-    assert_includes response.body, 'Wallet amount unavailable'
-    assert_select '.treasury-wallet-amount', text: /BEEP/, count: 0
+    assert_select '.treasury-wallet-amount', text: '1,000,000 BEEP', count: 2
+    assert_includes response.body, 'Registry decimals unknown'
     assert_includes response.body, '1,000,000'
   end
 
-  test 'wallet amounts retain all fractional digits beyond floating point precision' do
+  test 'whole BEEP amounts retain exact integers beyond floating point precision' do
     render_treasury(treasury_token, raw_units: 9_007_199_254_740_993, registry_decimals: 6)
 
     assert_response :success
-    assert_select '.treasury-wallet-amount', text: '9007199254.740993 BEEP', count: 2
+    assert_select '.treasury-wallet-amount', text: '9,007,199,254,740,993 BEEP', count: 2
+  end
+
+  test 'one raw BEEP unit displays as one BEEP not a registry fraction' do
+    render_treasury(treasury_token, raw_units: 1, registry_decimals: 6)
+    assert_response :success
+    assert_select '.treasury-wallet-amount', text: '1 BEEP', count: 2
   end
 
   private

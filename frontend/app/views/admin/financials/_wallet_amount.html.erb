@@ -1,6 +1,6 @@
 <% if decimals.nil? %>
   <span class="text-muted">Wallet amount unavailable</span>
-  <br><small>Token registry decimals are unavailable; no display amount is assumed.</small>
+  <br><small>Platform decimals are unavailable; no display amount is assumed.</small>
 <% else %>
-  <strong class="treasury-wallet-amount"><%= TokenAmount.format(units, decimals: decimals) %> <%= ticker %></strong>
+  <strong class="treasury-wallet-amount"><%= number_with_delimiter(TokenAmount.format(units, decimals: decimals)) %> <%= ticker %></strong>
 <% end %>

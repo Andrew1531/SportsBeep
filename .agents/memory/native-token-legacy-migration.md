@@ -11,6 +11,6 @@ Legacy BEEP cents may only migrate to native-token units when the exact configur
 
 For financial reports, verify registry decimals independently of the app's approved-token settings and retain raw integer quantities in the report. Never silently edit decimals or rescale balances to make a displayed balance match expectations.
 
-**Why:** A live treasury audit found a disagreement between the registry's decimal convention and the app's display configuration. An apparently large balance can represent a much smaller token-denominated balance; changing presentation settings can also change how future user-entered amounts are interpreted.
+**Why:** A live treasury audit found different registry and platform decimal conventions. The owner explicitly confirmed on 2026-09-18 that SportsBeep should show BEEP as whole raw units: 1,000,000 units means 1,000,000 BEEP on the platform, not 1 BEEP. Registry metadata must not override that product convention.
 
-**How to apply:** If the two conventions disagree, report both explicitly, reconcile the intended denomination with the owner, and audit transfers and ledgers before any migration. A request to match wallet presentation authorizes registry-based treasury display, not changes to stored units, swap rates, or wager denominations.
+**How to apply:** Keep BEEP's zero-decimal platform display, add thousands separators, and retain registry metadata in technical details only. ADA still converts lovelace using six decimals. Do not rescale balances, swap rates, or wager quantities to match registry metadata. Audit transfers and ledgers before any separately authorized denomination migration.
