@@ -19,7 +19,7 @@ class TreasurySnapshotService
     @address = address.to_s.strip
   end
 
-  def call(tokens: ApprovedToken.order(:ticker, :id).to_a)
+  def call(tokens: ApprovedToken.order(:ticker, :id).to_a, force_refresh: false)
     token_settings = tokens.map { |token| "#{token.asset_unit.downcase}=#{token.decimals}" }
     cache_identity = Digest::SHA256.hexdigest([@address, *token_settings.sort].join(':'))
     fresh_key = "treasury_snapshot/fresh/#{cache_identity}"
@@ -27,7 +27,7 @@ class TreasurySnapshotService
     error_key = "treasury_snapshot/error/#{cache_identity}"
 
     fresh = @cache.read(fresh_key)
-    return fresh if fresh
+    return fresh if fresh && !force_refresh
     recent_error = @cache.read(error_key)
     return recent_error if recent_error
 

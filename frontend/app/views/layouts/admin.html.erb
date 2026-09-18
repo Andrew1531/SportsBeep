@@ -16,5 +16,41 @@
     <%= yield %>
   </div>
 </main>
+<script>
+  (function() {
+    function startTreasuryRefresh() {
+      if (window.adminTreasuryRefreshTimer) {
+        window.clearInterval(window.adminTreasuryRefreshTimer);
+      }
+
+      window.adminTreasuryRefreshTimer = window.setInterval(function() {
+        var current = document.getElementById('admin-treasury-strip');
+        if (!current || document.hidden) return;
+
+        fetch('<%= admin_treasury_snapshot_path %>', {
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(function(response) {
+          if (!response.ok) throw new Error('Treasury refresh failed');
+          return response.text();
+        }).then(function(html) {
+          var wrapper = document.createElement('div');
+          wrapper.innerHTML = html.trim();
+          var replacement = wrapper.firstElementChild;
+          if (replacement && current.parentNode) current.parentNode.replaceChild(replacement, current);
+        }).catch(function() {
+          current.classList.add('admin-treasury-refresh-error');
+        });
+      }, 15000);
+    }
+
+    document.addEventListener('turbolinks:load', startTreasuryRefresh);
+    document.addEventListener('DOMContentLoaded', startTreasuryRefresh);
+    document.addEventListener('turbolinks:before-cache', function() {
+      if (window.adminTreasuryRefreshTimer) window.clearInterval(window.adminTreasuryRefreshTimer);
+    });
+  })();
+</script>
 </body>
 </html>

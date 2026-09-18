@@ -32,6 +32,25 @@ class TreasurySnapshotServiceTest < ActiveSupport::TestCase
     assert_equal 2, calls.length
   end
 
+  test 'force refresh bypasses a successful cached snapshot' do
+    calls = 0
+    requester = lambda do |path|
+      calls += 1
+      path.start_with?('/addresses/') ?
+        { 'amount' => [{ 'unit' => 'lovelace', 'quantity' => calls.to_s }] } :
+        { 'metadata' => { 'decimals' => 0 } }
+    end
+    service = TreasurySnapshotService.new(
+      cache: @cache, requester: requester, project_id: 'project', address: 'addr1treasury'
+    )
+
+    first = service.call(tokens: [@token])
+    second = service.call(tokens: [@token], force_refresh: true)
+
+    assert_operator second[:lovelace_units], :>, first[:lovelace_units]
+    assert_equal 4, calls
+  end
+
   test 'returns an explicit missing credential error without a network request' do
     called = false
     service = TreasurySnapshotService.new(

@@ -114,6 +114,7 @@ SportsbeepWeb::Application.routes.draw do
     root to: 'dashboard#index'
     get 'dashboard', to: 'dashboard#index', as: :dashboard
     get 'financials', to: 'financials#index', as: :financials
+    get 'treasury-snapshot', to: 'financials#treasury_snapshot', as: :treasury_snapshot
     get 'activity', to: 'activity#index', as: :activity
     get 'activity/wagers/:id', to: 'activity#wager', as: :activity_wager
     get 'activity/entries/:id', to: 'activity#entry', as: :activity_entry

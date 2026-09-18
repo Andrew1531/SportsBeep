@@ -1,0 +1,13 @@
+<% treasury_assets = treasury[:assets] || {} %>
+<div class="admin-treasury-strip" id="admin-treasury-strip" aria-live="polite">
+  <div class="admin-token-name">MAINNET TREASURY</div>
+  <div class="admin-token-metrics">
+    Checked <b><%= treasury[:checked_at] ? treasury[:checked_at].in_time_zone.strftime('%a, %d %b %Y %H:%M:%S %z') : 'never' %></b><%= ' · STALE' if treasury[:stale] %><br>
+    <% unless treasury[:lovelace_units].nil? %>ADA <strong><%= number_with_delimiter(TokenAmount.format(treasury[:lovelace_units], decimals: 6)) %></strong><br><% end %>
+    <% tokens.each do |token| %>
+      <% asset = treasury_assets[token.asset_unit] %>
+      <% if asset %><%= token.ticker %> <strong><%= number_with_delimiter(token.format_units(asset[:raw_units])) %></strong><br><% end %>
+    <% end %>
+    <% if treasury[:error].present? %><span class="admin-overview-note">Snapshot unavailable: <%= treasury[:error] %></span><% end %>
+  </div>
+</div>
