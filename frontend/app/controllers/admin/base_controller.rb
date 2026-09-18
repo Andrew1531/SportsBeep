@@ -16,6 +16,11 @@ class Admin::BaseController < ApplicationController
   end
   helper_method :current_sport
 
+  def admin_overview
+    @admin_overview ||= AdminOverviewService.new.call
+  end
+  helper_method :admin_overview
+
   def set_current_sport
     # Default to MLB if no sport is set
     session[:current_sport] ||= 'mlb'

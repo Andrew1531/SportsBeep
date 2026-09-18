@@ -1,0 +1,46 @@
+<% overview = admin_overview %>
+<% treasury = overview[:treasury] || {} %>
+<% treasury_assets = treasury[:assets] || {} %>
+<header class="admin-topbar">
+  <div class="container admin-brand-row">
+    <%= link_to admin_financials_path, class: 'admin-brand' do %>SPORTSBEEP <small>OPERATOR DESK</small><% end %>
+    <div class="admin-session">read-only reporting <%= link_to 'Logout', destroy_administrator_session_path, method: :delete %></div>
+  </div>
+</header>
+<section class="admin-overview" aria-label="All-sports financial overview">
+  <div class="container">
+    <div class="admin-overview-head">
+      <strong>Global financial overview — all sports</strong>
+      <span>generated <%= overview[:generated_at] ? l(overview[:generated_at]) : 'unavailable' %></span>
+    </div>
+    <div class="admin-overview-grid">
+      <% overview[:tokens].each do |row| %>
+        <% token = row[:token] %>
+        <div class="admin-token-strip">
+          <div class="admin-token-name"><%= token.ticker %> <span class="text-muted">exact asset</span></div>
+          <div class="admin-token-metrics">
+            Available <b><%= number_with_delimiter(token.format_units(row[:available_units])) %> <%= token.ticker %></b> · sportsbook stake <b><%= number_with_delimiter(token.format_units(row[:sportsbook_stake_units])) %></b><br>
+            Potential payout <b><%= number_with_delimiter(token.format_units(row[:potential_payout_units])) %></b> · <b><%= row[:open_wager_count] %></b> open wagers<br>
+            Fantasy stake <b><%= number_with_delimiter(token.format_units(row[:fantasy_stake_units])) %></b> · <b><%= row[:active_entry_count] %></b> entries<br>
+            Pending in/out <b><%= number_with_delimiter(token.format_units(row[:pending_deposit_units])) %></b> / <b><%= number_with_delimiter(token.format_units(row[:pending_withdrawal_units])) %></b>
+          </div>
+        </div>
+      <% end %>
+      <div class="admin-treasury-strip">
+        <div class="admin-token-name">MAINNET TREASURY</div>
+        <div class="admin-token-metrics">
+          Checked <b><%= treasury[:checked_at] ? l(treasury[:checked_at]) : 'never' %></b><%= ' · STALE' if treasury[:stale] %><br>
+          <% unless treasury[:lovelace_units].nil? %>ADA <strong><%= number_with_delimiter(TokenAmount.format(treasury[:lovelace_units], decimals: 6)) %></strong><br><% end %>
+          <% overview[:tokens].each do |row| %>
+            <% token = row[:token]; asset = treasury_assets[token.asset_unit] %>
+            <% if asset %><%= token.ticker %> <strong><%= number_with_delimiter(token.format_units(asset[:raw_units])) %></strong><br><% end %>
+          <% end %>
+          <% if treasury[:error].present? %><span class="admin-overview-note">Snapshot unavailable: <%= treasury[:error] %></span><% end %>
+        </div>
+      </div>
+    </div>
+    <% if overview[:unresolved_swap_count].to_i > 0 || overview[:legacy_unclassified_count].to_i > 0 %>
+      <div class="admin-overview-note">Unresolved swaps: <%= overview[:unresolved_swap_count] %> / <%= number_with_delimiter(overview[:unresolved_swap_beep_units]) %> BEEP units · Legacy unclassified records: <%= overview[:legacy_unclassified_count] %></div>
+    <% end %>
+  </div>
+</section>

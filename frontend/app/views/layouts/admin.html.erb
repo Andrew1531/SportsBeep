@@ -7,40 +7,14 @@
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
-<body class="admin" style="padding-top:0;background:#f5f7fa;color:#263346">
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-  <div class="container">
-    <div class="row">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a data-toggle="dropdown" href="#"><%= current_sport.upcase %> <span class="caret"></a>
-          <ul class="dropdown-menu">
-            <li><%= link_to 'MLB', admin_mlb_root_path %></li>
-            <li><%= link_to 'NFL', admin_nfl_root_path %></li>
-          </ul>
-        </li>
-        <%= render "admin/shared/#{current_sport}/nav" %>
-        <li><%= link_to 'Administrators', admin_administrators_path %></li>
-        <li><%= link_to 'Users', admin_users_path %></li>
-        <li><%= link_to 'Financials', admin_financials_path %></li>
-        <li><%= link_to 'Game Activity', admin_activity_path %></li>
-        <li><%= link_to 'Wallets', admin_wallets_path %></li>
-        <li><%= link_to 'Swap History', admin_swaps_path %></li>
-        <li><%= link_to 'Promo Codes', admin_promo_codes_path %></li>
-        <li><%= link_to 'Swap Assets', admin_swap_assets_path %></li>
-        <li><%= link_to 'Settings', admin_setting_path %></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to 'Logout', destroy_administrator_session_path, method: :delete %></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<div class="container">
+<body class="admin">
+<%= render 'admin/shared/header' %>
+<%= render 'admin/shared/navigation' %>
+<main class="container admin-shell">
   <div class="row">
     <%= render 'admin/flash' %>
     <%= yield %>
   </div>
-</div>
+</main>
 </body>
 </html>

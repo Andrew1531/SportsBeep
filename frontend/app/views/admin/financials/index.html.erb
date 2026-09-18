@@ -1,10 +1,10 @@
 <div class="admin-financials">
   <div class="page-header">
-    <h1>Financial overview <small>read-only</small></h1>
+    <h1>Financial overview <small>read-only · all-sports ledger reporting</small></h1>
   </div>
 
   <div class="alert alert-warning">
-    <strong>Separate environments:</strong> The <%= Rails.env %> application ledger below records player balances and obligations.
+    <strong>Separate environments:</strong> The global header shows each approved token independently across all sports. The <%= Rails.env %> application ledger below records player balances and obligations.
     The mainnet treasury snapshot is an external wallet holding. They overlap in uncertain ways and must not be read as
     net solvency, profit, or funds free to pay. Fantasy liabilities are not included. No USD valuation is shown.
   </div>
@@ -27,7 +27,7 @@
           <%= render 'wallet_amount', units: asset[:raw_units], decimals: token.decimals, ticker: token.ticker %>
         </p>
       <% end %>
-      <p class="text-muted"><small>SportsBeep displays BEEP as whole units: 1,000,000 units = 1,000,000 BEEP. ADA keeps its normal 6-decimal conversion. Token registry metadata is available in technical details.</small></p>
+      <p class="text-muted"><small>SportsBeep displays BEEP as whole units: 1,000,000 raw units = 1,000,000 BEEP. ADA keeps its normal 6-decimal conversion. Token registry metadata is technical detail only.</small></p>
     </div>
   </div>
 

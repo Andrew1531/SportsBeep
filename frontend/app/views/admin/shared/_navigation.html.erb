@@ -1,0 +1,28 @@
+<nav class="admin-navigation" aria-label="Administrative navigation">
+  <div class="container admin-nav-row">
+    <div class="admin-nav-section">
+      <span class="admin-nav-label">Global reporting</span>
+      <div class="admin-nav-links">
+        <%= link_to 'Financial overview', admin_financials_path, class: ('active' if current_page?(admin_financials_path)) %>
+        <%= link_to 'Game activity', admin_activity_path, class: ('active' if current_page?(admin_activity_path)) %>
+        <%= link_to 'Wallets', admin_wallets_path %>
+        <%= link_to 'Swap history', admin_swaps_path %>
+      </div>
+    </div>
+    <div class="admin-nav-section">
+      <span class="admin-nav-label">Management</span>
+      <div class="admin-nav-links">
+        <%= link_to 'Administrators', admin_administrators_path %><%= link_to 'Users', admin_users_path %>
+        <%= link_to 'Promo codes', admin_promo_codes_path %><%= link_to 'Swap assets', admin_swap_assets_path %><%= link_to 'Settings', admin_setting_path %>
+      </div>
+    </div>
+    <div class="admin-nav-section">
+      <span class="admin-nav-label">Legacy fantasy tools — sport-specific</span>
+      <div class="admin-nav-links">
+        <%= link_to 'MLB management', admin_mlb_root_path, class: ('active' if current_sport == 'mlb') %>
+        <%= link_to 'NFL management', admin_nfl_root_path, class: ('active' if current_sport == 'nfl') %>
+        <%= render "admin/shared/#{current_sport}/nav" %>
+      </div>
+    </div>
+  </div>
+</nav>
