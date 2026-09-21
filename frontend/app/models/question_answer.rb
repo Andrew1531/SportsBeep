@@ -1,6 +1,8 @@
 class QuestionAnswer < ActiveRecord::Base
   belongs_to :question
-  belongs_to :answer, class_name: 'Team'
+  # A timed-out Best/Bust question is persisted with no selected team and a
+  # zero time value so that it cannot be restarted after a refresh.
+  belongs_to :answer, class_name: 'Team', optional: true
   belongs_to :ticket
 
   validates :time, presence: true

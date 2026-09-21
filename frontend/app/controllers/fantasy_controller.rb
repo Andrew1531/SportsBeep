@@ -2,6 +2,11 @@ class FantasyController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    if params[:sport].to_s.downcase == 'nfl'
+      redirect_to nfl_fantasy_path
+      return
+    end
+
     @sport = params[:sport] || 'mlb'
     @user = current_user
     @account = @user.account
@@ -20,6 +25,11 @@ class FantasyController < ApplicationController
   end
 
   def show
+    if params[:sport].to_s.downcase == 'nfl'
+      redirect_to nfl_fantasy_game_path(params[:id])
+      return
+    end
+
     @sport = params[:sport] || 'mlb'
     @user  = current_user
     @account = @user.account
@@ -42,6 +52,14 @@ class FantasyController < ApplicationController
   end
 
   def enter_contest
+    if params[:sport].to_s.downcase == 'nfl' ||
+        Contest.where(id: params[:contest_id], type: 'Nfl::Contest').exists?
+      contest = Nfl::Contest.find_by(id: params[:contest_id])
+      destination = contest ? nfl_fantasy_game_path(contest.game) : nfl_fantasy_path
+      redirect_to destination, alert: 'Use the NFL entry form to choose the complete original roster.'
+      return
+    end
+
     @contest = Mlb::Contest.includes(template: [:game, :pool]).find(params[:contest_id])
     @user    = current_user
     @account = @user.account

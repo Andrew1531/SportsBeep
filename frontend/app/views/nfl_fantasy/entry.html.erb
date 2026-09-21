@@ -1,0 +1,83 @@
+<% away_name = @game.away_team.to_s; home_name = @game.home_team.to_s; questions = @questions.to_a; answered_ids = @answers.to_h.keys.map(&:to_i) %>
+<div class="nfl-fantasy" id="nf-entry">
+  <div class="nf-topline"><div class="container"><div class="row"><div class="col-sm-7"><div class="nf-kicker">NFL Fantasy / Entry #<%= @ticket.id %></div><h1 class="nf-title"><%= away_name %> <span style="color:#e8893d">@</span> <%= home_name %></h1></div><nav class="col-sm-5 nf-nav"><%= link_to 'NFL Games', nfl_fantasy_path %><%= link_to 'Refresh scores', nfl_fantasy_entry_path(@ticket), class: 'nf-button secondary', id: 'nf-refresh' %></nav></div></div></div>
+  <main class="container">
+    <% if flash[:notice].present? %><div class="nf-alert"><%= flash[:notice] %></div><% end %>
+    <% if flash[:alert].present? %><div class="nf-alert error"><%= flash[:alert] %></div><% end %>
+    <section class="nf-score-grid">
+      <div class="nf-panel">
+        <div class="nf-kicker">Your current score</div>
+        <div class="nf-score"><%= @score_breakdown.to_h[:total] || @ticket.try(:cached_score) || '—' %></div>
+        <div class="nf-legend">Actual scoring is shown as the game updates. No projected scores are displayed.</div>
+      </div>
+      <div class="nf-panel">
+        <div class="nf-kicker">Game status</div>
+        <h3 style="margin-top:8px"><%= @game.status.to_s.presence || 'Scheduled' %></h3>
+        <p class="nf-sub"><%= @game.start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%a, %b %-d · %-I:%M %p ET') %></p>
+        <% if @game.start_time.future? %><%= link_to 'Edit entry', nfl_fantasy_game_path(@game, ticket_id: @ticket.id), class: 'nf-button secondary' %><% end %>
+      </div>
+    </section>
+
+    <% if questions.any? && answered_ids.length < questions.length %>
+      <section class="nf-panel nf-question" id="nf-question-panel">
+        <div class="nf-kicker">Timed Best / Bust</div>
+        <div class="nf-progress"><% questions.each do |question| %><i class="<%= 'done' if answered_ids.include?(question.id) %>"></i><% end %></div>
+        <p class="nf-sub" id="nf-question-position"></p>
+        <h2 id="nf-question-text"></h2>
+        <div id="nf-ready-state"><p class="nf-muted">The timer does not begin until you are ready.</p><button type="button" class="nf-button" id="nf-ready">Ready — start 14 seconds</button></div>
+        <div id="nf-answer-state" style="display:none"><div class="nf-clock" id="nf-clock">14.0</div><div class="nf-question-options"><button type="button" data-team="<%= @game.away_team_id %>"><%= away_name %></button><button type="button" data-team="<%= @game.home_team_id %>"><%= home_name %></button></div></div>
+        <div class="nf-alert error" id="nf-network-error" style="display:none"></div>
+      </section>
+    <% elsif questions.any? %>
+      <section class="nf-empty"><h3>Best / Bust complete</h3><p>All six timed decisions have been recorded. Scores below are calculated from actual game data.</p></section>
+    <% else %>
+      <section class="nf-empty"><h3>Questions unavailable</h3><p>Timed Best/Bust questions will appear here once they are attached to this entry.</p></section>
+    <% end %>
+
+    <header class="nf-page-head"><div><h2>Score breakdown</h2><p>Roster, squad, league-pick and timed decision scoring.</p></div></header>
+    <section class="nf-score-grid">
+      <div class="nf-panel">
+        <% { players: 'Roster', squads: 'Team units', league_pick: 'League touchdown call', best_bust: 'Best / Bust' }.each do |key, label| %>
+          <% value = @score_breakdown.to_h[key] || @score_breakdown.to_h[key.to_s] %>
+          <div class="nf-row"><span><%= label %></span><em><%= value.present? ? value : 'Pending' %></em></div>
+        <% end %>
+        <div class="nf-row"><strong>Total</strong><em><%= @score_breakdown.to_h[:total] || @score_breakdown.to_h['total'] || 'Pending' %></em></div>
+      </div>
+      <div class="nf-panel"><h3>Contest ranking</h3><p class="nf-sub">Rankings use actual tickets in this contest.</p>
+        <% if @leaderboard.present? %><% @leaderboard.each_with_index do |entry, index| %><div class="nf-row"><span>#<%= index + 1 %> <%= entry == @ticket ? 'Your entry' : "Entry ##{entry.id}" %></span><em><%= entry.try(:cached_score) || '—' %></em></div><% end %><% else %><p class="nf-muted">Ranking will appear after entries are available.</p><% end %>
+      </div>
+    </section>
+  </main>
+</div>
+<script>
+(function() {
+  var questions = <%= raw questions.map { |q| { id: q.id, text: q.text, kind: q.is_a?(BestQuestion) ? 'Best' : 'Bust', started_at: @question_attempts[q.id].try(:started_at).try(:iso8601, 3), completed: answered_ids.include?(q.id) } }.to_json %>;
+  var completed = <%= raw answered_ids.to_json %>;
+  var current = questions.filter(function(q){ return completed.indexOf(q.id) === -1; })[0];
+  if (!current) return;
+  var panel = document.getElementById('nf-question-panel'), ready = document.getElementById('nf-ready'), readyState = document.getElementById('nf-ready-state'), answerState = document.getElementById('nf-answer-state'), clock = document.getElementById('nf-clock'), error = document.getElementById('nf-network-error'), ticking, deadline, submitting = false;
+  document.getElementById('nf-question-position').textContent = (completed.length + 1) + ' of ' + questions.length + ' · ' + current.kind;
+  document.getElementById('nf-question-text').textContent = current.text;
+  function csrf(){ var tag=document.querySelector('meta[name=csrf-token]'); return tag ? tag.content : ''; }
+  function fail(message){ error.style.display='block'; error.textContent=message; ready.disabled=false; submitting=false; }
+  function render(){ var remaining=Math.max(0, deadline-Date.now()); clock.textContent=(remaining/1000).toFixed(1); if(remaining<=0){ clearInterval(ticking); submit(null); } }
+  function submit(teamId) {
+    if(submitting) return; submitting=true; clearInterval(ticking);
+    panel.querySelectorAll('button').forEach(function(button){button.disabled=true;});
+    fetch('/fantasy/nfl/entries/<%= @ticket.id %>/questions/' + current.id + '/answer', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-Token':csrf()}, body:JSON.stringify({team_id:teamId})}).then(function(response){if(!response.ok) throw new Error('Unable to save answer'); return response.json();}).then(function(){ window.location.reload(); }).catch(function(){ answerState.style.display='none'; readyState.style.display='block'; fail('Your answer was not saved. Check your connection and retry; the server timer still applies.'); });
+  }
+  function beginTimer(expiresAt) {
+    deadline = new Date(expiresAt).getTime(); readyState.style.display='none'; answerState.style.display='block'; render(); ticking=setInterval(render,100);
+  }
+  ready.addEventListener('click', function() {
+    ready.disabled=true; error.style.display='none';
+    fetch('/fantasy/nfl/entries/<%= @ticket.id %>/questions/' + current.id + '/start', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-Token':csrf()}, body:'{}'}).then(function(response){if(!response.ok) throw new Error('Unable to start timer'); return response.json();}).then(function(data) {
+      if(data.answered){ window.location.reload(); return; }
+      beginTimer(data.expires_at);
+    }).catch(function(){fail('The timer could not start. Nothing has been recorded; retry when connected.');});
+  });
+  if(current.started_at) { beginTimer(new Date(new Date(current.started_at).getTime() + 14000).toISOString()); }
+  panel.querySelectorAll('[data-team]').forEach(function(button){button.addEventListener('click',function(){submit(button.getAttribute('data-team'));});});
+  window.setInterval(function(){ if(!submitting && answerState.style.display !== 'none') return; }, 30000);
+})();
+</script>

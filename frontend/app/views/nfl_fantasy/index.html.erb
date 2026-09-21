@@ -1,0 +1,71 @@
+<div class="nfl-fantasy">
+  <div class="nf-topline">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="nf-kicker">SportsBeep / Fantasy</div>
+          <h1 class="nf-title">NFL GAME ROOM</h1>
+        </div>
+        <nav class="col-sm-6 nf-nav">
+          <%= link_to 'NFL Games', nfl_fantasy_path, class: 'active' %>
+          <%= link_to 'My NFL Entries', '#my-nfl-entries' %>
+          <%= link_to 'Sportsbook', sportsbook_path %>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <% if flash[:notice].present? %><div class="nf-alert"><%= flash[:notice] %></div><% end %>
+    <% if flash[:alert].present? %><div class="nf-alert error"><%= flash[:alert] %></div><% end %>
+    <header class="nf-page-head">
+      <div><h2>Choose a game</h2><p>Build a five-player roster, call team units, then make six timed Best/Bust decisions.</p></div>
+      <span class="nf-badge"><%= @games.to_a.length %> on the board</span>
+    </header>
+
+    <% if @games.present? %>
+      <section class="nf-grid">
+        <% @games.each do |game| %>
+          <% away = game.away_team.to_s; home = game.home_team.to_s %>
+          <article class="nf-game">
+            <div class="nf-game-main">
+              <div class="nf-game-time"><%= game.start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%a, %b %-d · %-I:%M %p ET') %></div>
+              <div class="nf-matchup">
+                <div class="nf-team"><small>Away</small><strong><%= away %></strong></div>
+                <span class="nf-at">@</span>
+                <div class="nf-team"><small>Home</small><strong><%= home %></strong></div>
+              </div>
+              <span class="nf-badge"><%= game.status.to_s.presence || 'scheduled' %></span>
+            </div>
+            <footer class="nf-game-footer">
+              <span class="nf-muted">Roster + timed picks</span>
+              <%= link_to 'Enter game', nfl_fantasy_game_path(game), class: 'nf-button' %>
+            </footer>
+          </article>
+        <% end %>
+      </section>
+    <% else %>
+      <section class="nf-empty"><h3>No NFL games ready</h3><p>The NFL schedule or contest templates are not available yet. Check back after games and templates are imported.</p></section>
+    <% end %>
+
+    <section id="my-nfl-entries">
+      <header class="nf-page-head"><div><h2>My NFL entries</h2><p>Your current and completed NFL contest entries.</p></div></header>
+      <% if @tickets.present? %>
+        <div class="nf-grid">
+          <% @tickets.each do |ticket| %>
+            <% ticket_game = ticket.contest.try(:game) %>
+            <article class="nf-game">
+              <div class="nf-game-main">
+                <div class="nf-game-time"><%= ticket_game.try(:start_time).try(:in_time_zone, 'Eastern Time (US & Canada)').try(:strftime, '%a, %b %-d · %-I:%M %p ET') || 'Game time pending' %></div>
+                <div class="nf-matchup"><div class="nf-team"><small>Away</small><strong><%= ticket_game.try(:away_team).to_s %></strong></div><span class="nf-at">@</span><div class="nf-team"><small>Home</small><strong><%= ticket_game.try(:home_team).to_s %></strong></div></div>
+              </div>
+              <footer class="nf-game-footer"><span class="nf-muted">Score <strong><%= ticket.respond_to?(:cached_score) ? (ticket.cached_score || '—') : '—' %></strong></span><span><%= link_to 'View entry', nfl_fantasy_entry_path(ticket), class: 'nf-button secondary' %><% if ticket_game && ticket_game.start_time.future? %> <%= link_to 'Edit', nfl_fantasy_game_path(ticket_game, ticket_id: ticket.id), class: 'nf-button secondary' %><% end %></span></footer>
+            </article>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="nf-empty"><p>No NFL entries yet. Select an upcoming game to start one.</p></div>
+      <% end %>
+    </section>
+  </main>
+</div>

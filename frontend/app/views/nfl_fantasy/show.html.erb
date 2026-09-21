@@ -1,0 +1,67 @@
+<% away_name = @game.away_team.to_s; home_name = @game.home_team.to_s; editing = @ticket.present? %>
+<div class="nfl-fantasy">
+  <div class="nf-topline"><div class="container"><div class="row"><div class="col-sm-7"><div class="nf-kicker">NFL Fantasy / <%= editing ? 'Edit entry' : 'New entry' %></div><h1 class="nf-title"><%= away_name %> <span style="color:#e8893d">@</span> <%= home_name %></h1></div><nav class="col-sm-5 nf-nav"><%= link_to 'NFL Games', nfl_fantasy_path %><%= link_to 'My NFL Entries', nfl_fantasy_path(anchor: 'my-nfl-entries') %></nav></div></div></div>
+  <main class="container">
+    <% if flash[:alert].present? %><div class="nf-alert error"><%= flash[:alert] %></div><% end %>
+    <% if flash[:notice].present? %><div class="nf-alert"><%= flash[:notice] %></div><% end %>
+    <header class="nf-page-head"><div><h2><%= editing ? 'Adjust your entry' : 'Build your entry' %></h2><p><%= @game.start_time.in_time_zone('Eastern Time (US & Canada)').strftime('%A, %B %-d · %-I:%M %p ET') %> · all roster slots must be unique.</p></div><span class="nf-badge">5 players · 3 squads · 1 league call</span></header>
+    <% entry_form_path = editing ? nfl_fantasy_entry_path(@ticket) : nfl_fantasy_entries_path %>
+    <%= form_tag(entry_form_path, method: (editing ? :patch : :post), class: 'nf-form') do %>
+      <%= hidden_field_tag :game_id, @game.id unless editing %>
+      <div>
+        <section class="nf-panel">
+          <h3>1. Contest</h3><p class="nf-sub">Choose one contest or pool made available for this game.</p>
+          <% if @contests.present? || @pools.present? %>
+            <% @contests.each do |contest| %><label class="nf-choice"><%= radio_button_tag :contest_id, contest.id, @ticket.try(:contest_id) == contest.id, required: !editing %><strong><%= contest.template.try(:pool).try(:name).presence || "Contest ##{contest.id}" %></strong><small><%= contest.tickets_count || 0 %> entries</small></label><% end %>
+            <% @pools.each do |pool| %><label class="nf-choice"><%= radio_button_tag :pool_id, pool.id, false, required: !editing %><strong><%= pool.name.presence || "Pool ##{pool.id}" %></strong><small>Entry fee: <%= pool.entry_fee.to_i %> BEEP</small></label><% end %>
+          <% else %><div class="nf-empty"><p>No contest templates are available for this game.</p></div><% end %>
+        </section>
+        <section class="nf-panel">
+          <h3>2. Player roster</h3><p class="nf-sub">Running back, tight end, wide receiver, kicker, and one flex from any position.</p>
+          <div class="nf-fields">
+            <% @player_slots.each do |slot| %>
+              <% allowed = Nfl::POSITIONS_FOR_BUCKET[slot] || [] %>
+              <% choices = allowed == ['*'] ? @players : @players.select { |player| allowed.include?(player.position) } %>
+              <% selected_id = @ticket.try(:ticket_players).try(:find_by, position: slot).try(:player_id) %>
+              <div class="nf-field"><label><%= slot.humanize %></label><%= select_tag "players[#{slot}]", options_from_collection_for_select(choices, :id, :name, selected_id), include_blank: "Select #{slot.humanize}", required: true, class: 'nf-player-select', data: { slot: slot } %></div>
+            <% end %>
+          </div>
+        </section>
+        <section class="nf-panel">
+          <h3>3. Team units</h3><p class="nf-sub">For each unit, call either the home or away squad.</p>
+          <div class="nf-fields">
+            <% @squad_slots.each do |slot| %><div class="nf-field"><label><%= slot.humanize %></label><%= select_tag "squads[#{slot}]", options_for_select([[away_name, @game.away_team_id], [home_name, @game.home_team_id]], @ticket.try(:ticket_squads).try(:find_by, position: slot).try(:team_id)), include_blank: 'Choose team', required: true %></div><% end %>
+          </div>
+        </section>
+        <section class="nf-panel">
+          <h3>4. League touchdown call</h3><p class="nf-sub">Choose one league-pick game and the team you expect to score a touchdown. Correct call: 3 points.</p>
+          <% if @league_pick_games.present? %>
+            <% selected_league_game = @league_pick_games.detect { |league_game| league_game.id == @ticket.try(:league_pick_game_id) } || @league_pick_games.first %>
+            <% selected_league_teams = selected_league_game.teams.to_a %>
+            <div class="nf-fields"><div class="nf-field"><label>League-pick game</label><%= select_tag :league_pick_game_id, options_for_select(@league_pick_games.map { |league_game| ["#{league_game.away_team} @ #{league_game.home_team}", league_game.id] }, selected_league_game.id), include_blank: 'Choose game', required: true, id: 'league-pick-game' %></div><div class="nf-field"><label>Team</label><%= select_tag :league_pick_team_id, options_from_collection_for_select(selected_league_teams, :id, :to_s, @ticket.try(:league_pick_team_id)), include_blank: 'Choose team', required: true, id: 'league-pick-team' %></div></div>
+          <% else %><div class="nf-empty"><p>No league-pick game is available yet.</p></div><% end %>
+        </section>
+      </div>
+      <aside class="nf-panel nf-side">
+        <h3><%= editing ? 'Entry update' : 'Entry fee' %></h3>
+        <% unless editing %><div class="nf-fee"><span>Payment token</span><strong id="nf-fee">Select contest</strong></div><div class="nf-field" style="margin-top:14px"><label>Approved token</label><%= select_tag :approved_token_id, options_from_collection_for_select(@approved_tokens, :id, :ticker), include_blank: 'Select token', required: true %></div><% end %>
+        <div class="nf-rules"><b>Then comes Best/Bust.</b> After entry, answer 3 Best and 3 Bust team questions in sequence. Press Ready to start each 14-second server timer. A correct answer scores remaining seconds ÷ 14 × 2.8.</div>
+        <%= submit_tag(editing ? 'Save roster' : 'Submit entry', class: 'nf-button nf-submit', disabled: (@contests.blank? && @pools.blank?) || @players.blank? || @league_pick_games.blank?) %>
+      </aside>
+    <% end %>
+  </main>
+</div>
+<script>
+(function(){
+  var selects=document.querySelectorAll('.nf-player-select');
+  function unique(){var used={}; selects.forEach(function(s){if(s.value){if(used[s.value] && used[s.value]!==s){s.setCustomValidity('Each player can only be used once.');}else{s.setCustomValidity('');used[s.value]=s;}}});}
+  selects.forEach(function(s){s.addEventListener('change',unique);}); unique();
+  var games = <%= raw @league_pick_games.to_a.map { |league_game| { id: league_game.id, teams: league_game.teams.to_a.map { |team| { id: team.id, name: team.to_s } } } }.to_json %>;
+  var gameSelect=document.getElementById('league-pick-game'), teamSelect=document.getElementById('league-pick-team');
+  if(!gameSelect || !teamSelect) return;
+  gameSelect.addEventListener('change', function(){
+    var current=games.filter(function(game){return String(game.id)===gameSelect.value;})[0], placeholder='<option value="">Choose team</option>';
+    teamSelect.innerHTML=placeholder + (current ? current.teams.map(function(team){return '<option value="'+team.id+'">'+team.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</option>';}).join('') : '');
+  });
+})();
+</script>

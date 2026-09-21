@@ -5,8 +5,8 @@ class Ticket < ActiveRecord::Base
   belongs_to :user
   belongs_to :approved_token, optional: true
   belongs_to :contest, counter_cache: true, touch: true
-  belongs_to :league_pick_game, class_name: 'Game'
-  belongs_to :league_pick_team, class_name: 'Team'
+  belongs_to :league_pick_game, class_name: 'Game', optional: true
+  belongs_to :league_pick_team, class_name: 'Team', optional: true
 
   has_one :contest_template, through: :contest, source: :template
 
@@ -26,13 +26,14 @@ class Ticket < ActiveRecord::Base
 
   validates :contest, presence: true
   validates :league_pick_team, presence: true, if: :league_pick_game
+  validates :league_pick_game, presence: true, if: :league_pick_team
 
   validate :must_only_choose_a_player_one_time_per_ticket
   validate :must_only_include_players_from_the_contests_game
   validate :must_only_allow_up_to_5_players_from_a_single_team
   validate :must_have_a_valid_roster, if: :roster
-  # validate :league_pick_game_must_be_included_in_the_contest_games_league_pick_games, if: :league_pick_game
-  # validate :league_pick_team_must_be_playing_in_the_league_pick_game, if: :league_pick_game
+  validate :league_pick_game_must_be_included_in_the_contest_games_league_pick_games, if: :league_pick_game
+  validate :league_pick_team_must_be_playing_in_the_league_pick_game, if: :league_pick_game
   validate :must_not_join_the_same_contest_twice_per_user, on: :create
   validate :must_not_join_the_same_game_and_pool_more_than_5_times, on: :create
   validate :must_be_saved_before_game_time
@@ -86,7 +87,11 @@ class Ticket < ActiveRecord::Base
   end
 
   def league_pick
-    @_lp ||= NullLeaguePick.new
+    @_lp ||= if league_pick_game && league_pick_team
+      "#{self.class.name.deconstantize}::LeaguePick".constantize.new(league_pick_team, league_pick_game)
+    else
+      NullLeaguePick.new
+    end
   end
 
   private
@@ -134,7 +139,9 @@ class Ticket < ActiveRecord::Base
 
     def must_have_beep_balance
       account = user&.account
-      if account.nil? || !approved_token || account.token_balance_for(approved_token).balance_units.to_i <= 0
+      units = entry_fee_units.to_i
+      if account.nil? || !approved_token ||
+          (units.positive? && account.token_balance_for(approved_token).balance_units.to_i < units)
         errors.add :base, "You need #{approved_token&.ticker || 'an approved token'} tokens to enter a contest."
       end
     end

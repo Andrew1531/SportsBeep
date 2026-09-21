@@ -43,7 +43,10 @@ class GenerateTimerStates
     end
 
     def save
-      TimerState.import @states
+      # The original application used activerecord-import, which is not part of
+      # this Rails 6 bundle. Keep the same states without making ticket creation
+      # depend on an unavailable extension.
+      TimerState.transaction { @states.each(&:save!) }
     end
 
 end

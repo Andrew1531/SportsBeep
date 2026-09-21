@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_18_180000) do
+ActiveRecord::Schema.define(version: 2026_09_19_000000) do
 
   create_table "account_token_balances", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -271,6 +271,18 @@ ActiveRecord::Schema.define(version: 2026_09_18_180000) do
     t.boolean "current"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "nfl_question_attempts", force: :cascade do |t|
+    t.integer "ticket_id", null: false
+    t.integer "question_id", null: false
+    t.datetime "started_at", null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["question_id"], name: "index_nfl_question_attempts_on_question_id"
+    t.index ["ticket_id", "question_id"], name: "index_nfl_question_attempts_unique", unique: true
+    t.index ["ticket_id"], name: "index_nfl_question_attempts_on_ticket_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -651,6 +663,8 @@ ActiveRecord::Schema.define(version: 2026_09_18_180000) do
   add_foreign_key "cardano_swaps", "swap_assets"
   add_foreign_key "cardano_swaps", "swap_quotes"
   add_foreign_key "cardano_swaps", "users"
+  add_foreign_key "nfl_question_attempts", "questions"
+  add_foreign_key "nfl_question_attempts", "tickets"
   add_foreign_key "swap_quotes", "swap_assets"
   add_foreign_key "swap_quotes", "users"
   add_foreign_key "tickets", "approved_tokens"

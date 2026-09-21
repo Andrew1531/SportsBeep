@@ -130,7 +130,7 @@
           <div class="dash-account-body">
             <div class="dash-photo">
               <% if @user.profile_photo.attached? %>
-                <div class="dash-avatar"><%= image_tag @user.profile_photo, alt: "#{@user.username}'s profile photo" %></div>
+                <div class="dash-avatar"><%= image_tag rails_storage_proxy_path(@user.profile_photo), alt: 'Your profile photo' %></div>
               <% else %><div class="dash-avatar"><i class="fa fa-user"></i></div><% end %>
               <%= form_tag update_profile_photo_path, method: :patch, multipart: true do %>
                 <label for="profile_photo" class="dash-photo-button"><i class="fa fa-camera"></i> Choose photo</label>

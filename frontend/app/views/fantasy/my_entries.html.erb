@@ -55,7 +55,11 @@
             is_mlb = ticket.is_a?(Mlb::Ticket)
           %>
 
-          <div class="entry-card">
+          <% if is_mlb %>
+            <div class="entry-card">
+          <% else %>
+            <%= link_to nfl_fantasy_entry_path(ticket), class: 'entry-card', style: 'display:block; color: inherit;' do %>
+          <% end %>
             <div class="entry-sport-badge <%= is_mlb ? 'mlb' : 'nfl' %>">
               <%= image_tag is_mlb ? 'ic_baseball.png' : 'ic_football.png', style: 'width: 14px; height: 14px; vertical-align: middle; margin-right: 4px;' %>
               <%= is_mlb ? 'MLB' : 'NFL' %>
@@ -115,7 +119,11 @@
                 <% end %>
               </span>
             </div>
-          </div>
+          <% if is_mlb %>
+            </div>
+          <% else %>
+            <% end %>
+          <% end %>
         <% end %>
       </div>
     <% else %>

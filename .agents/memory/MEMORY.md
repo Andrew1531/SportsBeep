@@ -8,3 +8,4 @@
 - [Authenticated marketing captures](authenticated-marketing-captures.md) — use the HTTPS dev domain for automated sign-in screenshots; localhost drops this app's secure session cookie.
 - [Rails test isolation](rails-test-isolation.md) — inherited database URLs can override SQLite test settings; isolate test commands and avoid app boot during read-only financial audits.
 - [Rails test doubles](rails-test-doubles.md) — wrap callable service doubles in factory lambdas; explicitly load Minitest mocking helpers.
+- [Workspace process IDs](workspace-process-id-reuse.md) — resumed workspaces can reuse an old Rails PID for an editor process; verify process identity, not just PID existence.

@@ -1,0 +1,89 @@
+// NFL Fantasy is intentionally isolated from the legacy fantasy and sportsbook surfaces.
+.nfl-fantasy {
+  background: #071523;
+  color: #e9eff4;
+  font-family: 'Manrope', sans-serif;
+  min-height: 100vh;
+  padding-bottom: 48px;
+
+  *, *:before, *:after { box-sizing: border-box; }
+  a { color: inherit; text-decoration: none; }
+  button, select { font: inherit; }
+  .container { max-width: 1100px; overflow: visible; }
+  .nf-topline { background: #0b2033; border-bottom: 1px solid #21435a; padding: 14px 0; }
+  .nf-kicker { color: #e8893d; font: 700 11px 'DM Mono', monospace; letter-spacing: 1.4px; text-transform: uppercase; }
+  .nf-title { font-family: 'Barlow Condensed', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: .4px; line-height: .9; margin: 5px 0 0; color: #f4f0e8; }
+  .nf-nav { display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
+  .nf-nav a { border: 1px solid #31566c; color: #b9cad5; font-size: 12px; font-weight: 800; padding: 9px 12px; text-transform: uppercase; }
+  .nf-nav a.active, .nf-nav a:hover { background: #e8893d; border-color: #e8893d; color: #10202d; }
+  .nf-page-head { padding: 28px 0 18px; display: flex; gap: 20px; align-items: flex-end; justify-content: space-between; }
+  .nf-page-head h2 { color: #f4f0e8; font-family: 'Barlow Condensed', sans-serif; font-size: 31px; font-weight: 700; line-height: 1; margin: 0; text-transform: uppercase; }
+  .nf-page-head p { color: #9eb3c0; font-size: 13px; margin: 7px 0 0; }
+  .nf-badge { background: #e8893d; color: #10202d; display: inline-block; font: 700 10px 'DM Mono', monospace; letter-spacing: 1px; padding: 5px 7px; text-transform: uppercase; }
+  .nf-grid { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nf-game { background: #0c2133; border: 1px solid #23475c; position: relative; overflow: hidden; }
+  .nf-game:before { background: #e8893d; content: ''; height: 3px; left: 0; position: absolute; right: 0; top: 0; }
+  .nf-game-main { padding: 22px 20px 18px; }
+  .nf-game-time { color: #91a9b8; font: 11px 'DM Mono', monospace; letter-spacing: .3px; text-transform: uppercase; }
+  .nf-matchup { align-items: center; display: flex; gap: 12px; justify-content: space-between; margin: 20px 0; }
+  .nf-team { flex: 1; min-width: 0; }
+  .nf-team:last-child { text-align: right; }
+  .nf-team small { color: #91a9b8; display: block; font-size: 10px; letter-spacing: 1px; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+  .nf-team strong { color: #f4f0e8; display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nf-at { border: 1px solid #31566c; color: #e8893d; flex: 0 0 29px; font: 700 12px 'DM Mono', monospace; padding: 7px 0; text-align: center; }
+  .nf-game-footer { align-items: center; border-top: 1px solid #23475c; display: flex; justify-content: space-between; padding: 12px 20px; }
+  .nf-muted { color: #91a9b8; font-size: 12px; }
+  .nf-button { background: #e8893d; border: 1px solid #e8893d; color: #10202d; cursor: pointer; display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .5px; padding: 10px 13px; text-align: center; text-transform: uppercase; }
+  .nf-button:hover { background: #f2a35d; color: #10202d; }
+  .nf-button.secondary { background: transparent; border-color: #42677c; color: #c7d6de; }
+  .nf-button:disabled { cursor: not-allowed; opacity: .48; }
+  .nf-empty { background: #0c2133; border: 1px dashed #42677c; color: #b4c7d1; padding: 44px 24px; text-align: center; }
+  .nf-empty h3 { color: #f4f0e8; font: 700 26px 'Barlow Condensed', sans-serif; margin: 0 0 8px; text-transform: uppercase; }
+  .nf-alert { border-left: 3px solid #e8893d; color: #d7e2e7; background: #102b40; margin: 18px 0; padding: 12px 14px; }
+  .nf-alert.error { border-color: #d65e4c; }
+  .nf-form { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr) 290px; }
+  .nf-panel { background: #0c2133; border: 1px solid #23475c; padding: 20px; }
+  .nf-panel h3 { color: #f4f0e8; font: 700 23px 'Barlow Condensed', sans-serif; letter-spacing: .3px; margin: 0 0 5px; text-transform: uppercase; }
+  .nf-panel .nf-sub { color: #91a9b8; font-size: 12px; margin: 0 0 17px; }
+  .nf-choice { border: 1px solid #31566c; cursor: pointer; display: block; margin-bottom: 8px; padding: 12px; }
+  .nf-choice:hover, .nf-choice:has(input:checked) { background: #143148; border-color: #e8893d; }
+  .nf-choice input { margin: 0 8px 0 0; vertical-align: middle; }
+  .nf-choice strong { color: #f4f0e8; font-size: 13px; }
+  .nf-choice small { color: #91a9b8; display: block; margin: 4px 0 0 20px; }
+  .nf-fields { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .nf-field label { color: #b8cbd5; display: block; font: 700 10px 'DM Mono', monospace; letter-spacing: .7px; margin-bottom: 6px; text-transform: uppercase; }
+  .nf-field select { background: #092033; border: 1px solid #31566c; border-radius: 0; color: #edf4f4; min-height: 42px; padding: 8px; width: 100%; }
+  .nf-field select:focus { border-color: #e8893d; outline: none; }
+  .nf-side { align-self: start; position: sticky; top: 16px; }
+  .nf-rules { border-top: 1px solid #31566c; color: #b7cad3; font-size: 12px; line-height: 1.55; margin-top: 16px; padding-top: 14px; }
+  .nf-rules b { color: #e8893d; }
+  .nf-fee { align-items: baseline; border-bottom: 1px solid #31566c; display: flex; justify-content: space-between; padding-bottom: 14px; }
+  .nf-fee span { color: #91a9b8; font-size: 11px; text-transform: uppercase; }
+  .nf-fee strong { color: #f4f0e8; font: 700 25px 'Barlow Condensed', sans-serif; }
+  .nf-submit { margin-top: 16px; width: 100%; }
+  .nf-progress { display: flex; gap: 6px; margin: 17px 0; }
+  .nf-progress i { background: #27495c; display: block; height: 4px; flex: 1; }
+  .nf-progress i.done { background: #e8893d; }
+  .nf-question { margin: 28px auto; max-width: 650px; text-align: center; }
+  .nf-question h2 { color: #f4f0e8; font: 700 36px/1 'Barlow Condensed', sans-serif; margin: 15px 0; text-transform: uppercase; }
+  .nf-clock { color: #e8893d; font: 700 34px 'DM Mono', monospace; }
+  .nf-question-options { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; margin-top: 20px; }
+  .nf-question-options button { background: #123047; border: 1px solid #42677c; color: #f4f0e8; cursor: pointer; font: 700 21px 'Barlow Condensed', sans-serif; min-height: 90px; padding: 14px; text-transform: uppercase; }
+  .nf-question-options button:hover { border-color: #e8893d; }
+  .nf-score-grid { display: grid; gap: 14px; grid-template-columns: 1.2fr .8fr; }
+  .nf-score { color: #f4f0e8; font: 800 47px 'Barlow Condensed', sans-serif; line-height: .8; }
+  .nf-row { align-items: center; border-top: 1px solid #23475c; display: flex; font-size: 13px; justify-content: space-between; padding: 10px 0; }
+  .nf-row strong { color: #f4f0e8; }
+  .nf-row em { color: #e8893d; font-style: normal; font-weight: 800; }
+  .nf-legend { color: #91a9b8; font-size: 11px; margin-top: 12px; }
+  @media (max-width: 767px) {
+    .nf-nav { justify-content: flex-start; margin-top: 15px; }
+    .nf-page-head { align-items: flex-start; display: block; }
+    .nf-page-head .nf-badge { margin-top: 13px; }
+    .nf-grid, .nf-form, .nf-score-grid { grid-template-columns: 1fr; }
+    .nf-side { position: static; }
+    .nf-fields { grid-template-columns: 1fr; }
+    .nf-title { font-size: 36px; }
+    .nf-question h2 { font-size: 30px; }
+  }
+}

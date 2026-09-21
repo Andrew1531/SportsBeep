@@ -40,6 +40,13 @@ SportsbeepWeb::Application.routes.draw do
   get  'fantasy/game/:id', to: 'fantasy#show', as: :fantasy_game
   post 'fantasy/enter', to: 'fantasy#enter_contest', as: :fantasy_enter_contest
   get  'fantasy/my-entries', to: 'fantasy#my_entries', as: :my_entries
+  get   'fantasy/nfl', to: 'nfl_fantasy#index', as: :nfl_fantasy
+  get   'fantasy/nfl/games/:id', to: 'nfl_fantasy#show', as: :nfl_fantasy_game
+  post  'fantasy/nfl/entries', to: 'nfl_fantasy#create', as: :nfl_fantasy_entries
+  get   'fantasy/nfl/entries/:id', to: 'nfl_fantasy#entry', as: :nfl_fantasy_entry
+  patch 'fantasy/nfl/entries/:id', to: 'nfl_fantasy#update'
+  post  'fantasy/nfl/entries/:id/questions/:question_id/start', to: 'nfl_fantasy#start_question', as: :start_nfl_fantasy_question
+  post  'fantasy/nfl/entries/:id/questions/:question_id/answer', to: 'nfl_fantasy#answer_question', as: :answer_nfl_fantasy_question
   get 'wallet', to: 'dashboard#wallet', as: :wallet
   get 'vending', to: redirect('/wallet')
   post 'wallet/cardano_nonce', to: 'dashboard#cardano_nonce', as: :cardano_nonce
