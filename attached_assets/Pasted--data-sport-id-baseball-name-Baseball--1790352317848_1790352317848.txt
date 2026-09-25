@@ -1,0 +1,145 @@
+{
+  "data": [
+    {
+      "sport": {
+        "id": "baseball",
+        "name": "Baseball"
+      },
+      "league": {
+        "id": "mlb",
+        "name": "MLB"
+      },
+      "fixture": {
+        "id": "439A1AC1DBDB",
+        "game_id": "40644-60486-2024-10-01-11",
+        "start_date": "2024-10-01T18:32:00Z",
+        "home_competitors": [
+          {
+            "id": "4F11A5896C24",
+            "name": "Houston Astros",
+            "abbreviation": "HOU",
+            "logo": "https://cdn.opticodds.com/team-logos/baseball/28.png"
+          }
+        ],
+        "away_competitors": [
+          {
+            "id": "BF57CF7C7E07",
+            "name": "Detroit Tigers",
+            "abbreviation": "DET",
+            "logo": "https://cdn.opticodds.com/team-logos/baseball/27.png"
+          }
+        ],
+        "home_team_display": "Houston Astros",
+        "away_team_display": "Detroit Tigers",
+        "status": "live",
+        "is_live": true
+      },
+      "scores": {
+        "home": {
+          "total": 0,
+          "periods": {
+            "period_1": 0,
+            "period_2": 0,
+            "period_3": 0,
+            "period_4": 0,
+            "period_5": 0,
+            "period_6": 0
+          },
+          "aggregate": null
+        },
+        "away": {
+          "total": 3,
+          "periods": {
+            "period_1": 0,
+            "period_2": 3,
+            "period_3": 0,
+            "period_4": 0,
+            "period_5": 0,
+            "period_6": 0,
+            "period_7": 0
+          },
+          "aggregate": null
+        }
+      },
+      "in_play": {
+        "period": "7",
+        "clock": "Top",
+        "last_play": null,
+        "time_min": null,
+        "time_sec": null,
+        "balls": 0,
+        "outs": 2,
+        "strikes": 0,
+        "runners": {
+          "third": {
+            "player_id": "19AA4BA7DD27",
+            "player_name": "Colt Keith",
+            "team_id": "BF57CF7C7E07"
+          },
+          "second": {
+            "player_id": "48805399AB84",
+            "player_name": "Wenceel Perez",
+            "team_id": "BF57CF7C7E07"
+          },
+          "first": null
+        },
+        "batter": {
+          "player_id": "8BDDD21FD738",
+          "player_name": "Spencer Torkelson",
+          "team_id": "BF57CF7C7E07"
+        },
+        "pitcher": null,
+        "possession": null,
+        "down": null,
+        "distance_to_go": null,
+        "field_position": null
+      },
+      "events": [],
+      "stats": {
+        "home": [
+          {
+            "period": "all",
+            "stats": {
+              "rbi": 0,
+              "hits": 4,
+              "runs": 0,
+              "at_bats": 22,
+              "total_bases": 4,
+              "double_plays": 1,
+              "triple_plays": 0,
+              "batting_walks": 1,
+              "batting_strikeouts": 6,
+              "runners_left_on_base": 5,
+              "scoring_position_successes": 0,
+              "scoring_position_opportunities": 3
+            }
+          }
+        ],
+        "away": [
+          {
+            "period": "all",
+            "stats": {
+              "rbi": 3,
+              "hits": 9,
+              "runs": 3,
+              "at_bats": 28,
+              "total_bases": 10,
+              "double_plays": 0,
+              "triple_plays": 0,
+              "batting_walks": 4,
+              "batting_strikeouts": 7,
+              "runners_left_on_base": 7,
+              "scoring_position_successes": 3,
+              "scoring_position_opportunities": 10
+            }
+          }
+        ]
+      },
+      "extra": {
+        "decision": null,
+        "decision_method": null
+      },
+      "retirement_info": null
+    }
+  ]
+}

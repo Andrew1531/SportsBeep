@@ -1,0 +1,103 @@
+<style>
+  .data-samples { max-width: 1160px; margin: 28px auto; padding: 0 18px 50px; color: #eef1fa; }
+  .data-samples h1 { font-size: 2rem; margin: 12px 0; }
+  .data-samples h2 { font-size: 1.4rem; margin: 0 0 10px; }
+  .data-samples h3 { font-size: 1.05rem; margin: 16px 0 8px; }
+  .data-samples .note { color: #bfc9df; line-height: 1.5; }
+  .data-samples a { color: #75d6ef; }
+  .data-samples .card { background: #1c2537; border: 1px solid #394966; border-radius: 12px; padding: 20px; margin: 22px 0; }
+  .data-samples .source { padding: 12px 0; border-top: 1px solid #394966; }
+  .data-samples .meta { color: #bfc9df; font-size: .93rem; margin: 5px 0; }
+  .data-samples .scroll { overflow-x: auto; width: 100%; }
+  .data-samples table { border-collapse: collapse; width: 100%; font-size: .9rem; white-space: nowrap; }
+  .data-samples th, .data-samples td { padding: 8px 10px; border-bottom: 1px solid #394966; text-align: left; }
+  .data-samples th { color: #a5ebfa; }
+  .data-samples summary { cursor: pointer; color: #75d6ef; padding: 10px 0; }
+  .data-samples .empty { color: #aeb9ca; }
+  @media (max-width: 600px) { .data-samples { margin-top: 14px; } .data-samples .card { padding: 14px; } }
+</style>
+<main class="data-samples">
+  <%= link_to '← Back to fantasy', fantasy_path %>
+  <h1>Historical MLB data preview</h1>
+  <p class="note">These are four provided 2024 OpticOdds samples, not current live games or fantasy scores.
+    The timestamps below are scheduled fixture starts; the files provide no observation timestamp.
+    A “live” status means the historical sample was captured during play, not that it is live now.
+    No picks, paid entries, balances or game records are changed here.</p>
+
+  <% @fixtures.each do |fixture_id, snapshots| %>
+    <% fixture = snapshots.first %>
+    <section class="card">
+      <h2><%= fixture.dig('teams', 'away', 'name') %> at <%= fixture.dig('teams', 'home', 'name') %></h2>
+      <div class="meta">Provider fixture <%= fixture_id %> · Game <%= fixture['game_id'] %> ·
+        Scheduled <%= fixture['start_date'] %> · Status <%= fixture['status'] %>
+        (<%= fixture['completed'] ? 'completed in source' : 'not completed in source' %>)</div>
+      <div class="meta">Team IDs: <%= fixture.dig('teams', 'away', 'id') %> / <%= fixture.dig('teams', 'home', 'id') %></div>
+      <% snapshots.each do |snapshot| %>
+        <div class="source">
+          <h3><%= snapshot['kind'].humanize %> · <%= snapshot['source'].humanize %></h3>
+          <% if snapshot['kind'] == 'player_results' %>
+            <p class="note"><%= snapshot['players'].length %> player records. Batting and pitching values are raw “all” period stats, not projected points.</p>
+            <div class="scroll"><table>
+              <thead><tr><th>Player / provider ID</th><th>Team</th><th>Pos</th><th>Status</th><th>H</th><th>R</th><th>RBI</th><th>HR</th><th>BB</th><th>IP</th><th>K</th><th>ER</th><th>H allowed</th></tr></thead>
+              <tbody>
+                <% snapshot['players'].each do |player| %>
+                  <% stats = player['periods'].find { |p| p['period'] == 'all' }&.fetch('stats') || {} %>
+                  <tr>
+                    <td><%= player['name'] %> <small>(<%= player['id'] %>)</small></td>
+                    <td><%= snapshot['teams'].values.find { |team| team['id'] == player['team_id'] }['name'] %></td>
+                    <td><%= player['position'] %></td><td><%= player['status'] %></td>
+                    <% %w[hits runs rbi home_runs batting_walks innings_pitched strikeouts earned_runs hits_allowed].each do |stat| %>
+                      <td><%= stats.key?(stat) ? stats[stat] : '—' %></td>
+                    <% end %>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table></div>
+            <details><summary>Original MLB scoring coverage and missing inputs (per player)</summary>
+              <p class="note">Only lossless mappings to original MLB stat IDs are shown. Missing inputs (including outs, ERA and wins where absent) are unknown, never zero. No fantasy point totals are calculated.</p>
+              <div class="scroll"><table><thead><tr><th>Player</th><th>Available stat IDs → values</th><th>Missing scoring stat IDs</th></tr></thead><tbody>
+              <% snapshot['players'].each do |player| %>
+                <tr><td><%= player['name'] %></td><td><%= player.dig('scoring', 'stat_ids').map { |id, value| "#{id} → #{value}" }.join(', ').presence || 'None' %></td>
+                  <td><%= player.dig('scoring', 'missing_stat_ids').join(', ') %></td></tr>
+              <% end %>
+              </tbody></table></div>
+            </details>
+            <details><summary>All original player stat keys and raw values</summary>
+              <div class="scroll"><table><thead><tr><th>Player</th><th>Period</th><th>Provider stats (unmapped keys retained)</th></tr></thead><tbody>
+              <% snapshot['players'].each do |player| %>
+                <% player['periods'].each do |period| %>
+                  <tr><td><%= player['name'] %></td><td><%= period['period'] %></td><td><%= period['stats'].map { |key, value| "#{key}: #{value.inspect}" }.join(' · ') %></td></tr>
+                <% end %>
+              <% end %>
+              </tbody></table></div>
+            </details>
+          <% elsif snapshot['kind'] == 'team_results' %>
+            <p class="note">Team results only; no player scoring inputs in this sample.
+              Inning <%= snapshot.dig('in_play', 'period') || '—' %> (<%= snapshot.dig('in_play', 'clock') || '—' %>).
+              Score at capture: <%= snapshot.dig('scores', 'away', 'total') %>–<%= snapshot.dig('scores', 'home', 'total') %>.
+              Neither is a final score.</p>
+            <div class="scroll"><table><thead><tr><th>Team</th><th>Period</th><th>Raw team stats</th></tr></thead><tbody>
+              <% %w[away home].each do |side| %>
+                <% snapshot['team_stats'][side].each do |period| %>
+                  <tr><td><%= snapshot.dig('teams', side, 'name') %></td><td><%= period['period'] %></td>
+                    <td><%= period['stats'].map { |key, value| "#{key}: #{value.inspect}" }.join(' · ') %></td></tr>
+                <% end %>
+              <% end %>
+            </tbody></table></div>
+          <% else %>
+            <p class="note"><%= snapshot['odds'].length %> historical odds records; not player stats or odds for either other fixture.</p>
+            <details><summary>Show <%= snapshot['odds'].length %> historical odds</summary>
+              <div class="scroll"><table><thead><tr><th>Sportsbook</th><th>Market</th><th>Selection</th><th>Opening price / line</th><th>Closing price / line</th><th>Provider odds ID</th></tr></thead><tbody>
+                <% snapshot['odds'].each do |odd| %>
+                  <tr><td><%= odd['sportsbook'] %></td><td><%= odd['market'] %></td><td><%= odd['name'] %></td>
+                    <td><%= odd.dig('olv', 'price') || '—' %> / <%= odd.dig('olv', 'points') || '—' %></td>
+                    <td><%= odd.dig('clv', 'price') || '—' %> / <%= odd.dig('clv', 'points') || '—' %></td><td><%= odd['id'] %></td></tr>
+                <% end %>
+              </tbody></table></div>
+            </details>
+          <% end %>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+</main>

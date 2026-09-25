@@ -1,0 +1,86 @@
+{
+  "data": [
+    {
+      "id": "F075D920FFCA",
+      "game_id": "81005-35183-2024-08-27-15",
+      "start_date": "2024-08-27T22:40:00Z",
+      "home_competitors": [
+        {
+          "id": "D4F7181B2181",
+          "name": "Cleveland Guardians",
+          "abbreviation": "CLE",
+          "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/cle.png"
+        }
+      ],
+      "away_competitors": [
+        {
+          "id": "E970E2EDDCAE",
+          "name": "Kansas City Royals",
+          "abbreviation": "KAN",
+          "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/kc.png"
+        }
+      ],
+      "home_team_display": "Cleveland Guardians",
+      "away_team_display": "Kansas City Royals",
+      "status": "completed",
+      "is_live": false,
+      "sport": {
+        "id": "baseball",
+        "name": "Baseball"
+      },
+      "league": {
+        "id": "mlb",
+        "name": "MLB"
+      },
+      "tournament": null,
+      "odds": [
+        {
+          "id": "81005-35183-2024-08-27-15:betmgm:total_runs:under",
+          "sportsbook": "BetMGM",
+          "market": "Total Runs",
+          "name": "under",
+          "is_main": true,
+          "selection": "",
+          "normalized_selection": "",
+          "market_id": "total_runs",
+          "selection_line": "under",
+          "player_id": null,
+          "team_id": null,
+          "deep_link_info": null,
+          "entries": [],
+          "olv": {
+            "price": -150,
+            "points": 9
+          },
+          "clv": {
+            "price": -110,
+            "points": 9
+          }
+        },
+        {
+          "id": "81005-35183-2024-08-27-15:betmgm:total_runs:over",
+          "sportsbook": "BetMGM",
+          "market": "Total Runs",
+          "name": "over",
+          "is_main": true,
+          "selection": "",
+          "normalized_selection": "",
+          "market_id": "total_runs",
+          "selection_line": "over",
+          "player_id": null,
+          "team_id": null,
+          "deep_link_info": null,
+          "entries": [],
+          "olv": {
+            "price": 115,
+            "points": 9
+          },
+          "clv": {
+            "price": -110,
+            "points": 9
+          }
+        }
+      ]
+    }
+  ]
+}

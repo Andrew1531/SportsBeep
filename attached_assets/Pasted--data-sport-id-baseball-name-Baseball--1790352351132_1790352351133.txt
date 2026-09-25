@@ -1,0 +1,1619 @@
+{
+  "data": [
+    {
+      "sport": {
+        "id": "baseball",
+        "name": "Baseball"
+      },
+      "league": {
+        "id": "mlb",
+        "name": "MLB"
+      },
+      "fixture": {
+        "id": "24E371425A5F",
+        "game_id": "40548-36707-2024-08-28-09",
+        "start_date": "2024-08-28T16:35:00Z",
+        "home_competitors": [
+          {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates",
+            "abbreviation": "PIT",
+            "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/pit.png"
+          }
+        ],
+        "away_competitors": [
+          {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs",
+            "abbreviation": "CHC",
+            "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/chc.png"
+          }
+        ],
+        "home_team_display": "Pittsburgh Pirates",
+        "away_team_display": "Chicago Cubs",
+        "status": "live",
+        "is_live": true
+      },
+      "results": [
+        {
+          "player": {
+            "id": "2E6E5540E308",
+            "name": "Alika Williams",
+            "position": "SS",
+            "number": 25
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 1,
+                "hits": 1,
+                "runs": 0,
+                "at_bats": 4,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 1,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 2,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 1,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 5,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "B528EEE48AF1",
+            "name": "Aroldis Chapman",
+            "position": "RP",
+            "number": 45
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 1,
+                "earned_runs": 3,
+                "pitch_count": 27,
+                "hits_allowed": 3,
+                "runs_allowed": 3,
+                "save_pitcher": 0,
+                "batters_faced": 7,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 8,
+                "pitching_walks": 1,
+                "doubles_allowed": 1,
+                "holding_pitcher": 0,
+                "innings_pitched": 1,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 6,
+                "pitching_shutout": 0,
+                "pitching_strikes": 19,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 1,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 1,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 3,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "27D9BD8EC0EA19A4",
+            "name": "Billy McKinney",
+            "position": "LF",
+            "number": 29
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 1,
+                "hits": 1,
+                "runs": 1,
+                "at_bats": 4,
+                "doubles": 1,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 2,
+                "stolen_bases": 0,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 3,
+                "batting_hit_by_pitch": 1,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 6,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "387CBDD5C84C",
+            "name": "Bryan Reynolds",
+            "position": "LF",
+            "number": 10
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 2,
+                "hits": 3,
+                "runs": 3,
+                "at_bats": 5,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 1,
+                "total_bases": 6,
+                "stolen_bases": 0,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 6,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "89F837F2C660",
+            "name": "Christian Bethancourt",
+            "position": "C",
+            "number": 60
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 7,
+                "hits": 3,
+                "runs": 3,
+                "at_bats": 5,
+                "doubles": 1,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 1,
+                "total_bases": 7,
+                "stolen_bases": 1,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 0,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 5,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "6E6E734074FF",
+            "name": "Cody Bellinger",
+            "position": "CF",
+            "number": 24
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 1,
+                "hits": 1,
+                "runs": 1,
+                "at_bats": 6,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 1,
+                "stolen_bases": 1,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 0,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 6,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "5E0D53CB20D7",
+            "name": "Connor Joe",
+            "position": "1B",
+            "number": 2
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 2,
+                "hits": 3,
+                "runs": 1,
+                "at_bats": 4,
+                "doubles": 1,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 1,
+                "total_bases": 7,
+                "stolen_bases": 0,
+                "batting_walks": 2,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 6,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "2736E840910B",
+            "name": "Daniel Palencia",
+            "position": "RP",
+            "number": 48
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 1,
+                "earned_runs": 0,
+                "pitch_count": 25,
+                "hits_allowed": 1,
+                "runs_allowed": 0,
+                "save_pitcher": 0,
+                "batters_faced": 6,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 14,
+                "pitching_walks": 3,
+                "doubles_allowed": 0,
+                "holding_pitcher": 0,
+                "innings_pitched": 1,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 3,
+                "pitching_shutout": 0,
+                "pitching_strikes": 11,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 0,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 0,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 2,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "A28606A623FB",
+            "name": "Dansby Swanson",
+            "position": "SS",
+            "number": 7
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 1,
+                "hits": 0,
+                "runs": 2,
+                "at_bats": 4,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 0,
+                "stolen_bases": 1,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 2,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 5,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "DBCEA2E3C27C",
+            "name": "David Bednar",
+            "position": "RP",
+            "number": 51
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 0,
+                "earned_runs": 5,
+                "pitch_count": 28,
+                "hits_allowed": 3,
+                "runs_allowed": 5,
+                "save_pitcher": 0,
+                "batters_faced": 7,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 13,
+                "pitching_walks": 2,
+                "doubles_allowed": 0,
+                "holding_pitcher": 0,
+                "innings_pitched": 0.2,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 5,
+                "pitching_shutout": 0,
+                "pitching_strikes": 15,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 1,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 1,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 0,
+                "pitching_intentional_walks": 1,
+                "batting_groundballs_allowed": 5,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "E7EF91993AD3",
+            "name": "Dennis Santana",
+            "position": "RP",
+            "number": 60
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 0,
+                "earned_runs": 0,
+                "pitch_count": 2,
+                "hits_allowed": 0,
+                "runs_allowed": 0,
+                "save_pitcher": 0,
+                "batters_faced": 1,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 0,
+                "pitching_walks": 0,
+                "doubles_allowed": 0,
+                "holding_pitcher": 1,
+                "innings_pitched": 0.2,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 1,
+                "pitching_shutout": 0,
+                "pitching_strikes": 2,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 0,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 0,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 1,
+                "ground_into_double_play_allowed": 1
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "CEAE4191C8ED",
+            "name": "Drew Smyly",
+            "position": "RP",
+            "number": 11
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 5,
+                "earned_runs": 1,
+                "pitch_count": 27,
+                "hits_allowed": 3,
+                "runs_allowed": 2,
+                "save_pitcher": 0,
+                "batters_faced": 9,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 6,
+                "pitching_walks": 0,
+                "doubles_allowed": 1,
+                "holding_pitcher": 0,
+                "innings_pitched": 2,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 8,
+                "pitching_shutout": 0,
+                "pitching_strikes": 21,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 1,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 1,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 0,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 2,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "B0A091CA5389",
+            "name": "Ethan Roberts",
+            "position": "RP",
+            "number": 39
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 1,
+                "earned_runs": 2,
+                "pitch_count": 29,
+                "hits_allowed": 3,
+                "runs_allowed": 2,
+                "save_pitcher": 0,
+                "batters_faced": 9,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 11,
+                "pitching_walks": 1,
+                "doubles_allowed": 0,
+                "holding_pitcher": 0,
+                "innings_pitched": 1.1,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 7,
+                "pitching_shutout": 0,
+                "pitching_strikes": 18,
+                "home_runs_allowed": 1,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 1,
+                "stolen_bases_allowed": 0,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 1,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 2,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "D1D32F943335",
+            "name": "Henry Davis",
+            "position": "C",
+            "number": 32
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 0,
+                "runs": 0,
+                "at_bats": 1,
+                "doubles": 0,
+                "starter": 0,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 0,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 0,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 1,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "9D928FE0D483",
+            "name": "Ian Happ",
+            "position": "LF",
+            "number": 8
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 2,
+                "hits": 3,
+                "runs": 2,
+                "at_bats": 4,
+                "doubles": 1,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 4,
+                "stolen_bases": 0,
+                "batting_walks": 2,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 0,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 6,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "CABCC3C42356",
+            "name": "Isaac Paredes",
+            "position": "3B",
+            "number": 17
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 1,
+                "runs": 0,
+                "at_bats": 4,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 1,
+                "stolen_bases": 0,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 5,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "C2EB7C7AB4D1",
+            "name": "Isiah Kiner-Falefa",
+            "position": "3B",
+            "number": 7
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 1,
+                "hits": 0,
+                "runs": 0,
+                "at_bats": 5,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 0,
+                "stolen_bases": 0,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 2,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 6,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "A37B051426D0",
+            "name": "Jalen Beeks",
+            "position": "RP",
+            "number": 68
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 0,
+                "earned_runs": 1,
+                "pitch_count": 14,
+                "hits_allowed": 3,
+                "runs_allowed": 1,
+                "save_pitcher": 0,
+                "batters_faced": 4,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 7,
+                "pitching_walks": 0,
+                "doubles_allowed": 0,
+                "holding_pitcher": 0,
+                "innings_pitched": 0.1,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 4,
+                "pitching_shutout": 0,
+                "pitching_strikes": 7,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 0,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 1,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 0,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "6266E41BE40F",
+            "name": "Jared Triolo",
+            "position": "2B",
+            "number": 19
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 2,
+                "runs": 1,
+                "at_bats": 5,
+                "doubles": 1,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 3,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 5,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "37DC6697BA85",
+            "name": "Kyle Hendricks",
+            "position": "SP",
+            "number": 28
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 1,
+                "strikeouts": 2,
+                "earned_runs": 6,
+                "pitch_count": 70,
+                "hits_allowed": 8,
+                "runs_allowed": 6,
+                "save_pitcher": 0,
+                "batters_faced": 16,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 32,
+                "pitching_walks": 3,
+                "doubles_allowed": 3,
+                "holding_pitcher": 0,
+                "innings_pitched": 1.2,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 13,
+                "pitching_shutout": 0,
+                "pitching_strikes": 38,
+                "home_runs_allowed": 1,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 0,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 5,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 3,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "472828F9D628",
+            "name": "Kyle Nicolas",
+            "position": "RP",
+            "number": 62
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 1,
+                "earned_runs": 2,
+                "pitch_count": 37,
+                "hits_allowed": 2,
+                "runs_allowed": 2,
+                "save_pitcher": 0,
+                "batters_faced": 9,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 19,
+                "pitching_walks": 3,
+                "doubles_allowed": 0,
+                "holding_pitcher": 0,
+                "innings_pitched": 1.1,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 6,
+                "pitching_shutout": 0,
+                "pitching_strikes": 18,
+                "home_runs_allowed": 1,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 0,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 1,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 2,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 1,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "8A5D64542ED9",
+            "name": "Luis Vazquez",
+            "position": "SS",
+            "number": 12
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 0,
+                "runs": 1,
+                "at_bats": 0,
+                "doubles": 0,
+                "starter": 0,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 0,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 0,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "A60C468470C9",
+            "name": "Michael A. Taylor",
+            "position": "CF",
+            "number": 18
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 0,
+                "runs": 0,
+                "at_bats": 1,
+                "doubles": 0,
+                "starter": 0,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 0,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 1,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "4C8060AE3A89",
+            "name": "Michael Busch",
+            "position": "1B",
+            "number": 29
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 0,
+                "runs": 0,
+                "at_bats": 4,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 0,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 2,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 4,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "EE4FD49CE835",
+            "name": "Mike Tauchman",
+            "position": "RF",
+            "number": 40
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 1,
+                "hits": 1,
+                "runs": 0,
+                "at_bats": 2,
+                "doubles": 0,
+                "starter": 0,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 1,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 0,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 2,
+                "batting_ground_into_double_play": 1
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "B1178630A9C9",
+            "name": "Nico Hoerner",
+            "position": "2B",
+            "number": 2
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 1,
+                "runs": 1,
+                "at_bats": 4,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 1,
+                "stolen_bases": 1,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 5,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "547E10515707",
+            "name": "Oneil Cruz",
+            "position": "SS",
+            "number": 15
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 2,
+                "runs": 2,
+                "at_bats": 5,
+                "doubles": 1,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 3,
+                "stolen_bases": 1,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 6,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "19F08A683CCD",
+            "name": "Patrick Wisdom",
+            "position": "1B",
+            "number": 16
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 0,
+                "runs": 0,
+                "at_bats": 0,
+                "doubles": 0,
+                "starter": 0,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 0,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 0,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "FDD4A6132D6E",
+            "name": "Paul Skenes",
+            "position": "SP",
+            "number": 30
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 1,
+                "strikeouts": 6,
+                "earned_runs": 2,
+                "pitch_count": 82,
+                "hits_allowed": 5,
+                "runs_allowed": 3,
+                "save_pitcher": 0,
+                "batters_faced": 21,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 30,
+                "pitching_walks": 1,
+                "doubles_allowed": 1,
+                "holding_pitcher": 0,
+                "innings_pitched": 5,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 20,
+                "pitching_shutout": 0,
+                "pitching_strikes": 53,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 2,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 2,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 8,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "5A596340C059",
+            "name": "Pete Crow-Armstrong",
+            "position": "CF",
+            "number": 52
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 1,
+                "hits": 4,
+                "runs": 4,
+                "at_bats": 4,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 4,
+                "stolen_bases": 0,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 0,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 1,
+                "batting_plate_appearances": 5,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "EA2FCB2544CA",
+            "name": "Porter Hodge",
+            "position": "RP",
+            "number": 37
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 3,
+                "earned_runs": 0,
+                "pitch_count": 36,
+                "hits_allowed": 1,
+                "runs_allowed": 0,
+                "save_pitcher": 0,
+                "batters_faced": 8,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 15,
+                "pitching_walks": 1,
+                "doubles_allowed": 0,
+                "holding_pitcher": 0,
+                "innings_pitched": 2,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 7,
+                "pitching_shutout": 0,
+                "pitching_strikes": 21,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 0,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 1,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 1,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "6C4438621DB1",
+            "name": "Rowdy Tellez",
+            "position": "1B",
+            "number": 44
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 2,
+                "hits": 3,
+                "runs": 1,
+                "at_bats": 5,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 3,
+                "stolen_bases": 0,
+                "batting_walks": 0,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 5,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "A79EDA2441E9",
+            "name": "Seiya Suzuki",
+            "position": "RF",
+            "number": 27
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 1,
+                "hits": 2,
+                "runs": 0,
+                "at_bats": 5,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 2,
+                "stolen_bases": 0,
+                "batting_walks": 1,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 2,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 6,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "E85E0444718E",
+            "name": "Tyson Miller",
+            "position": "RP",
+            "number": 49
+          },
+          "team": {
+            "id": "5045D954DFF8",
+            "name": "Chicago Cubs"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "starter": 0,
+                "strikeouts": 2,
+                "earned_runs": 0,
+                "pitch_count": 15,
+                "hits_allowed": 0,
+                "runs_allowed": 0,
+                "save_pitcher": 0,
+                "batters_faced": 3,
+                "complete_game": 0,
+                "losing_pitcher": 0,
+                "pitching_balks": 0,
+                "pitching_balls": 5,
+                "pitching_walks": 0,
+                "doubles_allowed": 0,
+                "holding_pitcher": 0,
+                "innings_pitched": 1,
+                "triples_allowed": 0,
+                "winning_pitcher": 0,
+                "opponent_at_bats": 3,
+                "pitching_shutout": 0,
+                "pitching_strikes": 10,
+                "home_runs_allowed": 0,
+                "pitching_pickoffs": 0,
+                "blown_save_pitcher": 0,
+                "pitching_no_hitter": 0,
+                "pitching_hit_batsmen": 0,
+                "stolen_bases_allowed": 0,
+                "pitching_perfect_game": 0,
+                "pitching_wild_pitches": 0,
+                "sacrifice_hits_allowed": 0,
+                "sacrifice_flies_allowed": 0,
+                "batting_flyballs_allowed": 1,
+                "pitching_intentional_walks": 0,
+                "batting_groundballs_allowed": 0,
+                "ground_into_double_play_allowed": 0
+              }
+            }
+          ]
+        },
+        {
+          "player": {
+            "id": "98DE2FDB1B5C",
+            "name": "Yasmani Grandal",
+            "position": "C",
+            "number": 6
+          },
+          "team": {
+            "id": "98CE61698342",
+            "name": "Pittsburgh Pirates"
+          },
+          "status": "live",
+          "stats": [
+            {
+              "period": "all",
+              "stats": {
+                "rbi": 0,
+                "hits": 1,
+                "runs": 1,
+                "at_bats": 2,
+                "doubles": 0,
+                "starter": 1,
+                "triples": 0,
+                "home_runs": 0,
+                "total_bases": 1,
+                "stolen_bases": 0,
+                "batting_walks": 2,
+                "caught_stealing": 0,
+                "batting_picked_off": 0,
+                "batting_strikeouts": 1,
+                "batting_hit_by_pitch": 0,
+                "batting_sacrifice_hits": 0,
+                "batting_sacrifice_flies": 0,
+                "batting_intentional_walks": 0,
+                "batting_plate_appearances": 4,
+                "batting_ground_into_double_play": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

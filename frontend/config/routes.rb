@@ -37,6 +37,7 @@ SportsbeepWeb::Application.routes.draw do
   post 'sportsbook/place_wager', to: 'sportsbook#place_wager', as: :place_wager
   get 'my-bets', to: 'sportsbook#my_bets', as: :my_bets
   get 'fantasy', to: 'fantasy#index', as: :fantasy
+  get 'fantasy/data-samples', to: 'sports_data_samples#index', as: :fantasy_data_samples
   get  'fantasy/game/:id', to: 'fantasy#show', as: :fantasy_game
   post 'fantasy/enter', to: 'fantasy#enter_contest', as: :fantasy_enter_contest
   get  'fantasy/my-entries', to: 'fantasy#my_entries', as: :my_entries

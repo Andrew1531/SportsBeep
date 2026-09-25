@@ -9,3 +9,4 @@
 - [Rails test isolation](rails-test-isolation.md) — inherited database URLs can override SQLite test settings; isolate test commands and avoid app boot during read-only financial audits.
 - [Rails test doubles](rails-test-doubles.md) — wrap callable service doubles in factory lambdas; explicitly load Minitest mocking helpers.
 - [Workspace process IDs](workspace-process-id-reuse.md) — resumed workspaces can reuse an old Rails PID for an editor process; verify process identity, not just PID existence.
+- [Fantasy data transition](fantasy-data-transition.md) — use supplied samples now; later replace the data provider, not original gameplay; keep sample play separate from money.
