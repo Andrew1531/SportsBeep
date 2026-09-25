@@ -9,6 +9,8 @@ class BettableGame
   end
 
   def call
+    return if SportsbookOnly.active?
+
     determine_league_picks
     assign_default_pools if @game.pools.empty?
     create_contest_templates_for_each_pool

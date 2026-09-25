@@ -1,4 +1,6 @@
 class StatTopic < ActiveRecord::Base
+  before_save { SportsbookOnly.reject! }
+  before_destroy { SportsbookOnly.reject! }
   has_many :questions, foreign_key: :topic_id, dependent: :destroy
 
   before_validation -> { self.comparison = comparison.to_s }

@@ -1,4 +1,6 @@
 class TicketSquad < ActiveRecord::Base
+  before_save { SportsbookOnly.reject! }
+  before_destroy { SportsbookOnly.reject! }
   belongs_to :ticket, touch: true
   belongs_to :team, touch: true
 

@@ -8,6 +8,7 @@ class FinalizeContest
   end
 
   def call
+    SportsbookOnly.reject!
     tickets = order_tickets_by_score_in(contest)
     tickets.each_with_index do |ticket, n|
       ticket.update_column :placing, (n + 1)

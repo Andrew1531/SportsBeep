@@ -4,7 +4,7 @@
                      when 'Mlb::Game' then admin_mlb_game_path(game)
                      when 'Nfl::Game' then admin_nfl_game_path(game)
                      end %>
-<div class="page-header"><h1>Fantasy entry #<%= @entry.id %> <small>read-only</small></h1></div>
+<div class="page-header"><h1>Historical fantasy entry #<%= @entry.id %> <small>read-only audit record, not a sportsbook wager</small></h1></div>
 <p><%= link_to '← Activity report', admin_activity_path(token: token ? token.id : 'legacy'), class: 'btn btn-default' %>
   <% if @entry.user %><%= link_to 'Player', admin_user_path(@entry.user), class: 'btn btn-default' %> <%= link_to 'Wallet', admin_wallet_path(@entry.user), class: 'btn btn-default' %><% end %>
   <% if game_admin_path %><%= link_to 'Admin game', game_admin_path, class: 'btn btn-default' %><% end %></p>

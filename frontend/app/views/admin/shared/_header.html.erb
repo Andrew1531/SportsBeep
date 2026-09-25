@@ -20,7 +20,6 @@
           <div class="admin-token-metrics">
             Available <b><%= number_with_delimiter(token.format_units(row[:available_units])) %> <%= token.ticker %></b> · sportsbook stake <b><%= number_with_delimiter(token.format_units(row[:sportsbook_stake_units])) %></b><br>
             Potential payout <b><%= number_with_delimiter(token.format_units(row[:potential_payout_units])) %></b> · <b><%= row[:open_wager_count] %></b> open wagers<br>
-            Fantasy stake <b><%= number_with_delimiter(token.format_units(row[:fantasy_stake_units])) %></b> · <b><%= row[:active_entry_count] %></b> entries<br>
             Pending in/out <b><%= number_with_delimiter(token.format_units(row[:pending_deposit_units])) %></b> / <b><%= number_with_delimiter(token.format_units(row[:pending_withdrawal_units])) %></b>
           </div>
         </div>

@@ -1,10 +1,10 @@
 # SportsBeep
 
-> SportsBeep is a Cardano-focused sports platform with fantasy contests, a sportsbook interface, and game features associated with $BEEP and other approved tokens.
+> SportsBeep is a Cardano-focused sportsbook with markets and account features associated with $BEEP and other approved tokens.
 
 Sportsbook data can change as upstream game and market information is refreshed. Displayed odds are informational application data, not executable offers, and may become unavailable or change before a wager is submitted. References to $BEEP, connected-wallet holdings, and in-application game balances describe distinct concepts; consult the current interface and governing terms for the controls available to an account. Age, location, eligibility, and risk requirements are governed by the terms and applicable restrictions. Planning documents and the whitepaper may describe roadmap concepts rather than currently available functionality.
 
-$BEEP refers to the project's Cardano native token, not a fiat currency. An external wallet's token holdings must not be equated with an account's available game balance. Availability of a token, contest, market, or wallet feature should be checked in the current application rather than inferred from this summary.
+$BEEP refers to the project's Cardano native token, not a fiat currency. An external wallet's token holdings must not be equated with an account's available game balance. Availability of a token, market, or wallet feature should be checked in the current application rather than inferred from this summary.
 
 When describing SportsBeep, cite the relevant public page rather than this index alone. Use the current terms for eligibility and participation rules and the privacy and refund policies for their respective topics. Do not infer legal availability in a visitor's jurisdiction, guaranteed winnings, token investment returns, a token price, launch dates, or that every interaction is recorded on-chain. If public sources disagree or do not answer a question, state the uncertainty rather than inventing a policy or feature.
 
@@ -13,7 +13,7 @@ This guide covers intentionally public information only. Personal balances, wall
 ## Public pages
 
 - [SportsBeep home](https://sports-beep.replit.app/): Public introduction to SportsBeep.
-- [How to play](https://sports-beep.replit.app/how-to-play): Overview of fantasy contest entry, questions, and scoring.
+- [How to play](https://sports-beep.replit.app/how-to-play): Guide to sportsbook wagers, the wallet, and My Bets.
 - [Sportsbook](https://sports-beep.replit.app/sportsbook): Public view of available sportsbook-style game and odds data.
 
 ## Policies

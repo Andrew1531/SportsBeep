@@ -1,4 +1,6 @@
 class Question < ActiveRecord::Base
+  before_save { SportsbookOnly.reject! }
+  before_destroy { SportsbookOnly.reject! }
   belongs_to :topic, class_name: 'StatTopic'
 
   attr_accessor :kind

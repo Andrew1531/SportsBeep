@@ -7,7 +7,7 @@
 
   <div class="alert alert-warning">
     Balances, stakes, and maximum recorded payouts are separate ledger facts, not net solvency, profit, or funds free to pay.
-    Fantasy entry stakes are shown separately. No live score or inferred game state is displayed.
+    Historical fantasy entries remain available below as read-only audit records, not sportsbook wagers. No live score or inferred game state is displayed.
     <% if legacy %><strong>Legacy rows have no approved token identity. Their cents are an unknown denomination and are not BEEP or USD.</strong><% end %>
   </div>
 
@@ -37,8 +37,7 @@
     <% [
       ['Available player balance', legacy ? 'Not attributable for legacy rows' : amount.call(@report[:totals][:available_units])],
       ['Open sportsbook stake', amount.call(@report[:totals][:open_wager_stake])],
-      ['Potential max sportsbook payout', amount.call(@report[:totals][:open_potential_payout])],
-      ['Active fantasy entry stake', legacy ? 'Unknown (no legacy fee column)' : amount.call(@report[:totals][:active_entry_stake])]
+      ['Potential max sportsbook payout', amount.call(@report[:totals][:open_potential_payout])]
     ].each do |title, value| %>
       <div class="col-sm-3"><div class="panel panel-info"><div class="panel-heading"><strong><%= title %></strong></div><div class="panel-body"><%= value %></div></div></div>
     <% end %>
@@ -57,23 +56,6 @@
               <td><%= link_to 'wallet', admin_wallet_path(row[:user]), class: 'btn btn-xs btn-default' %></td>
             </tr><% end %>
             <% if @report[:balance_leaders].empty? %><tr><td colspan="3" class="text-center text-muted">No balances for this exact asset.</td></tr><% end %>
-          </tbody>
-        </table></div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading"><strong>Leaders by currently open stake</strong></div>
-        <div class="table-responsive"><table class="table table-condensed table-striped">
-          <thead><tr><th>Player</th><th class="text-right">Sportsbook</th><th class="text-right">Fantasy</th><th class="text-right">Total (same token only)</th></tr></thead>
-          <tbody>
-            <% @report[:stake_leaders].each do |row| %><tr>
-              <td><%= link_to(row[:user].username.presence || "User ##{row[:user].id}", admin_user_path(row[:user])) %><br><small><%= row[:user].email %></small></td>
-              <td class="text-right"><code><%= amount.call(row[:wager_units]) %></code></td>
-              <td class="text-right"><%= legacy ? 'unknown' : content_tag(:code, amount.call(row[:fantasy_units])) %></td>
-              <td class="text-right"><%= legacy ? 'not combined' : content_tag(:code, amount.call(row[:total_units])) %></td>
-            </tr><% end %>
-            <% if @report[:stake_leaders].empty? %><tr><td colspan="4" class="text-center text-muted">No currently open stake.</td></tr><% end %>
           </tbody>
         </table></div>
       </div>
@@ -123,7 +105,7 @@
   </div>
 
   <div class="panel panel-default">
-    <div class="panel-heading"><strong>Fantasy contest grouping (stored records only)</strong></div>
+    <div class="panel-heading"><strong>Historical fantasy contest audit (stored records only, not sportsbook)</strong></div>
     <div class="table-responsive"><table class="table table-condensed table-striped">
       <thead><tr><th>Contest / game</th><th>Sport</th><th>Teams</th><th>Scheduled start</th><th>Stored status</th><th class="text-right">Participants</th><th class="text-right">Entries</th><th class="text-right">Entry stake</th></tr></thead>
       <tbody>
@@ -142,7 +124,7 @@
   </div>
 
   <div class="panel panel-success">
-    <div class="panel-heading"><strong>Fantasy contest entries (<%= @report[:entry_count] %>)</strong> — status is the stored contest/game state</div>
+    <div class="panel-heading"><strong>Historical fantasy entries (<%= @report[:entry_count] %>, read-only)</strong> — status is the stored contest/game state</div>
     <div class="table-responsive"><table class="table table-condensed table-striped">
       <thead><tr><th>Entry / player</th><th>Contest / game</th><th>Teams</th><th>Start</th><th>Status</th><th class="text-right">Entry fee</th><th class="text-right">Score / placing</th><th>Created</th></tr></thead>
       <tbody>

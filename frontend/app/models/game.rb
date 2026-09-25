@@ -25,7 +25,7 @@ class Game < ActiveRecord::Base
 
   validates :home_team, presence: true
   validates :away_team, presence: true
-  validates :pools, length: { minimum: 1 }, if: :bettable?
+  # Pools were required by retired fantasy contests, not sportsbook games.
 
   scope :bettable, -> { where bettable: true }
   scope :live,     -> { where status: [:live, :ended] }

@@ -1,6 +1,7 @@
 namespace :fantasy do
   desc 'Set up MLB fantasy game data (game dates, pools, templates, contests)'
   task setup: :environment do
+    SportsbookOnly.reject!
     puts 'Setting up fantasy game data...'
 
     # Fix game dates — spread across next 14 days

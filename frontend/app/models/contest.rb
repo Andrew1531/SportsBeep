@@ -1,4 +1,6 @@
 class Contest < ActiveRecord::Base
+  before_save { SportsbookOnly.reject! }
+  before_destroy { SportsbookOnly.reject! }
   belongs_to :template, class_name: 'ContestTemplate'
 
   has_one :game, through: :template

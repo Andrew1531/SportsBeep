@@ -1,148 +1,55 @@
 <div class="container" style="padding-top: 30px; padding-bottom: 60px;">
   <div class="row">
     <div class="col-xs-12 col-md-10 col-md-offset-1">
-
       <div class="text-center" style="margin-bottom: 40px;">
         <h1 style="color: #e74c3c; font-weight: bold;">How to Play SportsBeep</h1>
-        <p class="lead text-muted">Pick your players. Build your team. Win $BEEP tokens.</p>
+        <p class="lead text-muted">Browse markets, review your wager, and track your bets.</p>
       </div>
 
       <div class="panel panel-default" style="margin-bottom: 25px;">
         <div class="panel-heading" style="background-color: #34495e; color: white;">
-          <h3 class="panel-title"><span class="badge" style="background-color: #e74c3c; margin-right: 10px;">1</span> Create Your Account</h3>
+          <h3 class="panel-title">1. Create an account</h3>
         </div>
         <div class="panel-body">
-          <p>Sign up for a free SportsBeep account. During registration, you can optionally link your <strong>Cardano wallet address</strong> to receive $BEEP token rewards directly on the blockchain.</p>
-          <ul>
-            <li>Choose a unique username</li>
-            <li>Provide your email address</li>
-            <li>Optionally add your Cardano wallet address for $BEEP token payouts</li>
-          </ul>
+          <p><%= link_to 'Sign up', new_user_registration_path %> or log in to use account features. Participation is subject to age, location, and other applicable restrictions; check the <%= link_to 'Terms of Service', '/tos' %>.</p>
         </div>
       </div>
 
       <div class="panel panel-default" style="margin-bottom: 25px;">
         <div class="panel-heading" style="background-color: #34495e; color: white;">
-          <h3 class="panel-title"><span class="badge" style="background-color: #e74c3c; margin-right: 10px;">2</span> Browse Available Contests</h3>
+          <h3 class="panel-title">2. Check your wallet and approved tokens</h3>
         </div>
         <div class="panel-body">
-          <p>Check out the available contests for <strong>MLB</strong> and <strong>NFL</strong> games. Each contest has:</p>
-          <ul>
-            <li><strong>Entry Fee</strong> &ndash; The cost to enter (in $BEEP tokens)</li>
-            <li><strong>Prize Pool</strong> &ndash; Total prizes available to winners</li>
-            <li><strong>Max Entries</strong> &ndash; How many players can join</li>
-            <li><strong>Start Time</strong> &ndash; When the contest locks and games begin</li>
-          </ul>
+          <p>Your <%= link_to 'Wallet', wallet_path %> shows account balances and transaction activity. A connected external wallet's holdings are not the same as your available in-app balance. Use the currently approved tokens shown in the app; review transaction status before wagering.</p>
         </div>
       </div>
 
       <div class="panel panel-default" style="margin-bottom: 25px;">
         <div class="panel-heading" style="background-color: #34495e; color: white;">
-          <h3 class="panel-title"><span class="badge" style="background-color: #e74c3c; margin-right: 10px;">3</span> Build Your Team</h3>
+          <h3 class="panel-title">3. Browse the sportsbook</h3>
         </div>
         <div class="panel-body">
-          <p>Select real players from that day's games to fill your roster. Each contest has position requirements you need to fill:</p>
-          <div class="row">
-            <div class="col-xs-12 col-sm-6">
-              <h4 style="color: #e74c3c;">MLB Roster</h4>
-              <ul>
-                <li>Pitcher (SP/CP/RP)</li>
-                <li>Catcher (C)</li>
-                <li>Corner Infielder (1B/3B)</li>
-                <li>Middle Infielder (2B/SS)</li>
-                <li>Outfielder (LF/CF/RF)</li>
-                <li>Flex Player (any position)</li>
-              </ul>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <h4 style="color: #e74c3c;">NFL Roster</h4>
-              <ul>
-                <li>Quarterback (QB)</li>
-                <li>Running Back (RB)</li>
-                <li>Wide Receiver (WR)</li>
-                <li>Tight End (TE)</li>
-                <li>Kicker (K)</li>
-                <li>Flex Player (any position)</li>
-              </ul>
-            </div>
-          </div>
+          <p>Visit the <%= link_to 'Sportsbook', sportsbook_path %> to browse available games and markets. Lines and displayed odds can change or become unavailable before a wager is submitted.</p>
         </div>
       </div>
 
       <div class="panel panel-default" style="margin-bottom: 25px;">
         <div class="panel-heading" style="background-color: #34495e; color: white;">
-          <h3 class="panel-title"><span class="badge" style="background-color: #e74c3c; margin-right: 10px;">4</span> Answer Timed Questions</h3>
+          <h3 class="panel-title">4. Review and place a wager</h3>
         </div>
         <div class="panel-body">
-          <p>What makes SportsBeep unique is our <strong>timed question system</strong>. After selecting your team, you'll answer sports trivia and prediction questions under time pressure.</p>
-          <ul>
-            <li>Each question has a countdown timer</li>
-            <li>Faster correct answers earn more points</li>
-            <li>Questions test your sports knowledge and prediction skills</li>
-            <li>Your total score combines player performance + question points</li>
-          </ul>
+          <p>Select a market, then check the selection, odds, approved token, stake, and displayed potential return in the bet slip before submitting. Wagers involve risk of loss; displayed potential returns are not guaranteed.</p>
         </div>
       </div>
 
       <div class="panel panel-default" style="margin-bottom: 25px;">
         <div class="panel-heading" style="background-color: #34495e; color: white;">
-          <h3 class="panel-title"><span class="badge" style="background-color: #e74c3c; margin-right: 10px;">5</span> Track &amp; Win</h3>
+          <h3 class="panel-title">5. Track your bets</h3>
         </div>
         <div class="panel-body">
-          <p>Once the games start, watch your players rack up points in real time on the leaderboard.</p>
-          <ul>
-            <li><strong>Live Scoring</strong> &ndash; See your points update as games progress</li>
-            <li><strong>Leaderboards</strong> &ndash; Track your ranking against other players</li>
-            <li><strong>Payouts</strong> &ndash; Winners receive $BEEP tokens to their wallet</li>
-            <li><strong>Blockchain Verified</strong> &ndash; All transactions recorded on Cardano</li>
-          </ul>
+          <p>Use <%= link_to 'My Bets', my_bets_path %> to review recorded wagers and their current status. A game ending does not by itself mean a wager has been settled or a payout has been credited. Contact support@sportsbeep.com if a result or transaction needs review.</p>
         </div>
       </div>
-
-      <div class="panel panel-default" style="margin-bottom: 25px;">
-        <div class="panel-heading" style="background-color: #27ae60; color: white;">
-          <h3 class="panel-title">Scoring System</h3>
-        </div>
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-xs-12 col-sm-6">
-              <h4 style="color: #e74c3c;">MLB Batting</h4>
-              <table class="table table-condensed table-striped">
-                <tr><td>Single</td><td class="text-right"><strong>+1 pt</strong></td></tr>
-                <tr><td>Double</td><td class="text-right"><strong>+2 pts</strong></td></tr>
-                <tr><td>Triple</td><td class="text-right"><strong>+3 pts</strong></td></tr>
-                <tr><td>Home Run</td><td class="text-right"><strong>+4 pts</strong></td></tr>
-                <tr><td>RBI</td><td class="text-right"><strong>+1 pt</strong></td></tr>
-                <tr><td>Run Scored</td><td class="text-right"><strong>+1 pt</strong></td></tr>
-                <tr><td>Walk / HBP</td><td class="text-right"><strong>+1 pt</strong></td></tr>
-                <tr><td>Stolen Base</td><td class="text-right"><strong>+2 pts</strong></td></tr>
-                <tr><td>Out</td><td class="text-right"><strong>-0.25 pts</strong></td></tr>
-              </table>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <h4 style="color: #e74c3c;">MLB Pitching</h4>
-              <table class="table table-condensed table-striped">
-                <tr><td>Win</td><td class="text-right"><strong>+4 pts</strong></td></tr>
-                <tr><td>Strikeout</td><td class="text-right"><strong>+1 pt</strong></td></tr>
-                <tr><td>Inning Pitched</td><td class="text-right"><strong>+1 pt</strong></td></tr>
-                <tr><td>Walk (BB)</td><td class="text-right"><strong>-0.25 pts</strong></td></tr>
-                <tr><td>Hit Allowed</td><td class="text-right"><strong>-0.25 pts</strong></td></tr>
-                <tr><td>ERA</td><td class="text-right"><strong>-1 pt</strong></td></tr>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="well text-center" style="background-color: #34495e; color: white; border: none; padding: 30px;">
-        <h3>Ready to Play?</h3>
-        <p>Create your free account and start competing today!</p>
-        <div style="margin-top: 15px;">
-          <%= link_to 'Sign Up Now', new_user_registration_path, class: 'btn btn-danger btn-lg', style: 'margin-right: 10px;' %>
-          <%= link_to 'Login', new_user_session_path, class: 'btn btn-default btn-lg' %>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>

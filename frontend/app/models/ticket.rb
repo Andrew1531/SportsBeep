@@ -1,5 +1,9 @@
 class Ticket < ActiveRecord::Base
 
+  before_validation { SportsbookOnly.reject! }
+  before_save { SportsbookOnly.reject! }
+  before_destroy { SportsbookOnly.reject! }
+
   attr_accessor :game, :pool, :roster
 
   belongs_to :user

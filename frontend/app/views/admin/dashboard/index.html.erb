@@ -17,26 +17,6 @@
     </div>
 
     <div class="col-md-3">
-      <div class="panel panel-success">
-        <div class="panel-body text-center">
-          <h2><%= number_with_delimiter(@stats[:active_contests]) %></h2>
-          <p>Active Contests</p>
-          <%= link_to 'View', admin_mlb_games_path, class: 'btn btn-sm btn-default' %>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="panel panel-info">
-        <div class="panel-body text-center">
-          <h2><%= number_with_delimiter(@stats[:mlb_games] + @stats[:nfl_games]) %></h2>
-          <p>Total Games</p>
-          <small class="text-muted">MLB: <%= @stats[:mlb_games] %> | NFL: <%= @stats[:nfl_games] %></small>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3">
       <div class="panel panel-warning">
         <div class="panel-body text-center">
           <h2><%= number_with_delimiter(@stats[:promo_codes]) %></h2>
@@ -55,8 +35,7 @@
           <h3 class="panel-title">Quick Actions</h3>
         </div>
         <div class="panel-body">
-          <%= link_to 'View MLB Games', admin_mlb_games_path, class: 'btn btn-primary' %>
-          <%= link_to 'View NFL Games', admin_nfl_games_path, class: 'btn btn-primary' %>
+          <%= link_to 'Game activity', admin_activity_path, class: 'btn btn-primary' %>
           <%= link_to 'Send Push Notification', new_admin_push_path, class: 'btn btn-info' %>
           <%= link_to 'Create Promo Code', new_admin_promo_code_path, class: 'btn btn-success' %>
           <%= link_to 'Add Administrator', new_admin_administrator_path, class: 'btn btn-warning' %>
@@ -137,34 +116,6 @@
     </div>
   </div>
 
-  <!-- Sport Management -->
-  <div class="row">
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">⚾ MLB Management</h3>
-        </div>
-        <div class="panel-body">
-          <p><strong><%= @stats[:mlb_games] %></strong> total games</p>
-          <%= link_to 'Manage MLB Games', admin_mlb_games_path, class: 'btn btn-primary' %>
-          <%= link_to 'Manage MLB Questions', admin_mlb_questions_path, class: 'btn btn-default' %>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">🏈 NFL Management</h3>
-        </div>
-        <div class="panel-body">
-          <p><strong><%= @stats[:nfl_games] %></strong> total games</p>
-          <%= link_to 'Manage NFL Games', admin_nfl_games_path, class: 'btn btn-primary' %>
-          <%= link_to 'Manage NFL Questions', admin_nfl_questions_path, class: 'btn btn-default' %>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <style>

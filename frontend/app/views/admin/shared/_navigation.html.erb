@@ -16,13 +16,5 @@
         <%= link_to 'Promo codes', admin_promo_codes_path %><%= link_to 'Swap assets', admin_swap_assets_path %><%= link_to 'Settings', admin_setting_path %>
       </div>
     </div>
-    <div class="admin-nav-section">
-      <span class="admin-nav-label">Legacy fantasy tools — sport-specific</span>
-      <div class="admin-nav-links">
-        <%= link_to 'MLB management', admin_mlb_root_path, class: ('active' if current_sport == 'mlb') %>
-        <%= link_to 'NFL management', admin_nfl_root_path, class: ('active' if current_sport == 'nfl') %>
-        <%= render "admin/shared/#{current_sport}/nav" %>
-      </div>
-    </div>
   </div>
 </nav>

@@ -1,4 +1,6 @@
 class QuestionAnswer < ActiveRecord::Base
+  before_save { SportsbookOnly.reject! }
+  before_destroy { SportsbookOnly.reject! }
   belongs_to :question
   # A timed-out Best/Bust question is persisted with no selected team and a
   # zero time value so that it cannot be restarted after a refresh.

@@ -2,6 +2,7 @@ class UpdateCachedTicketScores
   include Sidekiq::Worker
 
   def perform(game_id)
+    return if SportsbookOnly.active? # Keep historical scores unchanged.
     game = Game.find(game_id)
     game.contests.each do |contest|
       ActiveRecord::Base.transaction { cache_scores_and_placings(contest.tickets) }

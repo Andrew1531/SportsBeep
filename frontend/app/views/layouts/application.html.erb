@@ -194,7 +194,6 @@
           <li><%= link_to user_dashboard_path, class: ('sb-nav-active' if controller_name == 'dashboard' && action_name == 'index') do %><i class="fa fa-grid-2"></i> DASHBOARD<% end %></li>
           <li><%= link_to sportsbook_path, class: ('sb-nav-active' if controller_name == 'sportsbook') do %><i class="fa fa-trophy"></i> SPORTSBOOK<% end %></li>
           <li><%= link_to my_bets_path, class: ('sb-nav-active' if controller_name == 'sportsbook' && action_name == 'my_bets') do %><i class="fa fa-receipt"></i> MY BETS<% end %></li>
-          <li><%= link_to fantasy_path, class: ('sb-nav-active' if controller_name == 'fantasy') do %><i class="fa fa-users"></i> FANTASY<% end %></li>
           <li class="sb-nav-divider"></li>
           <li>
             <%= link_to wallet_path, class: ('sb-nav-active' if action_name == 'wallet' || action_name == 'vending') do %>
@@ -226,7 +225,7 @@
         <h4>SPORTSBEEP</h4>
         <p style="font-size: 13px; line-height: 1.6; margin: 0;">
           Powered by <a href="https://ladmedia.co" target="_blank" style="text-decoration: underline;">LAD MEDIA</a><br>
-          Fantasy sports on the Cardano blockchain.
+          Sportsbook on Cardano.
         </p>
       </div>
       <div>

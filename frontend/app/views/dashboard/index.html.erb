@@ -173,9 +173,9 @@
         </section>
 
         <section class="dash-panel dash-action-panel">
-          <p class="dash-kicker">Quick actions</p><h2 class="dash-panel-title">Ready for the slate?</h2><p>Enter the sportsbook or review the rules before your next contest.</p>
+          <p class="dash-kicker">Quick actions</p><h2 class="dash-panel-title">Ready for the slate?</h2><p>Visit the sportsbook or review the markets before your next wager.</p>
           <div class="dash-actions"><%= link_to 'Sportsbook', sportsbook_path, class: 'dash-button dash-button--signal' %><%= link_to 'How to play', how_to_play_path, class: 'dash-button' %></div>
-          <% if @account.balance_cents <= 0 %><p class="dash-wallet-warning"><i class="fa fa-triangle-exclamation"></i> You need <strong>$BEEP tokens</strong> to enter contests. <%= link_to 'Go to Wallet', wallet_path %> to swap ADA for $BEEP.</p><% end %>
+          <% if @account.balance_cents <= 0 %><p class="dash-wallet-warning"><i class="fa fa-triangle-exclamation"></i> Check your available balance before placing a wager. <%= link_to 'Go to Wallet', wallet_path %> to review approved tokens.</p><% end %>
         </section>
 
         <section class="dash-panel dash-wallet-panel">

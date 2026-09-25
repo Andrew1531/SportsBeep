@@ -143,15 +143,15 @@
       </div>
       <table class="table table-bordered">
         <tr>
-          <td><strong>Total Tickets:</strong></td>
+          <td><strong>Historical fantasy tickets:</strong></td>
           <td><span class="badge"><%= @user.tickets.size %></span></td>
         </tr>
         <tr>
-          <td><strong>MLB Tickets:</strong></td>
+          <td><strong>Historical MLB tickets:</strong></td>
           <td><span class="badge"><%= @user.mlb_tickets.size %></span></td>
         </tr>
         <tr>
-          <td><strong>NFL Tickets:</strong></td>
+          <td><strong>Historical NFL tickets:</strong></td>
           <td><span class="badge"><%= @user.nfl_tickets.size rescue 0 %></span></td>
         </tr>
         <tr>
@@ -229,12 +229,12 @@
   </div>
 </div>
 
-<!-- Recent Tickets -->
+<!-- Historical fantasy tickets -->
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h4 class="panel-title">Recent Tickets</h4>
+        <h4 class="panel-title">Historical fantasy tickets (read-only)</h4>
       </div>
       <% if @user.tickets.any? %>
         <table class="table table-striped">
@@ -274,7 +274,7 @@
         </table>
       <% else %>
         <div class="panel-body text-center text-muted">
-          No tickets yet
+          No historical fantasy tickets
         </div>
       <% end %>
     </div>

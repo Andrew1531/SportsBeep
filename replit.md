@@ -1,7 +1,15 @@
 # SportsBeep Web Application
 
 ## Overview
-This is a legacy Ruby on Rails sports betting/fantasy sports web application being migrated to run in the Replit environment. The application includes a frontend Rails application and a separate backend timer API service.
+SportsBeep is a sportsbook built on a legacy Ruby on Rails application. The repository also retains original fantasy and timer-service code as historical reference, not as active product features.
+
+## Product Scope — Sportsbook Only
+On September 25, 2026, the owner explicitly retired all fantasy features from the current platform and deferred any fantasy rebuild until a later, explicit request.
+
+- Do not restore fantasy navigation, public marketing, contests, entry APIs, sample-data previews, or fantasy scoring/prize jobs as part of current work.
+- Earlier MLB/NFL restoration plans and sample-data experiments are superseded by this direction. Review incoming changes against this scope before merging.
+- Preserve the original uploaded archives, source reference, and existing financial/entry history for the later rebuild and auditing. Do not delete historical ledger records or convert them into sportsbook wagers.
+- Keep sportsbook betting, sports data needed for wagering, wallet operations, accounts, and sportsbook settlement independent of retired fantasy services.
 
 ## Current Status
 - **Rails Server**: ✅ Running on port 5000 with Puma
@@ -13,7 +21,6 @@ This is a legacy Ruby on Rails sports betting/fantasy sports web application bei
 - **OpticOdds API**: ❌ Returns 401 "Invalid or inactive API key" (key expired/revoked — needs a valid key). NOTE: when re-enabling, route requests through `SecureHttp.client(uri)` (see Ruby TLS Fix below) or the handshake fails with "unable to get certificate CRL". Falls back to DB games with random odds.
 - **Balance Guard**: ✅ Inline warning + "Insufficient $BEEP" modal blocks overspending
 - **Team Logos**: ✅ ESPN CDN logos displayed in sportsbook rows (MLB/NFL/NBA/NHL)
-- **Fantasy Player Cards**: ✅ Smooth accordion expand — overflow:hidden bug fixed
 - **Wallet Display**: ✅ Total In Play shown as whole $BEEP with amber warning if over on-chain
 - **Password Reset (Beta)**: ✅ `/reset-password` support request form via Web3Forms → andrew@ladmedia.co; Devise password routes skipped + old URLs redirect; no outbound email (mailer :test); honeypot + 60s per-session throttle
 - **Ruby TLS Fix**: ✅ `SecureHttp.client(uri)` helper (fresh cert store, VERIFY_PEER) — used by Web3FormsService and BlockfrostService (VERIFY_NONE removed)

@@ -7,6 +7,7 @@ class EnterContest
   end
 
   def call(game, pool)
+    SportsbookOnly.reject!
     template = pool.contest_templates.find_by game: game
     if template.present?
       ticket.contest = template.contests.open.where.not(id: ticket.user.contests(sport).pluck(:id)).take || template.contests.create(type: "#{sport}::Contest")
@@ -18,6 +19,7 @@ class EnterContest
   end
 
   def call!(game, pool)
+    SportsbookOnly.reject!
     call game, pool
     ticket.save!
   end

@@ -4,7 +4,7 @@ class GameStatsWorker
   protected
 
     def requeue_or_end_game
-      Background.push UpdateCachedTicketScores, @game.id
+      Background.push UpdateCachedTicketScores, @game.id unless SportsbookOnly.active?
       @game.update(status: nil) if scheduled?
       if ended?
         EndGame.new(@game).call

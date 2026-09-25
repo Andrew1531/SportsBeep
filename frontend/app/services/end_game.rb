@@ -10,6 +10,8 @@ class EndGame
   def call(force = false)
     cache_recent_stats
     @game.save!
+    return if SportsbookOnly.active?
+
     contests_that_are_waiting_on(@game).each do |contest|
       FinalizeContest.new(contest).call if contest.finalizable?
     end

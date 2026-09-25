@@ -1,4 +1,6 @@
 class Pool < ActiveRecord::Base
+  before_save { SportsbookOnly.reject! }
+  before_destroy { SportsbookOnly.reject! }
   has_many :contest_templates, dependent: :destroy
   has_many :contests, through: :contest_templates
 

@@ -10,6 +10,7 @@ class Nfl::FantasyEntry
   end
 
   def create!
+    raise EntryError, SportsbookOnly::MESSAGE
     game = Nfl::Game.find(@attributes[:game_id])
     token = ApprovedToken.enabled.find_by(id: @attributes[:approved_token_id])
     raise EntryError, 'Choose an enabled approved token.' unless token
@@ -45,6 +46,7 @@ class Nfl::FantasyEntry
   end
 
   def update!(ticket)
+    raise EntryError, SportsbookOnly::MESSAGE
     ActiveRecord::Base.transaction do
       ticket.game.with_lock do
         ticket.lock!
