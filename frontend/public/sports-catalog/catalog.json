@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-28T17:33:52.428Z",
+  "generatedAt": "2026-09-28T17:39:50.670Z",
   "source": "ESPN site API",
   "sources": {
     "ncaaLogo": {
@@ -507,6 +507,16 @@
       "leagueLogo": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?limit=1",
       "espnLeagueMetadata": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?limit=1",
       "teamCount": 20,
+      "missingLogoCount": 0,
+      "missingLogos": []
+    },
+    "bundesliga": {
+      "teams": [
+        "https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/teams?limit=1000&page=1"
+      ],
+      "leagueLogo": "https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/scoreboard?limit=1",
+      "espnLeagueMetadata": "https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/scoreboard?limit=1",
+      "teamCount": 18,
       "missingLogoCount": 0,
       "missingLogos": []
     },
@@ -7676,6 +7686,121 @@
           "name": "Tottenham Hotspur",
           "abbreviation": "TOT",
           "logo": "/sports-catalog/epl/teams/367.png"
+        }
+      ]
+    },
+    {
+      "key": "bundesliga",
+      "name": "Bundesliga (Germany)",
+      "logo": "/sports-catalog/bundesliga/league.png",
+      "teams": [
+        {
+          "id": "598",
+          "name": "1. FC Union Berlin",
+          "abbreviation": "FCU",
+          "logo": "/sports-catalog/bundesliga/teams/598.png"
+        },
+        {
+          "id": "131",
+          "name": "Bayer Leverkusen",
+          "abbreviation": "B04",
+          "logo": "/sports-catalog/bundesliga/teams/131.png"
+        },
+        {
+          "id": "132",
+          "name": "Bayern Munich",
+          "abbreviation": "MUN",
+          "logo": "/sports-catalog/bundesliga/teams/132.png"
+        },
+        {
+          "id": "124",
+          "name": "Borussia Dortmund",
+          "abbreviation": "DOR",
+          "logo": "/sports-catalog/bundesliga/teams/124.png"
+        },
+        {
+          "id": "268",
+          "name": "Borussia Mönchengladbach",
+          "abbreviation": "BMG",
+          "logo": "/sports-catalog/bundesliga/teams/268.png"
+        },
+        {
+          "id": "125",
+          "name": "Eintracht Frankfurt",
+          "abbreviation": "SGE",
+          "logo": "/sports-catalog/bundesliga/teams/125.png"
+        },
+        {
+          "id": "3841",
+          "name": "FC Augsburg",
+          "abbreviation": "FCA",
+          "logo": "/sports-catalog/bundesliga/teams/3841.png"
+        },
+        {
+          "id": "122",
+          "name": "FC Cologne",
+          "abbreviation": "KOE",
+          "logo": "/sports-catalog/bundesliga/teams/122.png"
+        },
+        {
+          "id": "127",
+          "name": "Hamburg SV",
+          "abbreviation": "HSV",
+          "logo": "/sports-catalog/bundesliga/teams/127.png"
+        },
+        {
+          "id": "2950",
+          "name": "Mainz",
+          "abbreviation": "M05",
+          "logo": "/sports-catalog/bundesliga/teams/2950.png"
+        },
+        {
+          "id": "11420",
+          "name": "RB Leipzig",
+          "abbreviation": "RBL",
+          "logo": "/sports-catalog/bundesliga/teams/11420.png"
+        },
+        {
+          "id": "126",
+          "name": "SC Freiburg",
+          "abbreviation": "SCF",
+          "logo": "/sports-catalog/bundesliga/teams/126.png"
+        },
+        {
+          "id": "3307",
+          "name": "SC Paderborn 07",
+          "abbreviation": "SCP",
+          "logo": "/sports-catalog/bundesliga/teams/3307.png"
+        },
+        {
+          "id": "10388",
+          "name": "SV Elversberg",
+          "abbreviation": "ELV",
+          "logo": "/sports-catalog/bundesliga/teams/10388.png"
+        },
+        {
+          "id": "133",
+          "name": "Schalke 04",
+          "abbreviation": "S04",
+          "logo": "/sports-catalog/bundesliga/teams/133.png"
+        },
+        {
+          "id": "7911",
+          "name": "TSG Hoffenheim",
+          "abbreviation": "TSG",
+          "logo": "/sports-catalog/bundesliga/teams/7911.png"
+        },
+        {
+          "id": "134",
+          "name": "VfB Stuttgart",
+          "abbreviation": "VFB",
+          "logo": "/sports-catalog/bundesliga/teams/134.png"
+        },
+        {
+          "id": "137",
+          "name": "Werder Bremen",
+          "abbreviation": "SVW",
+          "logo": "/sports-catalog/bundesliga/teams/137.png"
         }
       ]
     },

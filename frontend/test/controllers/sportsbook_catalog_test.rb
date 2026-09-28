@@ -11,7 +11,9 @@ class SportsbookCatalogTest < ActionDispatch::IntegrationTest
       { key: 'ncaab', name: "NCAA Men's Basketball", teams: [{ id: 'unc', name: 'North Carolina Tar Heels', logo: nil }] },
       { key: 'mls', name: 'MLS', teams: [{ id: 'lafc', name: 'Los Angeles Football Club', logo: '/sports-catalog/lafc.png' }] },
       { key: 'epl', name: 'English Premier League',
-        teams: [{ id: 'man-city', name: 'Manchester City', logo: '/sports-catalog/man-city.png' }] }
+        teams: [{ id: 'man-city', name: 'Manchester City', logo: '/sports-catalog/man-city.png' }] },
+      { key: 'bundesliga', name: 'Bundesliga (Germany)',
+        teams: [{ id: 'bayern', name: 'Bayern Munich', logo: '/sports-catalog/bayern.png' }] }
     ]
   }.to_json.freeze
 
@@ -35,7 +37,8 @@ class SportsbookCatalogTest < ActionDispatch::IntegrationTest
         'ncaaf' => ['NCAA Football', 'Penn State Nittany Lions'],
         'ncaab' => ["NCAA Men's Basketball", 'North Carolina Tar Heels'],
         'mls' => ['MLS', 'Los Angeles Football Club'],
-        'epl' => ['English Premier League', 'Manchester City']
+        'epl' => ['English Premier League', 'Manchester City'],
+        'bundesliga' => ['Bundesliga (Germany)', 'Bayern Munich']
       }.each do |key, names|
         get sportsbook_path(sport: key)
         assert_response :success
@@ -44,7 +47,7 @@ class SportsbookCatalogTest < ActionDispatch::IntegrationTest
         refute_includes response.body, 'dk-game-row'
         assert_empty SportsbookController.new.send(:fetch_games_with_odds, key)
       end
-      assert_includes response.body, '/sports-catalog/man-city.png'
+      assert_includes response.body, '/sports-catalog/bayern.png'
       get sportsbook_path(sport: 'mma')
       assert_select 'img[alt="Ultimate Fighting Championship logo"][src="/sports-catalog/mma/ufc.png"]'
       assert_select 'h3', text: 'Promotion'

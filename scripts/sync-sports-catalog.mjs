@@ -13,6 +13,7 @@ const specs = [
   // ESPN no longer recognizes soccer/usa.mls (404); its current MLS slug is usa.1.
   { key: "mls", name: "MLS", endpoint: "soccer/usa.1" },
   { key: "epl", name: "English Premier League", endpoint: "soccer/eng.1" },
+  { key: "bundesliga", name: "Bundesliga (Germany)", endpoint: "soccer/ger.1" },
 ];
 const limit = 1000;
 const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
@@ -127,7 +128,7 @@ async function main() {
     };
     // ESPN publishes generic sport icons for the NCAA entries, NOT an NCAA league mark.
     const leagueLogoUrl = isNcaa ? null : defaultPng(league.logos);
-    if (["mls", "epl"].includes(spec.key) && !leagueLogoUrl) throw new Error(`Missing league logo: ${spec.key}`);
+    if (!isNcaa && !leagueLogoUrl) throw new Error(`Missing league logo: ${spec.key}`);
     const entry = { key: spec.key, name: spec.name, logo: isNcaa ? ncaaLogo : `/sports-catalog/${spec.key}/league.png`, teams: [] };
     if (leagueLogoUrl) downloads.push({ key: spec.key, id: "league", url: leagueLogoUrl, relative: `${spec.key}/league.png` });
     const missingLogos = [];

@@ -6,9 +6,9 @@ class SportsbookCatalog
     'mlb' => 'MLB', 'nfl' => 'NFL', 'nba' => 'NBA', 'nhl' => 'NHL',
     'mma' => 'MMA', 'ncaaf' => 'NCAA Football',
     'ncaab' => "NCAA Men's Basketball", 'mls' => 'MLS',
-    'epl' => 'English Premier League'
+    'epl' => 'English Premier League', 'bundesliga' => 'Bundesliga (Germany)'
   }.freeze
-  NEW_LEAGUES = %w[mma ncaaf ncaab mls epl].freeze
+  NEW_LEAGUES = %w[mma ncaaf ncaab mls epl bundesliga].freeze
   CATALOG_PATH = Rails.root.join('public', 'sports-catalog', 'catalog.json')
 
   def self.local_logo(path)
