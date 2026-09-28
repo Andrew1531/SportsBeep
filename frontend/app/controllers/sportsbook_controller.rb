@@ -3,7 +3,9 @@ class SportsbookController < ApplicationController
   before_action :set_user_and_account
 
   def index
-    @sport = params[:sport] || 'mlb'
+    @sport = SportsbookCatalog::LEAGUES.key?(params[:sport]) ? params[:sport] : 'mlb'
+    @catalog = SportsbookCatalog.new
+    @league = @catalog.league(@sport)
     @games = fetch_games_with_odds(@sport)
     @open_wagers = @user ? @user.wagers.open.game_pending.recent.limit(5) : []
     @approved_tokens = ApprovedToken.enabled.order(:ticker)
@@ -11,6 +13,12 @@ class SportsbookController < ApplicationController
 
   def place_wager
     clean_params = wager_params
+    unless SportsbookCatalog::LEAGUES.key?(clean_params[:sport])
+      return redirect_to(sportsbook_path, alert: 'Choose a valid sport.')
+    end
+    if SportsbookCatalog::NEW_LEAGUES.include?(clean_params[:sport])
+      return redirect_to(sportsbook_path(sport: clean_params[:sport]), alert: 'Betting lines are not available for this league yet.')
+    end
     is_parlay = clean_params.delete(:is_parlay)
     parlay_legs_json = clean_params.delete(:parlay_legs)
 
@@ -44,7 +52,9 @@ class SportsbookController < ApplicationController
       ticker = @wager.approved_token.ticker
       redirect_to sportsbook_path(sport: @wager.sport), notice: "Wager placed! #{ticker} on #{@wager.selection} (#{@wager.odds_display})"
     else
-      @sport = @wager.sport || 'mlb'
+      @sport = SportsbookCatalog::LEAGUES.key?(@wager.sport) ? @wager.sport : 'mlb'
+      @catalog = SportsbookCatalog.new
+      @league = @catalog.league(@sport)
       @games = fetch_games_with_odds(@sport)
       @open_wagers = @user ? @user.wagers.open.game_pending.recent.limit(5) : []
       flash.now[:alert] = @wager.errors.full_messages.join(', ')
@@ -82,6 +92,8 @@ class SportsbookController < ApplicationController
   SPORTS_API_URL = 'http://localhost:3001/api/markets'.freeze
 
   def fetch_games_with_odds(sport_key)
+    return [] if SportsbookCatalog::NEW_LEAGUES.include?(sport_key)
+
     espn_games(sport_key)
   rescue StandardError => e
     Rails.logger.error "ESPN Sports API fetch error: #{e.message}"

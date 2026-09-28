@@ -79,10 +79,15 @@
   </div>
 
   <%# SPORT TABS %>
-  <div class="dk-sport-nav">
-    <% [['mlb','MLB','ic_baseball.png'],['nfl','NFL','ic_football.png'],['nba','NBA','ic_basketball.png'],['nhl','NHL','ic_hockey.png']].each do |key, label, icon| %>
-      <%= link_to sportsbook_path(sport: key), class: "dk-sport-tab#{' active' if @sport == key}" do %>
-        <%= (image_tag icon, class: 'dk-sport-icon') rescue nil %>
+  <div class="dk-sport-nav" aria-label="Sports" style="overflow-x:auto;max-width:1240px;scrollbar-width:thin;">
+    <% SportsbookCatalog::LEAGUES.each do |key, label| %>
+      <%= link_to sportsbook_path(sport: key), class: "dk-sport-tab#{' active' if @sport == key}", style: 'flex:0 0 auto;white-space:nowrap;padding:12px 16px;' do %>
+        <% logo = @catalog.league(key)[:logo] %>
+        <% if logo %>
+          <%= image_tag logo, class: 'dk-sport-icon', style: 'background:#fff;border-radius:3px;padding:2px;', alt: "#{label} logo", onerror: "this.style.display='none'" %>
+        <% elsif (icon = { 'mlb' => 'ic_baseball.png', 'nfl' => 'ic_football.png', 'nba' => 'ic_basketball.png', 'nhl' => 'ic_hockey.png' }[key]) %>
+          <%= image_tag icon, class: 'dk-sport-icon', alt: '', onerror: "this.style.display='none'" %>
+        <% end %>
         <%= label %>
       <% end %>
     <% end %>
@@ -120,11 +125,58 @@
 
     <%# NAV TABS %>
     <div class="sportsbook-nav-bar" style="margin-top:16px;">
-      <a class="fnav-link active" href="<%= sportsbook_path(sport: @sport) %>">Available Lines</a>
+      <a class="fnav-link active" style="margin-right:20px;" href="<%= sportsbook_path(sport: @sport) %>"><%= SportsbookCatalog::NEW_LEAGUES.include?(@sport) ? 'League Overview' : 'Available Lines' %></a>
       <%= link_to 'My Wagers', my_bets_path, class: 'fnav-link' %>
     </div>
 
-    <% if @games.any? %>
+    <% if SportsbookCatalog::NEW_LEAGUES.include?(@sport) %>
+      <section style="margin:20px 0;color:#e5eaf1;">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+          <% if @league[:logo] %>
+            <%= image_tag @league[:logo], alt: "#{@league[:name]} logo", style: 'width:48px;height:48px;object-fit:contain;background:#fff;padding:4px;border-radius:6px;', onerror: "this.style.display='none'" %>
+          <% end %>
+          <h2 style="margin:0;font-size:24px;"><%= @league[:name] %></h2>
+        </div>
+        <% if @sport == 'mma' %>
+          <p>MMA coverage includes the UFC promotion. Fighters and event matchups are not listed here until verified data and wager support are available.</p>
+        <% end %>
+        <div class="dk-empty-state" style="margin:16px 0;padding:24px 12px;">
+          <h3>No betting lines available for <%= @league[:name] %></h3>
+          <p>This is a league directory, not a list of scheduled games or betting markets. Wagering for this league is not yet supported.</p>
+        </div>
+        <% if @league[:promotion] %>
+          <% promotion = @league[:promotion] %>
+          <h3 style="font-size:17px;margin:22px 0 12px;">Promotion</h3>
+          <div style="display:flex;align-items:center;gap:12px;max-width:400px;min-height:64px;padding:10px 12px;background:#171c28;border:1px solid #30394a;border-radius:8px;">
+            <% if promotion[:logo] %>
+              <%= image_tag promotion[:logo], alt: "#{promotion[:name]} logo", style: 'width:48px;height:48px;object-fit:contain;flex:none;', onerror: "this.style.display='none';this.nextElementSibling.style.display='inline-flex'" %>
+              <span aria-hidden="true" style="display:none;width:48px;height:48px;align-items:center;justify-content:center;background:#2d3748;border-radius:6px;flex:none;">★</span>
+            <% else %>
+              <span aria-hidden="true" style="display:inline-flex;width:48px;height:48px;align-items:center;justify-content:center;background:#2d3748;border-radius:6px;flex:none;">★</span>
+            <% end %>
+            <span style="font-weight:600;"><%= promotion[:name] %><% if promotion[:abbreviation].present? %> (<%= promotion[:abbreviation] %>)<% end %></span>
+          </div>
+        <% end %>
+        <% if @league[:teams].any? %>
+          <h3 style="font-size:17px;margin:22px 0 12px;">Teams</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:10px;">
+            <% @league[:teams].each do |team| %>
+              <div style="display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 12px;background:#171c28;border:1px solid #30394a;border-radius:8px;">
+                <% if team[:logo] %>
+                  <%= image_tag team[:logo], alt: "#{team[:name]} logo", loading: 'lazy', decoding: 'async', style: 'width:40px;height:40px;object-fit:contain;flex:none;', onerror: "this.style.display='none';this.nextElementSibling.style.display='inline-flex'" %>
+                  <span aria-hidden="true" style="display:none;width:40px;height:40px;align-items:center;justify-content:center;background:#2d3748;border-radius:6px;flex:none;">★</span>
+                <% else %>
+                  <span aria-hidden="true" style="display:inline-flex;width:40px;height:40px;align-items:center;justify-content:center;background:#2d3748;border-radius:6px;flex:none;">★</span>
+                <% end %>
+                <span style="font-weight:600;line-height:1.25;"><%= team[:name] %></span>
+              </div>
+            <% end %>
+          </div>
+        <% elsif !@league[:promotion] %>
+          <p>The <%= @league[:name] %> directory is currently unavailable.</p>
+        <% end %>
+      </section>
+    <% elsif @games.any? %>
       <%# STICKY ODDS COLUMNS HEADER %>
       <div class="dk-odds-header">
         <div class="dk-oh-left"><%= @sport.upcase %> LINES &nbsp;·&nbsp; <span style="color:#555e73;font-weight:500;font-size:13px;"><%= @games.size %> games</span></div>
@@ -167,7 +219,8 @@
 
         <div class="dk-game-row" id="<%= gid %>">
           <%# Team logo panel %>
-          <% away_logo = team_logo_url(game[:away_team]); home_logo = team_logo_url(game[:home_team]) %>
+          <% away_logo = @catalog.team(@sport, game[:away_team])&.dig(:logo) || team_logo_url(game[:away_team])
+             home_logo = @catalog.team(@sport, game[:home_team])&.dig(:logo) || team_logo_url(game[:home_team]) %>
           <div class="dk-logo-panel">
             <div class="dk-logo-slot" style="border-bottom:1px solid rgba(0,0,0,0.3);">
               <% if away_logo %>
