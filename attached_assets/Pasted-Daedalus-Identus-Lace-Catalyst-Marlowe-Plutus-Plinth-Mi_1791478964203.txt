@@ -1,0 +1,132 @@
+Daedalus
+Identus
+Lace
+Catalyst
+Marlowe
+Plutus / Plinth
+Midnight
+Nami
+RealFi
+$BEEP launch
+Final tips
+Strategy / execution / verification
+A Protocol Built for the $BEEP
+SPORTSBEEP brings the intensity of live sports together with Cardano-native ownership. The following modules map the infrastructure, decisions, and operating practices behind a transparent fan economy.
+
+Wallet infrastructure
+Daedalus: Full-node wallet for development and testing
+Purpose: A secure, full-node wallet that downloads the entire Cardano blockchain for offline verification. Ideal for dev/test of token minting, transactions, and dApp interactions.
+
+Download and install: From daedaluswallet.io; the chain auto-downloads (~200GB as of 2025).
+Create or restore wallet: Generate and securely back up the 24-word recovery phrase; set a password.
+Fund wallet: Use a testnet faucet for tADA; for mainnet, acquire ADA on an exchange and transfer.
+Send/receive ADA: Use "Send" and "Receive" tabs to test payments and integrations.
+Delegate/stake: Delegate to a pool to test staking models and rewards flows.
+Integrate with dApp: Use cardano-wallet API to simulate user connections during QA.
+Powered by LAD MEDIA
+Identity layer
+Identus: Decentralized identity for user verification
+Purpose: Self-sovereign identity with verifiable credentials (VCs) to verify user age/location for compliance without storing personal data on-chain.
+
+Set up environment: Clone the Hyperledger Identus repo; install Node.js 18+ and Docker; run npm install in agent-sdk-ts.
+Create a DID: Generate keys and derive a DID via the Identus Agent SDK.
+Issue credentials: Define schemas (e.g., AgeOver18) and issue VCs to user DIDs.
+Integrate in app: Request/verify VCs via QR or SDK; verify proofs programmatically.
+Test on Cardano: Use testnet and Cardano DID support; leverage quick-start workshop code.
+Powered by LAD MEDIA
+Player access
+Lace: Light wallet for user-friendly dApp access
+Purpose: Browser-based wallet with dApp integration for seamless crypto entries and payments in ADA or $BEEP.
+
+Install Lace: Use Chrome/Firefox extension or mobile app; create/import wallet.
+Fund and manage assets: Add ADA; mint and view multi-assets including $BEEP.
+Connect to dApp: Enable Lace via window.cardano.lace and prompt user connection.
+Sign transactions: Build tx off-chain (e.g., Mesh.js) and request signature.
+Use features: Stake ADA, access DeFi, and swap into $BEEP as needed.
+Mobile integration: Bridge connections via WebView and mobile SDK.
+Powered by LAD MEDIA
+Community funding
+Catalyst: Community funding for app development
+Purpose: Decentralized grants via community voting to fund token launch, smart contracts, and growth.
+
+Prepare proposal: Clear title, concise summary, quantified impact, transparent budget, and milestones.
+Submit via app: Connect wallet, complete forms, and include a video pitch.
+Community review: Gather feedback on Cardano forums and respond proactively.
+Voting phase: Track shortlist status and voting results in app dashboards.
+If funded: Report progress quarterly and allocate for hires/tools; target upcoming funds.
+Powered by LAD MEDIA
+Contract studio
+Marlowe: User-friendly smart contracts for game logic
+Purpose: DSL for financial contracts with visual tools to model contest entries, timeouts, and payouts.
+
+Access Playground: Use the web UI to design contracts with drag-and-drop blocks.
+Write contract: Define deposits, timeouts, and payout conditions tied to oracle data.
+Simulate: Run scenarios to validate timelines and payout behavior.
+Compile to Cardano: Export text and build via Marlowe CLI on testnet.
+Deploy: Submit transactions and test on previewnet.
+Integrate: Query state via Marlowe Runtime for live entry tracking.
+Powered by LAD MEDIA
+Advanced logic
+Plutus (Plinth): Advanced smart contracts for complex logic
+Purpose: Cardano's native smart contract platform (with Plinth for safer subsets) to support complex features like on-chain scoring or randomness.
+
+Set up dev environment: Install Nix, enter Plutus shells, and follow official docs.
+Write on-chain code: Implement validators in Haskell/Plinth and compile to Plutus Core.
+Off-chain client: Use plutus-apps to build and sign transactions.
+Test: Run emulator scenarios for entries and payouts.
+Deploy: Build Alonzo-era scripts and submit via CLI/wallet.
+Verify: Apply property tests and formal methods to reduce defects.
+Powered by LAD MEDIA
+Private rails
+Midnight: Privacy-focused sidechain for sensitive data
+Purpose: Cardano sidechain using zero-knowledge proofs to keep entries and personal data private while meeting regulatory requirements.
+
+Access network: Join devnet and install tooling for ZK development.
+Set up wallet: Manage NIGHT tokens and configure sidechain accounts.
+Build private dApp: Write ZK circuits (e.g., private entry proofs) and generate attestations.
+Integrate with Cardano: Bridge assets and verify proofs via SDK.
+Test: Simulate shielded transactions on devnet.
+Deploy: Submit private transactions and confirm via explorers.
+Powered by LAD MEDIA
+Connection fallback
+Nami: Browser wallet for quick dApp connections
+Purpose: Lightweight extension that enables users to connect and pay quickly; a fallback if Lace isn't available.
+
+Install: Add extension; create or import wallet.
+Connect to dApp: Detect window.cardano.nami and prompt enable.
+Sign payments: Build unsigned tx and request signature.
+Manage tokens: Add $BEEP policy ID post-mint and verify in assets.
+Mobile: Use WebView to simulate extension flows.
+Powered by LAD MEDIA
+DeFi interface
+RealFi: DeFi platform for lending and borrowing
+Purpose: Access lending markets and real-world asset rails so users can borrow ADA/$BEEP against collateral to enter contests.
+
+Access platform: Connect wallet and discover available pools.
+Deposit collateral: Provide ADA liquidity to earn yields.
+Borrow: Request loans against NFT/ADA collateral with wallet approval.
+Integrate in app: Use APIs to query rates and build borrow tx off-chain.
+Repay: Hook contest winnings to auto-repay loan via contract.
+Test: Use testnet pools and monitor behaviors.
+Powered by LAD MEDIA
+Native asset
+Launching your coin ($BEEP) to support development
+Purpose: Mint a native token for app funding and fees (e.g., 1% to treasury) to incentivize ecosystem growth.
+
+Prepare metadata: Create JSON (name, ticker, description) and register with CIP metadata resources.
+Generate policy: Build a single-mint policy and derive the policy ID.
+Build mint transaction: Construct Alonzo-era tx including mint amount and metadata.
+Sign and submit: Sign with payment key and submit on testnet/mainnet.
+List on DEX: Provide liquidity on Minswap and establish an ADA/$BEEP pair.
+Integrate: Enable entry payments in $BEEP; route 1% fee to treasury wallet.
+Powered by LAD MEDIA
+Operating standard
+Final tips, security, and timeline
+Mobile integration: Use Cardano mobile SDKs with deep links/QR bridges for wallet connections.
+Security: Audit contracts with reputable firms; start on testnet and enforce key management best practices.
+Timeline (suggested): Week 1: Wallets and Cardano setup. Weeks 2–4: Token + smart contracts. Month 2: Catalyst submission and launch.
+Community: Join Cardano and developer channels for faster feedback loops.
+Powered by LAD MEDIA
+The final whistle
+Built for the fans who play the game.
+SPORTSBEEP is a LAD MEDIA initiative bringing clear, accountable infrastructure to a new generation of 
