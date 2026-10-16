@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="SPORTSBEEP protocol whitepaper: Cardano wallets, identity, smart contracts, privacy, DeFi, and $BEEP.">
-  <title>SPORTSBEEP Protocol Briefing | $BEEP on Cardano</title>
+  <meta name="description" content="SPORTSBEEP platform whitepaper: sportsbook capabilities, Cardano wallet integration, token balances, custody, settlement limitations, risks, and development roadmap.">
+  <title>SPORTSBEEP Platform Whitepaper | Sportsbook &amp; Cardano</title>
   <style>
     :root { --ink:#111521; --deep:#080b12; --panel:#191e2b; --panel-hi:#232b3c; --copy:#f1f3fb; --muted:#9aa4bb; --line:rgba(222,230,255,.14); --orange:#f7760d; --amber:#fbbf24; --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace; --display:Impact,Haettenschweiler,"Arial Narrow Bold",sans-serif; }
     * { box-sizing:border-box; }
@@ -45,37 +45,159 @@
   <a class="skip" href="#document">Skip to whitepaper</a>
   <header class="topbar">
     <a href="/" class="brand" aria-label="SportsBeep home"><img src="whitepaper-assets/sportsbeep-logo.png" alt="SportsBeep"></a>
-    <nav class="topnav" aria-label="SportsBeep navigation"><a href="#contents">Briefing</a><a href="#disclaimer">Protocol note</a><a class="play" href="/play">Login &amp; Play</a></nav>
+    <nav class="topnav" aria-label="SportsBeep navigation"><a href="#contents">Whitepaper</a><a href="#disclaimer">Risk note</a><a class="play" href="/play">Login &amp; Play</a></nav>
   </header>
   <main>
     <section class="hero" aria-labelledby="whitepaper-title">
-      <div class="broadcast">Protocol briefing / 2025</div>
+      <div class="broadcast">Platform whitepaper / 2026</div>
       <h1 id="whitepaper-title">The <span class="accent">SPORTSBEEP</span><br>Playbook</h1>
-      <p class="hero-deck">A historical project briefing on Cardano wallet and token concepts. Roadmap ideas here are not descriptions of current sportsbook features, accepted wagers, or guaranteed payouts.</p>
-      <div class="hero-meta"><span><b>Network</b> Cardano native</span><span><b>Asset</b> $BEEP</span><span><b>Produced by</b> LAD MEDIA</span></div>
+      <p class="hero-deck">A sportsbook application with Cardano wallet integration. What is implemented, what remains unfinished, and how funds, wagers, and responsibility are handled.</p>
+      <div class="hero-meta"><span><b>Product</b> Sportsbook</span><span><b>Assets</b> Approved tokens</span><span><b>Produced by</b> LAD MEDIA</span></div>
     </section>
-    <div class="rail"><div class="rail-inner"><span class="rail-label">Live document / 11 modules</span><a href="/play">Return to sportsbook &rarr;</a></div></div>
+    <div class="rail"><div class="rail-inner"><span class="rail-label">Current implementation / 10 sections</span><a href="/sportsbook">Return to sportsbook &rarr;</a></div></div>
     <div class="shell">
       <aside class="contents" id="contents" aria-label="Whitepaper contents"><h2>On this page</h2><ol>
-        <li><a href="#daedalus">Daedalus</a></li><li><a href="#identus">Identus</a></li><li><a href="#lace">Lace</a></li><li><a href="#catalyst">Catalyst</a></li><li><a href="#marlowe">Marlowe</a></li><li><a href="#plutus">Plutus / Plinth</a></li><li><a href="#midnight">Midnight</a></li><li><a href="#nami">Nami</a></li><li><a href="#realfi">RealFi</a></li><li><a href="#beep-token">$BEEP launch</a></li><li><a href="#final-tips">Final tips</a></li>
+        <li><a href="#platform">The platform</a></li>
+        <li><a href="#coverage">Sports &amp; availability</a></li>
+        <li><a href="#wagering">How wagering works</a></li>
+        <li><a href="#wallets">Wallets &amp; funds</a></li>
+        <li><a href="#tokens">$BEEP &amp; tokens</a></li>
+        <li><a href="#settlement">Odds &amp; settlement</a></li>
+        <li><a href="#security">Security &amp; control</a></li>
+        <li><a href="#eligibility">Eligibility &amp; risks</a></li>
+        <li><a href="#roadmap">Development roadmap</a></li>
+        <li><a href="#research">Research appendix</a></li>
       </ol></aside>
       <article class="document" id="document">
-        <header class="intro"><div class="eyebrow">Strategy / execution / verification</div><h2>A Protocol Built for the <span class="token">$BEEP</span></h2><p>SPORTSBEEP brings the intensity of live sports together with Cardano-native ownership. The following modules map the infrastructure, decisions, and operating practices behind a transparent fan economy.</p></header>
-        <section class="section" data-num="01" id="daedalus"><div class="eyebrow">Wallet infrastructure</div><h2>Daedalus: Full-node wallet for development and testing</h2><p class="purpose"><strong>Purpose:</strong> A secure, full-node wallet that downloads the entire Cardano blockchain for offline verification. Ideal for dev/test of token minting, transactions, and dApp interactions.</p><ul><li><strong>Download and install:</strong> From daedaluswallet.io; the chain auto-downloads (~200GB as of 2025).</li><li><strong>Create or restore wallet:</strong> Generate and securely back up the 24-word recovery phrase; set a password.</li><li><strong>Fund wallet:</strong> Use a testnet faucet for tADA; for mainnet, acquire ADA on an exchange and transfer.</li><li><strong>Send/receive ADA:</strong> Use "Send" and "Receive" tabs to test payments and integrations.</li><li><strong>Delegate/stake:</strong> Delegate to a pool to test staking models and rewards flows.</li><li><strong>Integrate with dApp:</strong> Use cardano-wallet API to simulate user connections during QA.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="02" id="identus"><div class="eyebrow">Identity layer</div><h2>Identus: Decentralized identity for user verification</h2><p class="purpose"><strong>Purpose:</strong> Self-sovereign identity with verifiable credentials (VCs) to verify user age/location for compliance without storing personal data on-chain.</p><ul><li><strong>Set up environment:</strong> Clone the Hyperledger Identus repo; install Node.js 18+ and Docker; run npm install in agent-sdk-ts.</li><li><strong>Create a DID:</strong> Generate keys and derive a DID via the Identus Agent SDK.</li><li><strong>Issue credentials:</strong> Define schemas (e.g., AgeOver18) and issue VCs to user DIDs.</li><li><strong>Integrate in app:</strong> Request/verify VCs via QR or SDK; verify proofs programmatically.</li><li><strong>Test on Cardano:</strong> Use testnet and Cardano DID support; leverage quick-start workshop code.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="03" id="lace"><div class="eyebrow">Player access</div><h2>Lace: Light wallet for user-friendly dApp access</h2><p class="purpose"><strong>Purpose:</strong> Browser-based wallet with dApp integration for seamless crypto entries and payments in ADA or $BEEP.</p><ul><li><strong>Install Lace:</strong> Use Chrome/Firefox extension or mobile app; create/import wallet.</li><li><strong>Fund and manage assets:</strong> Add ADA; mint and view multi-assets including $BEEP.</li><li><strong>Connect to dApp:</strong> Enable Lace via window.cardano.lace and prompt user connection.</li><li><strong>Sign transactions:</strong> Build tx off-chain (e.g., Mesh.js) and request signature.</li><li><strong>Use features:</strong> Stake ADA, access DeFi, and swap into $BEEP as needed.</li><li><strong>Mobile integration:</strong> Bridge connections via WebView and mobile SDK.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="04" id="catalyst"><div class="eyebrow">Community funding</div><h2>Catalyst: Community funding for app development</h2><p class="purpose"><strong>Purpose:</strong> Decentralized grants via community voting to fund token launch, smart contracts, and growth.</p><ul><li><strong>Prepare proposal:</strong> Clear title, concise summary, quantified impact, transparent budget, and milestones.</li><li><strong>Submit via app:</strong> Connect wallet, complete forms, and include a video pitch.</li><li><strong>Community review:</strong> Gather feedback on Cardano forums and respond proactively.</li><li><strong>Voting phase:</strong> Track shortlist status and voting results in app dashboards.</li><li><strong>If funded:</strong> Report progress quarterly and allocate for hires/tools; target upcoming funds.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="05" id="marlowe"><div class="eyebrow">Research note</div><h2>Marlowe: smart contract research</h2><p class="purpose">Marlowe was evaluated as a contract design tool. This historical research is not a statement that sportsbook wagers or settlements currently run on Marlowe.</p><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="06" id="plutus"><div class="eyebrow">Advanced logic</div><h2>Plutus (Plinth): Advanced smart contracts for complex logic</h2><p class="purpose"><strong>Purpose:</strong> Cardano's native smart contract platform (with Plinth for safer subsets) to support complex features like on-chain scoring or randomness.</p><ul><li><strong>Set up dev environment:</strong> Install Nix, enter Plutus shells, and follow official docs.</li><li><strong>Write on-chain code:</strong> Implement validators in Haskell/Plinth and compile to Plutus Core.</li><li><strong>Off-chain client:</strong> Use plutus-apps to build and sign transactions.</li><li><strong>Test:</strong> Run emulator scenarios for entries and payouts.</li><li><strong>Deploy:</strong> Build Alonzo-era scripts and submit via CLI/wallet.</li><li><strong>Verify:</strong> Apply property tests and formal methods to reduce defects.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="07" id="midnight"><div class="eyebrow">Private rails</div><h2>Midnight: Privacy-focused sidechain for sensitive data</h2><p class="purpose"><strong>Purpose:</strong> Cardano sidechain using zero-knowledge proofs to keep entries and personal data private while meeting regulatory requirements.</p><ul><li><strong>Access network:</strong> Join devnet and install tooling for ZK development.</li><li><strong>Set up wallet:</strong> Manage NIGHT tokens and configure sidechain accounts.</li><li><strong>Build private dApp:</strong> Write ZK circuits (e.g., private entry proofs) and generate attestations.</li><li><strong>Integrate with Cardano:</strong> Bridge assets and verify proofs via SDK.</li><li><strong>Test:</strong> Simulate shielded transactions on devnet.</li><li><strong>Deploy:</strong> Submit private transactions and confirm via explorers.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="08" id="nami"><div class="eyebrow">Connection fallback</div><h2>Nami: Browser wallet for quick dApp connections</h2><p class="purpose"><strong>Purpose:</strong> Lightweight extension that enables users to connect and pay quickly; a fallback if Lace isn't available.</p><ul><li><strong>Install:</strong> Add extension; create or import wallet.</li><li><strong>Connect to dApp:</strong> Detect window.cardano.nami and prompt enable.</li><li><strong>Sign payments:</strong> Build unsigned tx and request signature.</li><li><strong>Manage tokens:</strong> Add $BEEP policy ID post-mint and verify in assets.</li><li><strong>Mobile:</strong> Use WebView to simulate extension flows.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="09" id="realfi"><div class="eyebrow">Research note</div><h2>RealFi: DeFi research</h2><p class="purpose">Research into lending concepts only. Borrowing against assets or automated repayment is not an advertised sportsbook feature.</p><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="10" id="beep-token"><div class="eyebrow">Native asset</div><h2>Launching your coin (<span class="token">$BEEP</span>) to support development</h2><p class="purpose"><strong>Purpose:</strong> Mint a native token for app funding and fees (e.g., 1% to treasury) to incentivize ecosystem growth.</p><ul><li><strong>Prepare metadata:</strong> Create JSON (name, ticker, description) and register with CIP metadata resources.</li><li><strong>Generate policy:</strong> Build a single-mint policy and derive the policy ID.</li><li><strong>Build mint transaction:</strong> Construct Alonzo-era tx including mint amount and metadata.</li><li><strong>Sign and submit:</strong> Sign with payment key and submit on testnet/mainnet.</li><li><strong>List on DEX:</strong> Provide liquidity on Minswap and establish an ADA/$BEEP pair.</li><li><strong>Integrate:</strong> Enable entry payments in $BEEP; route 1% fee to treasury wallet.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="section" data-num="11" id="final-tips"><div class="eyebrow">Operating standard</div><h2>Final tips, security, and timeline</h2><ul><li><strong>Mobile integration:</strong> Use Cardano mobile SDKs with deep links/QR bridges for wallet connections.</li><li><strong>Security:</strong> Audit contracts with reputable firms; start on testnet and enforce key management best practices.</li><li><strong>Timeline (suggested):</strong> <strong>Week 1:</strong> Wallets and Cardano setup. <strong>Weeks 2–4:</strong> Token + smart contracts. <strong>Month 2:</strong> Catalyst submission and launch.</li><li><strong>Community:</strong> Join Cardano and developer channels for faster feedback loops.</li></ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div></section>
-        <section class="finish"><div class="eyebrow">The final whistle</div><h2>Built for the fans who <span>play</span> the game.</h2><p>SPORTSBEEP is a LAD MEDIA initiative bringing clear, accountable infrastructure to a new generation of sports engagement.</p></section>
+        <header class="intro">
+          <div class="eyebrow">Implementation / limitations / roadmap</div>
+          <h2>The sportsbook.<br>The <span class="token">facts.</span></h2>
+          <p>SPORTSBEEP is a centrally operated sportsbook application with Cardano wallet integration and approved-token balances. Wagers and account balances are managed by the application; supported deposits and withdrawals use Cardano transactions.</p>
+          <p>This document describes the current implementation, not a certification of production readiness. <strong>Implemented</strong> means functionality exists in the application. <strong>Incomplete</strong> identifies work still required. <strong>Research</strong> is not an operating feature or a delivery commitment. Availability depends on deployment configuration, providers, and legal requirements.</p>
+        </header>
+
+        <section class="section" data-num="01" id="platform">
+          <div class="eyebrow">Implemented architecture</div><h2>What SportsBeep is</h2>
+          <p class="purpose">A sportsbook-focused web application, not a fully decentralized betting protocol.</p>
+          <ul>
+            <li><strong>Application layer:</strong> Accounts, wager records, token balances, and administrative tools are maintained by the server and its database.</li>
+            <li><strong>Cardano integration:</strong> Wallet ownership verification and transaction services connect the application to Cardano. A blockchain transaction is not created for every wager or internal balance update.</li>
+            <li><strong>Operator responsibility:</strong> The platform operates the application, controls its treasury processes, configures enabled assets, and depends on external services for blockchain and sports data.</li>
+            <li><strong>Current scope:</strong> Sportsbook only. MLB and NFL fantasy functionality is disabled and deferred. Historical records are retained; a future rebuild is separate from the current launch.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="02" id="coverage">
+          <div class="eyebrow">Implemented interface / incomplete coverage</div><h2>Sports &amp; availability</h2>
+          <p class="purpose">A league tab or team logo does not establish that real betting markets are available.</p>
+          <ul>
+            <li><strong>Existing sportsbook interface:</strong> MLB, NFL, NBA, and NHL sections exist. The current ESPN polling service fetches MLB; complete live-market coverage across the other sports is not established.</li>
+            <li><strong>Directory-only sections:</strong> MMA, NCAA Football, NCAA Men's Basketball, MLS, English Premier League, and Bundesliga (Germany) display league information and available branding. Wager submissions for these sections are currently blocked.</li>
+            <li><strong>MMA coverage:</strong> The directory currently identifies UFC as a promotion within MMA. It does not represent all promotions or a verified fighter roster.</li>
+            <li><strong>Names and logos:</strong> Team directories are sourced snapshots, not fixture schedules. Missing source logos are not replaced with invented branding. Listings do not imply league or team endorsement.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="03" id="wagering">
+          <div class="eyebrow">Implemented components / launch restrictions</div><h2>How wagering works</h2>
+          <p class="purpose">The application records a wager against an available in-app balance. Wallet holdings alone are not an available stake.</p>
+          <ul>
+            <li><strong>Existing components:</strong> The interface includes moneyline, spread, and total selections, a bet slip, and a My Wagers view. Parlay-related code also exists; complete parlay settlement is unfinished.</li>
+            <li><strong>Stake accounting:</strong> Approved-token wagers use the balance for the selected enabled asset. The application records the stake, selection, odds, and potential payout; a displayed potential payout is not a guaranteed payment.</li>
+            <li><strong>Acceptance must be verified:</strong> Reliable provider-backed prices, server-side market validation, and rejection of unavailable or stale selections are launch requirements. The current interface alone does not establish those guarantees.</li>
+            <li><strong>Not yet supported:</strong> The new directory leagues must remain unavailable for wagering until their markets and outcome rules are supported. Soccer draws and MMA bout outcomes cannot simply inherit another sport's grading rules.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="04" id="wallets">
+          <div class="eyebrow">Implemented flows / operational verification required</div><h2>Wallets, balances &amp; custody</h2>
+          <p class="purpose">Connecting a personal wallet does not make deposited platform funds self-custodied.</p>
+          <ul>
+            <li><strong>Connect:</strong> The browser-wallet flow requests a signed challenge to verify control of an address. Wallet compatibility must be tested for each supported browser and wallet version. The platform should never request a user's recovery phrase.</li>
+            <li><strong>Deposit:</strong> The on-chain deposit flow builds a transfer to the configured platform treasury for wallet approval. Confirmation processing verifies deposits before crediting the internal balance. A submitted transaction is not the same as a confirmed deposit.</li>
+            <li><strong>Custody:</strong> Tokens sent to the platform treasury are controlled through the platform's treasury signing infrastructure, not held in a per-wager user-controlled escrow contract. The internal balance is a platform accounting record, not a separate wallet address.</li>
+            <li><strong>Winnings:</strong> Settlement can credit the in-app balance. An internal credit does not itself transfer tokens to the user's external wallet.</li>
+            <li><strong>Withdrawal:</strong> The on-chain withdrawal flow requests a treasury payment and tracks its status. Execution depends on configuration, sufficient token and ADA funding, provider availability, and chain confirmation. Instant withdrawals are not guaranteed.</li>
+            <li><strong>Uncertain transactions:</strong> A timeout is not proof that a transfer failed. Reconciliation and safe handling of unresolved payouts remain essential operational work; duplicate payments or premature refunds must be prevented.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="05" id="tokens">
+          <div class="eyebrow">Implemented asset controls / disclosures pending</div><h2><span class="token">$BEEP</span> &amp; approved tokens</h2>
+          <p class="purpose">$BEEP is part of the platform's token model. Enabled assets are administrator-configured; not every Cardano token is accepted.</p>
+          <ul>
+            <li><strong>Asset identity:</strong> A ticker or logo is not sufficient identification. Cardano native assets must be matched by policy ID and asset name, with the correct decimal precision.</li>
+            <li><strong>Balances:</strong> Approved assets have separate in-app balances. Holding an unrelated token with the same displayed ticker does not establish eligibility or credit.</li>
+            <li><strong>Disclosures still required:</strong> Publish verified $BEEP identity, supply, minting restrictions, allocations, vesting, treasury arrangements, and any confirmed liquidity arrangements before relying on them in launch materials. This document does not assert values that have not been verified.</li>
+            <li><strong>Fees:</strong> No fixed 1% treasury fee is established by this whitepaper. Platform charges and Cardano transaction costs must be documented accurately and disclosed before approval; the earlier illustrative fee is not a current commitment.</li>
+            <li><strong>No investment promise:</strong> Token support does not imply guaranteed liquidity, appreciation, yield, governance rights, or a right to platform revenue.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="06" id="settlement">
+          <div class="eyebrow">Incomplete / launch blockers</div><h2>Odds, results &amp; settlement</h2>
+          <p class="purpose">The existence of a bet slip and score-grading code does not establish an end-to-end, reliable sportsbook.</p>
+          <ul>
+            <li><strong>Known pricing limitation:</strong> Legacy code can generate random fallback prices or matchups when real data is absent. These are not verified betting markets. Removing this behavior and refusing unavailable markets is a prerequisite for genuine wagering.</li>
+            <li><strong>Existing settlement logic:</strong> Score-based routines can grade supported wagers, credit wins, and refund pushes. Database locking and status checks help prevent repeated settlement; they do not validate the external result itself.</li>
+            <li><strong>Results pipeline:</strong> Authoritative final results, stable event identifiers, correction handling, and scheduled settlement need completion and operational verification. This whitepaper does not promise fully automatic payouts.</li>
+            <li><strong>Rules still required:</strong> Define and implement postponements, cancellations, abandoned events, no contests, draws, overtime treatment, pushes, and parlay outcomes for each supported market.</li>
+            <li><strong>Disputes and corrections:</strong> Document the result source, settlement timing, correction policy, and support process before launch. Unresolved cases must not be silently treated as final.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="07" id="security">
+          <div class="eyebrow">Implemented safeguards / assurance pending</div><h2>Security &amp; operator control</h2>
+          <p class="purpose">Cardano confirms on-chain transfers; it does not independently verify the platform's odds, database balances, or sports results.</p>
+          <ul>
+            <li><strong>Application safeguards:</strong> Account authentication, wallet ownership checks, token-specific balance validation, and transaction records are implemented components. They are not proof that the entire platform has passed an independent security audit.</li>
+            <li><strong>Administrative access:</strong> Administrators manage enabled tokens and operational settings and can inspect user, wager, wallet, and financial activity. These are centralized powers, not token-holder governance.</li>
+            <li><strong>Operational work:</strong> Treasury access policies, signing-key protection, permissions, backups, recovery drills, reconciliation, monitoring, and incident response need documented procedures and verification.</li>
+            <li><strong>Assurance limits:</strong> This document makes no claim of audited betting smart contracts, guaranteed reserves, insurance, formal verification, or uninterrupted service.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="08" id="eligibility">
+          <div class="eyebrow">Legal review &amp; enforcement required</div><h2>Eligibility &amp; user risks</h2>
+          <p class="purpose">Wallet ownership does not prove age, location, identity, or legal eligibility to gamble.</p>
+          <ul>
+            <li><strong>Jurisdiction:</strong> Required authorization and permissible markets depend on where the operator and users are located. The presence of a website or a league listing does not establish permission to accept wagers there.</li>
+            <li><strong>Launch requirements:</strong> Obtain jurisdiction-specific legal review and implement the resulting age, location, identity, and other applicable controls. No operating Identus verification or comprehensive compliance system is claimed here.</li>
+            <li><strong>Responsible gambling:</strong> Appropriate limits, self-exclusion, access restrictions, and support procedures must be defined and implemented where required. This document does not represent these protections as already complete.</li>
+            <li><strong>Financial risk:</strong> Wagered funds may be lost. Tokens may lose value or become illiquid. Treasury shortfalls, software errors, compromised credentials, provider failures, and chain delays can affect access to funds.</li>
+            <li><strong>Terms and privacy:</strong> Published terms, settlement rules, privacy practices, and dispute procedures must match the deployed service. A general disclaimer cannot replace those obligations.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="09" id="roadmap">
+          <div class="eyebrow">Planned / no guaranteed release dates</div><h2>Development roadmap</h2>
+          <p class="purpose">Release decisions should follow verified functionality and applicable approvals, not an assumed launch calendar.</p>
+          <ul>
+            <li><strong>Market integrity:</strong> Remove synthetic fallback data, validate available markets and prices server-side, and establish dependable provider coverage.</li>
+            <li><strong>Settlement readiness:</strong> Complete final-results ingestion, scheduling, sport-specific grading, parlay and exceptional-event rules, and auditable correction procedures.</li>
+            <li><strong>Funds and operations:</strong> Verify deposits, withdrawals, uncertain-payment handling, treasury reconciliation, account recovery, and production monitoring.</li>
+            <li><strong>Launch controls:</strong> Complete required legal review, eligibility enforcement, responsible-gambling controls, security review, and token and fee disclosures.</li>
+            <li><strong>League expansion:</strong> Enable directory-only leagues individually after their data, market rules, and settlement paths are ready. Branding alone does not satisfy this milestone.</li>
+            <li><strong>Later work:</strong> MLB and NFL fantasy remain deferred until after sportsbook launch and a separate decision to rebuild. Research below does not alter the current sportsbook-only scope.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+
+        <section class="section" data-num="10" id="research">
+          <div class="eyebrow">Research only / not integrated</div><h2>Cardano research appendix</h2>
+          <p class="purpose">These ideas are optional investigations, not current platform capabilities, partnerships, funding awards, or promised releases.</p>
+          <ul>
+            <li><strong>Identus:</strong> Potential credential-based identity research; not an implemented age or location verification system.</li>
+            <li><strong>Marlowe and Plutus / Plinth:</strong> Possible contract-design research. Current wagering and grading run in the application, not deployed betting validators.</li>
+            <li><strong>Midnight:</strong> Potential privacy research; no integrated private-wager or zero-knowledge verification feature is claimed.</li>
+            <li><strong>Catalyst:</strong> A possible funding avenue, with no grant award or application outcome asserted.</li>
+            <li><strong>Daedalus and other wallet tooling:</strong> Possible development and testing tools, not user requirements. Browser-wallet support is a separate integration and testing concern.</li>
+            <li><strong>RealFi:</strong> Historical lending research only. Borrowing to wager and automated loan repayment are not current sportsbook features.</li>
+          </ul><div class="section-footer">Powered by <span>LAD MEDIA</span></div>
+        </section>
+        <section class="finish"><div class="eyebrow">The operating standard</div><h2>Clear claims.<br><span>Verified</span> capabilities.</h2><p>SPORTSBEEP's priority is completing the sportsbook and making its rules, limitations, and handling of funds understandable. Future features belong on the roadmap until they are implemented and verified.</p></section>
       </article>
     </div>
   </main>
-  <footer id="disclaimer"><div class="footer-main"><section class="footer-brand"><a href="/" aria-label="SportsBeep home"><img class="footer-brand-logo" src="whitepaper-assets/sportsbeep-logo.png" alt="SportsBeep"></a><p>Next-generation sports engagement, built on Cardano.</p></section><section><h2>About LAD MEDIA</h2><p><strong>About LAD MEDIA:</strong> We architect crypto-native products with precision: branding, UX, smart contracts, and growth. Our black-and-white aesthetic reflects a commitment to clarity and truth in execution.</p><p><strong>Risk warning:</strong> Digital assets can be volatile. Only participate with funds you can afford to lose.</p><p><strong>Player responsibility:</strong> You are solely responsible for the security of your Cardano wallet. Never share your seed phrase.</p><p><strong>Availability:</strong> SportsBeep services and game access may vary by location and are subject to applicable terms.</p><p>© 2025 LAD MEDIA. All rights reserved. SPORTSBEEP is a LAD MEDIA initiative. This document is for informational purposes and does not constitute financial advice.</p></section></div><div class="footer-bottom"><div class="footer-bottom-inner"><span>© 2025 SportsBeep. All rights reserved.</span><span>Designed and engineered by <a href="https://ladmedia.co" target="_blank" rel="noopener noreferrer">LAD MEDIA</a> &nbsp; / &nbsp; <a href="/play">Enter sportsbook</a></span></div></div></footer>
+  <footer id="disclaimer"><div class="footer-main"><section class="footer-brand"><a href="/" aria-label="SportsBeep home"><img class="footer-brand-logo" src="whitepaper-assets/sportsbeep-logo.png" alt="SportsBeep"></a><p>A sportsbook application with Cardano wallet integration.</p></section><section><h2>About this document</h2><p><strong>LAD MEDIA:</strong> SPORTSBEEP is a LAD MEDIA initiative. This whitepaper explains the platform's implementation, limitations, and intended development direction.</p><p><strong>Risk warning:</strong> Wagers and digital assets involve financial risk. Token value, liquidity, payouts, and service availability are not guaranteed.</p><p><strong>Custody:</strong> Protect your wallet credentials and never share your recovery phrase. Deposited platform funds depend on the operator's treasury and accounting systems; wallet connection does not make those funds self-custodied.</p><p><strong>Scope:</strong> This is not a security audit, legal authorization, investment offer, or guarantee of production readiness. Features depend on configuration and applicable terms. Research items are not deployed capabilities.</p><p>© 2026 LAD MEDIA. All rights reserved. This document is informational and does not constitute financial or legal advice.</p></section></div><div class="footer-bottom"><div class="footer-bottom-inner"><span>© 2026 SportsBeep. All rights reserved.</span><span>Designed and engineered by <a href="https://ladmedia.co" target="_blank" rel="noopener noreferrer">LAD MEDIA</a> &nbsp; / &nbsp; <a href="/sportsbook">Explore sportsbook</a></span></div></div></footer>
 </body>
 </html>
